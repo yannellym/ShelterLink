@@ -1,5 +1,6 @@
 // Header.js
 import React from 'react';
+import '../styles/Header.css'; 
 
 function Header() {
   return (
@@ -9,7 +10,7 @@ function Header() {
         <ul>
           <li><a href="/">Home</a></li>
           <li><a href="/about">About</a></li>
-          {/* Add more navigation links */}
+          {/* more navigation links */}
         </ul>
       </nav>
     </header>

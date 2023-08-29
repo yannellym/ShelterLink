@@ -1,0 +1,35 @@
+/* SectionLink.css */
+.section-links {
+    display: flex; /* Use flex to align items horizontally */
+    justify-content: space-between; /* Spread the sections evenly */
+    margin-top: 20px; /* Add some spacing between the SearchFilters and sections */
+  }
+  
+  .section-card {
+    flex: 1; /* Each section takes equal space */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 120px;
+    background-color: #ff6a00; /* Match Petfinder button background color */
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-right: 10px; /* Add some spacing between sections */
+  }
+  
+  .section-card:last-child {
+    margin-right: 0; /* Remove margin on the last section */
+  }
+  
+  .section-card h3 {
+    margin: 0;
+  }
+  
+  .section-card:hover {
+    background-color: #ff8950; /* Match Petfinder button hover background color */
+  }
+  

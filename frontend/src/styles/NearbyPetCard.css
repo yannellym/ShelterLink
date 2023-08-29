@@ -1,0 +1,30 @@
+/* NearbyPetCard.css */
+.pet-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+  }
+  
+  .pet-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.15);
+  }
+  
+  .pet-card img {
+    max-width: 100%;
+    border-radius: 5px;
+  }
+  
+  .pet-card h3 {
+    margin-top: 10px;
+    font-size: 16px;
+    color: #333;
+  }
+  
