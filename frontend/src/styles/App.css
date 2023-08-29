@@ -48,3 +48,25 @@
   /* ... (other styles) */
   margin: 0 10px; /* Add some spacing between cards */
 }
+
+.background-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('../../public/landing1.jpg'); /* Replace with your image URL */
+  background-size: cover;
+  background-position: center;
+  opacity: 1; /* No overlay */
+  z-index: -1;
+}
+
+.search-bar-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 75vh; /* Set the container height to cover the viewport */
+  z-index: 1; /* Place above the background image */
+}

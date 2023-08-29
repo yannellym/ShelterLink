@@ -7,6 +7,8 @@ import SectionLink from './components/SectionLink';
 import NearbyPetCard from './components/NearbyPetCard';
 import AllNearbyPetsCard from './components/AllNearbyPetsCard';
 import AdoptionInfoSection from './components/AdoptionInfoSection';
+import Footer from './components/Footer';
+
 
 // Placeholder data
 const placeholderBreeds = ['Golden Retriever', 'Labrador', 'Poodle', 'Bulldog', 'Pug'];
@@ -52,7 +54,10 @@ function App() {
     <div className="App">
       <Header />
       <main>
-        <SearchFilters breeds={placeholderBreeds} sizes={placeholderSizes} ages={placeholderAges} types={placeholderTypes} onFilterChange={handleFilterChange} />
+        <div className="background-image"></div>
+        <div className="search-bar-container">
+          <SearchFilters breeds={placeholderBreeds} sizes={placeholderSizes} ages={placeholderAges} types={placeholderTypes} onFilterChange={handleFilterChange} />
+        </div>
         <div className="section-links">
           <SectionLink title="All Dogs" link="/dogs" />
           <SectionLink title="All Cats" link="/cats" />
@@ -68,13 +73,16 @@ function App() {
           <AllNearbyPetsCard />
         </div>
 
-        {/* Adoption Info Section */}
         <AdoptionInfoSection />
 
         <DogList dogs={filteredDogs} />
+
+        {/* Add the Footer */}
+        <Footer />
       </main>
     </div>
   );
 }
+
 
 export default App;
