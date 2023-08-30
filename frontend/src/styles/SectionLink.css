@@ -19,6 +19,9 @@
     cursor: pointer;
     transition: background-color 0.2s;
     margin-right: 10px; /* Add some spacing between sections */
+    flex-direction: column;
+    padding: 10px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
   }
   
   .section-card:last-child {
@@ -33,3 +36,7 @@
     background-color: #ff8950; /* Match Petfinder button hover background color */
   }
   
+  .section-card img {
+    max-width: 30%;
+    border-radius: 5px;
+  }

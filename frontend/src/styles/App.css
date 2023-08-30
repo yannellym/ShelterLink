@@ -36,17 +36,34 @@
     transform: rotate(360deg);
   }
 }
+
 .nearby-pets {
-  display: flex;
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
-  margin-top: 20px;
+  background-color: black;
 }
 
-/* NearbyPetCard.css */
-.pet-card {
-  /* ... (other styles) */
-  margin: 0 10px; /* Add some spacing between cards */
+.nearby-pet-cards {
+  display: flex;
+  align-items: center; /* Center vertically */
+  height: 40vh;
+  padding: 0 3%;
+  width: 90vw;
+}
+
+.nearby-pets h3{
+  font-size: 34px; /* Increase the font size for the title */
+  padding: 2% 0% ; /* Add space below the title */
+  color: white;
+}
+
+.section-links-inner-div {
+  display: flex;
+  align-items: center; /* Center vertically */
+  height: 40vh;
+  padding: 0 3%;
+  width: 90vw;
+}
+.section-links-div h3{
+  font-size: 34px; /* Increase the font size for the title */
 }
 
 .background-image {
@@ -55,7 +72,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: url('../../public/landing1.jpg'); /* Replace with your image URL */
+  background-image: url('../images/catanddog3.jpg'); 
   background-size: cover;
   background-position: center;
   opacity: 1; /* No overlay */
@@ -67,6 +84,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 75vh; /* Set the container height to cover the viewport */
+  height: 80vh; /* Set the container height to cover the viewport */
   z-index: 1; /* Place above the background image */
 }

@@ -8,6 +8,7 @@ import NearbyPetCard from './components/NearbyPetCard';
 import AllNearbyPetsCard from './components/AllNearbyPetsCard';
 import AdoptionInfoSection from './components/AdoptionInfoSection';
 import Footer from './components/Footer';
+import Dog1 from '../src/images/dog.jpg'
 
 
 // Placeholder data
@@ -58,26 +59,30 @@ function App() {
         <div className="search-bar-container">
           <SearchFilters breeds={placeholderBreeds} sizes={placeholderSizes} ages={placeholderAges} types={placeholderTypes} onFilterChange={handleFilterChange} />
         </div>
-        <div className="section-links">
-          <SectionLink title="All Dogs" link="/dogs" />
-          <SectionLink title="All Cats" link="/cats" />
-          <SectionLink title="Other Animals" link="/other-animals" />
-          <SectionLink title="Shelters & Rescues" link="/shelters" />
+        <div className="section-links-div">
+          <h3> Find your fur-ever friend:</h3>
+          <div className="section-links-inner-div">
+            <SectionLink title="All Dogs" imageSrc= {Dog1} link="/dogs" />
+            <SectionLink title="All Cats" imageSrc= {Dog1} link="/cats" />
+            <SectionLink title="Other Animals" imageSrc= {Dog1} link="/other-animals" />
+            <SectionLink title="Shelters & Rescues" imageSrc= {Dog1} link="/shelters" />
+          </div>
         </div>
 
         <div className="nearby-pets">
-          <NearbyPetCard imageSrc="dog1.jpg" name="Buddy" />
-          <NearbyPetCard imageSrc="cat1.jpg" name="Whiskers" />
-          <NearbyPetCard imageSrc="other1.jpg" name="Roger" />
-          <NearbyPetCard imageSrc="dog2.jpg" name="Daisy" />
-          <AllNearbyPetsCard />
+          <h3>Pets with greater need for love:</h3>
+          <div className="nearby-pet-cards">
+            <NearbyPetCard imageSrc={Dog1} name="Buddy" />
+            <NearbyPetCard imageSrc={Dog1} name="Whiskers" />
+            <NearbyPetCard imageSrc={Dog1} name="Roger" />
+            <NearbyPetCard imageSrc={Dog1} name="Daisy" />
+            <AllNearbyPetsCard imageSrc={Dog1} />
+          </div>
         </div>
 
         <AdoptionInfoSection />
 
         <DogList dogs={filteredDogs} />
-
-        {/* Add the Footer */}
         <Footer />
       </main>
     </div>

@@ -27,4 +27,7 @@
     font-size: 14px;
     color: #666;
   }
-  
+  .all-pets-card img {
+    max-width: 100%;
+    border-radius: 5px;
+  }

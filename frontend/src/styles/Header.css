@@ -1,11 +1,11 @@
 /* Header.css */
 .header {
-  background-color: #ff6a00;
+  background-color: #0000007c;
   color: #fff;
-  padding: 10px 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  box-shadow: 0px 2px 5px rgba(255, 161, 21, 0.353); /* Add a subtle shadow */
 }
 
 .main-navigation ul {
@@ -13,22 +13,23 @@
   padding: 0;
   margin: 0;
   display: flex;
+  align-items: center; /* Vertically align navigation items */
 }
 
 .main-navigation li {
-  margin-right: 20px;
+  margin-right: 30px;
 }
 
 .main-navigation a {
   color: #fff;
   text-decoration: none;
   font-weight: bold;
-  font-size: 14px;
+  font-size: 16px; /* Slightly larger font size */
   transition: color 0.2s;
 }
 
 .main-navigation a:hover {
-  color: #020202;
+  color: #ff6000;
 }
 
 .user-profile {
@@ -36,7 +37,7 @@
 }
 
 .user-profile span {
-  font-size: 14px;
+  font-size: 16px; /* Slightly larger font size */
 }
 
 /* Additional styling for responsiveness */
@@ -51,17 +52,14 @@
   }
 }
 
-.search-bar-background {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(80, 85, 234, 0.4); /* Add a semi-transparent overlay */
-  z-index: -1; /* Place the background behind other elements */
+.logo {
+  margin-left: 1%;
+  margin-right: 2%; /* Add margin to the right side */
+  display: flex;
+  align-items: center; /* Vertically center the image */
 }
 
-.search-bar {
-  position: relative; /* Ensure the search bar is above the background */
-  z-index: 1;
+.logo img {
+  width: 35%;
+  height: auto;
 }
