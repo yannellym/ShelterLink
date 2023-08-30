@@ -9,6 +9,7 @@ import AllNearbyPetsCard from './components/AllNearbyPetsCard';
 import AdoptionInfoSection from './components/AdoptionInfoSection';
 import Footer from './components/Footer';
 import Dog1 from '../src/images/dog.jpg'
+import UserPreferencesForm from './components/UserPreferencesForm';
 
 
 // Placeholder data
@@ -54,12 +55,22 @@ function App() {
   return (
     <div className="App">
       <Header />
-      <main>
+      <main className="main-container">
         <div className="background-image"></div>
-        <div className="search-bar-container">
-          <SearchFilters breeds={placeholderBreeds} sizes={placeholderSizes} ages={placeholderAges} types={placeholderTypes} onFilterChange={handleFilterChange} />
+        <div className="form-and-search-container">
+          <div className="left-column">
+            <UserPreferencesForm />
+          </div>
+          <div className="divider-container">
+            <div className="divider">OR</div>
+          </div>
+          <div className="right-column">
+            <div className="search-bar-container">
+              <SearchFilters breeds={placeholderBreeds} sizes={placeholderSizes} ages={placeholderAges} types={placeholderTypes} onFilterChange={handleFilterChange} />
+            </div>
+          </div>
         </div>
-        <div className="section-links-div">
+          <div className="section-links-inner-div">
           <h3> Find your fur-ever friend:</h3>
           <div className="section-links-inner-div">
             <SectionLink title="All Dogs" imageSrc= {Dog1} link="/dogs" />

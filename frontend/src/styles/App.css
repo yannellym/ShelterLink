@@ -72,7 +72,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: url('../images/catanddog3.jpg'); 
+  /* background-image: url('../images/catanddog3.jpg');  */
   background-size: cover;
   background-position: center;
   opacity: 1; /* No overlay */
@@ -87,3 +87,66 @@
   height: 80vh; /* Set the container height to cover the viewport */
   z-index: 1; /* Place above the background image */
 }
+
+
+.form-and-search-container {
+  display: flex;
+  gap: 20px; /* Adjust the gap between the form and search bar */
+  flex-grow: 1; /* Allow the container to grow and take available space */
+}
+.main-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 20px; /* Adjust the gap between columns */
+}
+
+.left-column,
+.right-column {
+  flex-grow: 1; /* Allow columns to take available space */
+}
+
+.left-column {
+  flex-basis: calc(50% - 10px); /* Adjust the width of the left column */
+}
+
+.right-column {
+  flex-basis: calc(50% - 10px); /* Adjust the width of the right column */
+}
+
+.main-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 20px; /* Adjust the gap between columns and divider */
+}
+.form-and-search-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 20px; /* Adjust the gap between columns and divider */
+}
+
+.left-column,
+.right-column {
+  flex: 1; /* Allow columns to take available space */
+}
+
+.divider-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.divider {
+  font-weight: bold;
+  font-size: 18px;
+  color: #000000;
+  margin: 0 10px; /* Adjust the margin as needed */
+  padding: 50% 0;
+}
+
+
+
+
