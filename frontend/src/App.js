@@ -70,7 +70,7 @@ function App() {
             </div>
           </div>
         </div>
-          <div className="section-links-inner-div">
+        <div className="section-links-div">
           <h3> Find your fur-ever friend:</h3>
           <div className="section-links-inner-div">
             <SectionLink title="All Dogs" imageSrc= {Dog1} link="/dogs" />
@@ -78,6 +78,11 @@ function App() {
             <SectionLink title="Other Animals" imageSrc= {Dog1} link="/other-animals" />
             <SectionLink title="Shelters & Rescues" imageSrc= {Dog1} link="/shelters" />
           </div>
+        </div>
+
+        <div className="adoption-div">
+          <AdoptionInfoSection />
+          {/* <DogList dogs={filteredDogs} /> */}
         </div>
 
         <div className="nearby-pets">
@@ -90,12 +95,8 @@ function App() {
             <AllNearbyPetsCard imageSrc={Dog1} />
           </div>
         </div>
-
-        <AdoptionInfoSection />
-
-        <DogList dogs={filteredDogs} />
-        <Footer />
       </main>
+    <Footer />
     </div>
   );
 }

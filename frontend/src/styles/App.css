@@ -37,33 +37,39 @@
   }
 }
 
-.nearby-pets {
-  background-color: black;
+/* outside divs */
+.section-links-div {
+  width: 100vw;
+  background-color: rgb(0, 0, 0);
 }
 
-.nearby-pet-cards {
+.nearby-pets {
+  width: 100vw;
+  background-color: black;
+}
+.adoption-div {
+  width: 100vw;
+  background-color: rgba(249, 170, 170, 0.113);
+}
+
+/* inner divs */
+.nearby-pet-cards, .section-links-inner-div {
   display: flex;
   align-items: center; /* Center vertically */
   height: 40vh;
-  padding: 0 3%;
-  width: 90vw;
+  padding: 0 10%;
+  width: 80vw;
 }
 
+
 .nearby-pets h3{
-  font-size: 34px; /* Increase the font size for the title */
-  padding: 2% 0% ; /* Add space below the title */
+  font-size: 34px; 
   color: white;
 }
 
-.section-links-inner-div {
-  display: flex;
-  align-items: center; /* Center vertically */
-  height: 40vh;
-  padding: 0 3%;
-  width: 90vw;
-}
 .section-links-div h3{
   font-size: 34px; /* Increase the font size for the title */
+  color: white;
 }
 
 .background-image {
@@ -91,7 +97,7 @@
 
 .form-and-search-container {
   display: flex;
-  gap: 20px; /* Adjust the gap between the form and search bar */
+  gap: 10px; /* Adjust the gap between the form and search bar */
   flex-grow: 1; /* Allow the container to grow and take available space */
 }
 .main-container {
@@ -99,7 +105,7 @@
   flex-wrap: wrap;
   justify-content: center;
   align-items: flex-start;
-  gap: 20px; /* Adjust the gap between columns */
+  gap: 10px; /* Adjust the gap between columns */
 }
 
 .left-column,
@@ -126,6 +132,7 @@
   justify-content: center;
   align-items: flex-start;
   gap: 20px; /* Adjust the gap between columns and divider */
+  padding: 2%;
 }
 
 .left-column,
@@ -137,6 +144,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 80vh;
 }
 
 .divider {
