@@ -25,18 +25,27 @@ function Footer() {
           <li>Animal Shelters & Rescues</li>
           <li>Other Types of Pets</li>
         </ul>
+        <a href="#" className="adopt-link">ADOPT</a>
       </div>
       <div className="footer-section">
-        <h4>ABOUT DOGS & PUPPIES</h4>
+        <h4>ABOUT DOGS & CATS </h4>
         <ul>
-          {/* ... (more items) */}
+          <li>Kittens</li>
+          <li>Puppies</li>
+          <li>Adult Dogs</li>
+          <li>Adult Cats</li>
         </ul>
       </div>
       <div className="footer-section">
-        <h4>ABOUT CATS & KITTENS</h4>
+        <h4> FOSTER OR GET INVOLVED</h4>
         <ul>
-          {/* ... (more items) */}
+          <li>What is fostering?</li>
+          <li>Foster Resources</li>
+          <li>Foster Group</li>
+          <li>FAQs</li>
         </ul>
+        <a href="#" className="foster-link">FOSTER</a>
+        
       </div>
       <div className="footer-section">
         <h4>To get the latest on pet adoption and pet care, sign up for the Petfinder newsletter.</h4>

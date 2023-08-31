@@ -1,6 +1,7 @@
 /* AdoptionInfoSection.css */
 .adoption-info-section {
     display: flex;
+    padding: 2% 5%;
     justify-content: space-between;
     margin-top: 30px;
   }
@@ -8,10 +9,11 @@
   .adoption-info-card {
     flex: 1;
     background-color: #f7f7f7;
-    padding: 20px;
+    padding: 40px;
     border-radius: 5px;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
     text-align: center;
+    margin: 10px;
   }
   
   .adoption-info-card h3 {

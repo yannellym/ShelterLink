@@ -28,20 +28,25 @@ const UserPreferencesForm = () => {
 
   return (
     <div className="container">
-      <h1>Find your perfect match:</h1>
+      <h2>Find your perfect match:</h2>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="size">Size:</label>
-        <select id="size" value={size} onChange={(event) => setSize(event.target.value)}>
-          <option value="small">Small</option>
-          <option value="medium">Medium</option>
-          <option value="large">Large</option>
-        </select>
-
-        <label>Gender:</label>
-        <div className="gender-options">
-        <label><input type="radio" name="gender" value="female" checked={gender === 'female'} onChange={() => setGender('female')} /> Female  </label>
-        <label><input type="radio" name="gender" value="male" checked={gender === 'male'} onChange={() => setGender('male')} /> Male  </label>
-        <label><input type="radio" name="gender" value="any" checked={gender === 'any'} onChange={() => setGender('any')} /> Any </label>
+        <div className="form-options">
+          <div className="form-option">
+            <label htmlFor="size">Size:</label>
+            <select id="size" value={size} onChange={(event) => setSize(event.target.value)}>
+              <option value="small">Small</option>
+              <option value="medium">Medium</option>
+              <option value="large">Large</option>
+            </select>
+          </div>
+          <div className="form-option">
+          <label htmlFor="size">Gender:</label>
+            <select id="gender" value={gender} onChange={(event) => setGender(event.target.value)}>
+              <option value="female">Female</option>
+              <option value="male">Male</option>
+              <option value="any">Any</option>
+            </select>
+          </div>
         </div>
 
         <label>Age Range:</label>
@@ -54,7 +59,7 @@ const UserPreferencesForm = () => {
         max="10"
         />
         <span>
-        {age < 1 ? 'months' : age >= 10 ? '10+' : `${age} `}
+        {age < 1 ? 'months' : age >= 10 ? '10+ years' : `${age} years`}
         </span>
 
         <label>Activity Level:</label>

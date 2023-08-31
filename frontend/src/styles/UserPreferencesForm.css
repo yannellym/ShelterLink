@@ -1,91 +1,121 @@
-/* ... (existing styles) */
-
 .container {
-    max-width: 70%;
-    margin: 0 auto;
-    padding: 20px;
-    height: 80%;
-    background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(35, 1, 26, 0.158);
+  max-width: 70%;
+  margin: 0 auto;
+  padding: 20px;
+  height: 80%;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(35, 1, 26, 0.158);
+}
+
+.container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #f91201;
+}
+
+form label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+
+.form-options, .gender-options, .temperament-options {
+  display: flex;
+  flex-wrap: wrap; /* Allow items to wrap on smaller screens */
+  gap: 20px; /* Adjust gap for responsiveness */
+  align-items: center;
+  margin-bottom: 10px;
+  padding-bottom: 5%; /* Add some margin to separate sections */
+}
+
+
+
+.form-options label, .gender-options label, .temperament-options label {
+  margin: 0; /* Remove margin from individual labels within the container */
+}
+
+.gender-options, .form-options {
+  display: flex;
+  justify-content: center; /* Center items horizontally */
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 10px;
+}
+form-options {
+  display: flex;
+  gap: 20px;
+}
+
+.form-option {
+  display: flex;
+  flex-direction: column;
+}
+
+.gender-options {
+  display: flex;
+  gap: 10px;
+}
+select,
+input[type='radio'],
+input[type='checkbox'] {
+  margin-bottom: 10px; /* Adjust margin to create spacing */
+  padding: 10px;
+  width: 100%; 
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  background-color: #f7f7f7;
+  transition: border-color 0.3s ease;
+}
+
+select:focus,
+input[type='radio']:focus,
+input[type='checkbox']:focus {
+  border-color: #3498db;
+}
+
+input[type='range'] {
+  appearance: none;
+  background: linear-gradient(to right, #242412, #00f00c) no-repeat;
+  background-size: calc(100% - 10px) 3px, 3px 3px; /* Adjust thickness */
+  background-position: left center, right center;
+  cursor: pointer;
+  width: 80%; /* Make the slider span full width */
+  border: none;
+}
+
+input[type='range']::-webkit-slider-thumb {
+  appearance: none;
+  width: 30px; /* Increase width */
+  height: 30px; /* Increase height */
+  background: url('../images/paw.png') center/cover no-repeat;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+button {
+  display: block;
+  margin: 20px auto 0;
+  padding: 10px 20px;
+  background-color: #d40808d0;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #045806;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .container {
+    max-width: 90%; /* Adjust max width for smaller screens */
   }
-  
-  .container h1 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #f91201;
-  }
-  
-  form label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-  }
-  
-  .form-options, .gender-options, .temperament-options {
-    display: flex;
-    gap: 40px; 
-    align-items: center;
-    margin-bottom: 10px; /* Add some margin to separate sections */
-  }
-  
-  .form-options label, .gender-options label, .temperament-options label {
-    margin: 0; /* Remove margin from individual labels within the container */
-  }
-  
-  select,
-  input[type='radio'],
-  input[type='checkbox'] {
-    margin-bottom: 10px; /* Adjust margin to create spacing */
-    padding: 10px;
-    width: 40%;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-    background-color: #f7f7f7;
-    transition: border-color 0.3s ease;
-  }
-  
-  select:focus,
-  input[type='radio']:focus,
-  input[type='checkbox']:focus {
-    border-color: #3498db;
-  }
-  
-  input[type='range'] {
-    appearance: none;
-    background: linear-gradient(to right, #242412, #00f00c) no-repeat;
-    background-size: calc(100% - 10px) 3px, 3px 3px; /* Adjust thickness */
-    background-position: left center, right center;
-    cursor: pointer;
-    width: 90%; /* Make the slider longer */
-    border: none;
-  }
-  
-  input[type='range']::-webkit-slider-thumb {
-    appearance: none;
-    width: 30px; /* Increase width */
-    height: 30px; /* Increase height */
-    background: url('../images/paw.png') center/cover no-repeat;
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-  }
-  
-  button {
-    display: block;
-    margin: 20px auto 0;
-    padding: 10px 20px;
-    background-color: #d40808d0;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 18px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  button:hover {
-    background-color: #045806;
-  }
-  
+}

@@ -49,7 +49,7 @@
 }
 .adoption-div {
   width: 100vw;
-  background-color: rgba(249, 170, 170, 0.113);
+  background-color: rgba(255, 255, 255, 0.113);
 }
 
 /* inner divs */
@@ -62,14 +62,13 @@
 }
 
 
-.nearby-pets h3{
+.nearby-pets, .section-links-div h3{
   font-size: 34px; 
   color: white;
 }
 
-.section-links-div h3{
-  font-size: 34px; /* Increase the font size for the title */
-  color: white;
+.adoption-div h3 {
+  font-size:  34px;
 }
 
 .background-image {
