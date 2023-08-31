@@ -1,7 +1,10 @@
 // Header.js
 import React from 'react';
 import '../styles/Header.css'; 
-import ShelterLinkLogo from '../images/ShelterLinkw.png'; // Import the logo image
+
+
+const ShelterLinkLogo = '/images/ShelterLinkw.png';
+
 
 function Header() {
   return (

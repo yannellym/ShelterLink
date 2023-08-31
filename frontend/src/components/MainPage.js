@@ -3,7 +3,7 @@ import SearchBar from './SearchBar';
 import PetCard from './PetCard';
 import Filter from './Filter';
 
-const MainPage = () => {
+function MainPage() {
   const [searchResults, setSearchResults] = useState([]); // Store the fetched pet data
   const [filters, setFilters] = useState({
     size: 'medium', // Default filter values

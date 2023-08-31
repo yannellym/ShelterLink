@@ -25,7 +25,7 @@ function Footer() {
           <li>Animal Shelters & Rescues</li>
           <li>Other Types of Pets</li>
         </ul>
-        <a href="#" className="adopt-link">ADOPT</a>
+        <a href="https://www.petfinder.com/" className="adopt-link">ADOPT</a>
       </div>
       <div className="footer-section">
         <h4>ABOUT DOGS & CATS </h4>
@@ -44,12 +44,12 @@ function Footer() {
           <li>Foster Group</li>
           <li>FAQs</li>
         </ul>
-        <a href="#" className="foster-link">FOSTER</a>
+        <a href="https://www.petfinder.com/" className="foster-link">FOSTER</a>
         
       </div>
       <div className="footer-section">
         <h4>To get the latest on pet adoption and pet care, sign up for the Petfinder newsletter.</h4>
-        <a href="#" className="sign-up-link">SIGN UP</a>
+        <a href="https://www.petfinder.com/" className="sign-up-link">SIGN UP</a>
       </div>
       {/* ... (more sections) */}
     </footer>
