@@ -18,9 +18,10 @@ function Header() {
       <nav className="main-navigation">
         <ul>
           <li><a href="/"> Home </a></li>
-          <li><a href="/"> Find a pet </a></li>
-          <li><a href="/"> Resources </a></li>
-          <li><a href="/"> Favorites </a></li>
+          <li><a href="/find-a-pet"> Find a pet </a></li>
+          <li><a href="/about"> About </a></li>
+          <li><a href="/resources"> Resources </a></li>
+          <li><a href="/favorites"> Favorites </a></li>
         </ul>
       </nav>
 
