@@ -1,0 +1,27 @@
+.main-page {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+  }
+  
+  .content {
+    flex: 1;
+    display: flex;
+  }
+  
+  .filter {
+    width: 300px; /* Adjust the width as needed */
+    padding: 20px;
+    background-color: #f8f8f8;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+    margin-right: 20px;
+  }
+  
+  .pet-card-list {
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  

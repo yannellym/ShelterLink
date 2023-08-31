@@ -1,10 +1,23 @@
 import React from 'react';
+import '../styles/Resources.css';
 
 const Resources = () => {
   return (
-    <div>
+    <div className="resources-container">
       <h2>Resources</h2>
-      {/* Add content related to the Resources section */}
+      <div className="resource">
+        <h3>Adoption Information</h3>
+        <p>Learn about the adoption process and requirements.</p>
+      </div>
+      <div className="resource">
+        <h3>Pet Care Tips</h3>
+        <p>Get advice on caring for your new furry friend.</p>
+      </div>
+      <div className="resource">
+        <h3>Local Shelters</h3>
+        <p>Find shelters and rescues near you.</p>
+      </div>
+      {/* Add more resources as needed */}
     </div>
   );
 };

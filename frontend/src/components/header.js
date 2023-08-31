@@ -1,12 +1,12 @@
-// Header.js
-import React from 'react';
-import '../styles/Header.css'; 
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import '../styles/Header.css';
 
+const ShelterLinkLogo = './images/shelterlink-logo.png';
 
-const ShelterLinkLogo = '/images/ShelterLinkw.png';
+const Header = () => {
+  const [user, setUser] = useState(null); // Replace with your user state logic
 
-
-function Header() {
   return (
     <header className="header">
       {/* Logo */}
@@ -17,17 +17,25 @@ function Header() {
       {/* Navigation */}
       <nav className="main-navigation">
         <ul>
-          <li><a href="/"> Home </a></li>
-          <li><a href="/find-a-pet"> Find a pet </a></li>
-          <li><a href="/about"> About </a></li>
-          <li><a href="/resources"> Resources </a></li>
-          <li><a href="/favorites"> Favorites </a></li>
+          <li><Link to="/">Home</Link></li>
+          <li><Link to="/find-a-pet">Find a pet</Link></li>
+          <li><Link to="/about">About</Link></li>
+          <li><Link to="/resources">Resources</Link></li>
+          <li><Link to="/favorites">Favorites</Link></li>
         </ul>
       </nav>
 
       {/* User profile */}
       <div className="user-profile">
-        <span>Yannelly Mercado (current user)</span>
+        {user ? (
+          <span>{user.name}</span>
+        ) : (
+          <div className="nav-item">
+            <Link to="/SignIn">
+              <button>Sign In</button>
+            </Link>
+          </div>
+        )}
       </div>
     </header>
   );

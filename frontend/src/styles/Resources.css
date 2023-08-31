@@ -1,0 +1,30 @@
+.resources-container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+  }
+  
+  .resource {
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: #f8f8f8;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+  }
+  
+  .resource h3 {
+    font-size: 24px;
+    color: #333;
+  }
+  
+  .resource p {
+    font-size: 16px;
+    color: #666;
+  }
+  
+  .resource:hover {
+    transform: scale(1.02);
+  }
+
+  
