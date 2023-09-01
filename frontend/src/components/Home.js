@@ -82,7 +82,7 @@ function Home() {
 
         <div className="adoption-div">
           <h3> Resources:</h3>
-          <AdoptionInfoSection />
+          <AdoptionInfoSection />  
           {/* <DogList dogs={filteredDogs} /> */}
         </div>
 

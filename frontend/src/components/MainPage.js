@@ -1,47 +1,99 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/MainPage.css';
 import SearchBar from './SearchBar';
 import PetCard from './PetCard';
 import Filter from './Filter';
+import SampleData from './SampleData';
 
-function MainPage() {
-  const [searchResults, setSearchResults] = useState([
-    // Sample pet data
-    {
-      id: 1,
-      name: 'Buddy',
-      breed: 'Golden Retriever',
-      age: 'Puppy',
-      size: 'Medium',
-      gender: 'Male',
-      shelter: 'Happy Paws Shelter',
-      photo: '/images/dog2.jpg', // Sample photo path
-      distance: '2 miles', // Sample distance from user
-    },
-    {
-      id: 2,
-      name: 'Daisy',
-      breed: 'Labrador',
-      age: 'Adult',
-      size: 'Large',
-      gender: 'Female',
-      shelter: 'Loving Hearts Rescue',
-      photo: '/images/dog.jpg', // Sample photo path
-      distance: '5 miles', // Sample distance from user
-    },
-    // Add more sample pet data as needed
-  ]);
+function MainPage({ onFilterChange }) {
   const [filters, setFilters] = useState({
-    size: 'medium', // Default filter values
-    breed: 'breed1', // Default breed filter
-    age: 'puppy',   // Default age filter
-    gender: 'male', // Default gender filter
-    shelter: 'shelter1', // Default shelter filter
+    type: 'any',
+    breed: 'any',
+    age: 'any',
+    gender: 'any',
+    size: 'any',
+    coat: 'any',
+    tags: 'any',
+    name: 'any',
+    description: 'any',
+    photos: 'any',
+    status: 'any',
+    contact: 'any',
   });
 
-  const handleSearch = (searchText) => {
-    // Fetch pet data based on the search text
-    // Update the searchResults state with fetched data
+  const [searchResults, setSearchResults] = useState([]);
+
+  useEffect(() => {
+    // Fetch and populate data from your API here and set it in setSearchResults
+    // For now, using sampleData for demonstration
+    setSearchResults(SampleData);
+  }, []);
+
+  const filterPets = () => {
+    let filteredData = [...SampleData];
+    console.log(filteredData)
+
+    // Filter by pet type
+    if (filters.petType !== 'any') {
+      filteredData = filteredData.filter((pet) => pet.type === filters.petType);
+    }
+
+    // Filter by breed
+    if (filters.breed !== 'any') {
+      filteredData = filteredData.filter((pet) => pet.breeds.primary === filters.breed);
+    }
+
+    // Filter by age
+    if (filters.age !== 'any') {
+      filteredData = filteredData.filter((pet) => pet.age === filters.age);
+    }
+
+    // Filter by gender
+    if (filters.gender !== 'any') {
+      filteredData = filteredData.filter((pet) => pet.gender === filters.gender);
+    }
+
+    // Filter by size
+    if (filters.size !== 'any') {
+      filteredData = filteredData.filter((pet) => pet.size === filters.size);
+    }
+
+    // Filter by coat
+    if (filters.coat !== 'any') {
+      filteredData = filteredData.filter((pet) => pet.coat === filters.coat);
+    }
+
+    // Filter by tags
+    if (filters.tags !== 'any') {
+      filteredData = filteredData.filter((pet) => pet.tags.includes(filters.tags));
+    }
+
+    // Filter by name
+    if (filters.name !== 'any') {
+      filteredData = filteredData.filter((pet) => pet.name === filters.name);
+    }
+
+    // Filter by description
+    if (filters.description !== 'any') {
+      filteredData = filteredData.filter((pet) => pet.description === filters.description);
+    }
+
+    // Filter by photos
+    if (filters.photos !== 'any') {
+      filteredData = filteredData.filter((pet) => pet.photos.some((photo) => photo === filters.photos));
+    }
+
+    // Filter by status
+    if (filters.status !== 'any') {
+      filteredData = filteredData.filter((pet) => pet.status === filters.status);
+    }
+
+    // Filter by contact
+    if (filters.contact !== 'any') {
+      filteredData = filteredData.filter((pet) => pet.contact.email === filters.contact);
+    }
+
+    setSearchResults(filteredData);
   };
 
   const handleFilterChange = (filterName, value) => {
@@ -49,13 +101,21 @@ function MainPage() {
       ...filters,
       [filterName]: value,
     });
+
+    filterPets();
   };
 
   return (
     <div className="main-page">
-      <SearchBar onSearch={handleSearch} />
+      <div className="search-bar">
+        <SearchBar />
+      </div>
+      <div className="sidebar">
+        <div className="filters">
+          <Filter filters={filters} onFilterChange={handleFilterChange} />
+        </div>
+      </div>
       <div className="content">
-        <Filter filters={filters} onFilterChange={handleFilterChange} />
         <div className="pet-card-list">
           {searchResults.map((pet) => (
             <PetCard key={pet.id} pet={pet} />

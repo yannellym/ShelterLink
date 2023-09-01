@@ -1,8 +1,17 @@
 .main-page {
-    display: flex;
-    justify-content: space-between;
-    padding: 20px;
-  }
+  display: flex;
+}
+
+.sidebar {
+  flex: 0.3;
+  padding: 20px; /* Adjust the amount of space as needed */
+}
+
+.content {
+  flex: 3; /* Adjust the ratio of space as needed */
+  padding: 20px; /* Adjust the amount of space as needed */
+}
+
   
   .content {
     flex: 1;

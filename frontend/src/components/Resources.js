@@ -16,8 +16,7 @@ const Resources = () => {
       <div className="resource">
         <h3>Local Shelters</h3>
         <p>Find shelters and rescues near you.</p>
-      </div>
-      {/* Add more resources as needed */}
+      </div> 
     </div>
   );
 };
