@@ -1,7 +1,7 @@
 const sampleData = [
     {
       id: 120,
-      name: "Spot",
+      name: "Spot a dog",
       breed: "Akita",
       age: "Young",
       size: "Medium",
@@ -28,8 +28,8 @@ const sampleData = [
       tags: ["Cute", "Intelligent", "Large", "Playful", "Happy", "Affectionate"],
     },
     {
-      id: 120,
-      name: "Niki",
+      id: 121,
+      name: "Niki a cat",
       age: "Young",
       size: "Small",
       gender: "Female",
@@ -56,7 +56,7 @@ const sampleData = [
     },
     {
       id: 122,
-      name: "Sample Pet 3",
+      name: "Sample Pet 3 a cat",
       breed: "Siamese",
       age: "Kitten",
       size: "Small",
@@ -71,7 +71,7 @@ const sampleData = [
     },
     {
       id: 123,
-      name: "Sample Pet 4",
+      name: "Sample Pet 4 a dog",
       breed: "Golden Retriever",
       age: "Adult",
       size: "Large",

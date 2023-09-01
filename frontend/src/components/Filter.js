@@ -2,8 +2,14 @@ import React from 'react';
 
 function Filter({ filters, onFilterChange }) {
   const handleFilterSelect = (filterName, event) => {
-    onFilterChange(filterName, event.target?.value); // Ensure the value is lowercase
+    const selectedValue = event.target.value;
+    // Ensure the value is lowercase, or set it to 'any' if it's undefined
+    const lowercasedValue = selectedValue ? selectedValue : 'any';
+    onFilterChange(filterName, lowercasedValue);
   };
+
+  console.log('Current filters.type:', filters.type); // Debugging log
+
 
   const renderDogFilters = () => {
     return (
@@ -139,7 +145,7 @@ function Filter({ filters, onFilterChange }) {
     <div className="filters">
       <h2>Filters</h2>
       <div className="filter-group">
-        <label htmlFor="petType">Pet Type:</label>
+        <label htmlFor="type">Type:</label>
         <select
           id="type"
           value={filters.type}

@@ -24,82 +24,80 @@ function MainPage({ onFilterChange }) {
   const [searchResults, setSearchResults] = useState([]);
 
   useEffect(() => {
-    // Fetch and populate data from your API here and set it in setSearchResults
-    // For now, using sampleData for demonstration
+
     setSearchResults(SampleData);
   }, []);
 
   const filterPets = () => {
     let filteredData = [...SampleData];
-    console.log(filteredData)
+    console.log('filtered data' , filteredData)
+    console.log('Current filters.type:', filters.type);
 
     // Filter by pet type
-    if (filters.petType !== 'any') {
-      filteredData = filteredData.filter((pet) => pet.type === filters.petType);
+    if (filters.type !== 'any') {
+      filteredData = filteredData.filter((pet) => pet.type.toLowerCase() === filters.type.toLowerCase() );
     }
 
-    // Filter by breed
-    if (filters.breed !== 'any') {
-      filteredData = filteredData.filter((pet) => pet.breeds.primary === filters.breed);
-    }
+    // // Filter by age
+    // if (filters.age !== 'any') {
+    //   filteredData = filteredData.filter((pet) => pet.age.toLowerCase() === filters.age);
+    // }
 
-    // Filter by age
-    if (filters.age !== 'any') {
-      filteredData = filteredData.filter((pet) => pet.age === filters.age);
-    }
+    // // Filter by gender
+    // if (filters.gender !== 'any') {
+    //   filteredData = filteredData.filter((pet) => pet.gender.toLowerCase() === filters.gender);
+    // }
 
-    // Filter by gender
-    if (filters.gender !== 'any') {
-      filteredData = filteredData.filter((pet) => pet.gender === filters.gender);
-    }
+    // // Filter by size
+    // if (filters.size !== 'any') {
+    //   filteredData = filteredData.filter((pet) => pet.size.toLowerCase() === filters.size);
+    // }
 
-    // Filter by size
-    if (filters.size !== 'any') {
-      filteredData = filteredData.filter((pet) => pet.size === filters.size);
-    }
+    // // Filter by coat
+    // if (filters.coat !== 'any') {
+    //   filteredData = filteredData.filter((pet) => pet.coat.toLowerCase() === filters.coat);
+    // }
 
-    // Filter by coat
-    if (filters.coat !== 'any') {
-      filteredData = filteredData.filter((pet) => pet.coat === filters.coat);
-    }
+    // // Filter by tags
+    // if (filters.tags !== 'any') {
+    //   filteredData = filteredData.filter((pet) => pet.tags.includes(filters.tags));
+    // }
 
-    // Filter by tags
-    if (filters.tags !== 'any') {
-      filteredData = filteredData.filter((pet) => pet.tags.includes(filters.tags));
-    }
+    // // Filter by name
+    // if (filters.name !== 'any') {
+    //   filteredData = filteredData.filter((pet) => pet.name.toLowerCase() === filters.name);
+    // }
 
-    // Filter by name
-    if (filters.name !== 'any') {
-      filteredData = filteredData.filter((pet) => pet.name === filters.name);
-    }
+    // // Filter by description
+    // if (filters.description !== 'any') {
+    //   filteredData = filteredData.filter((pet) => pet.description.toLowerCase() === filters.description);
+    // }
 
-    // Filter by description
-    if (filters.description !== 'any') {
-      filteredData = filteredData.filter((pet) => pet.description === filters.description);
-    }
+    // // Filter by photos
+    // if (filters.photos !== 'any') {
+    //   filteredData = filteredData.filter((pet) => pet.photos.some((photo) => photo === filters.photos));
+    // }
 
-    // Filter by photos
-    if (filters.photos !== 'any') {
-      filteredData = filteredData.filter((pet) => pet.photos.some((photo) => photo === filters.photos));
-    }
+    // // Filter by status
+    // if (filters.status !== 'any') {
+    //   filteredData = filteredData.filter((pet) => pet.status.toLowerCase() === filters.status);
+    // }
 
-    // Filter by status
-    if (filters.status !== 'any') {
-      filteredData = filteredData.filter((pet) => pet.status === filters.status);
-    }
-
-    // Filter by contact
-    if (filters.contact !== 'any') {
-      filteredData = filteredData.filter((pet) => pet.contact.email === filters.contact);
-    }
+    // // Filter by contact
+    // if (filters.contact !== 'any') {
+    //   filteredData = filteredData.filter((pet) => pet.contact.email.toLowerCase() === filters.contact);
+    // }
+    console.log("final filtered data", filteredData);
 
     setSearchResults(filteredData);
   };
 
   const handleFilterChange = (filterName, value) => {
+    const lowercasedValue = value ? value.toLowerCase() : 'any';
+
     setFilters({
       ...filters,
-      [filterName]: value,
+      [filterName]: lowercasedValue,
     });
 
     filterPets();
@@ -107,9 +105,9 @@ function MainPage({ onFilterChange }) {
 
   return (
     <div className="main-page">
-      <div className="search-bar">
+      {/* <div className="search-bar">
         <SearchBar />
-      </div>
+      </div> */}
       <div className="sidebar">
         <div className="filters">
           <Filter filters={filters} onFilterChange={handleFilterChange} />
