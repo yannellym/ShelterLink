@@ -60,31 +60,6 @@ function MainPage({ onFilterChange }) {
       filteredData = filteredData.filter((pet) => pet.coat.toLowerCase() === filters.coat);
     }
 
-    // Filter by tags
-    if (filters.tags !== 'any') {
-      filteredData = filteredData.filter((pet) => pet.tags.includes(filters.tags));
-    }
-
-    // Filter by name
-    if (filters.name !== 'any') {
-      filteredData = filteredData.filter((pet) => pet.name.toLowerCase() === filters.name);
-    }
-
-    // Filter by description
-    if (filters.description !== 'any') {
-      filteredData = filteredData.filter((pet) => pet.description.toLowerCase() === filters.description);
-    }
-
-    // Filter by photos
-    if (filters.photos !== 'any') {
-      filteredData = filteredData.filter((pet) => pet.photos.some((photo) => photo === filters.photos));
-    }
-
-    // Filter by status
-    if (filters.status !== 'any') {
-      filteredData = filteredData.filter((pet) => pet.status.toLowerCase() === filters.status);
-    }
-
     // Filter by contact
     if (filters.contact !== 'any') {
       filteredData = filteredData.filter((pet) => pet.contact.email.toLowerCase() === filters.contact);

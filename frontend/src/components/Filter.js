@@ -1,4 +1,5 @@
 import React from 'react';
+import popularDogBreeds from './popularDogBreeds';
 
 function Filter({ filters, onFilterChange }) {
   const handleFilterSelect = (filterName, event) => {
@@ -19,8 +20,11 @@ function Filter({ filters, onFilterChange }) {
             onChange={(event) => handleFilterSelect('breed', event)}
           >
             <option value="any">Any</option>
-            <option value="akita">Akita</option>
-            {/* Add more dog breed options based on your API data */}
+            {popularDogBreeds.map((breed, index) => (
+            <option key={index} value={breed.toLowerCase().replace(/ /g, '-')}>
+              {breed}
+            </option>
+          ))}
           </select>
         </div>
         <div className="filter-group">
@@ -72,19 +76,6 @@ function Filter({ filters, onFilterChange }) {
             <option value="short">Short</option>
             <option value="long">Long</option>
             {/* Add more coat options based on  API data */}
-          </select>
-        </div>
-        <div className="filter-group">
-          <label htmlFor="tags">Tags:</label>
-          <select
-            id="tags"
-            value={filters.tags}
-            onChange={(event) => handleFilterSelect('tags', event)}
-          >
-            <option value="any">Any</option>
-            <option value="cute">Cute</option>
-            <option value="intelligent">Intelligent</option>
-            {/* Add more tags options based on  API data */}
           </select>
         </div>
         {/* Add more dog-specific filters here */}
