@@ -5,8 +5,8 @@ import PetCard from './PetCard';
 import Filter from './Filter';
 import SampleData from './SampleData';
 
-function MainPage() {
-  const [filters, setFilters] = useState({
+function MainPage({ onFilterChange }) {
+  const initialFilters = {
     type: 'any',
     breed: 'any',
     age: 'any',
@@ -19,14 +19,15 @@ function MainPage() {
     photos: 'any',
     status: 'any',
     contact: 'any',
-  });
+  };
 
+  const [filters, setFilters] = useState(initialFilters);
   const [searchResults, setSearchResults] = useState([]);
 
   useEffect(() => {
-
-    setSearchResults(SampleData);
-  }, []);
+    // When the component mounts or filters change, filter the data
+    filterPets(filters);
+  }, [filters]);
 
   const filterPets = (filters) => {
     let filteredData = [...SampleData];
@@ -38,6 +39,7 @@ function MainPage() {
     if (filters.type !== 'any') {
       filteredData = filteredData.filter((pet) => pet.type.toLowerCase() === filters.type.toLowerCase());
     }
+    
     // Filter by age
     if (filters.age !== 'any') {
       filteredData = filteredData.filter((pet) => pet.age.toLowerCase() === filters.age);
@@ -87,23 +89,16 @@ function MainPage() {
     if (filters.contact !== 'any') {
       filteredData = filteredData.filter((pet) => pet.contact.email.toLowerCase() === filters.contact);
     }
-    console.log("final filtered data", filteredData);
-
     setSearchResults(filteredData);
   };
 
   const handleFilterChange = (filterName, value) => {
-    const lowercasedValue = value ? value.toLowerCase() : 'any';
-
-    // Pass the new filter values directly to filterPets
-    filterPets({ ...filters, [filterName]: lowercasedValue });
+    const updatedFilters = { ...filters, [filterName]: value };
+    setFilters(updatedFilters);
   };
 
   return (
     <div className="main-page">
-      {/* <div className="search-bar">
-        <SearchBar />
-      </div> */}
       <div className="sidebar">
         <div className="filters">
           <Filter filters={filters} onFilterChange={handleFilterChange} />

@@ -3,9 +3,7 @@ import React from 'react';
 function Filter({ filters, onFilterChange }) {
   const handleFilterSelect = (filterName, event) => {
     const selectedValue = event.target.value;
-    // Ensure the value is lowercase, or set it to 'any' if it's undefined
-    const lowercasedValue = selectedValue ? selectedValue : 'any';
-    onFilterChange(filterName, lowercasedValue);
+    onFilterChange(filterName, selectedValue);
   };
   console.log('Current filters.type:', filters.type); // Debugging log
 
@@ -142,25 +140,26 @@ function Filter({ filters, onFilterChange }) {
 
   return (
     <div className="filters">
-      <h2>Filters</h2>
-      <div className="filter-group">
-        <label htmlFor="type">Type:</label>
-        <select
-          id="type"
-          value={filters.type}
-          onChange={(event) => handleFilterSelect('type', event)}
-        >
-          <option value="any">Any</option>
-          <option value="dog">Dog</option>
-          <option value="cat">Cat</option>
-        </select>
-      </div>
-      {filters.type.toLowerCase() === 'dog' && renderDogFilters()} 
-      {filters.type.toLowerCase() === 'cat' && renderCatFilters()}
-      {filters.type === 'any' && console.log("showing any")}  
+    <h2>Filters</h2>
+    <div className="filter-group">
+      <label htmlFor="type">Type:</label>
+      <select
+        id="type"
+        value={filters.type}
+        onChange={(event) => handleFilterSelect('type', event)}
+      >
+        <option value="any">Any</option>
+        <option value="dog">Dog</option>
+        <option value="cat">Cat</option>
+      </select>
     </div>
-  );
-};
+    {/* Render dog filters if type is "dog" */}
+    {filters.type.toLowerCase() === 'dog' && renderDogFilters()}
+    {/* Render cat filters if type is "cat" */}
+    {filters.type.toLowerCase() === 'cat' && renderCatFilters()}
+  </div>
+);
+}
 
 
 export default Filter;

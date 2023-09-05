@@ -8,7 +8,7 @@ function SearchFilters({ breeds, sizes, ages, types, onFilterChange }) {
     <div className="search-filters">
       <div className="search-section">
         {/* Type of pet select */}
-        <select onChange={onFilterChange}>
+        {/* <select onChange={onFilterChange}>
           <option value="">Any</option>
           {types.map(type => (
             <option key={type} value={type}>{type}</option>
@@ -18,7 +18,7 @@ function SearchFilters({ breeds, sizes, ages, types, onFilterChange }) {
 
       <div className="search-section-wide"> {/* Use a class for the wider section */}
         {/* City input */}
-        <input type="text" id="cityInput" placeholder="City, State, or Zip Code" style={{ width: '100%' }} />
+        <input type="text" id="cityInput" placeholder="City, State, or Zip Code" style={{ width: '100%' }} /> */}
 
         {/* Button */}
         <button className="search-button">Search</button>
