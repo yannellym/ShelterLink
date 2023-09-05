@@ -7,7 +7,6 @@ function Filter({ filters, onFilterChange }) {
     const lowercasedValue = selectedValue ? selectedValue : 'any';
     onFilterChange(filterName, lowercasedValue);
   };
-
   console.log('Current filters.type:', filters.type); // Debugging log
 
 
@@ -61,7 +60,7 @@ function Filter({ filters, onFilterChange }) {
             <option value="any">Any</option>
             <option value="medium">Medium</option>
             <option value="large">Large</option>
-            {/* Add more size options based on your API data */}
+            {/* Add more size options based on  API data */}
           </select>
         </div>
         <div className="filter-group">
@@ -74,7 +73,7 @@ function Filter({ filters, onFilterChange }) {
             <option value="any">Any</option>
             <option value="short">Short</option>
             <option value="long">Long</option>
-            {/* Add more coat options based on your API data */}
+            {/* Add more coat options based on  API data */}
           </select>
         </div>
         <div className="filter-group">
@@ -87,7 +86,7 @@ function Filter({ filters, onFilterChange }) {
             <option value="any">Any</option>
             <option value="cute">Cute</option>
             <option value="intelligent">Intelligent</option>
-            {/* Add more tags options based on your API data */}
+            {/* Add more tags options based on  API data */}
           </select>
         </div>
         {/* Add more dog-specific filters here */}
@@ -154,11 +153,11 @@ function Filter({ filters, onFilterChange }) {
           <option value="any">Any</option>
           <option value="dog">Dog</option>
           <option value="cat">Cat</option>
-          <option value="others">Others</option>
         </select>
       </div>
-      {filters.type === 'dog' && renderDogFilters()} {/* Render dog filters when "Dog" is selected */}
-      {filters.type === 'cat' && renderCatFilters()} {/* Render cat filters when "Cat" is selected */}
+      {filters.type.toLowerCase() === 'dog' && renderDogFilters()} 
+      {filters.type.toLowerCase() === 'cat' && renderCatFilters()}
+      {filters.type === 'any' && console.log("showing any")}  
     </div>
   );
 };
