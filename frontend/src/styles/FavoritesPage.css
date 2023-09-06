@@ -1,8 +1,38 @@
 .pet-card-container {
-  display: flex;
-  flex-wrap: wrap; /* Wrap items to the next line when they don't fit */
-  gap: 20px; /* Adjust the gap between cards */
+  text-align: center;
 }
 
-  
-  
+.title-container {
+  margin-bottom: 20px;
+}
+
+.message-container {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+
+.sad-lab-image {
+  max-width: 100%;
+  height: 50vh;
+}
+
+.link {
+  font-size: 18px;
+  text-decoration: none;
+  color: blue;
+}
+
+.pet-card-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.message {
+  /* border-color: red, 10px solid; */
+  /* background-color: red; */
+  margin-left: 20%;
+}
