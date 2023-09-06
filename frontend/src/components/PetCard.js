@@ -1,11 +1,18 @@
 import React, { useState } from 'react';
 import '../styles/PetCard.css';
 
-const PetCard = ({ pet }) => {
-  const [favorited, setFavorited] = useState(false);
+const PetCard = ({ pet, addToFavorites, removeFromFavorites, isFavorite }) => {
+  // Replace the local state with the 'isFavorite' prop
+  const [favorited, setFavorited] = useState(isFavorite);
 
   const handleToggleFavorite = () => {
+    // Toggle the 'isFavorite' state and call the appropriate function
     setFavorited(!favorited);
+    if (favorited) {
+      removeFromFavorites(pet.id);
+    } else {
+      addToFavorites(pet);
+    }
   };
 
   // Truncate the description to one line with "..." at the end
@@ -32,7 +39,7 @@ const PetCard = ({ pet }) => {
       <div className="pet-card-footer">
         <button className="more-info-button">More Info</button>
         <button
-          className={`favorite-heart-${favorited ? 'favorited' : 'data'}`}
+          className={`favorite-heart-${favorited ? 'favorited' : 'unfavorited'}`}
           onClick={handleToggleFavorite}
           tabIndex="0"
         >

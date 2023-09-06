@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/MainPage.css';
-import SearchBar from './SearchBar';
 import PetCard from './PetCard';
 import Filter from './Filter';
 import SampleData from './SampleData';
 
-function MainPage({ onFilterChange }) {
+function MainPage({ onFilterChange, favoritePets, setFavoritePets, addToFavorites, removeFromFavorites }) {
   const initialFilters = {
     type: 'any',
     breed: 'any',
@@ -24,6 +23,9 @@ function MainPage({ onFilterChange }) {
   const [filters, setFilters] = useState(initialFilters);
   const [searchResults, setSearchResults] = useState([]);
 
+
+
+
   useEffect(() => {
     // When the component mounts or filters change, filter the data
     filterPets(filters);
@@ -32,12 +34,13 @@ function MainPage({ onFilterChange }) {
   const filterPets = (filters) => {
     let filteredData = [...SampleData];
     
-    console.log('filtered data' , filteredData)
-    console.log('Current filters.type:', filters.type);
-
     // Filter by pet type
     if (filters.type !== 'any') {
       filteredData = filteredData.filter((pet) => pet.type.toLowerCase() === filters.type.toLowerCase());
+    }
+    // Filter by breed
+    if (filters.breed !== 'any') {
+      filteredData = filteredData.filter((pet) => pet.breed.toLowerCase() === filters.breed.toLowerCase());
     }
     
     // Filter by age
@@ -60,10 +63,6 @@ function MainPage({ onFilterChange }) {
       filteredData = filteredData.filter((pet) => pet.coat.toLowerCase() === filters.coat);
     }
 
-    // Filter by contact
-    if (filters.contact !== 'any') {
-      filteredData = filteredData.filter((pet) => pet.contact.email.toLowerCase() === filters.contact);
-    }
     setSearchResults(filteredData);
   };
 
@@ -81,9 +80,16 @@ function MainPage({ onFilterChange }) {
       </div>
       <div className="content">
         <div className="pet-card-list">
-          {searchResults.map((pet) => (
-            <PetCard key={pet.id} pet={pet} />
+        {searchResults.map((pet) => (
+          <PetCard
+            key={pet.id}
+            pet={pet}
+            addToFavorites={addToFavorites}
+            removeFromFavorites={removeFromFavorites}
+            isFavorite={favoritePets.some((favoritePet) => favoritePet.id === pet.id)}
+          />
           ))}
+          
         </div>
       </div>
     </div>

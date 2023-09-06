@@ -6,23 +6,36 @@ import MainPage from './components/MainPage';
 import Home from './components/Home'; 
 import About from './components/About';
 import Resources from './components/Resources'; 
-import Favorites from './components/Favorites';
+import FavoritesPage from './components/FavoritesPage';
 import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
 
 const App = () => {
   const [isSignInVisible, setIsSignInVisible] = useState(true);
+  const [favoritePets, setFavoritePets] = useState([]);
+
+  // Functions for Managing Favorites
+  const addToFavorites = (pet) => {
+    // Check if the pet is already in favorites to avoid duplicates
+    if (!favoritePets.some((favoritePet) => favoritePet.id === pet.id)) {
+      setFavoritePets([...favoritePets, pet]);
+    }
+  };
+  
+  const removeFromFavorites = (petId) => {
+    const updatedFavorites = favoritePets.filter((pet) => pet.id !== petId);
+    setFavoritePets(updatedFavorites);
+  };
 
   return (
     <BrowserRouter>
       <Header />
       <Routes>
-        {/* Define your routes using <Route> */}
         <Route path="/" element={<Home />} />
-        <Route path="/find-a-pet" element={<MainPage />} />
+        <Route path="/find-a-pet" element={<MainPage favoritePets={favoritePets} setFavoritePets={setFavoritePets} addToFavorites={addToFavorites} removeFromFavorites={removeFromFavorites}/>} />
         <Route path="/about" element={<About />} />
         <Route path="/resources" element={<Resources />} />
-        <Route path="/favorites" element={<Favorites />} />
+        <Route path="/favorites" element={<FavoritesPage favoritePets={favoritePets} removeFromFavorites={removeFromFavorites} />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
       </Routes>

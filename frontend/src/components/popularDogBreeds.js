@@ -1,6 +1,7 @@
 const popularDogBreeds = [
     'Akita',
     'Australian Shepherd',
+    'Basset Hound',
     'Beagle',
     'Bernese Mountain Dog',
     'Bichon Frise',
@@ -31,8 +32,6 @@ const popularDogBreeds = [
     'Staffordshire Bull Terrier',
     'West Highland White Terrier / Westie',
     'Yorkshire Terrier',
-    'Boxer',
-    'Basset Hound',
   ].sort();
   
   export default popularDogBreeds;

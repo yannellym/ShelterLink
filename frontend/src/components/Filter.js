@@ -6,8 +6,6 @@ function Filter({ filters, onFilterChange }) {
     const selectedValue = event.target.value;
     onFilterChange(filterName, selectedValue);
   };
-  console.log('Current filters.type:', filters.type); // Debugging log
-
 
   const renderDogFilters = () => {
     return (
@@ -21,7 +19,7 @@ function Filter({ filters, onFilterChange }) {
           >
             <option value="any">Any</option>
             {popularDogBreeds.map((breed, index) => (
-            <option key={index} value={breed.toLowerCase().replace(/ /g, '-')}>
+            <option key={index} value={breed.toLowerCase()}>
               {breed}
             </option>
           ))}
