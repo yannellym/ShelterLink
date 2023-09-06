@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/FavoritesPage.css';
 import PetCard from './PetCard';
+import SadLab from '../images/sadlab.jpg';
 
 function FavoritesPage({ favoritePets, removeFromFavorites }) {
   return (
@@ -11,7 +12,7 @@ function FavoritesPage({ favoritePets, removeFromFavorites }) {
       </div>
       {favoritePets.length === 0 ? (
         <div className="message-container">
-          <img src="/images/sadlab.jpg" alt="Sad Lab" className="sad-lab-image" />
+          <img src={SadLab} alt="Sad Lab" className="sad-lab-image" />
           <div className="message">
             <h2>Uh oh, no pets have been favorited yet.</h2>
             <p>
@@ -22,7 +23,12 @@ function FavoritesPage({ favoritePets, removeFromFavorites }) {
       ) : (
         <div className="pet-card-list">
           {favoritePets.map((pet) => (
-            <PetCard key={pet.id} pet={pet} removeFromFavorites={removeFromFavorites} />
+            <PetCard
+              key={pet.id}
+              pet={pet}
+              removeFromFavorites={removeFromFavorites}
+              isFavorite={favoritePets.some((favoritePet) => favoritePet.id === pet.id)}
+            />
           ))}
         </div>
       )}

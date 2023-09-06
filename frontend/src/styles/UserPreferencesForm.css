@@ -90,7 +90,7 @@ input[type='range']::-webkit-slider-thumb {
   appearance: none;
   width: 30px; /* Increase width */
   height: 30px; /* Increase height */
-  background: url('../../public/images/paw.png') center/cover no-repeat;
+  background: url('../images/paw.png') center/cover no-repeat;
   border: none;
   border-radius: 50%;
   cursor: pointer;

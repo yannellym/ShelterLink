@@ -2,6 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/About.css'; 
+import ShelterLinkLogo from '../images/ShelterLinknb.png';
 
 const About = () => {
   return (
@@ -9,7 +10,7 @@ const About = () => {
       <div className="about-content">
         <div className="about-image">
           <img
-            src="/images/about-image.jpg"
+            src={ShelterLinkLogo}
             alt="About ShelterLink"
           />
         </div>
@@ -34,10 +35,10 @@ const About = () => {
       </div>
       <div className="clickable-squares">
         <Link to="/find-a-pet" className="square">
-          <h3>Find a Dog</h3>
+          <h3>Find a Shelter</h3>
         </Link>
         <Link to="/dogs" className="square">
-          <h3>Dogs Nearby</h3>
+          <h3>Resources</h3>
         </Link>
         <Link to="/nearby-pets" className="square">
           <h3>Pets Nearby</h3>

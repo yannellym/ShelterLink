@@ -6,13 +6,14 @@ import AllNearbyPetsCard from './AllNearbyPetsCard';
 import AdoptionInfoSection from './AdoptionInfoSection';
 import UserPreferencesForm from './UserPreferencesForm';
 import '../styles/Home.css';
+import dog2 from '../images/dog.jpg';
 
 // Placeholder data
 const placeholderBreeds = ['Golden Retriever', 'Labrador', 'Poodle', 'Bulldog', 'Pug'];
 const placeholderSizes = ['Small', 'Medium', 'Large'];
 const placeholderAges = ['Puppy', 'Adult', 'Senior'];
 const placeholderTypes = ['Dog', 'Cat', 'Bird', 'Rabbit'];
-const dog2 = '/images/dog.jpg';
+
 
 const placeholderDogs = [
   { id: 1, name: 'Buddy', breed: 'Golden Retriever', photo: 'dogs1.jpg' },

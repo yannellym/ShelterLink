@@ -4,7 +4,19 @@ import popularDogBreeds from './popularDogBreeds';
 function Filter({ filters, onFilterChange }) {
   const handleFilterSelect = (filterName, event) => {
     const selectedValue = event.target.value;
+    
+    if (filterName === 'type') {
+      // If "type" changes, reset all other filters
+      onFilterChange('type', selectedValue);
+      onFilterChange('breed', 'any');
+      onFilterChange('age', 'any');
+      onFilterChange('gender', 'any');
+      onFilterChange('size', 'any');
+      onFilterChange('coat', 'any');
+    };
+    
     onFilterChange(filterName, selectedValue);
+    
   };
 
   const renderDogFilters = () => {

@@ -3,7 +3,7 @@ import '../styles/NearbyPetCard.css';
 
 function NearbyPetCard({ imageSrc, name }) {
   // If the imageSrc is null, use a default Google image link
-  const fallbackImage = 'https://www.google.com/images/branding/googlelogo/2x/googlelogo_light_color_92x30dp.png';
+  const fallbackImage = './images/dog2.jpg';
 
   return (
     <div className="pet-card">

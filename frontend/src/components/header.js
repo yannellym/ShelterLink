@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/Header.css';
 
-const ShelterLinkLogo = './images/shelterlink-logo.png';
+import ShelterLinkLogo from '../images/ShelterLinkw.png';
 
 const Header = () => {
   const [user, setUser] = useState(null); // Replace with your user state logic
