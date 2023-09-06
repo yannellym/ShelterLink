@@ -30,14 +30,14 @@ const PetCard = ({ pet }) => {
       </div>
       <p className="pet-card-description">{truncatedDescription}</p>
       <div className="pet-card-footer">
+        <button className="more-info-button">More Info</button>
         <button
-          className={`favorite-heart ${favorited ? 'favorited' : ''}`}
+          className={`favorite-heart-${favorited ? 'favorited' : 'data'}`}
           onClick={handleToggleFavorite}
           tabIndex="0"
         >
           &#10084;
         </button>
-        <button className="more-info-button">More Info</button>
       </div>
     </div>
   );

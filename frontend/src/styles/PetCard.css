@@ -1,8 +1,8 @@
 /* styles/PetCard.css */
 
 .pet-card {
+  position: relative; /* Set the card as a relative container */
   border: 1px solid #ccc;
-  padding: 10px;
   margin: 10px;
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -10,12 +10,11 @@
   flex-direction: column; /* Ensure content stacks vertically */
   align-items: center; /* Center-align contents horizontally */
   text-align: center; /* Center-align text */
-  min-width: 200px; /* Set a fixed width for the card */
-  max-width: 280px;
-  height: 380px; /* Set a fixed height for the card */
+  min-width: 210px; /* Set a fixed width for the card */
+  max-width: 300px;
+  height: 400px; /* Set a fixed height for the card */
   overflow: hidden; /* Hide any content that overflows the card */
 }
-
 
 .pet-card h3 {
   font-size: 18px;
@@ -23,6 +22,33 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.pet-card-image {
+  width: 100%;
+  height: 200px;
+  position: relative; /* Set the image as a relative container */
+}
+
+.favorite-heart-data {
+  font-size: 24px;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  position: absolute; /* Position the heart button absolutely */
+  top: -15px; /* Adjust the top position as needed */
+  right: 0px; /* Adjust the right position as needed */
+}
+
+.favorite-heart-favorited{
+  font-size: 24px;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+  position: absolute; /* Position the heart button absolutely */
+  top: 10px; /* Adjust the top position as needed */
+  right: 10px; /* Adjust the right position as needed */
+  color: red;
 }
 
 .pet-card h3 p {
