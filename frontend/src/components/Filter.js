@@ -2,6 +2,9 @@ import React from 'react';
 import popularDogBreeds from './popularDogBreeds';
 
 function Filter({ filters, onFilterChange }) {
+  // Check if filters is undefined or null, and provide a default value if necessary
+  filters = filters || { type: 'any', breed: 'any', age: 'any', gender: 'any', size: 'any', coat: 'any' };
+
   const handleFilterSelect = (filterName, event) => {
     const selectedValue = event.target.value;
     

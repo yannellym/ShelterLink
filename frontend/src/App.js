@@ -10,6 +10,7 @@ import FavoritesPage from './components/FavoritesPage';
 import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
 
+
 const App = () => {
   const [isSignInVisible, setIsSignInVisible] = useState(true);
   const [favoritePets, setFavoritePets] = useState([]);

@@ -15,13 +15,23 @@ const PetCard = ({ pet, addToFavorites, removeFromFavorites, isFavorite }) => {
     }
   };
 
+  // Check if the 'pet.photos' array is not empty
+  if (!pet.photos || pet.photos.length === 0) {
+    return null; // Skip rendering this card if no photos are available
+  }
+  // Check if the 'pet.description' array is not empty
+  if (!pet.description || pet.description.length === 0) {
+    return null; // Skip rendering this card if no photos are available
+  }
+
   // Truncate the description to one line with "..." at the end
   const truncatedDescription =
-    pet.description.length > 100 ? `${pet.description.substring(0, 100)}...` : pet.description;
+    pet.description && pet.description.length > 100 ? `${pet.description.substring(0, 100)}...` : pet.description;
+
 
   return (
     <div className="pet-card">
-      <img src={pet.photos[0]} alt={pet.name} className="pet-card-image" />
+      <img src={pet.photos[0]?.medium} alt={pet.name} className="pet-card-image" />
       <h3>
         {pet.name} |{' '}
         <span role="img" aria-label="Location">
@@ -31,7 +41,7 @@ const PetCard = ({ pet, addToFavorites, removeFromFavorites, isFavorite }) => {
       <div className="pet-card-info">
         <div>
           <p>
-            {pet.age} | {pet.gender} | {pet.size} | {pet.breed}
+            {pet.age} | {pet.gender} | {pet.size} | {pet.breeds.primary}
           </p>
         </div>
       </div>
