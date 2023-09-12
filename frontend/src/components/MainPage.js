@@ -13,19 +13,22 @@ function MainPage({ favoritePets, addToFavorites, removeFromFavorites }) {
   }, []);
 
   const fetchAllPets = () => {
-    const endpoint = 'http://localhost:3001/api/petfinder';
+    const endpoint = 'http://localhost:3002/api/petfinder';
 
     fetch(endpoint)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log('API Response:', data);
-        setSearchResults(data.animals || []);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error.message);
-        setLoading(false);
-      });
+    .then((response) => {
+      console.log('API Response:', response);
+      return response.json();
+    })
+    .then((data) => {
+      console.log('API Data:', data);
+      setSearchResults(data.animals || []);
+      setLoading(false);
+    })
+    .catch((error) => {
+      console.error('Error fetching data:', error.message);
+      setLoading(false);
+    });
   };
 
   const handleFilterChange = (filters) => {
