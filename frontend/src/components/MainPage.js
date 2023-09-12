@@ -7,6 +7,15 @@ function MainPage({ favoritePets, addToFavorites, removeFromFavorites }) {
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const [filters, setFilters] = useState({
+    type: 'dog',
+    breed: 'any',
+    age: 'any',
+    gender: 'any',
+    size: 'any',
+    coat: 'any',
+  });
+
   useEffect(() => {
     // When the component mounts, fetch all animals
     fetchAllPets();
@@ -16,58 +25,39 @@ function MainPage({ favoritePets, addToFavorites, removeFromFavorites }) {
     const endpoint = 'http://localhost:3002/api/petfinder';
 
     fetch(endpoint)
-    .then((response) => {
-      console.log('API Response:', response);
-      return response.json();
-    })
-    .then((data) => {
-      console.log('API Data:', data);
-      setSearchResults(data.animals || []);
-      setLoading(false);
-    })
-    .catch((error) => {
-      console.error('Error fetching data:', error.message);
-      setLoading(false);
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('API Data:', data);
+        setSearchResults(data.animals || []);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error.message);
+        setLoading(false);
+      });
+  };
+
+  const applyFilters = (data) => {
+
+    // Filter by type
+    return data.filter((pet) => {
+      console.log( filters.type)
     });
   };
 
-  const handleFilterChange = (filters) => {
-    // Apply client-side filtering based on filters
-    let filteredData = [...searchResults];
-
-    // Filter by pet type
-    if (filters.type !== 'any') {
-      filteredData = filteredData.filter((pet) => pet.type.toLowerCase() === filters.type.toLowerCase());
-    }
-    // Filter by breed
-    if (filters.breed !== 'any') {
-      filteredData = filteredData.filter((pet) => pet.breed.toLowerCase() === filters.breed.toLowerCase());
-    }
-    // Filter by age
-    if (filters.age !== 'any') {
-      filteredData = filteredData.filter((pet) => pet.age.toLowerCase() === filters.age);
-    }
-    // Filter by gender
-    if (filters.gender !== 'any') {
-      filteredData = filteredData.filter((pet) => pet.gender.toLowerCase() === filters.gender);
-    }
-    // Filter by size
-    if (filters.size !== 'any') {
-      filteredData = filteredData.filter((pet) => pet.size.toLowerCase() === filters.size);
-    }
-    // Filter by coat
-    if (filters.coat !== 'any') {
-      filteredData = filteredData.filter((pet) => pet.coat.toLowerCase() === filters.coat);
-    }
-
-    setSearchResults(filteredData);
+  const handleFilterChange = (selectedFilters) => {
+    // Update the filters state with the selected filter values
+    setFilters(selectedFilters);
+    console.log('Selected Type Filter:', selectedFilters);
   };
+
+  const filteredResults = applyFilters(searchResults);
 
   return (
     <div className="main-page">
       <div className="sidebar">
         <div className="filters">
-          <Filter onFilterChange={handleFilterChange} />
+          <Filter filters={filters} onFilterChange={handleFilterChange} />
         </div>
       </div>
       <div className="content">
@@ -75,7 +65,7 @@ function MainPage({ favoritePets, addToFavorites, removeFromFavorites }) {
           <p>Loading...</p>
         ) : (
           <div className="pet-card-list">
-            {searchResults.map((pet) => (
+            {filteredResults.map((pet) => (
               <PetCard
                 key={pet.id}
                 pet={pet}

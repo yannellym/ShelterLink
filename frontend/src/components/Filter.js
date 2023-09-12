@@ -10,18 +10,16 @@ function Filter({ filters, onFilterChange }) {
     
     if (filterName === 'type') {
       // If "type" changes, reset all other filters
-      onFilterChange('type', selectedValue);
       onFilterChange('breed', 'any');
       onFilterChange('age', 'any');
       onFilterChange('gender', 'any');
       onFilterChange('size', 'any');
       onFilterChange('coat', 'any');
-    };
-    
-    onFilterChange(filterName, selectedValue);
+    }
+    onFilterChange('type', selectedValue);
     
   };
-
+  
   const renderDogFilters = () => {
     return (
       <>
@@ -152,15 +150,16 @@ function Filter({ filters, onFilterChange }) {
         value={filters.type}
         onChange={(event) => handleFilterSelect('type', event)}
       >
-        <option value="any">Any</option>
-        <option value="dog">Dog</option>
-        <option value="cat">Cat</option>
+        <option value="any">any</option>
+        <option value="Dog">Dog</option>
+        <option value="Cat">Cat</option>
       </select>
     </div>
     {/* Render dog filters if type is "dog" */}
-    {filters.type.toLowerCase() === 'dog' && renderDogFilters()}
-    {/* Render cat filters if type is "cat" */}
-    {filters.type.toLowerCase() === 'cat' && renderCatFilters()}
+    {console.log(filters.type, "filter type")}
+    {filters.type?.toLowerCase() === 'dog' && renderDogFilters()}
+    {filters.type?.toLowerCase() === 'cat' && renderCatFilters()}
+
   </div>
 );
 }
