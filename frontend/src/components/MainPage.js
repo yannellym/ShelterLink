@@ -1,17 +1,17 @@
-import React, { useState, useCallback, useRef, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import '../styles/MainPage.css';
 import PetCard from './PetCard';
 import Filter from './Filter';
 
 function MainPage({ favoritePets, addToFavorites, removeFromFavorites }) {
   const [searchResults, setSearchResults] = useState([]);
-  const [filteredResults, setFilteredResults] = useState([]);
-  const [loading, setLoading] = useState(true); // Set initial loading state to true
-  const currentPageRef = useRef(1); // Use a ref to track the current page
-  const itemsPerPage = 10; // Number of dogs to display per page
-  const minimumPets = 100; // Minimum number of pets to query
-  const fetchInProgress = useRef(false); // To prevent concurrent fetch requests
-  const filterTimeout = useRef(null); // To debounce filter function
+  const [loading, setLoading] = useState(true);
+  const currentPageRef = useRef(1);
+  const itemsPerPage = 20;
+  const minimumPets = 400;
+  const fetchInProgress = useRef(false);
+  const [cachedData, setCachedData] = useState([]);
+  const totalPages = Math.ceil(minimumPets / itemsPerPage);
 
   const [selectedFilters, setSelectedFilters] = useState({
     type: 'any',
@@ -23,7 +23,7 @@ function MainPage({ favoritePets, addToFavorites, removeFromFavorites }) {
   });
 
   const fetchAllPets = useCallback(() => {
-    if (fetchInProgress.current || searchResults.length >= minimumPets) {
+    if (fetchInProgress.current || cachedData.length >= minimumPets) {
       return;
     }
 
@@ -36,101 +36,110 @@ function MainPage({ favoritePets, addToFavorites, removeFromFavorites }) {
       .then((data) => {
         console.log('API Data:', data);
 
-        // Combine new results with existing results
         const updatedResults = [...searchResults, ...(data.animals || [])];
 
-        // Set loading to false when fetching is complete
         setLoading(false);
 
-        // If we haven't reached the minimumPets, increment the current page
         if (updatedResults.length < minimumPets) {
           currentPageRef.current++;
         }
 
         setSearchResults(updatedResults);
+
+        // Cache the data
+        setCachedData(updatedResults);
       })
       .catch((error) => {
         console.error('Error fetching data:', error.message);
-
-        // Set loading to false on error
         setLoading(false);
       })
       .finally(() => {
         fetchInProgress.current = false;
       });
-  }, [searchResults, minimumPets, itemsPerPage]);
+  }, [searchResults, cachedData, minimumPets, itemsPerPage]);
 
   useEffect(() => {
-    // Fetch all data on component mount
+    // Fetch all data on component mount with initial filters
     fetchAllPets();
-  }, []); // Fetch only on mount
+  }, []); // Empty dependency array for initial fetch
 
-  const applyFilters = (data, selectedFilters) => {
-    // Apply filters for all filter categories
-    for (const filterKey in selectedFilters) {
-      const filterValue = selectedFilters[filterKey]?.toLowerCase();
-      if (filterValue && filterValue !== 'any') {
-        data = data.filter((pet) => {
-          // Filter logic for the given category
+  const applyFilters = (data, filters) => {
+    return data.filter((pet) => {
+      for (const filterKey in filters) {
+        const filterValue = filters[filterKey]?.toLowerCase();
+        if (filterValue && filterValue !== 'any') {
           const petValue = pet[filterKey]?.toLowerCase();
-          return petValue && petValue === filterValue;
-        });
+          if (petValue !== filterValue) {
+            return false;
+          }
+        }
       }
-    }
-
-    return data;
+      return true;
+    });
   };
 
-  const handleSearchClick = () => {
-    if (filterTimeout.current) {
-      clearTimeout(filterTimeout.current);
-    }
+  const handleSearchClick = (filters) => {
+    // Apply filters to the cached data
+    const filteredResults = applyFilters(cachedData, filters);
+    setSearchResults(filteredResults);
+  };
 
-    filterTimeout.current = setTimeout(() => {
-      // Apply filters based on the selected filters
-      const filteredResults = applyFilters(searchResults, selectedFilters);
-      setFilteredResults(filteredResults);
-    }, 300); // Debounce for 300 milliseconds
+  const handleFilterChange = (newFilters) => {
+    setSelectedFilters(newFilters);
+
+    // Apply filters to the cached data
+    const filteredResults = applyFilters(cachedData, newFilters);
+    setSearchResults(filteredResults);
+  };
+
+  const renderPetCards = () => {
+    if (!loading) {
+      if (searchResults.length > 0) {
+        return searchResults.map((pet) => (
+          <PetCard
+            key={pet.id}
+            pet={pet}
+            addToFavorites={addToFavorites}
+            removeFromFavorites={removeFromFavorites}
+            isFavorite={favoritePets.some((favoritePet) => favoritePet.id === pet.id)}
+          />
+        ));
+      } else {
+        return <p>No pets match your criteria.</p>;
+      }
+    } else {
+      return <p>Loading...</p>;
+    }
+  };
+
+  const handlePageChange = (page) => {
+    currentPageRef.current = page;
+    setSearchResults([]); // Clear current search results
+    fetchAllPets(); // Fetch data for the new page with existing filters
   };
 
   return (
     <div className="main-page">
       <div className="sidebar">
         <div className="filters">
-          {/* Pass setSelectedFilters and onSearchClick to the Filter component */}
-          <Filter
-            selectedFilters={selectedFilters}
-            onFilterChange={(newFilters) => setSelectedFilters(newFilters)}
-            onSearchClick={handleSearchClick}
-          />
+          {/* Pass the handleSearchClick function to the Filter component */}
+          <Filter onSearchClick={handleSearchClick} />
         </div>
       </div>
       <div className="content">
-        {!loading ? (
-          <div className="pet-card-list">
-            {filteredResults.length > 0
-              ? filteredResults.map((pet) => (
-                  <PetCard
-                    key={pet.id}
-                    pet={pet}
-                    addToFavorites={addToFavorites}
-                    removeFromFavorites={removeFromFavorites}
-                    isFavorite={favoritePets.some((favoritePet) => favoritePet.id === pet.id)}
-                  />
-                ))
-              : searchResults.map((pet) => (
-                  <PetCard
-                    key={pet.id}
-                    pet={pet}
-                    addToFavorites={addToFavorites}
-                    removeFromFavorites={removeFromFavorites}
-                    isFavorite={favoritePets.some((favoritePet) => favoritePet.id === pet.id)}
-                  />
-                ))}
-          </div>
-        ) : (
-          <p>Loading...</p>
-        )}
+        {/* Render pet cards based on filtered search results */}
+        <div className="pet-card-list">{renderPetCards()}</div>
+        <div className="pagination-horizontal">
+          {Array.from({ length: totalPages }, (_, index) => (
+            <button
+              key={index}
+              onClick={() => handlePageChange(index + 1)}
+              className={currentPageRef.current === index + 1 ? 'active' : ''}
+            >
+              {index + 1}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );
