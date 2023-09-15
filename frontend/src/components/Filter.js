@@ -1,25 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import popularDogBreeds from './popularDogBreeds';
 
-function Filter({ filters, onFilterChange }) {
-  // Check if filters is undefined or null, and provide a default value if necessary
-  filters = filters || { type: 'any', breed: 'any', age: 'any', gender: 'any', size: 'any', coat: 'any' };
+function Filter({ onSearchClick }) {
+  const [selectedFilters, setSelectedFilters] = useState({
+    type: 'any',
+    breed: 'any',
+    age: 'any',
+    gender: 'any',
+    size: 'any',
+    coat: 'any',
+  });
 
   const handleFilterSelect = (filterName, event) => {
     const selectedValue = event.target.value;
-    
-    if (filterName === 'type') {
-      // If "type" changes, reset all other filters
-      onFilterChange('breed', 'any');
-      onFilterChange('age', 'any');
-      onFilterChange('gender', 'any');
-      onFilterChange('size', 'any');
-      onFilterChange('coat', 'any');
-    }
-    onFilterChange('type', selectedValue);
-    
+
+    setSelectedFilters((prevFilters) => ({
+      ...prevFilters,
+      [filterName]: selectedValue,
+    }));
   };
-  
+
+  const handleSearchClick = () => {
+    // Pass the selected filters to the parent component to trigger the search
+    onSearchClick(selectedFilters);
+  };
+
+
+
   const renderDogFilters = () => {
     return (
       <>
@@ -27,25 +34,26 @@ function Filter({ filters, onFilterChange }) {
           <label htmlFor="breed">Breed:</label>
           <select
             id="breed"
-            value={filters.breed}
+            value={selectedFilters.breed}
             onChange={(event) => handleFilterSelect('breed', event)}
           >
             <option value="any">Any</option>
             {popularDogBreeds.map((breed, index) => (
-            <option key={index} value={breed.toLowerCase()}>
-              {breed}
-            </option>
-          ))}
+              <option key={index} value={breed.toLowerCase()}>
+                {breed}
+              </option>
+            ))}
           </select>
         </div>
         <div className="filter-group">
           <label htmlFor="age">Age:</label>
           <select
             id="age"
-            value={filters.age}
+            value={selectedFilters.age}
             onChange={(event) => handleFilterSelect('age', event)}
           >
             <option value="any">Any</option>
+            <option value="baby">Baby</option>
             <option value="young">Young</option>
             <option value="adult">Adult</option>
             <option value="senior">Senior</option>
@@ -55,41 +63,45 @@ function Filter({ filters, onFilterChange }) {
           <label htmlFor="gender">Gender:</label>
           <select
             id="gender"
-            value={filters.gender}
+            value={selectedFilters.gender}
             onChange={(event) => handleFilterSelect('gender', event)}
           >
             <option value="any">Any</option>
             <option value="male">Male</option>
             <option value="female">Female</option>
+            <option value="unknown">Unknown</option>
           </select>
         </div>
         <div className="filter-group">
           <label htmlFor="size">Size:</label>
           <select
             id="size"
-            value={filters.size}
+            value={selectedFilters.size}
             onChange={(event) => handleFilterSelect('size', event)}
           >
             <option value="any">Any</option>
+            <option value="small">Small</option>
             <option value="medium">Medium</option>
             <option value="large">Large</option>
-            {/* Add more size options based on  API data */}
+            <option value="xlarge">X-Large</option>
           </select>
         </div>
         <div className="filter-group">
           <label htmlFor="coat">Coat:</label>
           <select
             id="coat"
-            value={filters.coat}
+            value={selectedFilters.coat}
             onChange={(event) => handleFilterSelect('coat', event)}
           >
             <option value="any">Any</option>
             <option value="short">Short</option>
+            <option value="medium">Medium</option>
             <option value="long">Long</option>
-            {/* Add more coat options based on  API data */}
+            <option value="wire">Wire</option>
+            <option value="hairless">Hairless</option>
+            <option value="curly">Curly</option>
           </select>
         </div>
-        {/* Add more dog-specific filters here */}
       </>
     );
   };
@@ -97,72 +109,75 @@ function Filter({ filters, onFilterChange }) {
   const renderCatFilters = () => {
     return (
       <>
-      <div className="filter-group">
-        <label htmlFor="age">Age:</label>
-        <select
-          id="age"
-          value={filters.age}
-          onChange={(event) => handleFilterSelect('age', event)}
-        >
-          <option value="any">Any</option>
-          <option value="kitten">Kitten</option>
-          <option value="adult">Adult</option>
-          <option value="senior">Senior</option>
-        </select>
-      </div>
-      <div className="filter-group">
-        <label htmlFor="size">Size:</label>
-        <select
-          id="size"
-          value={filters.size}
-          onChange={(event) => handleFilterSelect('size', event)}
-        >
-          <option value="any">Any</option>
-          <option value="small">Small</option>
-          <option value="medium">Medium</option>
-          <option value="large">Large</option>
-        </select>
-      </div>
-      <div className="filter-group">
-        <label htmlFor="gender">Gender:</label>
-        <select
-          id="gender"
-          value={filters.gender}
-          onChange={(event) => handleFilterSelect('gender', event)}
-        >
-          <option value="any">Any</option>
-          <option value="female">Female</option>
-          <option value="male">Male</option>
-        </select>
-      </div>
-      {/* Add more cat-specific filters here */}
-    </>
-  );
-};
+        <div className="filter-group">
+          <label htmlFor="age">Age:</label>
+          <select
+            id="age"
+            value={selectedFilters.age}
+            onChange={(event) => handleFilterSelect('age', event)}
+          >
+            <option value="any">Any</option>
+            <option value="baby">Baby</option>
+            <option value="young">Young</option>
+            <option value="adult">Adult</option>
+            <option value="senior">Senior</option>
+          </select>
+        </div>
+        <div className="filter-group">
+          <label htmlFor="size">Size:</label>
+          <select
+            id="size"
+            value={selectedFilters.size}
+            onChange={(event) => handleFilterSelect('size', event)}
+          >
+            <option value="any">Any</option>
+            <option value="small">Small</option>
+            <option value="medium">Medium</option>
+            <option value="large">Large</option>
+            <option value="xlarge">X-Large</option>
+          </select>
+        </div>
+        <div className="filter-group">
+          <label htmlFor="gender">Gender:</label>
+          <select
+            id="gender"
+            value={selectedFilters.gender}
+            onChange={(event) => handleFilterSelect('gender', event)}
+          >
+            <option value="any">Any</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="unknown">Unknown</option>
+          </select>
+        </div>
+        {/* Add more cat filters here */}
+      </>
+    );
+  };
 
   return (
     <div className="filters">
-    <h2>Filters</h2>
-    <div className="filter-group">
-      <label htmlFor="type">Type:</label>
-      <select
-        id="type"
-        value={filters.type}
-        onChange={(event) => handleFilterSelect('type', event)}
-      >
-        <option value="any">any</option>
-        <option value="Dog">Dog</option>
-        <option value="Cat">Cat</option>
-      </select>
+      <h2>Filters</h2>
+      <div className="filter-group">
+        <label htmlFor="type">Type:</label>
+        <select
+          id="type"
+          value={selectedFilters.type}
+          onChange={(event) => handleFilterSelect('type', event)}
+        >
+          <option value="any">Any</option>
+          <option value="dog">Dog</option>
+          <option value="cat">Cat</option>
+        </select>
+      </div>
+      {/* Render dog filters if type is "dog" */}
+      {selectedFilters.type?.toLowerCase() === 'dog' && renderDogFilters()}
+      {/* Render cat filters if type is "cat" */}
+      {selectedFilters.type?.toLowerCase() === 'cat' && renderCatFilters()}
+
+      <button onClick={handleSearchClick}>Search</button>
     </div>
-    {/* Render dog filters if type is "dog" */}
-    {console.log(filters.type, "filter type")}
-    {filters.type?.toLowerCase() === 'dog' && renderDogFilters()}
-    {filters.type?.toLowerCase() === 'cat' && renderCatFilters()}
-
-  </div>
-);
+  );
 }
-
 
 export default Filter;
