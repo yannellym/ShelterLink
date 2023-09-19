@@ -66,54 +66,6 @@ function MainPage({ favoritePets, addToFavorites, removeFromFavorites }) {
     }
   }, [cachedData, fetchAllPets]);
 
-
-  const applyFilters = (data, filters) => {
-    return data.filter((pet) => {
-      for (const filterKey in filters) {
-        const filterValue = filters[filterKey]?.toLowerCase();
-        if (filterValue && filterValue !== 'any') {
-          const petValue = pet[filterKey]?.toLowerCase();
-          if (petValue !== filterValue) {
-            return false;
-          }
-        }
-      }
-      return true;
-    });
-  };
-
-  const handleSearchClick = (filters) => {
-    // Apply filters to the cached data
-    const filteredResults = applyFilters(cachedData, filters);
-    setSearchResults(filteredResults);
-  };
-
-  const handleFilterChange = (newFilters) => {
-    setSelectedFilters(newFilters);
-
-    // Apply filters to the cached data
-    const filteredResults = applyFilters(cachedData, newFilters);
-    setSearchResults(filteredResults);
-  };
-
-  const renderPetCards = () => {
-    if (!loading) {
-      return cachedData.map((pet) => (
-        <PetCard
-          key={pet.id}
-          pet={pet}
-          addToFavorites={addToFavorites}
-          removeFromFavorites={removeFromFavorites}
-          isFavorite={favoritePets.some((favoritePet) => favoritePet.id === pet.id)}
-        />
-      ));
-    } else {
-      return <p>Loading...</p>;
-    }
-  };
-  
-  
-  
   const handlePageChange = (page) => {
     currentPageRef.current = page;
     const startIndex = (page - 1) * itemsPerPage;
@@ -121,13 +73,70 @@ function MainPage({ favoritePets, addToFavorites, removeFromFavorites }) {
     setSearchResults(cachedData.slice(startIndex, endIndex));
   };
 
+  // Function to handle filter changes
+  const handleFilterChange = (newFilters) => {
+    setSelectedFilters(newFilters);
+
+    // Apply filters to the cached data and update search results
+    const filteredResults = applyFilters(cachedData, newFilters);
+    setSearchResults(filteredResults);
+  };
+
+  // Function to apply filters to the data
+  const applyFilters = (data, filters) => {
+    return data.filter((pet) => {
+      // Flag to check if the pet matches all filters
+      let matchesAllFilters = true;
+  
+      for (const filterKey in filters) {
+        const filterValue = filters[filterKey]?.toLowerCase();
+        const petValue = pet[filterKey]?.toLowerCase();
+  
+        // If the filter value is "any," skip this filter
+        if (filterValue === 'any') {
+          continue;
+        }
+  
+        // If the pet data doesn't match the filter value, set the flag to false
+        if (petValue !== filterValue) {
+          matchesAllFilters = false;
+          break; // Exit the loop early if there's no match
+        }
+      }
+  
+      // If the pet matches all filters, include it in the results
+      return matchesAllFilters;
+    });
+  };
+  const renderPetCards = () => {
+    if (!loading) {
+      // Apply filters to the cached data
+      const filteredResults = applyFilters(cachedData, selectedFilters);
+
+      if (filteredResults.length > 0) {
+        return filteredResults.map((pet) => (
+          <PetCard
+            key={pet.id}
+            pet={pet}
+            addToFavorites={addToFavorites}
+            removeFromFavorites={removeFromFavorites}
+            isFavorite={favoritePets.some((favoritePet) => favoritePet.id === pet.id)}
+          />
+        ));
+      } else {
+        return <p>No pets match your criteria.</p>;
+      }
+    } else {
+      return <p>Loading...</p>;
+    }
+  };
 
   return (
     <div className="main-page">
       <div className="sidebar">
         <div className="filters">
-          {/* Pass the handleSearchClick function to the Filter component */}
-          <Filter onSearchClick={handleSearchClick} />
+          {/* Pass the handleFilterChange function to the Filter component */}
+          <Filter onFilterChange={handleFilterChange} />
         </div>
       </div>
       <div className="content">

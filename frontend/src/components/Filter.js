@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import popularDogBreeds from './popularDogBreeds';
 
-function Filter({ onSearchClick }) {
+function Filter({ onFilterChange, onSearchClick }) {
   const [selectedFilters, setSelectedFilters] = useState({
     type: 'any',
     breed: 'any',
@@ -18,12 +18,19 @@ function Filter({ onSearchClick }) {
       ...prevFilters,
       [filterName]: selectedValue,
     }));
+    // Call the parent component's function to update filters
+    onFilterChange({
+      ...selectedFilters,
+      [filterName]: selectedValue,
+    });
   };
+
 
   const handleSearchClick = () => {
     // Pass the selected filters to the parent component to trigger the search
     onSearchClick(selectedFilters);
   };
+
 
 
   const renderFilters = () => {
