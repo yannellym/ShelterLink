@@ -11,7 +11,7 @@ function MainPage({ favoritePets, addToFavorites, removeFromFavorites }) {
   const minimumPets = 400;
   const fetchInProgress = useRef(false);
   const [cachedData, setCachedData] = useState([]);
-  const totalPages = Math.ceil(minimumPets / itemsPerPage);
+  const totalPages = Math.ceil(cachedData.length / itemsPerPage);
 
   const [selectedFilters, setSelectedFilters] = useState({
     type: 'any',
@@ -36,15 +36,13 @@ function MainPage({ favoritePets, addToFavorites, removeFromFavorites }) {
       .then((data) => {
         console.log('API Data:', data);
 
-        const updatedResults = [...searchResults, ...(data.animals || [])];
+        const updatedResults = [...cachedData, ...(data.animals || [])];
 
         setLoading(false);
 
         if (updatedResults.length < minimumPets) {
           currentPageRef.current++;
         }
-
-        setSearchResults(updatedResults);
 
         // Cache the data
         setCachedData(updatedResults);
@@ -56,12 +54,18 @@ function MainPage({ favoritePets, addToFavorites, removeFromFavorites }) {
       .finally(() => {
         fetchInProgress.current = false;
       });
-  }, [searchResults, cachedData, minimumPets, itemsPerPage]);
+  }, [cachedData, minimumPets, itemsPerPage]);
 
   useEffect(() => {
-    // Fetch all data on component mount with initial filters
-    fetchAllPets();
-  }, []); // Empty dependency array for initial fetch
+    if (cachedData.length === 0) {
+      // Only fetch from API if the cache is empty
+      fetchAllPets();
+    } else {
+      // If cached data is available, set loading to false
+      setLoading(false);
+    }
+  }, [cachedData, fetchAllPets]);
+
 
   const applyFilters = (data, filters) => {
     return data.filter((pet) => {
@@ -94,29 +98,29 @@ function MainPage({ favoritePets, addToFavorites, removeFromFavorites }) {
 
   const renderPetCards = () => {
     if (!loading) {
-      if (searchResults.length > 0) {
-        return searchResults.map((pet) => (
-          <PetCard
-            key={pet.id}
-            pet={pet}
-            addToFavorites={addToFavorites}
-            removeFromFavorites={removeFromFavorites}
-            isFavorite={favoritePets.some((favoritePet) => favoritePet.id === pet.id)}
-          />
-        ));
-      } else {
-        return <p>No pets match your criteria.</p>;
-      }
+      return cachedData.map((pet) => (
+        <PetCard
+          key={pet.id}
+          pet={pet}
+          addToFavorites={addToFavorites}
+          removeFromFavorites={removeFromFavorites}
+          isFavorite={favoritePets.some((favoritePet) => favoritePet.id === pet.id)}
+        />
+      ));
     } else {
       return <p>Loading...</p>;
     }
   };
-
+  
+  
+  
   const handlePageChange = (page) => {
     currentPageRef.current = page;
-    setSearchResults([]); // Clear current search results
-    fetchAllPets(); // Fetch data for the new page with existing filters
+    const startIndex = (page - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    setSearchResults(cachedData.slice(startIndex, endIndex));
   };
+
 
   return (
     <div className="main-page">
