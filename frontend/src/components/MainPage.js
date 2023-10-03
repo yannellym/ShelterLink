@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/MainPage.css';
 import PetCard from './PetCard';
 import Filter from './Filter';
@@ -6,10 +6,9 @@ import Filter from './Filter';
 function MainPage({ favoritePets, addToFavorites, removeFromFavorites }) {
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(true);
-  const currentPageRef = useRef(1);
+  const currentPageRef = useState(1);
   const itemsPerPage = 20;
   const minimumPets = 400;
-  const fetchInProgress = useRef(false);
   const [cachedData, setCachedData] = useState([]);
   const totalPages = Math.ceil(cachedData.length / itemsPerPage);
 
@@ -22,49 +21,29 @@ function MainPage({ favoritePets, addToFavorites, removeFromFavorites }) {
     coat: 'any',
   });
 
-  const fetchAllPets = useCallback(() => {
-    if (fetchInProgress.current || cachedData.length >= minimumPets) {
-      return;
-    }
+  // Function to fetch all pets and store them in memory
+  const fetchAllPets = async () => {
+    try {
+      const endpoint = 'http://localhost:3002/api/petfinder?perPage=400'; // Fetch all pets in a single request
+      const response = await fetch(endpoint);
+      const data = await response.json();
 
-    fetchInProgress.current = true;
+      console.log('API Response:', data); // Print the API response
 
-    const endpoint = `http://localhost:3002/api/petfinder?page=${currentPageRef.current}&perPage=${itemsPerPage}`;
-
-    fetch(endpoint)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log('API Data:', data);
-
-        const updatedResults = [...cachedData, ...(data.animals || [])];
-
+      if (data && data.animals) {
+        setCachedData(data.animals);
+        setSearchResults(data.animals);
         setLoading(false);
-
-        if (updatedResults.length < minimumPets) {
-          currentPageRef.current++;
-        }
-
-        // Cache the data
-        setCachedData(updatedResults);
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error.message);
-        setLoading(false);
-      })
-      .finally(() => {
-        fetchInProgress.current = false;
-      });
-  }, [cachedData, minimumPets, itemsPerPage]);
-
-  useEffect(() => {
-    if (cachedData.length === 0) {
-      // Only fetch from API if the cache is empty
-      fetchAllPets();
-    } else {
-      // If cached data is available, set loading to false
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error.message);
       setLoading(false);
     }
-  }, [cachedData, fetchAllPets]);
+  };
+
+  useEffect(() => {
+    fetchAllPets(); // Fetch all pets when the component mounts
+  }, []);
 
   const handlePageChange = (page) => {
     currentPageRef.current = page;
@@ -82,7 +61,6 @@ function MainPage({ favoritePets, addToFavorites, removeFromFavorites }) {
     setSearchResults(filteredResults);
   };
 
-  // Function to apply filters to the data
   const applyFilters = (data, filters) => {
     return data.filter((pet) => {
       // Flag to check if the pet matches all filters
@@ -97,10 +75,29 @@ function MainPage({ favoritePets, addToFavorites, removeFromFavorites }) {
           continue;
         }
   
-        // If the pet data doesn't match the filter value, set the flag to false
-        if (petValue !== filterValue) {
-          matchesAllFilters = false;
-          break; // Exit the loop early if there's no match
+        // Special handling for the "type" filter to handle both "Cat" and "Dog"
+        if (filterKey === 'type') {
+          if (filterValue === 'cat' && petValue !== 'cat') {
+            matchesAllFilters = false;
+            break; // Exit the loop early if there's no match
+          }
+          if (filterValue === 'dog' && petValue !== 'dog') {
+            matchesAllFilters = false;
+            break; // Exit the loop early if there's no match
+          }
+        } else if (filterKey === 'breed') {
+          // Handle the "breed" filter
+          const primaryBreed = pet.breeds?.primary?.toLowerCase();
+          if (primaryBreed !== filterValue) {
+            matchesAllFilters = false;
+            break; // Exit the loop early if there's no match
+          }
+        } else {
+          // For other filters, compare values directly
+          if (petValue !== filterValue) {
+            matchesAllFilters = false;
+            break; // Exit the loop early if there's no match
+          }
         }
       }
   
@@ -108,6 +105,7 @@ function MainPage({ favoritePets, addToFavorites, removeFromFavorites }) {
       return matchesAllFilters;
     });
   };
+  
   const renderPetCards = () => {
     if (!loading) {
       // Apply filters to the cached data

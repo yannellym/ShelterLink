@@ -18,7 +18,9 @@ const About = () => {
         <p>
           Welcome to ShelterLink, your online platform for finding the perfect
           furry companion. Our mission is to connect animal lovers with
-          adoptable pets from shelters and rescues across the country.
+          adoptable pets from shelters and rescues across the country. We aim to 
+          bring awareness the trending issue of unloved pets. Helps us to find these 
+          lovable pets their forever home. 
         </p>
         <p>
           We believe that every pet deserves a loving home, and we're here to

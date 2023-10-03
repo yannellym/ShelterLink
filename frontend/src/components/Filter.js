@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import popularDogBreeds from './popularDogBreeds';
 
-function Filter({ onFilterChange, onSearchClick }) {
+function Filter({ onFilterChange }) {
   const [selectedFilters, setSelectedFilters] = useState({
     type: 'any',
     breed: 'any',
@@ -14,23 +14,29 @@ function Filter({ onFilterChange, onSearchClick }) {
   const handleFilterSelect = (filterName, event) => {
     const selectedValue = event.target.value;
 
-    setSelectedFilters((prevFilters) => ({
-      ...prevFilters,
-      [filterName]: selectedValue,
-    }));
-    // Call the parent component's function to update filters
-    onFilterChange({
-      ...selectedFilters,
-      [filterName]: selectedValue,
-    });
+    // Check if the filterName is "breed" and if the selectedValue is not "any"
+    if (filterName === 'breed' && selectedValue !== 'any') {
+      setSelectedFilters((prevFilters) => ({
+        ...prevFilters,
+        breed: selectedValue, // Set the breed filter to the selected value
+      }));
+      // Call the parent component's function to update filters
+      onFilterChange({
+        ...selectedFilters,
+        breed: selectedValue,
+      });
+    } else {
+      setSelectedFilters((prevFilters) => ({
+        ...prevFilters,
+        [filterName]: selectedValue,
+      }));
+      // Call the parent component's function to update filters
+      onFilterChange({
+        ...selectedFilters,
+        [filterName]: selectedValue,
+      });
+    }
   };
-
-
-  const handleSearchClick = () => {
-    // Pass the selected filters to the parent component to trigger the search
-    onSearchClick(selectedFilters);
-  };
-
 
 
   const renderFilters = () => {
@@ -93,7 +99,7 @@ function Filter({ onFilterChange, onSearchClick }) {
             >
               <option value="any">Any</option>
               {popularDogBreeds.map((breed, index) => (
-                <option key={index} value={breed.toLowerCase()}>
+                <option key={index} value={breed}>
                   {breed}
                 </option>
               ))}
@@ -177,7 +183,6 @@ function Filter({ onFilterChange, onSearchClick }) {
         </select>
       </div>
       {renderFilters()}
-      <button onClick={handleSearchClick}>Search</button>
     </div>
   );
 }
