@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import '../styles/MainPage.css';
 import PetCard from './PetCard';
 import Filter from './Filter';
@@ -6,11 +6,11 @@ import Filter from './Filter';
 function MainPage({ favoritePets, addToFavorites, removeFromFavorites }) {
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(true);
-  const currentPageRef = useState(1);
+  const currentPageRef = useRef(1);
   const itemsPerPage = 20;
   const minimumPets = 400;
   const [cachedData, setCachedData] = useState([]);
-  const totalPages = Math.ceil(cachedData.length / itemsPerPage);
+  const [totalPages, setTotalPages] = useState(0);
 
   const [selectedFilters, setSelectedFilters] = useState({
     type: 'any',
@@ -21,18 +21,24 @@ function MainPage({ favoritePets, addToFavorites, removeFromFavorites }) {
     coat: 'any',
   });
 
-  // Function to fetch all pets and store them in memory
-  const fetchAllPets = async () => {
+  // Function to fetch pets based on filters and pagination
+  const fetchPets = async () => {
     try {
-      const endpoint = 'http://localhost:3002/api/petfinder?perPage=400'; // Fetch all pets in a single request
+      const filters = Object.keys(selectedFilters)
+        .filter((key) => selectedFilters[key] !== 'any')
+        .map((key) => `${key}=${selectedFilters[key]}`)
+        .join('&');
+
+      const endpoint = `http://localhost:3002/api/petfinder?perPage=${itemsPerPage}&page=${currentPageRef.current}&${filters}`;
       const response = await fetch(endpoint);
       const data = await response.json();
 
-      console.log('API Response:', data); // Print the API response
+      console.log('API Response:', data);
 
       if (data && data.animals) {
         setCachedData(data.animals);
         setSearchResults(data.animals);
+        setTotalPages(Math.ceil(data.pagination.total_count / itemsPerPage));
         setLoading(false);
       }
     } catch (error) {
@@ -42,77 +48,23 @@ function MainPage({ favoritePets, addToFavorites, removeFromFavorites }) {
   };
 
   useEffect(() => {
-    fetchAllPets(); // Fetch all pets when the component mounts
-  }, []);
+    fetchPets();
+  }, [currentPageRef, selectedFilters]);
 
   const handlePageChange = (page) => {
     currentPageRef.current = page;
-    const startIndex = (page - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    setSearchResults(cachedData.slice(startIndex, endIndex));
   };
 
   // Function to handle filter changes
   const handleFilterChange = (newFilters) => {
     setSelectedFilters(newFilters);
-
-    // Apply filters to the cached data and update search results
-    const filteredResults = applyFilters(cachedData, newFilters);
-    setSearchResults(filteredResults);
+    currentPageRef.current = 1;
   };
 
-  const applyFilters = (data, filters) => {
-    return data.filter((pet) => {
-      // Flag to check if the pet matches all filters
-      let matchesAllFilters = true;
-  
-      for (const filterKey in filters) {
-        const filterValue = filters[filterKey]?.toLowerCase();
-        const petValue = pet[filterKey]?.toLowerCase();
-  
-        // If the filter value is "any," skip this filter
-        if (filterValue === 'any') {
-          continue;
-        }
-  
-        // Special handling for the "type" filter to handle both "Cat" and "Dog"
-        if (filterKey === 'type') {
-          if (filterValue === 'cat' && petValue !== 'cat') {
-            matchesAllFilters = false;
-            break; // Exit the loop early if there's no match
-          }
-          if (filterValue === 'dog' && petValue !== 'dog') {
-            matchesAllFilters = false;
-            break; // Exit the loop early if there's no match
-          }
-        } else if (filterKey === 'breed') {
-          // Handle the "breed" filter
-          const primaryBreed = pet.breeds?.primary?.toLowerCase();
-          if (primaryBreed !== filterValue) {
-            matchesAllFilters = false;
-            break; // Exit the loop early if there's no match
-          }
-        } else {
-          // For other filters, compare values directly
-          if (petValue !== filterValue) {
-            matchesAllFilters = false;
-            break; // Exit the loop early if there's no match
-          }
-        }
-      }
-  
-      // If the pet matches all filters, include it in the results
-      return matchesAllFilters;
-    });
-  };
-  
   const renderPetCards = () => {
     if (!loading) {
-      // Apply filters to the cached data
-      const filteredResults = applyFilters(cachedData, selectedFilters);
-
-      if (filteredResults.length > 0) {
-        return filteredResults.map((pet) => (
+      if (searchResults.length > 0) {
+        return searchResults.map((pet) => (
           <PetCard
             key={pet.id}
             pet={pet}
@@ -129,31 +81,57 @@ function MainPage({ favoritePets, addToFavorites, removeFromFavorites }) {
     }
   };
 
+  const renderPaginationButtons = () => {
+    const visiblePageCount = 9; // Number of visible page buttons
+    const totalPagesToDisplay = Math.min(totalPages, visiblePageCount);
+    const firstPage = Math.max(currentPageRef.current - Math.floor(visiblePageCount / 2), 1);
+    const lastPage = firstPage + totalPagesToDisplay - 1;
+
+    return (
+      <div className="pagination-horizontal">
+        {Array.from({ length: totalPagesToDisplay }, (_, index) => {
+          const page = firstPage + index;
+          return (
+            <button
+              key={index}
+              onClick={() => {
+                handlePageChange(page);
+                fetchPets();
+              }}
+              className={currentPageRef.current === page ? 'active' : ''}
+            >
+              {page}
+            </button>
+          );
+        })}
+        {lastPage < totalPages && (
+          <button
+            onClick={() => {
+              handlePageChange(lastPage + 1);
+              fetchPets();
+            }}
+          >
+            ...
+          </button>
+        )}
+      </div>
+    );
+  };
+
   return (
     <div className="main-page">
       <div className="sidebar">
         <div className="filters">
-          {/* Pass the handleFilterChange function to the Filter component */}
           <Filter onFilterChange={handleFilterChange} />
         </div>
       </div>
       <div className="content">
-        {/* Render pet cards based on filtered search results */}
         <div className="pet-card-list">{renderPetCards()}</div>
-        <div className="pagination-horizontal">
-          {Array.from({ length: totalPages }, (_, index) => (
-            <button
-              key={index}
-              onClick={() => handlePageChange(index + 1)}
-              className={currentPageRef.current === index + 1 ? 'active' : ''}
-            >
-              {index + 1}
-            </button>
-          ))}
-        </div>
+        {totalPages > 1 && renderPaginationButtons()}
       </div>
     </div>
   );
 }
 
 export default MainPage;
+

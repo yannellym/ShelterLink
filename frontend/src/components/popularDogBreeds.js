@@ -39,6 +39,7 @@ const popularDogBreeds = [
     'Terrier',
     'West Highland White Terrier / Westie',
     'Whippet',
+    'Yellow Labrador Retriever',
     'Yorkshire Terrier',
   ].sort();
   
