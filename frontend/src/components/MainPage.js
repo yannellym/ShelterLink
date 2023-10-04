@@ -2,12 +2,14 @@ import React, { useState, useEffect, useRef } from 'react';
 import '../styles/MainPage.css';
 import PetCard from './PetCard';
 import Filter from './Filter';
+import { Link } from 'react-router-dom';
+
 
 function MainPage({ favoritePets, addToFavorites, removeFromFavorites }) {
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(true);
   const currentPageRef = useRef(1);
-  const itemsPerPage = 20;
+  const itemsPerPage = 10;
   const minimumPets = 400;
   const [cachedData, setCachedData] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
@@ -65,13 +67,15 @@ function MainPage({ favoritePets, addToFavorites, removeFromFavorites }) {
     if (!loading) {
       if (searchResults.length > 0) {
         return searchResults.map((pet) => (
-          <PetCard
-            key={pet.id}
-            pet={pet}
-            addToFavorites={addToFavorites}
-            removeFromFavorites={removeFromFavorites}
-            isFavorite={favoritePets.some((favoritePet) => favoritePet.id === pet.id)}
-          />
+          <div key={pet.id}>
+            <PetCard
+              pet={pet}
+              addToFavorites={addToFavorites}
+              removeFromFavorites={removeFromFavorites}
+              isFavorite={favoritePets.some((favoritePet) => favoritePet.id === pet.id)}
+            />
+            <Link to={`/pet/${pet.id}`}>More Info</Link> {/* Add a link to the PetDetails component */}
+          </div>
         ));
       } else {
         return <p>No pets match your criteria.</p>;

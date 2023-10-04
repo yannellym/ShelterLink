@@ -1,0 +1,87 @@
+/* PetDetails.css */
+
+.pet-details {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    max-width: 600px;
+  }
+  
+  .pet-name {
+    font-size: 24px;
+    color: #333;
+  }
+  
+  .pet-info {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .pet-info-section {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    margin: 0 10px;
+  }
+  
+  .pet-info-section p {
+    margin: 5px 0;
+    font-size: 16px;
+  }
+  
+  .contact-info {
+    margin-top: 20px;
+  }
+  
+  .contact-info h3 {
+    font-size: 20px;
+    color: #333;
+  }
+  
+  .contact-info p {
+    font-size: 16px;
+    margin: 5px 0;
+  }
+  
+  .photos {
+    margin-top: 20px;
+  }
+  
+  .photos h3 {
+    font-size: 20px;
+    color: #333;
+  }
+  
+  .photo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    grid-gap: 10px;
+  }
+  
+  .pet-photo {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+  }
+  
+  .petfinder-link {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .petfinder-link a {
+    text-decoration: none;
+    color: #007BFF;
+    font-weight: 600;
+    font-size: 18px;
+  }
+  
+  .petfinder-link a:hover {
+    text-decoration: underline;
+  }
+  

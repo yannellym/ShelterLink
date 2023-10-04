@@ -9,6 +9,8 @@ import Resources from './components/Resources';
 import FavoritesPage from './components/FavoritesPage';
 import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
+import PetDetails from './components/PetDetails'; // Import the PetDetails component
+
 
 
 const App = () => {
@@ -39,6 +41,7 @@ const App = () => {
         <Route path="/favorites" element={<FavoritesPage favoritePets={favoritePets} removeFromFavorites={removeFromFavorites} />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
+        <Route path="/pet-details/:petId" element={<PetDetails />} />
       </Routes>
   
       <Footer />

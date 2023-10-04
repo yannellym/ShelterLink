@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import '../styles/PetCard.css';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const PetCard = ({ pet, addToFavorites, removeFromFavorites, isFavorite }) => {
-  // Replace the local state with the 'isFavorite' prop
   const [favorited, setFavorited] = useState(isFavorite);
+  const navigate = useNavigate(); // Get the navigate function
 
   const handleToggleFavorite = () => {
-    // Toggle the 'isFavorite' state and call the appropriate function
     setFavorited(!favorited);
     if (favorited) {
       removeFromFavorites(pet.id);
@@ -15,19 +15,21 @@ const PetCard = ({ pet, addToFavorites, removeFromFavorites, isFavorite }) => {
     }
   };
 
-  // Check if the 'pet.photos' array is not empty
+  const handleMoreInfoClick = () => {
+    // Use navigate to go to the PetDetails component and send the pet data as state
+    navigate(`/pet-details/${pet.id}`, { state: { petData: pet } });
+  };
+
   if (!pet.photos || pet.photos.length === 0) {
-    return null; // Skip rendering this card if no photos are available
-  }
-  // Check if the 'pet.description' array is not empty
-  if (!pet.description || pet.description.length === 0) {
-    return null; // Skip rendering this card if no photos are available
+    return null;
   }
 
-  // Truncate the description to one line with "..." at the end
+  if (!pet.description || pet.description.length === 0) {
+    return null;
+  }
+
   const truncatedDescription =
     pet.description && pet.description.length > 100 ? `${pet.description.substring(0, 100)}...` : pet.description;
-
 
   return (
     <div className="pet-card">
@@ -47,7 +49,9 @@ const PetCard = ({ pet, addToFavorites, removeFromFavorites, isFavorite }) => {
       </div>
       <p className="pet-card-description">{truncatedDescription}</p>
       <div className="pet-card-footer">
-        <button className="more-info-button">More Info</button>
+        <button className="more-info-button" onClick={handleMoreInfoClick}>
+          More Info
+        </button>
         <button
           className={`favorite-heart-${favorited ? 'favorited' : 'unfavorited'}`}
           onClick={handleToggleFavorite}
