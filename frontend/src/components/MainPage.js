@@ -67,14 +67,13 @@ function MainPage({ favoritePets, addToFavorites, removeFromFavorites }) {
     if (!loading) {
       if (searchResults.length > 0) {
         return searchResults.map((pet) => (
-          <div key={pet.id}>
+          <div key={pet.id} className="pet-card-container">
             <PetCard
               pet={pet}
               addToFavorites={addToFavorites}
               removeFromFavorites={removeFromFavorites}
               isFavorite={favoritePets.some((favoritePet) => favoritePet.id === pet.id)}
             />
-            <Link to={`/pet/${pet.id}`}>More Info</Link> {/* Add a link to the PetDetails component */}
           </div>
         ));
       } else {
@@ -84,6 +83,7 @@ function MainPage({ favoritePets, addToFavorites, removeFromFavorites }) {
       return <p>Loading...</p>;
     }
   };
+  
 
   const renderPaginationButtons = () => {
     const visiblePageCount = 9; // Number of visible page buttons

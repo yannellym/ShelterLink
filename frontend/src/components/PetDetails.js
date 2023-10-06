@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import '../styles/PetDetails.css';
 
 const PetDetails = () => {
@@ -12,24 +12,43 @@ const PetDetails = () => {
 
   return (
     <div className="pet-details">
-        <div className="photos">
-        <h3>Photos</h3>
+      <div className="back-link-container">
+        {/* Use Link for navigation */}
+        <Link to="/find-a-pet" className="back-link">
+          Go Back
+        </Link>
+      </div>
+      <div className="photos">
+        <div className="name-id-container">
+          <h2 className="pet-name">{petData.name}</h2>
+          <h4>Animal ID: {petData.id}</h4>
+        </div>
         <div className="photo-grid">
-            {petData.photos && petData.photos.map((photo, index) => (
-            <img key={index} src={photo.medium} alt={`Photo ${index + 1}`} className="pet-photo" />
-            ))}
+          {petData.photos && petData.photos.map((photo, index) => (
+            <img
+              key={index}
+              src={photo.medium}
+              alt={`Pet ${index + 1}`}
+              className={`pet-photo ${petData.photos.length === 1 ? 'single-photo' : ''}`}
+            />
+          ))}
         </div>
-        </div>
-      <h2 className="pet-name">{petData.name}</h2>
+      </div>
+      <div className="petfinder-button">
+        <a href={petData.url} target="_blank" rel="noopener noreferrer">
+          <span> I want {petData.gender === "Female" ? "her" : "him"}! </span>
+        </a>
+      </div>
       <div className="pet-info">
         <div className="pet-info-section">
-          <p><strong>Age:</strong> {petData.age}</p>
-          <p><strong>Gender:</strong> {petData.gender}</p>
-          <p><strong>Size:</strong> {petData.size}</p>
+          <p><strong>Age:</strong> {petData.age ? petData.age : "Unknown"}</p>
+          <p><strong>Gender:</strong> {petData.gender ? petData.gender : "Unknown"}</p>
+          <p><strong>Size:</strong> {petData.size ? petData.size : "Unknown"}</p>
+          <p><strong>Status:</strong> {petData.status ? petData.status : "Unknown"}</p>
         </div>
         <div className="pet-info-section">
-          <p><strong>Primary Breed:</strong> {petData.breeds.primary}</p>
-          <p><strong>Secondary Breed:</strong> {petData.breeds.secondary}</p>
+          <p><strong>Primary Breed:</strong> {petData.breeds.primary ? petData.breeds.primary : "Unknown"}</p>
+          <p><strong>Secondary Breed:</strong> {petData.breeds.secondary ? petData.breeds.secondary : "Unknown"}</p>
           <p><strong>Mixed:</strong> {petData.breeds.mixed ? 'Yes' : 'No'}</p>
         </div>
         <div className="pet-info-section">
@@ -41,18 +60,14 @@ const PetDetails = () => {
       </div>
       <div className="contact-info">
         <h3>Contact Information</h3>
-        <p><strong>Email:</strong> {petData.contact.email}</p>
-        <p><strong>Phone:</strong> {petData.contact.phone}</p>
-        <p><strong>Location:</strong> {petData.contact.address.city}, {petData.contact.address.state}</p>
-        <p><strong>Address:</strong> {petData.contact.address.address1}</p>
-      </div>
-      <div className="petfinder-link">
-        <a href={petData.url} target="_blank" rel="noopener noreferrer">
-          View on Petfinder
-        </a>
+        <p><strong>Email:</strong> {petData.contact.email ? petData.contact.email : "Unknown"}</p>
+        <p><strong>Phone:</strong> {petData.contact.phone ? petData.contact.phone : "Unknown"}</p>
+        <p><strong>Location:</strong> 
+          {petData.contact.address.address1} {petData.contact.address.city}, {petData.contact.address.state}
+        </p>
       </div>
     </div>
   );
-};
+};  
 
 export default PetDetails;
