@@ -1,14 +1,13 @@
-// AllNearbyPetsCard.js
 import React from 'react';
+import { Link } from 'react-router-dom'; 
 import '../styles/AllNearbyPetsCard.css';
 
 function AllNearbyPetsCard({ imageSrc, name }) {
   return (
-    <div className="all-pets-card">
-      <img src={imageSrc} alt={name} />
-      <h3>All Nearby Pets</h3>
+    <Link to="/find-a-pet" className="all-pets-card"> 
+      <img width="64" height="64" src="https://img.icons8.com/sf-black/64/right.png" alt="right" />
       <p>View all available pets near you.</p>
-    </div>
+    </Link>
   );
 }
 

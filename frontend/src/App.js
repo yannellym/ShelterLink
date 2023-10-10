@@ -34,7 +34,7 @@ const App = () => {
     <BrowserRouter>
       <Header />
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home favoritePets={favoritePets} setFavoritePets={setFavoritePets} addToFavorites={addToFavorites} removeFromFavorites={removeFromFavorites} />} />
         <Route path="/find-a-pet" element={<MainPage favoritePets={favoritePets} setFavoritePets={setFavoritePets} addToFavorites={addToFavorites} removeFromFavorites={removeFromFavorites}/>} />
         <Route path="/about" element={<About />} />
         <Route path="/resources" element={<Resources />} />

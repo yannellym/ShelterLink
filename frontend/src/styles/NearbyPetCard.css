@@ -1,29 +1,44 @@
-/* NearbyPetCard.css */
+/* Update NearbyPetCard.css */
 .pet-card {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    background-color: #fff;
-    border-radius: 5px;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s, box-shadow 0.2s;
-    cursor: pointer;
-    margin: 0 10px;
-  }
-  
-  .pet-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.15);
-  }
-  
-  .pet-card img {
-    max-width: 100%;
-    border-radius: 5px;
-  }
-  
-  .pet-card h3 {
-    margin-top: 10px;
-    font-size: 16px;
-    color: #353333;
-  }
-  
+  max-width: 100%;
+  margin: 2px auto;
+  background-color: #f8f8f8;
+  border-radius: 5px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+  text-align: center;
+  box-sizing: border-box;
+  height: 100%; /* Set the card's height to 100% of its container */
+  display: flex; /* Use flex display to align content vertically */
+  flex-direction: column; /* Stack child elements vertically */
+}
+
+.pet-card img {
+  width: 100%;
+  flex-grow: 1; /* Allow the image to grow and fill the available space */
+  object-fit: cover; /* Ensure the image covers the entire card */
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  max-height: 50%;
+}
+
+.pet-card .pet-info {
+  padding: 10px;
+  background-color: #fff;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  display: flex; /* Use flex to center-align the content */
+  flex-direction: column; /* Stack child elements vertically */
+  align-items: center; /* Center align the content horizontally */
+  color: #000000; /* Set the text color to white */
+  font-size: 13px;;
+}
+
+.pet-card h3 {
+  margin: 10px 0; /* Add margin to the name */
+}
+
+/* Hover effect */
+.pet-card:hover {
+  transform: scale(1.02);
+}

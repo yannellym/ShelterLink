@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SearchFilters from './SearchFilters';
 import SectionLink from './SectionLink';
 import NearbyPetCard from './NearbyPetCard';
 import AllNearbyPetsCard from './AllNearbyPetsCard';
 import AdoptionInfoSection from './AdoptionInfoSection';
 import UserPreferencesForm from './UserPreferencesForm';
+import PetCard from './PetCard';
 import '../styles/Home.css';
 import dog2 from '../images/dog.jpg';
 
@@ -14,15 +15,49 @@ const placeholderSizes = ['Small', 'Medium', 'Large'];
 const placeholderAges = ['Puppy', 'Adult', 'Senior'];
 const placeholderTypes = ['Dog', 'Cat', 'Bird', 'Rabbit'];
 
-
 const placeholderDogs = [
   { id: 1, name: 'Buddy', breed: 'Golden Retriever', photo: 'dogs1.jpg' },
   { id: 2, name: 'Daisy', breed: 'Labrador', photo: 'dog2.jpg' },
   { id: 3, name: 'Charlie', breed: 'Poodle', photo: 'dog3.jpg' },
 ];
 
-function Home() {
-  const [filteredDogs, setFilteredDogs] = useState(placeholderDogs);
+function Home({ favoritePets, addToFavorites, removeFromFavorites }) {
+  const [loading, setLoading] = useState(true);
+  const [petData, setPetData] = useState([]); // Store fetched pet data
+  const [selectedAnimals, setSelectedAnimals] = useState([]); // Store selected animals
+
+  useEffect(() => {
+    // Function to fetch pet data from an API
+    const fetchPetData = async () => {
+      try {
+        const response = await fetch('http://localhost:3002/api/petfinder?perPage=200');
+        const data = await response.json();
+
+        if (data && data.animals) {
+          setPetData(data.animals);
+          setLoading(false);
+
+          // Select 5 animals from the fetched data
+          const animals = data.animals.filter((animal) => animal.photos.length > 0).slice(0, 5);
+
+          if (animals.length < 5) {
+            // If there are fewer than 5 animals, fetch more data to reach 5
+            const remainingAnimalsCount = 5 - animals.length;
+            const additionalAnimals = data.animals.slice(0, remainingAnimalsCount);
+            setSelectedAnimals([...animals, ...additionalAnimals]);
+          } else {
+            setSelectedAnimals(animals);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching pet data:', error);
+        setLoading(false);
+      }
+    };
+
+    fetchPetData(); // Fetch pet data when the component mounts
+  }, []);
+
 
   const handleFilterChange = (event) => {
     const selectedType = event.target.value; // Placeholder: Type of pet
@@ -46,7 +81,7 @@ function Home() {
       return matchesType;
     });
   
-    setFilteredDogs(filteredDogs);
+    setSelectedAnimals(filteredDogs);
   };
   return (
     <div className="Home">
@@ -84,16 +119,24 @@ function Home() {
         <div className="adoption-div">
           <h3> Resources:</h3>
           <AdoptionInfoSection />  
-          {/* <DogList dogs={filteredDogs} /> */}
         </div>
 
         <div className="nearby-pets">
           <h3>Pets with greater need for love:</h3>
           <div className="nearby-pet-cards">
-            <NearbyPetCard imageSrc={dog2} name="Buddy" />
-            <NearbyPetCard imageSrc={dog2} name="Whiskers" />
-            <NearbyPetCard imageSrc={dog2} name="Roger" />
-            <NearbyPetCard imageSrc={dog2} name="Daisy" />
+            {loading ? (
+              <p>Loading...</p>
+            ) : (
+              selectedAnimals.map((dog) => (
+                <PetCard
+                  key={dog.id}
+                  pet={dog} // Pass the entire dog object as a prop
+                  addToFavorites={addToFavorites}
+                  removeFromFavorites={removeFromFavorites}
+                  isFavorite={favoritePets.some((favoritePet) => favoritePet.id === dog.id)}
+                />
+              ))
+            )}
             <AllNearbyPetsCard imageSrc={dog2} />
           </div>
         </div>

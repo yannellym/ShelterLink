@@ -36,13 +36,13 @@ const About = () => {
         </p>
       </div>
       <div className="clickable-squares">
-        <Link to="/find-a-pet" className="square">
+        <Link to="https://www.google.com/search?q=animal+shelters+near+me&sca_esv=572280770&sxsrf=AM9HkKlxuAD2GjmPPBX4r_1lHGwfbdLmpA%3A1696961336649&ei=OJMlZa2EJ_yoqtsP5fCDsAI&ved=0ahUKEwitgKzNieyBAxV8lGoFHWX4ACYQ4dUDCBA&uact=5&oq=animal+shelters+near+me&gs_lp=Egxnd3Mtd2l6LXNlcnAiF2FuaW1hbCBzaGVsdGVycyBuZWFyIG1lMggQABiKBRiRAjIIEAAYigUYkQIyCBAAGIoFGJECMgUQABiABDIGEAAYBxgeMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABDIIEAAYgAQYsQNItiBQAFiUH3AAeAGQAQCYAWqgAfYHqgEDOC4zuAEDyAEA-AEBwgIHEAAYgAQYCsICCBAAGAcYHhgKwgILEAAYBxgeGPEEGArCAgcQABgNGIAEwgIIEAAYBRgeGA3iAwQYACBBiAYB&sclient=gws-wiz-serp" className="square">
           <h3>Find a Shelter</h3>
         </Link>
-        <Link to="/dogs" className="square">
+        <Link to="/resources" className="square">
           <h3>Resources</h3>
         </Link>
-        <Link to="/nearby-pets" className="square">
+        <Link to="/find-a-pet" className="square">
           <h3>Pets Nearby</h3>
         </Link>
       </div>
