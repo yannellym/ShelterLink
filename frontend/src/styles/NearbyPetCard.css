@@ -14,7 +14,7 @@
 }
 
 .pet-card img {
-  width: 100%;
+  max-width: 100%;
   flex-grow: 1; /* Allow the image to grow and fill the available space */
   object-fit: cover; /* Ensure the image covers the entire card */
   border-top-left-radius: 5px;

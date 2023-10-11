@@ -34,12 +34,12 @@ const PetCard = ({ pet, addToFavorites, removeFromFavorites, isFavorite }) => {
   return (
     <div className="pet-card">
       <img src={pet.photos[0]?.medium} alt={pet.name} className="pet-card-image" />
-      <h3>
-        {pet.name} |{' '}
+      <h4>
+        {pet.name.length > 12 ? pet.name.substring(0, 12) + ' ...' : pet.name}{' '}
         <span role="img" aria-label="Location">
-          📍 {pet.contact.address.city}, {pet.contact.address.state}
+          📍{pet.contact.address.city}, {pet.contact.address.state}
         </span>
-      </h3>
+      </h4>
       <div className="pet-card-info">
         <div>
           <p>

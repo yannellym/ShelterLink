@@ -10,9 +10,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 120px;
-    background-color: #ff8a50a8; /* Match Petfinder button background color */
-    color: rgb(135, 41, 41);
+    height: 180px;
+    background-color: #ffffff; /* Match Petfinder button background color */
+    color: rgb(0, 0, 0);
     font-size: 18px;
     font-weight: bold;
     border-radius: 5px;
@@ -33,10 +33,12 @@
   }
   
   .section-card:hover {
-    background-color: #ff8950; /* Match Petfinder button hover background color */
+    background-color: #ef0000; /* Match Petfinder button hover background color */
   }
   
   .section-card img {
-    max-width: 30%;
+    max-width: 50%;
+    max-height: 50%;
+    padding-bottom: 3%;
     border-radius: 5px;
   }

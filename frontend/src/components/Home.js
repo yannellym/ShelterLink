@@ -8,18 +8,21 @@ import UserPreferencesForm from './UserPreferencesForm';
 import PetCard from './PetCard';
 import '../styles/Home.css';
 import dog2 from '../images/dog.jpg';
+import kitten from '../images/kitten.jpg';
+import hamster from '../images/hamster.jpg';
+import paw from '../images/paw.png';
 
-// Placeholder data
-const placeholderBreeds = ['Golden Retriever', 'Labrador', 'Poodle', 'Bulldog', 'Pug'];
-const placeholderSizes = ['Small', 'Medium', 'Large'];
-const placeholderAges = ['Puppy', 'Adult', 'Senior'];
-const placeholderTypes = ['Dog', 'Cat', 'Bird', 'Rabbit'];
+// // Placeholder data
+// const placeholderBreeds = ['Golden Retriever', 'Labrador', 'Poodle', 'Bulldog', 'Pug'];
+// const placeholderSizes = ['Small', 'Medium', 'Large'];
+// const placeholderAges = ['Puppy', 'Adult', 'Senior'];
+// const placeholderTypes = ['Dog', 'Cat', 'Bird', 'Rabbit'];
 
-const placeholderDogs = [
-  { id: 1, name: 'Buddy', breed: 'Golden Retriever', photo: 'dogs1.jpg' },
-  { id: 2, name: 'Daisy', breed: 'Labrador', photo: 'dog2.jpg' },
-  { id: 3, name: 'Charlie', breed: 'Poodle', photo: 'dog3.jpg' },
-];
+// const placeholderDogs = [
+//   { id: 1, name: 'Buddy', breed: 'Golden Retriever', photo: 'dogs1.jpg' },
+//   { id: 2, name: 'Daisy', breed: 'Labrador', photo: 'dog2.jpg' },
+//   { id: 3, name: 'Charlie', breed: 'Poodle', photo: 'dog3.jpg' },
+// ];
 
 function Home({ favoritePets, addToFavorites, removeFromFavorites }) {
   const [loading, setLoading] = useState(true);
@@ -38,11 +41,11 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites }) {
           setLoading(false);
 
           // Select 5 animals from the fetched data
-          const animals = data.animals.filter((animal) => animal.photos.length > 0).slice(0, 5);
+          const animals = data.animals.filter((animal) => animal.photos.length > 0).slice(0, 4);
 
-          if (animals.length < 5) {
+          if (animals.length < 4) {
             // If there are fewer than 5 animals, fetch more data to reach 5
-            const remainingAnimalsCount = 5 - animals.length;
+            const remainingAnimalsCount = 4 - animals.length;
             const additionalAnimals = data.animals.slice(0, remainingAnimalsCount);
             setSelectedAnimals([...animals, ...additionalAnimals]);
           } else {
@@ -59,30 +62,30 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites }) {
   }, []);
 
 
-  const handleFilterChange = (event) => {
-    const selectedType = event.target.value; // Placeholder: Type of pet
+  // const handleFilterChange = (event) => {
+  //   const selectedType = event.target.value; // Placeholder: Type of pet
     
-    // Get the values from other input fields (city, state, zip code)
-    const city = document.getElementById('cityInput').value.trim();
-    const state = document.getElementById('stateInput').value.trim();
-    const zipCode = document.getElementById('zipCodeInput').value.trim();
+  //   // Get the values from other input fields (city, state, zip code)
+  //   const city = document.getElementById('cityInput').value.trim();
+  //   const state = document.getElementById('stateInput').value.trim();
+  //   const zipCode = document.getElementById('zipCodeInput').value.trim();
   
-    // Simulate filtering based on type of pet and other criteria
-    const filteredDogs = placeholderDogs.filter(dog => {
-      const matchesType = !selectedType || dog.type === selectedType;
+  //   // Simulate filtering based on type of pet and other criteria
+  //   const filteredDogs = placeholderDogs.filter(dog => {
+  //     const matchesType = !selectedType || dog.type === selectedType;
   
-      if (city || state || zipCode) {
-        const matchesCity = !city || dog.city.toLowerCase().includes(city.toLowerCase());
-        const matchesState = !state || dog.state.toLowerCase().includes(state.toLowerCase());
-        const matchesZipCode = !zipCode || dog.zipCode.includes(zipCode);
-        return matchesType && (matchesCity || matchesState || matchesZipCode);
-      }
+  //     if (city || state || zipCode) {
+  //       const matchesCity = !city || dog.city.toLowerCase().includes(city.toLowerCase());
+  //       const matchesState = !state || dog.state.toLowerCase().includes(state.toLowerCase());
+  //       const matchesZipCode = !zipCode || dog.zipCode.includes(zipCode);
+  //       return matchesType && (matchesCity || matchesState || matchesZipCode);
+  //     }
   
-      return matchesType;
-    });
+  //     return matchesType;
+  //   });
   
-    setSelectedAnimals(filteredDogs);
-  };
+  //   setSelectedAnimals(filteredDogs);
+  // };
   return (
     <div className="Home">
       <main className="main-container">
@@ -96,13 +99,13 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites }) {
           </div>
           <div className="right-column">
             <div className="search-bar-container">
-              <SearchFilters
+              {/* <SearchFilters
                 breeds={placeholderBreeds}
                 sizes={placeholderSizes}
                 ages={placeholderAges}
                 types={placeholderTypes}
                 onFilterChange={handleFilterChange}
-              />
+              /> */}
             </div>
           </div>
         </div>
@@ -110,17 +113,15 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites }) {
           <h3> Find your fur-ever friend:</h3>
           <div className="section-links-inner-div">
             <SectionLink title="All Dogs" imageSrc= {dog2} link="/dogs" />
-            <SectionLink title="All Cats" imageSrc= {dog2} link="/cats" />
-            <SectionLink title="Other Animals" imageSrc= {dog2} link="/other-animals" />
-            <SectionLink title="Shelters & Rescues" imageSrc= {dog2} link="/shelters" />
+            <SectionLink title="All Cats" imageSrc= {kitten} link="/cats" />
+            <SectionLink title="Other Animals" imageSrc= {hamster} link="/other-animals" />
+            <SectionLink title="Shelters & Rescues" imageSrc= {paw} link="/shelters" />
           </div>
         </div>
-
-        <div className="adoption-div">
+        <div className="reso-div">
           <h3> Resources:</h3>
           <AdoptionInfoSection />  
         </div>
-
         <div className="nearby-pets">
           <h3>Pets with greater need for love:</h3>
           <div className="nearby-pet-cards">
@@ -137,7 +138,7 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites }) {
                 />
               ))
             )}
-            <AllNearbyPetsCard imageSrc={dog2} />
+            <AllNearbyPetsCard/>
           </div>
         </div>
       </main>

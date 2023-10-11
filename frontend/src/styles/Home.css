@@ -1,53 +1,51 @@
-/* * outside divs */ */
-
 .Home {
-text-align: center;
+  text-align: center;
+  box-sizing: border-box;
 }
-
 .section-links-div h3,
-.adoption-div h3,
+.resources-div h3,
 .nearby-pets h3 {
   text-align: center;
 }
-
+/* pet links section */
 .section-links-div {
   width: 100vw;
+  height: 50vh;
   background-color: rgb(0, 0, 0);
 }
+.section-links-div > h3 {
+  font-size: 34px;
+  color: rgb(255, 255, 255);
+}
 
+/* nearby pets section */
 .nearby-pets {
   width: 100vw;
   height: 85vh;
-  background-color: rgb(0, 0, 0);
+  background-color: rgba(200, 82, 36, 0.309);
+  font-size: 30px; 
+  color: rgb(0, 0, 0);
+}
+.nearby-pets > h3 {
+  color: rgb(0, 0, 0);
 }
 
-.nearby-pets > h3 {
-  color: white;
-}
-.adoption-div {
+/* resources section */
+.resources-div {
   width: 100vw;
-  background-color: rgba(255, 255, 255, 0.113);
+  background-color: rgb(255, 255, 255);
+}
+.resources-div h3 {
+  font-size: 34px;
 }
 
 /* inner divs */
 .nearby-pet-cards, .section-links-inner-div {
   display: flex;
   align-items: center; /* Center vertically */
-  height: 55vh;
-  padding: 2% 3%;
-  width: 90vw;
+  padding: 1% 3%;
   margin: 2%;
   gap: 1%;
-}
-
-
-.nearby-pets, .section-links-div h3{
-  font-size: 34px; 
-  color: rgb(0, 0, 0);
-}
-
-.adoption-div h3 {
-  font-size:  34px;
 }
 
 .background-image {
@@ -71,18 +69,20 @@ text-align: center;
   z-index: 1; /* Place above the background image */
 }
 
-
 .form-and-search-container {
   display: flex;
   gap: 10px; /* Adjust the gap between the form and search bar */
   flex-grow: 1; /* Allow the container to grow and take available space */
 }
+
 .main-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: flex-start;
-  gap: 10px; /* Adjust the gap between columns */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box ;
 }
 
 .left-column,
@@ -98,12 +98,7 @@ text-align: center;
   flex-basis: calc(50% - 10px); /* Adjust the width of the right column */
 }
 
-.main-container {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 20px; /* Adjust the gap between columns and divider */
-}
+
 .form-and-search-container {
   display: flex;
   justify-content: center;
@@ -131,7 +126,4 @@ text-align: center;
   margin: 0 10px; /* Adjust the margin as needed */
   padding: 50% 0;
 }
-
-
-
 
