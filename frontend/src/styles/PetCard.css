@@ -11,7 +11,7 @@
   align-items: center; /* Center-align contents horizontally */
   text-align: center; /* Center-align text */
   width: 270px;
-  height: 450px !important; /* Set a fixed height for the card */
+  height: auto; /* Set a fixed height for the card */
   overflow: hidden; /* Hide any content that overflows the card */
 }
 

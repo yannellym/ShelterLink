@@ -10,7 +10,7 @@ import FavoritesPage from './components/FavoritesPage';
 import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
 import PetDetails from './components/PetDetails'; // Import the PetDetails component
-
+import AllPetsPage from './components/AllPetsPage.js';
 
 
 const App = () => {
@@ -42,6 +42,7 @@ const App = () => {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/pet-details/:petId" element={<PetDetails />} />
+        <Route path="/all-pets/:category" element={<AllPetsPage />} />
       </Routes>
   
       <Footer />

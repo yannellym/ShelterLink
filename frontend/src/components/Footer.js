@@ -44,7 +44,7 @@ function Footer() {
       </div>
       <div className="footer-section">
         <h4>To get the latest on pet adoption and pet care, sign up for the Petfinder newsletter.</h4>
-        <a href="https://www.petfinder.com/" className="sign-up-link">SIGN UP</a>
+        <a href="https://profiles.petfinder.com/subscription/subscribe/brand/PF?sc=PFOptinFooter201707&_gl=1*dfpi6t*_ga*MjEyMjEyMTk4OC4xNjkzNTE0MTg0*_ga_5H1R91DP2Q*MTY5NzEyODE2Ni4zMi4xLjE2OTcxMjg0MzkuMC4wLjA." className="sign-up-link">SIGN UP</a>
       </div>
     </footer>
   );

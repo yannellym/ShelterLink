@@ -112,13 +112,14 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites }) {
         <div className="section-links-div">
           <h3> Find your fur-ever friend:</h3>
           <div className="section-links-inner-div">
-            <SectionLink title="All Dogs" imageSrc= {dog2} link="/dogs" />
-            <SectionLink title="All Cats" imageSrc= {kitten} link="/cats" />
-            <SectionLink title="Other Animals" imageSrc= {hamster} link="/other-animals" />
-            <SectionLink title="Shelters & Rescues" imageSrc= {paw} link="/shelters" />
+            <SectionLink title="All Dogs" imageSrc={dog2} link="/all-pets/dog" />
+            <SectionLink title="All Cats" imageSrc={kitten} link="/all-pets/cat" />
+            <SectionLink title="Other Animals" imageSrc={hamster} link="/all-pets/animals" />
+            <SectionLink title="Shelters & Rescues" imageSrc={paw} link="/shelters" />
           </div>
+
         </div>
-        <div className="reso-div">
+        <div className="resource-div">
           <h3> Resources:</h3>
           <AdoptionInfoSection />  
         </div>
