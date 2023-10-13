@@ -5,51 +5,66 @@ import PetCard from './PetCard';
 
 function AllPetsPage() {
   const { category } = useParams();
-  const [pets, setPets] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const petsPerPage = 20;
+  const cache = []; // Cache to store pets data
 
-  // Function to calculate and set card heights dynamically
-  const adjustCardHeights = () => {
-    const petCards = document.querySelectorAll('.pet-card'); // Select all pet cards
-    petCards.forEach((card) => {
-      const content = card.querySelector('.pet-card-content');
-      if (content) {
-        card.style.height = content.offsetHeight + 'px'; // Set card height to content height
-      }
-    });
-  };
-  
+  const fetchAnimalsByType = async (type, page) => {
+    const offset = (page - 1) * petsPerPage;
+    if (cache.length > offset) {
+      // If data for this page exists in the cache, use it
+      const displayedPets = cache.slice(offset, offset + petsPerPage);
+      setLoading(false);
+      return displayedPets;
+    } else {
+      try {
+        const response = await fetch(
+          `http://localhost:3002/api/petfinder?type=${type}&offset=${offset}&limit=${petsPerPage}`
+        );
+        const data = await response.json();
 
-  const fetchAnimalsByType = async (type) => {
-    try {
-      const response = await fetch(`http://localhost:3002/api/petfinder?type=${type}`);
-      const data = await response.json();
+        console.log('API Response:', data);
 
-      console.log('API Response:', data);
+        if (data && data.animals) {
+          const pets = data.animals;
 
-      if (data && data.animals) {
-        setPets(data.animals);
+          // Update the cache with the fetched data
+          cache.splice(offset, petsPerPage, ...pets);
+
+          setLoading(false);
+          return pets;
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error.message);
         setLoading(false);
       }
-    } catch (error) {
-      console.error('Error fetching data:', error.message);
-      setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchAnimalsByType(category);
-  }, [category]);
-  
-  
-  // Call the function to adjust card heights when pets data changes (after loading)
-  useEffect(() => {
-    if (!loading) {
-      adjustCardHeights();
-    }
-  }, [loading, pets]);
+    fetchAnimalsByType(category, currentPage).then((displayedPets) => {
+      if (displayedPets) {
+        setAllPets(displayedPets);
+      }
+    });
+  }, [category, currentPage]);
 
-  console.log('Number of pets:', pets.length);
+  const [allPets, setAllPets] = useState([]);
+
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const totalPets = cache.length; // Total pets in cache
+
+  const totalPages = Math.ceil(totalPets / petsPerPage);
+
+  const paginationNumbers = Array.from({ length: Math.max(9, totalPages) }, (_, index) => (
+    <button key={index + 1} onClick={() => paginate(index + 1)}>
+      {index + 1}
+    </button>
+  ));
 
   return (
     <div className="all-pets-page">
@@ -57,11 +72,16 @@ function AllPetsPage() {
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <div className="pet-list">
-          {pets.map((pet) => (
-            <PetCard key={pet.id} pet={pet} />
-          ))}
-        </div>
+        <>
+          <div className="pet-list">
+            {allPets.map((pet) => (
+              <PetCard key={pet.id} pet={pet} />
+            ))}
+          </div>
+          <div className="pagination">
+            {paginationNumbers}
+          </div>
+        </>
       )}
     </div>
   );

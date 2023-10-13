@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import '../styles/PetCard.css';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom';
 
 const PetCard = ({ pet, addToFavorites, removeFromFavorites, isFavorite }) => {
   const [favorited, setFavorited] = useState(isFavorite);
-  const navigate = useNavigate(); // Get the navigate function
+  const navigate = useNavigate();
 
+  
   const handleToggleFavorite = () => {
     setFavorited(!favorited);
     if (favorited) {
@@ -16,7 +17,6 @@ const PetCard = ({ pet, addToFavorites, removeFromFavorites, isFavorite }) => {
   };
 
   const handleMoreInfoClick = () => {
-    // Use navigate to go to the PetDetails component and send the pet data as state
     navigate(`/pet-details/${pet.id}`, { state: { petData: pet } });
   };
 

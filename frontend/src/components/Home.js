@@ -86,6 +86,7 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites }) {
   
   //   setSelectedAnimals(filteredDogs);
   // };
+  console.log('Number of pets received in parent component:', selectedAnimals.length);
   return (
     <div className="Home">
       <main className="main-container">
@@ -130,6 +131,7 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites }) {
               <p>Loading...</p>
             ) : (
               selectedAnimals.map((dog) => (
+              
                 <PetCard
                   key={dog.id}
                   pet={dog} // Pass the entire dog object as a prop
@@ -138,6 +140,7 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites }) {
                   isFavorite={favoritePets.some((favoritePet) => favoritePet.id === dog.id)}
                 />
               ))
+              
             )}
             <AllNearbyPetsCard/>
           </div>

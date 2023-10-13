@@ -33,4 +33,11 @@
     color: #666;
     text-align: center;
   }
-  
+    .pagination {
+    display: flex;
+    gap: 10px; /* Adjust the gap between page buttons */
+    }
+
+    .pagination button {
+    /* Your button styling here */
+    }
