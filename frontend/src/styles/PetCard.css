@@ -121,3 +121,30 @@
 .more-info-button:hover {
   background-color: #000000;
 }
+
+.greater-need-cards {
+  flex-direction: column;
+  align-items: center;
+  background-color: #ffffff;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  width: 60px;
+}
+
+.greater-need-cards:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.15);
+}
+
+.greater-need-cards p {
+  margin-top: 5px;
+  font-size: 14px;
+  color: #ff0000;
+}
+.greater-need-cards img {
+  max-width: 100%;
+  border-radius: 5px;
+}

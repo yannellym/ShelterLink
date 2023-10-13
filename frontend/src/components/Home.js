@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import SearchFilters from './SearchFilters';
 import SectionLink from './SectionLink';
-import NearbyPetCard from './NearbyPetCard';
-import AllNearbyPetsCard from './AllNearbyPetsCard';
 import AdoptionInfoSection from './AdoptionInfoSection';
 import UserPreferencesForm from './UserPreferencesForm';
 import PetCard from './PetCard';
@@ -11,7 +9,7 @@ import dog2 from '../images/dog.jpg';
 import kitten from '../images/kitten.jpg';
 import hamster from '../images/hamster.jpg';
 import paw from '../images/paw.png';
-
+import { Link } from 'react-router-dom'; 
 // // Placeholder data
 // const placeholderBreeds = ['Golden Retriever', 'Labrador', 'Poodle', 'Bulldog', 'Pug'];
 // const placeholderSizes = ['Small', 'Medium', 'Large'];
@@ -126,23 +124,35 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites }) {
         </div>
         <div className="nearby-pets">
           <h3>Pets with greater need for love:</h3>
-          <div className="nearby-pet-cards">
-            {loading ? (
+          {loading ? (
               <p>Loading...</p>
             ) : (
               selectedAnimals.map((dog) => (
               
-                <PetCard
-                  key={dog.id}
-                  pet={dog} // Pass the entire dog object as a prop
-                  addToFavorites={addToFavorites}
-                  removeFromFavorites={removeFromFavorites}
-                  isFavorite={favoritePets.some((favoritePet) => favoritePet.id === dog.id)}
-                />
+                dog.name + dog.photos.length + " " + dog.description?.length + " ==>"
               ))
-              
             )}
-            <AllNearbyPetsCard/>
+          <div className="nearby-pet-cards">
+            {loading ? (
+              <p>Loading...</p>
+            ) : (
+              selectedAnimals.map((pet) => {
+
+              console.log('Pet Data:', pet);
+                return (
+                  <PetCard
+                    key={pet.id}
+                    pet={pet}
+                    addToFavorites={addToFavorites}
+                    removeFromFavorites={removeFromFavorites}
+                    isFavorite={favoritePets.some((favoritePet) => favoritePet.id === pet.id)}
+                  />
+              )})
+            )}
+            <Link to="/find-a-pet" className="greater-need-cards"> 
+              <img width="64" height="64" src="https://img.icons8.com/sf-black/64/right.png" alt="right" />
+              <p><strong>View all available pets near you.</strong></p>
+            </Link>
           </div>
         </div>
       </main>

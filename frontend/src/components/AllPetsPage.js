@@ -7,64 +7,43 @@ function AllPetsPage() {
   const { category } = useParams();
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const petsPerPage = 20;
-  const cache = []; // Cache to store pets data
+  const petsPerPage = 40;
+  const [cache, setCache] = useState([]);
 
   const fetchAnimalsByType = async (type, page) => {
     const offset = (page - 1) * petsPerPage;
-    if (cache.length > offset) {
-      // If data for this page exists in the cache, use it
-      const displayedPets = cache.slice(offset, offset + petsPerPage);
-      setLoading(false);
-      return displayedPets;
-    } else {
-      try {
-        const response = await fetch(
-          `http://localhost:3002/api/petfinder?type=${type}&offset=${offset}&limit=${petsPerPage}`
-        );
-        const data = await response.json();
 
-        console.log('API Response:', data);
+    try {
+      const response = await fetch(
+        `http://localhost:3002/api/petfinder?type=${type}&offset=${offset}&limit=${petsPerPage}`
+      );
+      const data = await response.json();
 
-        if (data && data.animals) {
-          const pets = data.animals;
+      console.log('API Response:', data);
 
-          // Update the cache with the fetched data
-          cache.splice(offset, petsPerPage, ...pets);
+      if (data && data.animals) {
+        const pets = data.animals;
 
-          setLoading(false);
-          return pets;
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error.message);
         setLoading(false);
+
+        // Set the pet data in the state
+        setCache(pets);
+
+        return pets;
       }
+    } catch (error) {
+      console.error('Error fetching data:', error.message);
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchAnimalsByType(category, currentPage).then((displayedPets) => {
-      if (displayedPets) {
-        setAllPets(displayedPets);
-      }
-    });
+    async function fetchData() {
+      await fetchAnimalsByType(category, currentPage);
+    }
+
+    fetchData();
   }, [category, currentPage]);
-
-  const [allPets, setAllPets] = useState([]);
-
-  const paginate = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
-
-  const totalPets = cache.length; // Total pets in cache
-
-  const totalPages = Math.ceil(totalPets / petsPerPage);
-
-  const paginationNumbers = Array.from({ length: Math.max(9, totalPages) }, (_, index) => (
-    <button key={index + 1} onClick={() => paginate(index + 1)}>
-      {index + 1}
-    </button>
-  ));
 
   return (
     <div className="all-pets-page">
@@ -72,16 +51,11 @@ function AllPetsPage() {
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <>
-          <div className="pet-list">
-            {allPets.map((pet) => (
-              <PetCard key={pet.id} pet={pet} />
-            ))}
-          </div>
-          <div className="pagination">
-            {paginationNumbers}
-          </div>
-        </>
+        <div className="pet-list">
+          {cache.map((pet) => (
+            <PetCard key={pet.id} pet={pet} />
+          ))}
+        </div>
       )}
     </div>
   );
