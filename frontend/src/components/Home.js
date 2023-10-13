@@ -113,7 +113,7 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites }) {
           <div className="section-links-inner-div">
             <SectionLink title="All Dogs" imageSrc={dog2} link="/all-pets/dog" />
             <SectionLink title="All Cats" imageSrc={kitten} link="/all-pets/cat" />
-            <SectionLink title="Other Animals" imageSrc={hamster} link="/all-pets/animals" />
+            <SectionLink title="Other Animals" imageSrc={hamster} link="/all-pets/Rabbit" />
             <SectionLink title="Shelters & Rescues" imageSrc={paw} link="/shelters" />
           </div>
 

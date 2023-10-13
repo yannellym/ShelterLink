@@ -12,23 +12,28 @@ function AllPetsPage() {
 
   const fetchAnimalsByType = async (type, page) => {
     const offset = (page - 1) * petsPerPage;
-
+    let endpoint = `http://localhost:3002/api/petfinder?type=${type}&offset=${offset}&limit=${petsPerPage}`;
+  
+    // Check if the type is "other animals"
+    if (type === "other animals") {
+      // Modify the endpoint to fetch animals that are not dogs or cats
+      // Here, you can use the Petfinder API's Get Animal Types to retrieve the list of valid types
+      // You can then specify a type that is not "dog" or "cat"
+      // For example, if "Rabbit" is a valid type, you can use that
+      endpoint = `http://localhost:3002/api/petfinder?type=${type}&offset=${offset}&limit=${petsPerPage}`;
+    }
+  
     try {
-      const response = await fetch(
-        `http://localhost:3002/api/petfinder?type=${type}&offset=${offset}&limit=${petsPerPage}`
-      );
+      // Continue with your existing code to fetch data from the modified endpoint
+      const response = await fetch(endpoint);
       const data = await response.json();
-
+  
       console.log('API Response:', data);
-
+  
       if (data && data.animals) {
         const pets = data.animals;
-
         setLoading(false);
-
-        // Set the pet data in the state
         setCache(pets);
-
         return pets;
       }
     } catch (error) {
@@ -36,6 +41,7 @@ function AllPetsPage() {
       setLoading(false);
     }
   };
+  
 
   useEffect(() => {
     async function fetchData() {
