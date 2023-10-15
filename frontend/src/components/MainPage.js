@@ -7,8 +7,7 @@ function MainPage({ favoritePets, addToFavorites, removeFromFavorites }) {
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(true);
   const currentPageRef = useState(1);
-  const itemsPerPage = 20;
-  const minimumPets = 400;
+  const itemsPerPage = 100;
   const [cachedData, setCachedData] = useState([]);
   const totalPages = Math.ceil(cachedData.length / itemsPerPage);
 
@@ -24,7 +23,7 @@ function MainPage({ favoritePets, addToFavorites, removeFromFavorites }) {
   // Function to fetch all pets and store them in memory
   const fetchAllPets = async () => {
     try {
-      const endpoint = 'http://localhost:3002/api/petfinder?perPage=40'; // Fetch pets in a single request
+      const endpoint = 'http://localhost:3002/api/petfinder?perPage={itemsPerPage}'; // Fetch pets in a single request
       const response = await fetch(endpoint);
       const data = await response.json();
 
