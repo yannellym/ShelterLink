@@ -13,7 +13,6 @@ const PetDetails = () => {
   return (
     <div className="pet-details">
       <div className="back-link-container">
-        {/* Use Link for navigation */}
         <Link to="/find-a-pet" className="back-link">
           Go Back
         </Link>
@@ -34,6 +33,7 @@ const PetDetails = () => {
           ))}
         </div>
       </div>
+      <p>{petData.description}</p>
       <div className="petfinder-button">
         <a href={petData.url} target="_blank" rel="noopener noreferrer">
           <span> I want {petData.gender === "Female" ? "her" : "him"}! </span>

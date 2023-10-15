@@ -19,17 +19,6 @@ const PetCard = ({ pet, addToFavorites, removeFromFavorites, isFavorite }) => {
   const handleMoreInfoClick = () => {
     navigate(`/pet-details/${pet.id}`, { state: { petData: pet } });
   };
-
-  const truncatedAddress =
-    pet.contact.address.city && pet.contact.address.city.length > 10
-      ? `${pet.contact.address.city.substring(0, 10)}...`
-      : pet.contact.address.city;
-
-  const truncatedDescription =
-    pet.description && pet.description.length > 100
-      ? `${pet.description.substring(0, 100)}...`
-      : pet.description;
-
   return (
     <div className="pet-card">
       {pet.photos && pet.photos.length > 0 ? (
@@ -40,7 +29,8 @@ const PetCard = ({ pet, addToFavorites, removeFromFavorites, isFavorite }) => {
       <h4>
         {pet.name.length > 9 ? pet.name.substring(0, 9) + ' ...' : pet.name}{' '}
         <span role="img" aria-label="Location">
-          📍{truncatedAddress}, {pet.contact.address.state}
+          📍{pet.contact.address.city.substring(0, 10)},  
+            {pet.contact.address.state}
         </span>
       </h4>
       <div className="pet-card-info">
@@ -51,7 +41,10 @@ const PetCard = ({ pet, addToFavorites, removeFromFavorites, isFavorite }) => {
         </div>
       </div>
       {pet.description && pet.description.length > 0 ? (
-        <p className="pet-card-description">{truncatedDescription}</p>
+        <p className="pet-card-description">
+          {pet.description && pet.description.length > 100
+          ? `${pet.description.substring(0, 100)}...`
+          : pet.description}</p>
       ) : (
         <p className="pet-card-description">This pet doesn't have a description.</p>
       )}

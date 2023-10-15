@@ -24,7 +24,7 @@ function MainPage({ favoritePets, addToFavorites, removeFromFavorites }) {
   // Function to fetch all pets and store them in memory
   const fetchAllPets = async () => {
     try {
-      const endpoint = 'http://localhost:3002/api/petfinder?perPage=200'; // Fetch all pets in a single request
+      const endpoint = 'http://localhost:3002/api/petfinder?perPage=40'; // Fetch pets in a single request
       const response = await fetch(endpoint);
       const data = await response.json();
 

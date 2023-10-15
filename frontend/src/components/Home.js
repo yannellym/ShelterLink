@@ -113,7 +113,7 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites }) {
           <div className="section-links-inner-div">
             <SectionLink title="All Dogs" imageSrc={dog2} link="/all-pets/dog" />
             <SectionLink title="All Cats" imageSrc={kitten} link="/all-pets/cat" />
-            <SectionLink title="Other Animals" imageSrc={hamster} link="/all-pets/Rabbit" />
+            <SectionLink title="Other Animals" imageSrc={hamster} link="/all-pets/other" />
             <SectionLink title="Shelters & Rescues" imageSrc={paw} link="/shelters" />
           </div>
 
@@ -124,21 +124,11 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites }) {
         </div>
         <div className="nearby-pets">
           <h3>Pets with greater need for love:</h3>
-          {loading ? (
-              <p>Loading...</p>
-            ) : (
-              selectedAnimals.map((dog) => (
-              
-                dog.name + dog.photos.length + " " + dog.description?.length + " ==>"
-              ))
-            )}
           <div className="nearby-pet-cards">
             {loading ? (
               <p>Loading...</p>
             ) : (
               selectedAnimals.map((pet) => {
-
-              console.log('Pet Data:', pet);
                 return (
                   <PetCard
                     key={pet.id}
