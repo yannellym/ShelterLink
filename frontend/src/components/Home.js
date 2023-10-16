@@ -9,23 +9,11 @@ import dog2 from '../images/dog.jpg';
 import kitten from '../images/kitten.jpg';
 import hamster from '../images/hamster.jpg';
 import paw from '../images/paw.png';
-import { Link } from 'react-router-dom'; 
-// // Placeholder data
-// const placeholderBreeds = ['Golden Retriever', 'Labrador', 'Poodle', 'Bulldog', 'Pug'];
-// const placeholderSizes = ['Small', 'Medium', 'Large'];
-// const placeholderAges = ['Puppy', 'Adult', 'Senior'];
-// const placeholderTypes = ['Dog', 'Cat', 'Bird', 'Rabbit'];
-
-// const placeholderDogs = [
-//   { id: 1, name: 'Buddy', breed: 'Golden Retriever', photo: 'dogs1.jpg' },
-//   { id: 2, name: 'Daisy', breed: 'Labrador', photo: 'dog2.jpg' },
-//   { id: 3, name: 'Charlie', breed: 'Poodle', photo: 'dog3.jpg' },
-// ];
+import { Link } from 'react-router-dom';
 
 function Home({ favoritePets, addToFavorites, removeFromFavorites }) {
   const [loading, setLoading] = useState(true);
-  const [petData, setPetData] = useState([]); // Store fetched pet data
-  const [selectedAnimals, setSelectedAnimals] = useState([]); // Store selected animals
+  const [selectedAnimals, setSelectedAnimals] = useState([]);
 
   useEffect(() => {
     // Function to fetch pet data from an API
@@ -33,24 +21,19 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites }) {
       try {
         const response = await fetch('http://localhost:3002/api/petfinder?perPage=200');
         const data = await response.json();
-      
 
         if (data && data.animals) {
-          setPetData(data.animals);
           setLoading(false);
-
           // Select 4 animals from the fetched data
           const animals = data.animals.filter((animal) => animal.photos.length > 0).slice(0, 4);
-          
+
           if (animals.length < 4) {
-            // If there are fewer than 4animals, fetch more data to reach 4
+            // If there are fewer than 4 animals, fetch more data to reach 4
             const remainingAnimalsCount = 4 - animals.length;
             const additionalAnimals = data.animals.slice(0, remainingAnimalsCount);
             setSelectedAnimals([...animals, ...additionalAnimals]);
-            
           } else {
             setSelectedAnimals(animals);
-            // console.log(selectedAnimals.map((animal) => animal.description.length), "SELECTED")
           }
         }
       } catch (error) {
@@ -58,9 +41,12 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites }) {
         setLoading(false);
       }
     };
-    fetchPetData(); // Fetch pet data when the component mounts
-  }, []);
 
+    // Only fetch data when the component mounts
+    if (selectedAnimals.length === 0) {
+      fetchPetData();
+    }
+  }, [selectedAnimals]);
 
   // const handleFilterChange = (event) => {
   //   const selectedType = event.target.value; // Placeholder: Type of pet
@@ -86,7 +72,7 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites }) {
   
   //   setSelectedAnimals(filteredDogs);
   // };
-  console.log('Number of pets received in parent component:', selectedAnimals.length);
+
   return (
     <div className="Home">
       <main className="main-container">
@@ -116,9 +102,11 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites }) {
             <SectionLink title="All Dogs" imageSrc={dog2} link="/all-pets/dog" />
             <SectionLink title="All Cats" imageSrc={kitten} link="/all-pets/cat" />
             <SectionLink title="Other Animals" imageSrc={hamster} link="/all-pets/other" />
-            <SectionLink title="Shelters & Rescues" imageSrc={paw} link="/shelters" />
-          </div>
-
+            <a href="https://www.chewy.com/g/animal-shelters-and-rescues" className="shelters-cards">
+              <img width="64" height="64" src={paw} alt="right" />
+              <p><strong>View all shelters & rescues near you.</strong></p>
+            </a>
+          </div>  
         </div>
         <div className="resource-div">
           <h3> Resources:</h3>
