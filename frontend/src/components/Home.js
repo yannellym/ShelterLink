@@ -33,21 +33,24 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites }) {
       try {
         const response = await fetch('http://localhost:3002/api/petfinder?perPage=200');
         const data = await response.json();
+      
 
         if (data && data.animals) {
           setPetData(data.animals);
           setLoading(false);
 
-          // Select 5 animals from the fetched data
+          // Select 4 animals from the fetched data
           const animals = data.animals.filter((animal) => animal.photos.length > 0).slice(0, 4);
-
+          
           if (animals.length < 4) {
-            // If there are fewer than 5 animals, fetch more data to reach 5
+            // If there are fewer than 4animals, fetch more data to reach 4
             const remainingAnimalsCount = 4 - animals.length;
             const additionalAnimals = data.animals.slice(0, remainingAnimalsCount);
             setSelectedAnimals([...animals, ...additionalAnimals]);
+            
           } else {
             setSelectedAnimals(animals);
+            // console.log(selectedAnimals.map((animal) => animal.description.length), "SELECTED")
           }
         }
       } catch (error) {
@@ -55,7 +58,6 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites }) {
         setLoading(false);
       }
     };
-
     fetchPetData(); // Fetch pet data when the component mounts
   }, []);
 

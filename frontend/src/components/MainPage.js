@@ -30,6 +30,7 @@ function MainPage({ favoritePets, addToFavorites, removeFromFavorites }) {
       console.log('API Response:', data); // Print the API response
 
       if (data && data.animals) {
+        data.animals = data.animals.filter((animal) => animal.photos.length > 0);
         setCachedData(data.animals);
         setSearchResults(data.animals);
         setLoading(false);

@@ -3,71 +3,57 @@ import { useParams } from 'react-router-dom';
 import '../styles/AllPetsPage.css';
 import PetCard from './PetCard';
 
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
 function AllPetsPage() {
   const { category } = useParams();
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const petsPerPage = 40;
   const [cache, setCache] = useState([]);
-  const fetchAnimalsByType = async (type, page) => {
-    const offset = (page - 1) * petsPerPage;
-    let endpoint;
+  const otherAnimalTypes = ["horse", "bird", "barnyard"];
   
-    if (type === "dog" || type === "cat") {
-      // Query dogs and cats
-      endpoint = `http://localhost:3002/api/petfinder?type=${type}&offset=${offset}&limit=${petsPerPage}`;
-    } else if (type === "other") {
-      // Query "horse," "rabbit," "hamster," and "pigeon"
-      const validTypes = ["horse", "rabbit", "hamster", "pigeon"].join(",");
-      endpoint = `http://localhost:3002/api/petfinder?type=${validTypes}&offset=${offset}&limit=${petsPerPage}`;
-    } else {
-      // Query all animals
-      endpoint = `http://localhost:3002/api/petfinder?offset=${offset}&limit=${petsPerPage}`;
-    }
-  
+  const fetchAnimalsByType = async (type) => {
+    const endpoint = `http://localhost:3002/api/petfinder?type=${type}&limit=${petsPerPage}`;
+    
     try {
-      // Continue with your existing code to fetch data from the modified endpoint
       const response = await fetch(endpoint);
       const data = await response.json();
-  
-      console.log('API Response:', data);
-  
+    
       if (data && data.animals) {
-        let pets = data.animals;
-  
-        if (type !== "dog" && type !== "cat") {
-          // Filter out dogs and cats if the type is not "dog" or "cat"
-          pets = pets.filter(pet => pet.type !== 'Dog' && pet.type !== 'Cat');
-        }
-  
-        setLoading(false);
-  
-        // Check if you have fewer than 20 pets and continue querying for "other" animals
-        if (type === "other" && pets.length < 20) {
-          const remainingPets = 20 - pets.length;
-          const additionalPets = await fetchAnimalsByType("other", page + 1);
-          pets = pets.concat(additionalPets.slice(0, remainingPets));
-        }
-  
-        setCache(pets);
-        return pets;
+        data.animals = data.animals.filter((animal) => animal.photos.length > 0);
+        return data.animals;
       }
     } catch (error) {
       console.error('Error fetching data:', error.message);
-      setLoading(false);
     }
+    
+    return [];
   };
-  
-  
-  
 
   useEffect(() => {
     async function fetchData() {
-      await fetchAnimalsByType(category, currentPage);
+      const allPets = await Promise.all(
+        otherAnimalTypes.map(animalType => fetchAnimalsByType(animalType))
+      );
+      
+      // Merge the arrays of animals
+      const mergedPets = allPets.reduce((accumulator, current) => [...accumulator, ...current], []);
+
+      // Shuffle the mergedPets array
+      shuffleArray(mergedPets);
+      
+      setCache(mergedPets);
+      setLoading(false);
     }
 
     fetchData();
-  }, [category, currentPage]);
+  }, []);
 
   return (
     <div className="all-pets-page">
@@ -86,37 +72,3 @@ function AllPetsPage() {
 }
 
 export default AllPetsPage;
-
-
-// const fetchAnimalsByType = async (type) => {
-//   const endpoint = `http://localhost:3002/api/petfinder?type=${type}&limit=${petsPerPage}`;
-
-//   try {
-//     const response = await fetch(endpoint);
-//     const data = await response.json();
-
-//     if (data && data.animals) {
-//       return data.animals;
-//     }
-//   } catch (error) {
-//     console.error('Error fetching data:', error.message);
-//   }
-
-//   return [];
-// };
-
-// useEffect(() => {
-//   async function fetchData() {
-//     const allPets = await Promise.all(
-//       otherAnimalTypes.map(animalType => fetchAnimalsByType(animalType))
-//     );
-    
-//     // Merge the arrays of animals
-//     const mergedPets = allPets.reduce((accumulator, current) => [...accumulator, ...current], []);
-    
-//     setCache(mergedPets);
-//     setLoading(false);
-//   }
-
-//   fetchData();
-// }, []);
