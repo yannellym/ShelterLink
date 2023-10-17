@@ -11,7 +11,7 @@ const UserPreferencesForm = ({ onPreferencesSubmit }) => {
 
   const [type, setType] = useState('dog');
   const [size, setSize] = useState('Large');
-  const [age, setAge] = useState(0);
+  const [age, setAge] = useState(1);
   const [selectedAgeCategory, setSelectedAgeCategory] = useState(ageCategories[0]); 
   const [gender, setGender] = useState('Male');
   const [temperament, setTemperament] = useState([]);
