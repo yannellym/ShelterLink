@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import '../styles/UserPreferencesForm.css';
 
-const UserPreferencesForm = () => {
+const UserPreferencesForm = ({ onPreferencesSubmit }) => {
   const ageCategories = {
-    0: 'Baby',
-    1: 'Young',
-    4: 'Adult',
-    7: 'Senior',
+    1: 'Baby',
+    2: 'Young',
+    3: 'Adult',
+    4: 'Senior',
   };
 
   const [type, setType] = useState('dog');
-  const [size, setSize] = useState('any');
+  const [size, setSize] = useState('Large');
   const [age, setAge] = useState(0);
   const [selectedAgeCategory, setSelectedAgeCategory] = useState(ageCategories[0]); 
-  const [gender, setGender] = useState('any');
+  const [gender, setGender] = useState('Male');
   const [temperament, setTemperament] = useState([]);
   const [messageVisible, setMessageVisible] = useState(false); // State to control message visibility
 
@@ -56,21 +56,19 @@ const UserPreferencesForm = () => {
     return formattedMessage;
   };
 
-
-
-  const areAllChoicesMade = () => {
-    return type !== 'any' && size !== 'any' && age !== 0 && gender !== 'any' && temperament.length > 0;
-  };
-
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (areAllChoicesMade()) {
-      setMessageVisible(true);
-      // Handle the form submission (e.g., filter pets based on user preferences)
-    }
+    console.log('Submit button clicked'); 
+    const userPreferences = {
+      type,
+      size,
+      age: selectedAgeCategory,
+      gender,
+      temperament,
+    };
+    console.log(userPreferences, "userpref");
+    onPreferencesSubmit(userPreferences);
   };
-
-
 
   return (
     <div className="container">
@@ -81,9 +79,9 @@ const UserPreferencesForm = () => {
             <input
               type="radio"
               name="type"
-              value="dog"
-              checked={type === 'dog'}
-              onChange={() => setType('dog')}
+              value="Dog"
+              checked={type === 'Dog'}
+              onChange={() => setType('Dog')}
             />{' '}
             Dog 🐶
           </label>
@@ -91,9 +89,9 @@ const UserPreferencesForm = () => {
             <input
               type="radio"
               name="type"
-              value="cat"
-              checked={type === 'cat'}
-              onChange={() => setType('cat')}
+              value="Cat"
+              checked={type === 'Cat'}
+              onChange={() => setType('Cat')}
             />{' '}
             Cat 🐱
           </label>
@@ -102,8 +100,8 @@ const UserPreferencesForm = () => {
               type="radio"
               name="type"
               value="other"
-              checked={type === 'other'}
-              onChange={() => setType('other')}
+              checked={type === 'Barnyard'}
+              onChange={() => setType('Barnyard')}
             />{' '}
             Other 🐴🐓🐷
           </label>
@@ -113,17 +111,17 @@ const UserPreferencesForm = () => {
             <label htmlFor="size">Size:</label>
             <select id="size" value={size} onChange={(event) => setSize(event.target.value)}>
               <option value="any">Any</option>
-              <option value="small">Small</option>
-              <option value="medium">Medium</option>
-              <option value="large">Large</option>
+              <option value="Small">Small</option>
+              <option value="Medium">Medium</option>
+              <option value="Large">Large</option>
             </select>
           </div>
           <div className="form-option">
             <label htmlFor="gender">Gender:</label>
             <select id="gender" value={gender} onChange={(event) => setGender(event.target.value)}>
               <option value="any">Any</option>
-              <option value="female">Female</option>
-              <option value="male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Male">Male</option>
             </select>
           </div>
         </div>
@@ -134,11 +132,10 @@ const UserPreferencesForm = () => {
           id="age"
           value={age}
           onChange={handleAgeChange}
-          min="0"
-          max="7" // Use max value that corresponds to "Senior"
+          min="1"
+          max="4" 
         />
         <span>{ageCategories[age]}</span> {/* Display the age category */}
-        <span>{age < 1 ? 'Baby' : age <= 3 ? 'Young' : age <= 6 ? 'Adult' : 'Senior'}</span>
 
         <label>Characteristics:</label>
         <div className="temperament-options">
@@ -146,8 +143,8 @@ const UserPreferencesForm = () => {
             <input
               type="checkbox"
               name="temperament"
-              value="friendly"
-              checked={temperament.includes('friendly')}
+              value="Friendly"
+              checked={temperament.includes('Friendly')}
               onChange={handleTemperamentChange}
             />{' '}
             Friendly 🙂
@@ -156,8 +153,8 @@ const UserPreferencesForm = () => {
             <input
               type="checkbox"
               name="temperament"
-              value="playful"
-              checked={temperament.includes('playful')}
+              value="Playful"
+              checked={temperament.includes('Playful')}
               onChange={handleTemperamentChange}
             />{' '}
             Playful 🎾
@@ -166,8 +163,8 @@ const UserPreferencesForm = () => {
             <input
               type="checkbox"
               name="temperament"
-              value="smart"
-              checked={temperament.includes('smart')}
+              value="Smart"
+              checked={temperament.includes('Smart')}
               onChange={handleTemperamentChange}
             />{' '}
             Smart 😌
@@ -176,8 +173,8 @@ const UserPreferencesForm = () => {
             <input
               type="checkbox"
               name="temperament"
-              value="gentle"
-              checked={temperament.includes('gentle')}
+              value="Gentle"
+              checked={temperament.includes('Gentle')}
               onChange={handleTemperamentChange}
             />{' '}
             Gentle 🥹
@@ -186,8 +183,8 @@ const UserPreferencesForm = () => {
             <input
               type="checkbox"
               name="temperament"
-              value="funny"
-              checked={temperament.includes('funny')}
+              value="Funny"
+              checked={temperament.includes('Funny')}
               onChange={handleTemperamentChange}
             />{' '}
             Funny 🤪
@@ -198,10 +195,10 @@ const UserPreferencesForm = () => {
           <p>{getSelectedPreferences()}</p>
         </div>
         {messageVisible && (
-        <div className="message">
-          <p>Great choices. Let's find your perfect match!</p>
-        </div>
-      )}
+          <div className="message">
+            <p>Great choices. Let's find your perfect match!</p>
+          </div>
+        )}
         <button type="submit">Find My Match</button>
       </form>
     </div>

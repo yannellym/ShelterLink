@@ -11,9 +11,11 @@ import hamster from '../images/hamster.jpg';
 import paw from '../images/paw.png';
 import { Link } from 'react-router-dom';
 
-function Home({ favoritePets, addToFavorites, removeFromFavorites }) {
+function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferences }) {
   const [loading, setLoading] = useState(true);
   const [selectedAnimals, setSelectedAnimals] = useState([]);
+  const [selectedPreferences, setSelectedPreferences] = useState(null);
+  const [preferredAnimals, setPreferredAnimals] = useState([]);
 
   useEffect(() => {
     // Function to fetch pet data from an API
@@ -48,6 +50,50 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites }) {
     }
   }, [selectedAnimals]);
 
+
+  // handle the submission of the userPreferencesForm 
+  const handlePreferencesSubmit = (preferences) => {
+    console.log(preferences, "Preferences")
+    // Call the API to fetch animals based on user preferences
+    fetchAnimalsBasedOnPreferences(preferences);
+  };
+
+  // fetches animals and then filters based on user preferences
+  const fetchAnimalsBasedOnPreferences = async (preferences) => {
+    try {
+      if (preferences?.type !== 'any') {
+        // Include the user's selected type in the API request
+        const apiUrl = `http://localhost:3002/api/petfinder?perPage=60&type=${preferences.type}`;
+        const response = await fetch(apiUrl);
+        const prefdata = await response.json();
+        console.log(prefdata, "prefdata")
+
+        if (prefdata && prefdata.animals) {
+          const filteredAnimals = prefdata.animals.filter((animal) => {
+            const matchesSize = (
+              animal.size === preferences.size &&
+              animal.gender === preferences.gender &&
+              animal.age === preferences.age && // Check if any of the temperament tags match the preferences
+              preferences.temperament.some((prefTemperament) => animal.tags.includes(prefTemperament))
+              // Add more matching criteria for other preferences
+            );
+            return matchesSize;
+          });
+          console.log(filteredAnimals, "filteredanimals")
+
+          // Append the matching animals to the preferredAnimals array
+          setPreferredAnimals(filteredAnimals);
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching pet data:', error);
+    }
+    // if (preferredAnimals.length === 0) {
+    //   fetchAnimalsBasedOnPreferences();
+    // }
+  };
+  
+
   // const handleFilterChange = (event) => {
   //   const selectedType = event.target.value; // Placeholder: Type of pet
     
@@ -79,7 +125,7 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites }) {
         <div className="background-image"></div>
         <div className="form-and-search-container">
           <div className="left-column">
-            <UserPreferencesForm />
+            <UserPreferencesForm onPreferencesSubmit={handlePreferencesSubmit} userPreferences={userPreferences} />
           </div>
           <div className="divider-container">
             <div className="divider">OR</div>
