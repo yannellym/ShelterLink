@@ -123,7 +123,7 @@
   background-color: #000000;
 }
 
-.special-card {
+.matched-pet-card {
   background: red !important;
   animation: rainbow-pulsate 4s linear infinite, border-pulsate 4s linear infinite; /* Apply both animations */
   background: linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet, red);

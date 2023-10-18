@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import SearchFilters from './SearchFilters';
+import SearchBar from './SearchBar';
 import SectionLink from './SectionLink';
 import AdoptionInfoSection from './AdoptionInfoSection';
 import UserPreferencesForm from './UserPreferencesForm';
@@ -14,9 +14,7 @@ import { Link, useNavigate } from 'react-router-dom';
 function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferences }) {
 const [loading, setLoading] = useState(true);
 const [selectedAnimals, setSelectedAnimals] = useState([]);
-const [selectedPreferences, setSelectedPreferences] = useState(null);
 const [preferredAnimals, setPreferredAnimals] = useState([]);
-const navigate = useNavigate();
 
 useEffect(() => {
   // Function to fetch pet data from an API
@@ -66,42 +64,34 @@ const fetchAnimalsBasedOnPreferences = async (preferences) => {
     let apiCallsMade = 0;
 
     while (apiCallsMade < 2 && filteredAnimals.length === 0) {
-      if (preferences?.type !== 'any') {
-        // Include the user's selected type in the API request
-        const apiUrl = `http://localhost:3002/api/petfinder?perPage=100&type=${preferences.type}&gender=${preferences.gender}&age=${preferences.age}`;
-        const response = await fetch(apiUrl);
-        const prefdata = await response.json();
-        console.log(prefdata, "prefdata");
-  
-        if (prefdata && prefdata.animals) {
-          filteredAnimals = prefdata.animals.filter((animal) => {
-           
-            // Check if any of the temperament tags match the preferences
-            const matchesTags = preferences.temperament.some((prefTemperament) => animal.tags.includes(prefTemperament));
-  
-            return (matchesTags || preferences.temperament.length === 0);
-          });
-  
-          console.log(filteredAnimals, "filteredanimals");
-  
-          if (filteredAnimals.length === 0) {
-            console.log("No suitable animals found. Making another API request.");
-            apiCallsMade++;
-          }
-        }
-      }
-    }
+      const gender = preferences.gender !== 'any' ? preferences.gender : 'Male';
+      const size = preferences.size !== 'any' ? preferences.size : 'Large';
+      // Include the user's selected type in the API request
+      const apiUrl = `http://localhost:3002/api/petfinder?perPage=100&type=${preferences.type}&gender=${gender}&age=${preferences.age}&size=${size}`;
+      const response = await fetch(apiUrl);
+      const prefdata = await response.json();
+      console.log(prefdata, "prefdata");
 
+      if (prefdata && prefdata.animals) {
+        filteredAnimals = prefdata.animals.filter((animal) => {
+          // Check if any of the temperament tags match the preferences
+          const matchesTags = preferences.temperament.some((prefTemperament) => animal.tags.includes(prefTemperament));
+          return (matchesTags || preferences.temperament.length === 0);
+        });
+        console.log(filteredAnimals, "filteredanimals");
+        if (filteredAnimals.length === 0) {
+          console.log("No suitable animals found. Making another API request.");
+          apiCallsMade++;
+        }
+      }  
+    }
     // If no suitable animals are found in 4 API calls, display an animal based on type and gender
     if (filteredAnimals.length === 0) {
-      console.log("Displaying an animal based on type and gender or size...");
-      
-      const type = preferences.type; 
-      const gender = preferences.gender; 
-    
+      const type = preferences.type;
+      const gender = preferences.gender !== 'any' ? preferences.type : 'Male';
       // Make an API request to fetch an animal based on type and matching gender or age
       const apiUrl = `http://localhost:3002/api/petfinder?perPage=1&type=${type}&gender=${gender}`;
-      
+    
       try {
         const response = await fetch(apiUrl);
         const animalData = await response.json();
@@ -114,17 +104,18 @@ const fetchAnimalsBasedOnPreferences = async (preferences) => {
           console.log("No matching animal found based on type and gender or age.");
         }
       } catch (error) {
-        console.error('Error fetching pet data:', error);
+        console.error('Error fetching pet data 1:', error);
       }
     }
     // Append the matching animals to the preferredAnimals array
     setPreferredAnimals(filteredAnimals);
   } catch (error) {
-    console.error('Error fetching pet data:', error);
+    console.error('Error fetching pet data 2:', error);
   }
 };
 
 const toggleForm = () => {
+  // reload the page so we see the form again
   window.location.reload(); 
 };
 
@@ -160,36 +151,36 @@ const toggleForm = () => {
         <div className="background-image"></div>
         <div className="form-and-search-container">
           <div className="left-column">
-          {preferredAnimals.length <= 0  ? (
-        // Render the UserPreferencesForm when the form is visible
-        <UserPreferencesForm onPreferencesSubmit={handlePreferencesSubmit} userPreferences={userPreferences} />
-      ) : (
-        // Render the pet card
-        <div>
-          <PetCard 
-                key={preferredAnimals[0].id}
-                pet={preferredAnimals[0]}
-                addToFavorites={addToFavorites}
-                removeFromFavorites={removeFromFavorites}
-                isFavorite={favoritePets.some((favoritePet) => favoritePet.id === preferredAnimals[0].id)}
-                className="special-card"
-              />
-          <button onClick={toggleForm}>Show Form</button>
-        </div>
-      )}
+            {preferredAnimals.length <= 0  ? (
+              // if we DO NOT have pets in the preferredAnimals array, display the form.
+              <UserPreferencesForm onPreferencesSubmit={handlePreferencesSubmit} userPreferences={userPreferences} />
+              ) : (
+              // if we have pets in the preferredAnimals array, display their information using the petCard component
+              <div>
+                <PetCard 
+                  key={preferredAnimals[0].id}
+                  pet={preferredAnimals[0]}
+                  addToFavorites={addToFavorites}
+                  removeFromFavorites={removeFromFavorites}
+                  isFavorite={favoritePets.some((favoritePet) => favoritePet.id === preferredAnimals[0].id)}
+                  className="matched-pet-card"
+                />
+                <button className="back-to-form" onClick={toggleForm}>Find another match</button>
+              </div>
+            )}
           </div>
           <div className="divider-container">
             <div className="divider">OR</div>
           </div>
           <div className="right-column">
             <div className="search-bar-container">
-              {/* <SearchFilters
-                breeds={placeholderBreeds}
-                sizes={placeholderSizes}
-                ages={placeholderAges}
-                types={placeholderTypes}
-                onFilterChange={handleFilterChange}
-              /> */}
+              <SearchBar
+                breeds={''}
+                sizes={''}
+                ages={''}
+                types={''}
+                onFilterChange={''}
+              />
             </div>
           </div>
         </div>
@@ -236,6 +227,5 @@ const toggleForm = () => {
     </div>
   );
 }
-
 
 export default Home;

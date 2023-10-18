@@ -85,15 +85,15 @@ input[type='range'] {
 
 input[type='range']::-webkit-slider-thumb {
   appearance: none;
-  width: 30px; /* Increase width */
-  height: 30px; /* Increase height */
+  width: 30px; 
+  height: 30px; 
   background: url('../images/paw.png') center/cover no-repeat;
   border: none;
   border-radius: 50%;
   cursor: pointer;
 }
 
-button {
+.find-match-button, .back-to-form {
   display: block;
   margin: 20px auto 0;
   padding: 10px 20px;
@@ -106,8 +106,15 @@ button {
   transition: background-color 0.3s ease;
 }
 
-button:hover {
+.find-match-button:hover {
   background-color: #045806;
+}
+
+/* back to form button */
+.back-to-form {
+  background-color: transparent;
+  border: 1px solid red;
+  color: rgb(0, 0, 0);
 }
 
 /* Responsive adjustments */

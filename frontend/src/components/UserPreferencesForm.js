@@ -12,7 +12,7 @@ const UserPreferencesForm = ({ onPreferencesSubmit }) => {
   const [type, setType] = useState('dog');
   const [size, setSize] = useState('Large');
   const [age, setAge] = useState(1);
-  const [selectedAgeCategory, setSelectedAgeCategory] = useState(ageCategories[0]); 
+  const [selectedAgeCategory, setSelectedAgeCategory] = useState(ageCategories[1]); 
   const [gender, setGender] = useState('Male');
   const [temperament, setTemperament] = useState([]);
   const [messageVisible, setMessageVisible] = useState(false); // State to control message visibility
@@ -199,7 +199,7 @@ const UserPreferencesForm = ({ onPreferencesSubmit }) => {
             <p>Great choices. Let's find your perfect match!</p>
           </div>
         )}
-        <button type="submit">Find My Match</button>
+        <button className= "find-match-button" type="submit">Find My Match</button>
       </form>
     </div>
   );
