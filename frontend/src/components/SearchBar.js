@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
 import '../styles/SearchBar.css';
+import PlacesAutocomplete, {
+  geocodeByAddress,
+  getLatLng,
+} from 'react-places-autocomplete';
 
 const SearchBar = ({ onSearch }) => {
   const [searchText, setSearchText] = useState('');
   const [petType, setPetType] = useState('');
   const [showLocationOptions, setShowLocationOptions] = useState(false);
+  const [showLocationMessage, setShowLocationMessage] = useState(false);
+
 
   const handleSearch = async () => {
     if (searchText && petType) {
@@ -34,7 +40,44 @@ const SearchBar = ({ onSearch }) => {
     // \check if the input is a 5-digit number
     return /^\d{5}$/.test(text);
   }
-  
+
+  const handleSelect = async (address, placeId) => {
+    if (isZipCode(address)) {
+      // If the input is a 5-digit number (ZIP code), show the location options
+      setShowLocationOptions(true);
+      setSearchText(address);
+    } else {
+      // Hide the location options
+      setShowLocationOptions(false);
+      // Handle the address as before
+      try {
+        const results = await geocodeByAddress(address);
+        const cityState = results[0].address_components.reduce((acc, component) => {
+          if (component.types.includes('locality')) {
+            acc.city = component.long_name;
+          } else if (component.types.includes('administrative_area_level_1')) {
+            acc.state = component.short_name;
+          }
+          return acc;
+        }, {});
+
+        if (cityState.city && cityState.state) {
+          setSearchText(`${cityState.city}, ${cityState.state}`);
+        } else {
+          setSearchText(address);
+        }
+      } catch (error) {
+        console.error('Error geocoding address:', error);
+      }
+    }
+  };
+
+  // Customize the autocomplete suggestions to show only places within the USA
+  const searchOptions = {
+    types: isZipCode(searchText) ? ['(regions)'] : ['(cities)'],
+    componentRestrictions: { country: 'us' }, // Limit to the USA
+  };
+
 
   const handleShareLocation = () => {
     if ("geolocation" in navigator) {
@@ -54,7 +97,6 @@ const SearchBar = ({ onSearch }) => {
           console.error("Error getting zip code:", error);
         }
       }, (error) => {
-        // Handle any errors
         alert(`Error getting location: ${error.message}`);
       });
     } else {
@@ -63,9 +105,10 @@ const SearchBar = ({ onSearch }) => {
   };
 
   const handleInputClick = () => {
-    setShowLocationOptions(!showLocationOptions); // Toggle the display of the location options
+    setShowLocationMessage(true);
+    handleShareLocation();
   };
-
+  
   const handleLocationOptionClick = () => {
     handleShareLocation();
     setShowLocationOptions(false);
@@ -73,39 +116,62 @@ const SearchBar = ({ onSearch }) => {
 
   return (
     <div className="search-bar">
-      <div className="search-container">
-        <div className="search-input-container">
-          <input
-            type="text"
-            placeholder="Enter zipcode, city, or state"
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
-            onClick={handleInputClick}
-            className="search-input"
-          />
-          {showLocationOptions && (
-            <div className="location-option" onClick={handleLocationOptionClick}>
-              Share Location
-            </div>
-          )}
-        </div>
-        <select
-          value={petType}
-          onChange={(e) => setPetType(e.target.value)}
-          className="search-select"
+    <div className="search-container">
+    <div className="search-input-container">
+      <PlacesAutocomplete
+        value={searchText}
+        onChange={setSearchText}
+        onSelect={handleSelect}
+        searchOptions={searchOptions}
         >
-          <option value="">Select pet type</option>
-          <option value="dog">Dog</option>
-          <option value="cat">Cat</option>
-          <option value="horse">Horse</option>
-          <option value="bird">Bird</option>
-          <option value="furry">Furry</option>
-          <option value="barnyard">Barnyard</option>
-        </select>
-        <button onClick={handleSearch} className="search-button">Search</button>
-      </div>
+        {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+          <div>
+            <input
+              {...getInputProps({
+                placeholder: 'Enter zipcode, city, or state',
+                className: 'search-input',
+                onClick: handleInputClick,
+              })}
+            />
+            <div className="autocomplete-dropdown-container">
+              {loading && <div>Loading...</div>}
+              {suggestions.map((suggestion) => (
+                <div
+                  {...getSuggestionItemProps(suggestion)}
+                  className="suggestion-item"
+                >
+                  {suggestion.description}
+                </div>
+              ))}
+            </div>
+            {showLocationMessage && (
+              <div className="location-message" onClick={handleShareLocation}>
+                Share your location 📍
+              </div>
+            )}
+          </div>
+        )}
+      </PlacesAutocomplete>
     </div>
-  );
+    <select
+      value={petType}
+      onChange={(e) => setPetType(e.target.value)}
+      className="search-select"
+    >
+      <option value="">Select pet type</option>
+      <option value="dog">Dog</option>
+      <option value="cat">Cat</option>
+      <option value="horse">Horse</option>
+      <option value="bird">Bird</option>
+      <option value="furry">Furry</option>
+      <option value="barnyard">Barnyard</option>
+    </select>
+    <button onClick={handleSearch} className="search-button">
+      Search
+    </button>
+  </div>
+</div>
+);
 };
 
 export default SearchBar;
