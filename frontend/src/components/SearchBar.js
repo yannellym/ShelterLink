@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../styles/SearchBar.css';
 import PlacesAutocomplete, {
   geocodeByAddress,
@@ -13,7 +14,8 @@ const SearchBar = ({ onSearch }) => {
   const [showLocationOptions, setShowLocationOptions] = useState(false);
   const [showLocationMessage, setShowLocationMessage] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(false);
-  
+  const navigate = useNavigate(); 
+
   const handleSearch = async () => {
     if (searchText && petType) {
       const apiEndpoint = `http://localhost:3002/api/petfinder?perPage=100&location=${searchText}&type=${petType}`;
@@ -22,7 +24,10 @@ const SearchBar = ({ onSearch }) => {
         const response = await fetch(apiEndpoint);
         if (response.ok) {
           const data = await response.json();
+          console.log(data)
           setDataLoaded(true); // Data has been loaded
+           // Navigate to the '/pets-specific-location' route with data as state
+           navigate('/pets-specific-location', {  state: { data, petType, searchText } });
         } else {
           console.error('API request failed:', response.statusText);
         }
@@ -162,7 +167,6 @@ const SearchBar = ({ onSearch }) => {
       <option value="cat">Cat</option>
       <option value="horse">Horse</option>
       <option value="bird">Bird</option>
-      <option value="furry">Furry</option>
       <option value="barnyard">Barnyard</option>
     </select>
     <button onClick={handleSearch} className="search-button">

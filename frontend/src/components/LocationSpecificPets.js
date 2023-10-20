@@ -1,20 +1,33 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import PetCard from './PetCard'; // Import the PetCard component
+import PetCard from './PetCard';
+import '../styles/LocationSpecificPets.css';
 
 const LocationSpecificPets = () => {
   const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const searchText = searchParams.get('searchText');
-  const petType = searchParams.get('petType');
+  const state = location.state;
 
+  if (!state || !state.data) {
+    return <div className="loading">Loading...</div>;
+  }
+
+  // unpack the values received from the state
+  const { data, petType, searchText } = state;
 
   return (
-    <div>
-      <h2>Search Results for: {searchText}</h2>
-      <h3>Pet Type: {petType}</h3>
+    <div className="location-specific-pets">
+      <h2 className="search-results-title">
+        Search Results for:
+      </h2>
+      <h3 className="pet-type-title">All {petType}s in the {searchText} area</h3>
       <div className="pet-card-container">
-        "back"
+        {data.animals.length === 0 ? (
+          <p className="no-animals-message">No animals found.</p>
+        ) : (
+          data.animals.map((pet) => (
+            <PetCard key={pet.id} pet={pet} />
+          ))
+        )}
       </div>
     </div>
   );
