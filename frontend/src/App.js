@@ -11,6 +11,8 @@ import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
 import PetDetails from './components/PetDetails'; 
 import AllPetsPage from './components/AllPetsPage.js';
+import LocationSpecificPets from './components/LocationSpecificPets'; // Import LocationSpecificPets
+
 
 const App = () => {
   const [isSignInVisible, setIsSignInVisible] = useState(true);
@@ -18,12 +20,11 @@ const App = () => {
 
   // Functions for Managing Favorites
   const addToFavorites = (pet) => {
-    // Check if the pet is already in favorites to avoid duplicates
     if (!favoritePets.some((favoritePet) => favoritePet.id === pet.id)) {
       setFavoritePets([...favoritePets, pet]);
     }
   };
-  
+
   const removeFromFavorites = (petId) => {
     const updatedFavorites = favoritePets.filter((pet) => pet.id !== petId);
     setFavoritePets(updatedFavorites);
@@ -32,37 +33,37 @@ const App = () => {
   return (
     <BrowserRouter>
       <Header />
-      <Routes>
-        <Route path="/" element={
-          <Home 
-            favoritePets={favoritePets} 
-            setFavoritePets={setFavoritePets} 
-            addToFavorites={addToFavorites} 
-            removeFromFavorites={removeFromFavorites} 
-          />} 
-        />
-        <Route path="/find-a-pet" element={
-          <MainPage 
-            favoritePets={favoritePets} 
-            setFavoritePets={setFavoritePets} 
-            addToFavorites={addToFavorites} 
-            removeFromFavorites={removeFromFavorites}
-          />}
-        />
-        <Route path="/about" element={<About />} />
-        <Route path="/resources" element={<Resources />} />
-        <Route path="/favorites" element={
-          <FavoritesPage 
-            favoritePets={favoritePets} 
-            removeFromFavorites={removeFromFavorites} 
-          />} 
-        />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/signin" element={<SignIn />} />
-        <Route path="/pet-details/:petId" element={<PetDetails />} />
-        <Route path="/all-pets/:category" element={<AllPetsPage />} />
-      </Routes>
-  
+        <Routes>
+          <Route path="/" element={
+            <Home 
+              favoritePets={favoritePets} 
+              setFavoritePets={setFavoritePets} 
+              addToFavorites={addToFavorites} 
+              removeFromFavorites={removeFromFavorites} 
+            />} 
+          />
+          <Route path="/find-a-pet" element={
+            <MainPage 
+              favoritePets={favoritePets} 
+              setFavoritePets={setFavoritePets} 
+              addToFavorites={addToFavorites} 
+              removeFromFavorites={removeFromFavorites}
+            />}
+          />
+          <Route path="/about" element={<About />} />
+          <Route path="/resources" element={<Resources />} />
+          <Route path="/favorites" element={
+            <FavoritesPage 
+              favoritePets={favoritePets} 
+              removeFromFavorites={removeFromFavorites} 
+            />} 
+          />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/pet-details/:petId" element={<PetDetails />} />
+          <Route path="/all-pets/:category" element={<AllPetsPage />} />
+          <Route path="/pets-specific-location" element={<LocationSpecificPets />} />
+        </Routes>
       <Footer />
     </BrowserRouter>
   );

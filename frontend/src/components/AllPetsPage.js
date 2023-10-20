@@ -13,21 +13,45 @@ function shuffleArray(array) {
 function AllPetsPage() {
   const { category } = useParams();
   const [loading, setLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
-  const petsPerPage = 40;
   const [cache, setCache] = useState([]);
+  const petsPerPage = 100;
   const otherAnimalTypes = ["horse", "bird", "barnyard"];
   
-  const fetchAnimalsByType = async (type) => {
-    const endpoint = `http://localhost:3002/api/petfinder?type=${type}&limit=${petsPerPage}`;
-    
+  const fetchAnimalsByCategory = async (category) => {
+    let endpoint;
+
+    if (category === "dog" || category === "cat") {
+      // First API call for "dog" or "cat"
+      endpoint = `http://localhost:3002/api/petfinder?type=${category}&limit=${petsPerPage}`;
+    } else if (category === "other") {
+      // Second API call for "other" category
+      // Fetch animals for each type in the "other" category
+      const animalPromises = otherAnimalTypes.map(animalType => {
+        return fetch(`http://localhost:3002/api/petfinder?type=${animalType}&limit=${petsPerPage}`)
+          .then(response => response.json());
+      });
+
+      const animalData = await Promise.all(animalPromises);
+
+      // Merge the arrays of animals from different types
+      const mergedAnimals = animalData.flatMap(data => data.animals);
+
+      endpoint = mergedAnimals;
+    }
+
     try {
-      const response = await fetch(endpoint);
-      const data = await response.json();
-    
-      if (data && data.animals) {
-        data.animals = data.animals.filter((animal) => animal.photos.length > 0);
-        return data.animals;
+      if (endpoint) {
+        if (Array.isArray(endpoint)) {
+          // If endpoint is an array, we have already fetched animals for the "other" category
+          return endpoint.filter(animal => animal && animal.photos.length > 0);
+        } else {
+          // Fetch animals for "dog" or "cat"
+          const response = await fetch(endpoint);
+          const data = await response.json();
+          if (data && data.animals) {
+            return data.animals.filter((animal) => animal.photos.length > 0);
+          }
+        }
       }
     } catch (error) {
       console.error('Error fetching data:', error.message);
@@ -38,22 +62,17 @@ function AllPetsPage() {
 
   useEffect(() => {
     async function fetchData() {
-      const allPets = await Promise.all(
-        otherAnimalTypes.map(animalType => fetchAnimalsByType(animalType))
-      );
-      
-      // Merge the arrays of animals
-      const mergedPets = allPets.reduce((accumulator, current) => [...accumulator, ...current], []);
+      const animals = await fetchAnimalsByCategory(category);
 
-      // Shuffle the mergedPets array
-      shuffleArray(mergedPets);
+      // Shuffle the animals array
+      shuffleArray(animals);
       
-      setCache(mergedPets);
+      setCache(animals);
       setLoading(false);
     }
 
     fetchData();
-  }, []);
+  }, [category]);
 
   return (
     <div className="all-pets-page">

@@ -71,3 +71,4 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 
 # https://nominatim.org/ for geo location
+# Google: places API, Maps JavaScript  API, and Geocoding API 

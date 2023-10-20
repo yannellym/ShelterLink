@@ -4,25 +4,25 @@ import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
 } from 'react-places-autocomplete';
+import { Link } from 'react-router-dom';
+
 
 const SearchBar = ({ onSearch }) => {
   const [searchText, setSearchText] = useState('');
   const [petType, setPetType] = useState('');
   const [showLocationOptions, setShowLocationOptions] = useState(false);
   const [showLocationMessage, setShowLocationMessage] = useState(false);
-
-
+  const [dataLoaded, setDataLoaded] = useState(false);
+  
   const handleSearch = async () => {
     if (searchText && petType) {
-      // Both location and type are provided, so we can query the API
       const apiEndpoint = `http://localhost:3002/api/petfinder?perPage=100&location=${searchText}&type=${petType}`;
-      
+
       try {
         const response = await fetch(apiEndpoint);
         if (response.ok) {
           const data = await response.json();
-          console.log(data);
-          onSearch(data);
+          setDataLoaded(true); // Data has been loaded
         } else {
           console.error('API request failed:', response.statusText);
         }
@@ -30,11 +30,10 @@ const SearchBar = ({ onSearch }) => {
         console.error('API request error:', error);
       }
     } else {
-      // Location or type is missing, so you can display an error message or prevent the search
       alert('Please enter both location and pet type to search.');
     }
-  };
-  
+  }
+
   
   function isZipCode(text) {
     // \check if the input is a 5-digit number
@@ -167,7 +166,9 @@ const SearchBar = ({ onSearch }) => {
       <option value="barnyard">Barnyard</option>
     </select>
     <button onClick={handleSearch} className="search-button">
-      Search
+      <Link to="/pets-specific-location">
+        <button className="search-button">Search</button>
+      </Link>
     </button>
   </div>
 </div>

@@ -118,33 +118,6 @@ const toggleForm = () => {
   // reload the page so we see the form again
   window.location.reload(); 
 };
-
-
-// const handleFilterChange = (event) => {
-//   const selectedType = event.target.value; // Placeholder: Type of pet
-  
-//   // Get the values from other input fields (city, state, zip code)
-//   const city = document.getElementById('cityInput').value.trim();
-//   const state = document.getElementById('stateInput').value.trim();
-//   const zipCode = document.getElementById('zipCodeInput').value.trim();
-
-//   // Simulate filtering based on type of pet and other criteria
-//   const filteredDogs = placeholderDogs.filter(dog => {
-//     const matchesType = !selectedType || dog.type === selectedType;
-
-//     if (city || state || zipCode) {
-//       const matchesCity = !city || dog.city.toLowerCase().includes(city.toLowerCase());
-//       const matchesState = !state || dog.state.toLowerCase().includes(state.toLowerCase());
-//       const matchesZipCode = !zipCode || dog.zipCode.includes(zipCode);
-//       return matchesType && (matchesCity || matchesState || matchesZipCode);
-//     }
-
-//     return matchesType;
-//   });
-
-//   setSelectedAnimals(filteredDogs);
-// };
-
   return (
     <div className="Home">
       <main className="main-container">
