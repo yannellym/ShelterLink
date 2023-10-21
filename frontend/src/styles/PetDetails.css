@@ -5,7 +5,8 @@
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   margin: 20px auto;
-  max-width: 800px; /* Increase max-width for a wider container */
+  max-width: 800px;
+  position: relative; /* Added position relative */
 }
 
 /* Name and ID container */
@@ -24,7 +25,7 @@
 .pet-info {
   margin-top: 20px;
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap; /* Allow items to wrap */
 }
 
 .pet-info-section {
@@ -33,7 +34,7 @@
   border: 1px solid #ddd;
   border-radius: 5px;
   background-color: #f9f9f9;
-  margin: 0 10px;
+  margin: 0 10px 10px 0; /* Added margin to separate sections */
 }
 
 .pet-info-section p {
@@ -68,8 +69,8 @@
 
 .photo-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Wider photos */
-  grid-gap: 20px; /* Increase space between photos */
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-gap: 20px;
 }
 
 .pet-photo {
@@ -79,19 +80,19 @@
 }
 
 .single-photo {
-  width: 100%; /* Make single photo 100% width */
-  max-width: 500px; /* Limit maximum width of single photo */
-  margin: 0 auto; /* Center the single photo */
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
 }
 
 /* Petfinder button */
-.petfinder-link a:hover {
+.petfinder-button a:hover {
   text-decoration: underline;
 }
 
 .petfinder-button {
   text-align: center;
-  margin-top: 20px; /* Add space between photos and the button */
+  margin-top: 20px;
 }
 
 .petfinder-button a {
@@ -116,8 +117,15 @@
 .petfinder-button a:hover span {
   transform: scale(1.05);
 }
-.back-link-container {
-  position: relative;
-  top: 30%; 
-  left: 10px; 
+
+/* Favorite heart */
+.favorite-heart {
+  position: absolute; 
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  cursor: pointer;
+  border: none;
+  color: #ff0000;
+  z-index: 1;
 }

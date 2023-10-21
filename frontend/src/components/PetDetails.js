@@ -1,14 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import '../styles/PetDetails.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHeart } from '@fortawesome/free-solid-svg-icons';
 
-const PetDetails = () => {
+
+const PetDetails = ({addToFavorites, removeFromFavorites, isFavorite}) => {
   const location = useLocation();
+  const [favorited, setFavorited] = useState(isFavorite);
   const petData = location.state && location.state.petData;
 
   if (!petData) {
     return <p className="error-message">Error: Pet not found</p>;
   }
+
+  const handleToggleFavorite = () => {
+    setFavorited(!favorited);
+    if (favorited) {
+      removeFromFavorites(petData.id);
+    } else {
+      addToFavorites(petData);
+    }
+  };
 
   return (
     <div className="pet-details">
@@ -17,6 +30,13 @@ const PetDetails = () => {
           Go Back
         </Link>
       </div>
+      <button
+        className={`favorite-heart-${favorited ? 'favorited' : 'unfavorited'}`}
+        onClick={handleToggleFavorite}
+        tabIndex="0"
+      >
+        <FontAwesomeIcon icon={faHeart} />
+      </button>
       <div className="photos">
         <div className="name-id-container">
           <h2 className="pet-name">{petData.name}</h2>
@@ -68,6 +88,6 @@ const PetDetails = () => {
       </div>
     </div>
   );
-};  
+};
 
 export default PetDetails;

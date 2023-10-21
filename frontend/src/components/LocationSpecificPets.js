@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import PetCard from './PetCard';
 import '../styles/LocationSpecificPets.css';
 
-const LocationSpecificPets = () => {
+const LocationSpecificPets = ({ favoritePets, addToFavorites, removeFromFavorites }) => {
   const location = useLocation();
   const state = location.state;
 
@@ -25,7 +25,13 @@ const LocationSpecificPets = () => {
           <p className="no-animals-message">No animals found.</p>
         ) : (
           data.animals.map((pet) => (
-            <PetCard key={pet.id} pet={pet} />
+            <PetCard
+            key={pet.id}
+            pet={pet}
+            addToFavorites={addToFavorites}
+            removeFromFavorites={removeFromFavorites}
+            isFavorite={favoritePets.some((favoritePet) => favoritePet.id === pet.id)}
+          />
           ))
         )}
       </div>

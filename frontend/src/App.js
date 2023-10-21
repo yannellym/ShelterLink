@@ -11,7 +11,7 @@ import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
 import PetDetails from './components/PetDetails'; 
 import AllPetsPage from './components/AllPetsPage.js';
-import LocationSpecificPets from './components/LocationSpecificPets'; // Import LocationSpecificPets
+import LocationSpecificPets from './components/LocationSpecificPets'; 
 
 
 const App = () => {
@@ -60,9 +60,23 @@ const App = () => {
           />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signin" element={<SignIn />} />
-          <Route path="/pet-details/:petId" element={<PetDetails />} />
+          <Route path="/pet-details/:petId" element={
+            <PetDetails 
+              favoritePets={favoritePets} 
+              setFavoritePets={setFavoritePets} 
+              addToFavorites={addToFavorites} 
+              removeFromFavorites={removeFromFavorites}
+            />} 
+          />
           <Route path="/all-pets/:category" element={<AllPetsPage />} />
-          <Route path="/pets-specific-location" element={<LocationSpecificPets />} />
+          <Route path="/pets-specific-location" element={
+            <LocationSpecificPets 
+              favoritePets={favoritePets} 
+              setFavoritePets={setFavoritePets} 
+              addToFavorites={addToFavorites} 
+              removeFromFavorites={removeFromFavorites}  
+            />} 
+          />
         </Routes>
       <Footer />
     </BrowserRouter>

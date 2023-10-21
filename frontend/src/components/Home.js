@@ -10,127 +10,61 @@ import kitten from '../images/kitten.jpg';
 import hamster from '../images/hamster.jpg';
 import paw from '../images/paw.png';
 import { Link, useNavigate } from 'react-router-dom';
+import usePetFinderAPI from '../hooks/usePetFinderAPI'; // hook
+import useAnimalsBasedOnPreferencesAPI from '../hooks/useAnimalsBasedOnPreferencesAPI'; // hook
+
 
 function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferences }) {
-const [loading, setLoading] = useState(true);
-const [selectedAnimals, setSelectedAnimals] = useState([]);
-const [preferredAnimals, setPreferredAnimals] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedAnimals, setSelectedAnimals] = useState([]);
 
-useEffect(() => {
-  // Function to fetch pet data from an API
-  const fetchPetData = async () => {
-    try {
-      const response = await fetch('http://localhost:3002/api/petfinder?perPage=200');
-      const data = await response.json();
+  const { data: petData, loading: petDataLoading } = usePetFinderAPI(
+    'http://localhost:3002/api/petfinder?perPage=200',
+    []
+  );
 
-      if (data && data.animals) {
-        setLoading(false);
-        // Select 4 animals from the fetched data
-        const animals = data.animals.filter((animal) => animal.photos.length > 0).slice(0, 4);
-
-        if (animals.length < 4) {
-          // If there are fewer than 4 animals, fetch more data to reach 4
-          const remainingAnimalsCount = 4 - animals.length;
-          const additionalAnimals = data.animals.slice(0, remainingAnimalsCount);
-          setSelectedAnimals([...animals, ...additionalAnimals]);
-        } else {
-          setSelectedAnimals(animals);
-        }
-      }
-    } catch (error) {
-      console.error('Error fetching pet data:', error);
+  useEffect(() => {
+    if (petData && petData.animals) {
       setLoading(false);
+      // Select 4 animals from the fetched data
+      const animals = petData.animals.filter((animal) => animal.photos.length > 0).slice(0, 4);
+
+      if (animals.length < 4) {
+        // If there are fewer than 4 animals, fetch more data to reach 4
+        const remainingAnimalsCount = 4 - animals.length;
+        const additionalAnimals = petData.animals.slice(0, remainingAnimalsCount);
+        setSelectedAnimals([...animals, ...additionalAnimals]);
+      } else {
+        setSelectedAnimals(animals);
+      }
     }
+  }, [petData]);
+
+
+  const { preferredAnimals, loading: preferredAnimalsLoading, fetchAnimalsBasedOnPreferences } = useAnimalsBasedOnPreferencesAPI();
+
+  const handlePreferencesSubmit = (preferences) => {
+    fetchAnimalsBasedOnPreferences(preferences);
+  }
+
+  const toggleForm = () => {
+    // reload the page so we see the form again
+    window.location.reload();
   };
 
-  // Only fetch data when the component mounts
-  if (selectedAnimals.length === 0) {
-    fetchPetData();
-  }
-}, [selectedAnimals]);
-
-
-// handle the submission of the userPreferencesForm 
-const handlePreferencesSubmit = (preferences) => {
-  console.log(preferences, "Preferences")
-  // Call the API to fetch animals based on user preferences
-  fetchAnimalsBasedOnPreferences(preferences);
-};
-
-// Function to fetch animals from the API based on user preferences
-const fetchAnimalsBasedOnPreferences = async (preferences) => {
-  try {
-    let filteredAnimals = [];
-    let apiCallsMade = 0;
-
-    while (apiCallsMade < 2 && filteredAnimals.length === 0) {
-      const gender = preferences.gender !== 'any' ? preferences.gender : 'Male';
-      const size = preferences.size !== 'any' ? preferences.size : 'Large';
-      // Include the user's selected type in the API request
-      const apiUrl = `http://localhost:3002/api/petfinder?perPage=100&type=${preferences.type}&gender=${gender}&age=${preferences.age}&size=${size}`;
-      const response = await fetch(apiUrl);
-      const prefdata = await response.json();
-      console.log(prefdata, "prefdata");
-
-      if (prefdata && prefdata.animals) {
-        filteredAnimals = prefdata.animals.filter((animal) => {
-          // Check if any of the temperament tags match the preferences
-          const matchesTags = preferences.temperament.some((prefTemperament) => animal.tags.includes(prefTemperament));
-          return (matchesTags || preferences.temperament.length === 0);
-        });
-        console.log(filteredAnimals, "filteredanimals");
-        if (filteredAnimals.length === 0) {
-          console.log("No suitable animals found. Making another API request.");
-          apiCallsMade++;
-        }
-      }  
-    }
-    // If no suitable animals are found in 4 API calls, display an animal based on type and gender
-    if (filteredAnimals.length === 0) {
-      const type = preferences.type;
-      const gender = preferences.gender !== 'any' ? preferences.type : 'Male';
-      // Make an API request to fetch an animal based on type and matching gender or age
-      const apiUrl = `http://localhost:3002/api/petfinder?perPage=1&type=${type}&gender=${gender}`;
-    
-      try {
-        const response = await fetch(apiUrl);
-        const animalData = await response.json();
-        
-        if (animalData && animalData.animals && animalData.animals.length > 0) {
-          const matchedAnimal = animalData.animals[0];
-          // Append the matched animal to the filteredAnimals array
-          filteredAnimals.push(matchedAnimal);
-        } else {
-          console.log("No matching animal found based on type and gender or age.");
-        }
-      } catch (error) {
-        console.error('Error fetching pet data 1:', error);
-      }
-    }
-    // Append the matching animals to the preferredAnimals array
-    setPreferredAnimals(filteredAnimals);
-  } catch (error) {
-    console.error('Error fetching pet data 2:', error);
-  }
-};
-
-const toggleForm = () => {
-  // reload the page so we see the form again
-  window.location.reload(); 
-};
   return (
     <div className="Home">
       <main className="main-container">
         <div className="background-image"></div>
         <div className="form-and-search-container">
           <div className="left-column">
-            {preferredAnimals.length <= 0  ? (
+            {preferredAnimals.length <= 0 ? (
               // if we DO NOT have pets in the preferredAnimals array, display the form.
               <UserPreferencesForm onPreferencesSubmit={handlePreferencesSubmit} userPreferences={userPreferences} />
-              ) : (
+            ) : (
               // if we have pets in the preferredAnimals array, display their information using the petCard component
               <div>
-                <PetCard 
+                <PetCard
                   key={preferredAnimals[0].id}
                   pet={preferredAnimals[0]}
                   addToFavorites={addToFavorites}
@@ -167,11 +101,11 @@ const toggleForm = () => {
               <img width="64" height="64" src={paw} alt="right" />
               <p><strong>View all shelters & rescues near you.</strong></p>
             </a>
-          </div>  
+          </div>
         </div>
         <div className="resource-div">
           <h3> Resources:</h3>
-          <AdoptionInfoSection />  
+          <AdoptionInfoSection />
         </div>
         <div className="nearby-pets">
           <h3>Pets with greater need for love:</h3>
@@ -188,9 +122,9 @@ const toggleForm = () => {
                     removeFromFavorites={removeFromFavorites}
                     isFavorite={favoritePets.some((favoritePet) => favoritePet.id === pet.id)}
                   />
-              )})
-            )}
-            <Link to="/find-a-pet" className="greater-need-cards"> 
+                )
+                }))}
+            <Link to="/find-a-pet" className="greater-need-cards">
               <img width="64" height="64" src="https://img.icons8.com/sf-black/64/right.png" alt="right" />
               <p><strong>View all available pets near you.</strong></p>
             </Link>
@@ -199,6 +133,6 @@ const toggleForm = () => {
       </main>
     </div>
   );
-}
+};
 
 export default Home;

@@ -35,25 +35,23 @@
   position: relative; /* Set the image as a relative container */
 }
 
-.favorite-heart-unfavorited {
+.favorite-heart-unfavorited,
+.favorite-heart-favorited {
+  width: 40px; 
+  height: 40px;
+  border-radius: 50%; 
+  background-color: rgb(218, 211, 211); 
   font-size: 24px;
   cursor: pointer;
-  background-color: transparent;
   border: none;
-  position: absolute; /* Position the heart button absolutely */
-  top: -15px;
-  right: 0px;
+  position: absolute; 
+  top: 10px;
+  right: 10px;
+  color: white; 
 }
 
 .favorite-heart-favorited {
-  font-size: 24px;
-  cursor: pointer;
-  border: none;
-  background-color: transparent;
-  position: absolute; /* Position the heart button absolutely */
-  top: -15px;
-  right: 0px;
-  color: red;
+  color: rgb(255, 0, 0); /* Set the color to red for favorited */
 }
 
 
