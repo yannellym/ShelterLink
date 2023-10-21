@@ -6,10 +6,11 @@ import Filter from './Filter';
 function MainPage({ favoritePets, addToFavorites, removeFromFavorites }) {
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(true);
-  const currentPageRef = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 100;
   const [cachedData, setCachedData] = useState([]);
-  const totalPages = Math.ceil(cachedData.length / itemsPerPage);
+  const [totalPages, setTotalPages] = useState(0);
+  const maxPaginationButtons = 10; // Adjust this number
 
   const [selectedFilters, setSelectedFilters] = useState({
     type: 'any',
@@ -20,20 +21,20 @@ function MainPage({ favoritePets, addToFavorites, removeFromFavorites }) {
     coat: 'any',
   });
 
-  // Function to fetch all pets and store them in memory
-  const fetchAllPets = async () => {
+  const fetchPetsForPage = async (page) => {
     try {
-      const endpoint = 'http://localhost:3002/api/petfinder?perPage={itemsPerPage}'; // Fetch pets in a single request
+      const endpoint = `http://localhost:3002/api/petfinder?page=${page}&perPage=${itemsPerPage}`;
       const response = await fetch(endpoint);
       const data = await response.json();
 
-      console.log('API Response:', data); // Print the API response
+      console.log('API Response:', data);
 
       if (data && data.animals) {
-        data.animals = data.animals.filter((animal) => animal.photos.length > 0);
         setCachedData(data.animals);
         setSearchResults(data.animals);
         setLoading(false);
+        setCurrentPage(page);
+        setTotalPages(data.pagination.total_pages);
       }
     } catch (error) {
       console.error('Error fetching data:', error.message);
@@ -42,75 +43,57 @@ function MainPage({ favoritePets, addToFavorites, removeFromFavorites }) {
   };
 
   useEffect(() => {
-    fetchAllPets(); // Fetch all pets when the component mounts
+    fetchPetsForPage(currentPage);
   }, []);
 
   const handlePageChange = (page) => {
-    currentPageRef.current = page;
-    const startIndex = (page - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    setSearchResults(cachedData.slice(startIndex, endIndex));
+    fetchPetsForPage(page);
   };
 
-  // Function to handle filter changes
   const handleFilterChange = (newFilters) => {
     setSelectedFilters(newFilters);
-
-    // Apply filters to the cached data and update search results
     const filteredResults = applyFilters(cachedData, newFilters);
     setSearchResults(filteredResults);
   };
 
   const applyFilters = (data, filters) => {
     return data.filter((pet) => {
-      // Flag to check if the pet matches all filters
       let matchesAllFilters = true;
-  
       for (const filterKey in filters) {
         const filterValue = filters[filterKey]?.toLowerCase();
         const petValue = pet[filterKey]?.toLowerCase();
-  
-        // If the filter value is "any," skip this filter
         if (filterValue === 'any') {
           continue;
         }
-  
-        // Special handling for the "type" filter to handle both "Cat" and "Dog"
         if (filterKey === 'type') {
           if (filterValue === 'cat' && petValue !== 'cat') {
             matchesAllFilters = false;
-            break; // Exit the loop early if there's no match
+            break;
           }
           if (filterValue === 'dog' && petValue !== 'dog') {
             matchesAllFilters = false;
-            break; // Exit the loop early if there's no match
+            break;
           }
         } else if (filterKey === 'breed') {
-          // Handle the "breed" filter
           const primaryBreed = pet.breeds?.primary?.toLowerCase();
           if (primaryBreed !== filterValue) {
             matchesAllFilters = false;
-            break; // Exit the loop early if there's no match
+            break;
           }
         } else {
-          // For other filters, compare values directly
           if (petValue !== filterValue) {
             matchesAllFilters = false;
-            break; // Exit the loop early if there's no match
+            break;
           }
         }
       }
-  
-      // If the pet matches all filters, include it in the results
       return matchesAllFilters;
     });
   };
-  
+
   const renderPetCards = () => {
     if (!loading) {
-      // Apply filters to the cached data
       const filteredResults = applyFilters(cachedData, selectedFilters);
-
       if (filteredResults.length > 0) {
         return filteredResults.map((pet) => (
           <PetCard
@@ -129,27 +112,37 @@ function MainPage({ favoritePets, addToFavorites, removeFromFavorites }) {
     }
   };
 
+  const generatePaginationButtons = () => {
+    const buttons = [];
+    const startPage = Math.max(1, currentPage - Math.floor(maxPaginationButtons / 2));
+    const endPage = Math.min(totalPages, startPage + maxPaginationButtons - 1);
+    for (let page = startPage; page <= endPage; page++) {
+      buttons.push(
+        <button
+          key={page}
+          onClick={() => handlePageChange(page)}
+          className={currentPage === page ? 'active' : ''}
+        >
+          {page}
+        </button>
+      );
+    }
+    return buttons;
+  };
+
   return (
     <div className="main-page">
       <div className="sidebar">
         <div className="filters">
-          {/* Pass the handleFilterChange function to the Filter component */}
           <Filter onFilterChange={handleFilterChange} />
         </div>
       </div>
       <div className="content">
-        {/* Render pet cards based on filtered search results */}
-        <div className="pet-card-list">{renderPetCards()}</div>
+        <div className="pet-card-list">
+          {renderPetCards()}
+        </div>
         <div className="pagination-horizontal">
-          {Array.from({ length: totalPages }, (_, index) => (
-            <button
-              key={index}
-              onClick={() => handlePageChange(index + 1)}
-              className={currentPageRef.current === index + 1 ? 'active' : ''}
-            >
-              {index + 1}
-            </button>
-          ))}
+          {generatePaginationButtons()}
         </div>
       </div>
     </div>
