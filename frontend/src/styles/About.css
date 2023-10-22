@@ -1,17 +1,17 @@
 /* About.css */
 .about-container {
   display: flex;
-  flex-direction: row; /* Change to row layout */
-  justify-content: space-between; /* Add space between elements */
-  align-items: center; /* Center-align vertically */
-  text-align: center; /* Center-align text */
-  padding: 20px; /* Add padding for spacing */
+  flex-direction: row; 
+  justify-content: space-between; 
+  align-items: center;
+  text-align: center; 
+  padding: 20px; 
 }
 
-/* Add other styles for your content as needed */
+
 .about-content {
   max-width: 50%;
-  padding: 0 5%; /* Adjust the max width as needed */
+  padding: 0 5%;
 }
 
 .about-content h2 {
@@ -27,10 +27,10 @@
 
 /* Style for the left part containing the image and text */
 .about-image {
-  flex: 1; /* Expand to fill available space */
+  flex: 1;
   display: flex;
-  flex-direction: column; /* Stack image and text vertically */
-  align-items: center; /* Center-align horizontally */
+  flex-direction: column; 
+  align-items: center;
 }
 
 .about-image img {
@@ -39,14 +39,14 @@
   border-radius: 5px;
   box-shadow: 0px 0px 10px rgba(115, 69, 69, 0.2);
   display: block; /* Ensure the image is treated as a block element */
-  margin: 0 auto; /* Center-align horizontally */
+  margin: 0 auto; 
 }
 
 /* Style for the right part containing clickable squares */
 .clickable-squares {
   
   display: flex;
-  flex-direction: column; /* Stack squares vertically */
+  flex-direction: column;
   margin-right: 15%;
 }
 

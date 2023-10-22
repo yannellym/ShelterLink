@@ -1,30 +1,29 @@
 /* DogList.css */
 .dog-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
-    padding: 20px;
-  }
-  
-  .dog-card {
-    border: 1px solid #ccc;
-    padding: 20px;
-    text-align: center;
-  }
-  
-  .dog-card img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 5px;
-    margin-bottom: 10px;
-  }
-  
-  .dog-card h3 {
-    font-size: 18px;
-    margin-bottom: 5px;
-  }
-  
-  .dog-card p {
-    font-size: 14px;
-  }
-  
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.dog-card {
+  border: 1px solid #ccc;
+  padding: 20px;
+  text-align: center;
+}
+
+.dog-card img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.dog-card h3 {
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+.dog-card p {
+  font-size: 14px;
+}

@@ -40,7 +40,6 @@
 }
 
 /* inner divs */
-/*  */
 .nearby-pet-cards, .section-links-inner-div{
   display: flex;
 }
@@ -119,7 +118,7 @@
   font-weight: bold;
   font-size: 18px;
   color: #000000;
-  margin: 0 10px; /* Adjust the margin as needed */
+  margin: 0 10px; 
   padding: 50% 0;
 }
 

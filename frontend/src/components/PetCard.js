@@ -3,7 +3,7 @@ import '../styles/PetCard.css';
 import { useNavigate } from 'react-router-dom';
 import coming_soon from "../images/coming_soon.png";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart } from '@fortawesome/free-solid-svg-icons';
+import { faPaw } from '@fortawesome/free-solid-svg-icons';
 
 const PetCard = ({ pet, addToFavorites, removeFromFavorites, isFavorite }) => {
   const [favorited, setFavorited] = useState(isFavorite);
@@ -59,7 +59,7 @@ const PetCard = ({ pet, addToFavorites, removeFromFavorites, isFavorite }) => {
           onClick={handleToggleFavorite}
           tabIndex="0"
         >
-        <FontAwesomeIcon icon={faHeart} />
+        <FontAwesomeIcon icon={faPaw} />
         </button>
       </div>
     </div>
