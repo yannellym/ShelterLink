@@ -24,17 +24,26 @@ function MainPage({ favoritePets, addToFavorites, removeFromFavorites }) {
   });
 
   // Function to fetch pets for a specific page
-  const fetchPetsForPage = async (page) => {
+  const fetchPetsForPage = async (page, filters) => {
     try {
-      const endpoint = `http://localhost:3002/api/petfinder?page=${page}&perPage=${itemsPerPage}`;
+      let endpoint = `http://localhost:3002/api/petfinder?page=${page}&perPage=${itemsPerPage}`;
+  
+      // Add filter parameters to the API request
+      for (const filterKey in filters) {
+        if (filters[filterKey] !== 'any') {
+          endpoint += `&${filterKey}=${filters[filterKey]}`;
+        }
+      }
+  
       const response = await fetch(endpoint);
       const data = await response.json();
-
+  
       console.log('API Response:', data);
-
+  
       if (data && data.animals) {
+        // Set the cached data to the new data
         setCachedData(data.animals);
-        setSearchResults(data.animals);
+        setSearchResults(applyFilters(data.animals, filters)); // Apply filters to the new data
         setLoading(false);
         setCurrentPage(page);
         setTotalPages(data.pagination.total_pages);
@@ -63,15 +72,43 @@ function MainPage({ favoritePets, addToFavorites, removeFromFavorites }) {
     }, 500); // 500 milliseconds (0.5 second) delay
   };
 
-  const handleFilterChange = (newFilters) => {
+  const handleFilterChange = async (newFilters) => {
+    // Clear the cached data and search results
+    setCachedData([]);
+    setSearchResults([]);
+    // Set loading to true before fetching new data (this will allow our "looking through" message to display)
+    setLoading(true);
     // Update selected filters
     setSelectedFilters(newFilters);
-
-    // Apply filters to the cached data and update search results
-    const filteredResults = applyFilters(cachedData, newFilters);
-    setSearchResults(filteredResults);
+  
+    // Fetch new data based on the updated filters
+    try {
+      // Construct the API endpoint based on selected filter values
+      let endpoint = `http://localhost:3002/api/petfinder?page=${currentPage}&perPage=${itemsPerPage}`;
+      for (const filterKey in newFilters) {
+        if (newFilters[filterKey] !== 'any') {
+          endpoint += `&${filterKey}=${newFilters[filterKey]}`;
+        }
+      }
+  
+      const response = await fetch(endpoint);
+      const data = await response.json();
+  
+      console.log('API Response:', data);
+  
+      if (data && data.animals) {
+        // Add the fetched data to the cache
+        setCachedData(data.animals);
+        setSearchResults(applyFilters(data.animals, newFilters));
+        setLoading(false);
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error.message);
+      setLoading(false);
+    }
   };
-
+  
+  
 // Function to filter pet data based on selected filters
 const applyFilters = (data, filters) => {
   return data.filter((pet) => {
@@ -99,11 +136,16 @@ const applyFilters = (data, filters) => {
           break; // Exit the loop early if there's no match
         }
       } else if (filterKey === 'breed') {
-        // Handle the "breed" filter
-        const primaryBreed = pet.breeds?.primary?.toLowerCase();
-        if (primaryBreed !== filterValue) {
+        if (
+          filterValue !== 'any' &&
+          petValue &&
+          !(
+            petValue.primary.toLowerCase().includes(filterValue) ||
+            (petValue.secondary && petValue.secondary.toLowerCase().includes(filterValue))
+          )
+        ) {
           matchesAllFilters = false;
-          break; // Exit the loop early if there's no match
+          break;
         }
       } else {
         // For other filters, compare values directly
@@ -121,7 +163,9 @@ const applyFilters = (data, filters) => {
 
 // Function to render the list of pet cards based on applied filters
 const renderPetCards = () => {
-  if (!loading) {
+  if (loading) {
+    return <p>Looking through all of our amazing pets...</p>;
+  } else {
     // Apply filters to the cached data
     const filteredResults = applyFilters(cachedData, selectedFilters);
 
@@ -140,9 +184,6 @@ const renderPetCards = () => {
       // If no matching pets, display a message
       return <p>No pets match your criteria.</p>;
     }
-  } else {
-    // If data is still loading, display a loading message
-    return <p>Loading...</p>;
   }
 };
 
