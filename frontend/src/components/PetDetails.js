@@ -8,7 +8,12 @@ import { faHeart } from '@fortawesome/free-solid-svg-icons';
 const PetDetails = ({addToFavorites, removeFromFavorites, isFavorite}) => {
   const location = useLocation();
   const [favorited, setFavorited] = useState(isFavorite);
-  const petData = location.state && location.state.petData;
+
+  // Extract the 'petData' from the query parameter in the URL
+  const searchParams = new URLSearchParams(window.location.search);
+  const petData = JSON.parse(decodeURIComponent(searchParams.get('petData')));
+
+  console.log(petData);
 
   if (!petData) {
     return <p className="error-message">Error: Pet not found</p>;
@@ -21,6 +26,11 @@ const PetDetails = ({addToFavorites, removeFromFavorites, isFavorite}) => {
     } else {
       addToFavorites(petData);
     }
+  };
+
+  // Function to open the pet details in a new window
+  const openInNewWindow = () => {
+    window.open(petData.url, '_blank');
   };
 
   return (

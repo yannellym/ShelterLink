@@ -19,8 +19,22 @@ const PetCard = ({ pet, addToFavorites, removeFromFavorites, isFavorite }) => {
   };
 
   const handleMoreInfoClick = () => {
-    navigate(`/pet-details/${pet.id}`, { state: { petData: pet } });
+    // Create the URL for the new window, including the 'petData' query parameter
+    const moreInfoUrl = `/pet-details/${pet.id}?petData=${encodeURIComponent(JSON.stringify(pet))}`;
+  
+    // Open the new window with the generated URL
+    const newWindow = window.open(moreInfoUrl, '_blank');
+  
+    // Check if the new window was successfully opened
+    if (newWindow) {
+      // If opened successfully, focus on the new window
+      newWindow.focus();
+    } else {
+      // If the new window couldn't be opened (likely due to a pop-up blocker), show an alert
+      alert('Please allow pop-ups for this site to view more details.');
+    }
   };
+  
   return (
     <div className="pet-card">
       {pet.photos && pet.photos.length > 0 ? (

@@ -80,11 +80,14 @@ function MainPage({ favoritePets, addToFavorites, removeFromFavorites }) {
     setLoading(true);
     // Update selected filters
     setSelectedFilters(newFilters);
+    
+    // Set the current page to 1 when filters change
+    setCurrentPage(1);
   
     // Fetch new data based on the updated filters
     try {
       // Construct the API endpoint based on selected filter values
-      let endpoint = `http://localhost:3002/api/petfinder?page=${currentPage}&perPage=${itemsPerPage}`;
+      let endpoint = `http://localhost:3002/api/petfinder?page=1&perPage=${itemsPerPage}`;
       for (const filterKey in newFilters) {
         if (newFilters[filterKey] !== 'any') {
           endpoint += `&${filterKey}=${newFilters[filterKey]}`;
