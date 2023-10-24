@@ -18,12 +18,13 @@ const SearchBar = ({ onSearch }) => {
 
   const handleSearch = async () => {
     if (searchText && petType) {
-      const apiEndpoint = `http://localhost:3002/api/petfinder?perPage=100&location=${searchText}&type=${petType}`;
+      const apiEndpoint = `http://localhost:3002/api/petfinder?perPage=200&location=${searchText}&type=${petType}`;
 
       try {
         const response = await fetch(apiEndpoint);
         if (response.ok) {
           const data = await response.json();
+          console.log(data, "data")
           setDataLoaded(true);
 
           // Include the favorited information in the state
@@ -177,11 +178,9 @@ const SearchBar = ({ onSearch }) => {
           <option value="bird">Bird</option>
           <option value="barnyard">Barnyard</option>
         </select>
-        <button onClick={handleSearch} className="search-button">
-          <Link to="/pets-specific-location">
-            <button className="search-button">Search</button>
-          </Link>
-        </button>
+        <Link to="/pets-specific-location">
+          <button className="search-button" onClick={handleSearch} >Search</button>
+        </Link>
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ const useAnimalsBasedOnPreferencesAPI = () => {
   // Define state variables to store preferred animals and loading state
   const [preferredAnimals, setPreferredAnimals] = useState([]);
   const [loading, setLoading] = useState(false);
+  
 
   // Define an asynchronous function to fetch animals based on user preferences
   const fetchAnimalsBasedOnPreferences = async (preferences) => {

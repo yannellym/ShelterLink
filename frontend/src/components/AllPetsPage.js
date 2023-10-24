@@ -13,66 +13,75 @@ function shuffleArray(array) {
 function AllPetsPage() {
   const { category } = useParams();
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
   const [cache, setCache] = useState([]);
-  const petsPerPage = 100;
+  const petsPerPage = 20;
   const otherAnimalTypes = ["horse", "bird", "barnyard"];
-  
-  const fetchAnimalsByCategory = async (category) => {
+  const buttonsToShow = 9; // Number of buttons to show at once
+
+  const fetchAnimalsByCategory = async (category, page) => {
     let endpoint;
+    let animalData;
 
     if (category === "dog" || category === "cat") {
-      // First API call for "dog" or "cat"
-      endpoint = `http://localhost:3002/api/petfinder?type=${category}&limit=${petsPerPage}`;
+      endpoint = `http://localhost:3002/api/petfinder?type=${category}&limit=${40}&page=${page}`;
     } else if (category === "other") {
-      // Second API call for "other" category
       // Fetch animals for each type in the "other" category
-      const animalPromises = otherAnimalTypes.map(animalType => {
-        return fetch(`http://localhost:3002/api/petfinder?type=${animalType}&limit=${petsPerPage}`)
-          .then(response => response.json());
+      const animalPromises = otherAnimalTypes.map(async (animalType) => {
+        const response = await fetch(
+          `http://localhost:3002/api/petfinder?type=${animalType}&limit=${petsPerPage}&page=${page}`
+        );
+        const data = await response.json();
+        return data.animals || [];
       });
 
-      const animalData = await Promise.all(animalPromises);
-
-      // Merge the arrays of animals from different types
-      const mergedAnimals = animalData.flatMap(data => data.animals);
-
-      endpoint = mergedAnimals;
+      const animalResponses = await Promise.all(animalPromises);
+      animalData = animalResponses.flat();
     }
 
     try {
-      if (endpoint) {
-        if (Array.isArray(endpoint)) {
-          // If endpoint is an array, we have already fetched animals for the "other" category
-          return endpoint.filter(animal => animal && animal.photos.length > 0);
-        } else {
-          // Fetch animals for "dog" or "cat"
-          const response = await fetch(endpoint);
-          const data = await response.json();
-          if (data && data.animals) {
-            return data.animals.filter((animal) => animal.photos.length > 0);
-          }
+      if (animalData) {
+        return animalData.filter((animal) => animal && animal.photos.length > 0);
+      } else if (endpoint) {
+        const response = await fetch(endpoint);
+        const data = await response.json();
+        if (data && data.animals) {
+          return data.animals.filter((animal) => animal.photos.length > 0);
         }
       }
     } catch (error) {
       console.error('Error fetching data:', error.message);
     }
-    
+
     return [];
   };
 
   useEffect(() => {
     async function fetchData() {
-      const animals = await fetchAnimalsByCategory(category);
+      const animals = await fetchAnimalsByCategory(category, currentPage);
 
       // Shuffle the animals array
       shuffleArray(animals);
-      
+
       setCache(animals);
       setLoading(false);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     fetchData();
-  }, [category]);
+  }, [category, currentPage]);
+
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1) {
+      setCurrentPage(newPage);
+    }
+  };
+
+  // Calculate the range of page buttons to display
+  const startPage = Math.max(1, currentPage - Math.floor(buttonsToShow / 2));
+  const endPage = startPage + buttonsToShow - 1;
+
+  const pageButtons = Array.from({ length: buttonsToShow }, (_, i) => startPage + i);
 
   return (
     <div className="all-pets-page">
@@ -86,6 +95,28 @@ function AllPetsPage() {
           ))}
         </div>
       )}
+      <div className="pagination">
+        <button
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          Previous
+        </button>
+        {pageButtons.map((page) => (
+          <button
+            key={page}
+            onClick={() => handlePageChange(page)}
+            className={currentPage === page ? 'active' : ''}
+          >
+            {page}
+          </button>
+        ))}
+        <button
+          onClick={() => handlePageChange(currentPage + 1)}
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 }

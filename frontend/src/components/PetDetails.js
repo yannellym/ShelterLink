@@ -3,7 +3,7 @@ import { useLocation, Link } from 'react-router-dom';
 import '../styles/PetDetails.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
-
+import coming_soon from "../images/coming_soon.png";
 
 const PetDetails = ({addToFavorites, removeFromFavorites, isFavorite}) => {
   const location = useLocation();
@@ -28,10 +28,6 @@ const PetDetails = ({addToFavorites, removeFromFavorites, isFavorite}) => {
     }
   };
 
-  // Function to open the pet details in a new window
-  const openInNewWindow = () => {
-    window.open(petData.url, '_blank');
-  };
 
   return (
     <div className="pet-details">
@@ -53,14 +49,22 @@ const PetDetails = ({addToFavorites, removeFromFavorites, isFavorite}) => {
           <h4>Animal ID: {petData.id}</h4>
         </div>
         <div className="photo-grid">
-          {petData.photos && petData.photos.map((photo, index) => (
+        {petData.photos && petData.photos.length > 0 ? (
+          petData.photos.map((photo, index) => (
             <img
               key={index}
               src={photo.medium}
               alt={`Pet ${index + 1}`}
               className={`pet-photo ${petData.photos.length === 1 ? 'single-photo' : ''}`}
             />
-          ))}
+          ))
+        ) : (
+          <img
+            src={coming_soon} 
+            alt="Fallback"
+            className="fallback-photo"
+          />
+        )};
         </div>
       </div>
       <p>{petData.description}</p>
