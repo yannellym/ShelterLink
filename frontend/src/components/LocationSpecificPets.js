@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import PetCard from './PetCard';
 import '../styles/LocationSpecificPets.css';
@@ -20,15 +20,9 @@ const LocationSpecificPets = ({
 
   // unpack the values received from the state
   const { data, petType, searchText } = state;
-  const { total_pages } = data.pagination; // Extract the total pages
+  const { total_pages } = data.pagination;
 
-  const itemsPerPage = 20; 
-
-  // Calculate the index range for the current page
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-
-  const petsToDisplay = data.animals.slice(startIndex, endIndex);
+  const itemsPerPage = 20;
 
   // Function to handle moving to the previous page
   const handlePreviousPage = () => {
@@ -43,6 +37,22 @@ const LocationSpecificPets = ({
       setCurrentPage(currentPage + 1);
     }
   };
+
+  // Function to handle clicking on a specific page number
+  const handlePageChange = (pageNumber) => {
+    if (pageNumber >= 1 && pageNumber <= total_pages) {
+      setCurrentPage(pageNumber);
+    }
+  };
+
+  // Create an array of page numbers (1-9)
+  const pageNumbers = Array.from({ length: 9 }, (_, i) => i + 1);
+
+  // Calculate the index range for the current page
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
+  const petsToDisplay = data.animals.slice(startIndex, endIndex);
 
   return (
     <div className="location-specific-pets">
@@ -67,7 +77,17 @@ const LocationSpecificPets = ({
         <button onClick={handlePreviousPage} disabled={currentPage === 1}>
           Previous Page
         </button>
-        <span>Page {currentPage} of {total_pages}</span>
+        <div className="page-numbers">
+          {pageNumbers.map((pageNumber) => (
+            <button
+              key={pageNumber}
+              onClick={() => handlePageChange(pageNumber)}
+              className={currentPage === pageNumber ? 'active' : ''}
+            >
+              {pageNumber}
+            </button>
+          ))}
+        </div>
         <button onClick={handleNextPage} disabled={currentPage === total_pages}>
           Next Page
         </button>

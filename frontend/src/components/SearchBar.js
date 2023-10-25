@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/SearchBar.css';
 import PlacesAutocomplete, {
-  geocodeByAddress,
-  getLatLng,
+  geocodeByAddress
 } from 'react-places-autocomplete';
 import { Link } from 'react-router-dom';
 
@@ -28,7 +27,7 @@ const SearchBar = ({ onSearch }) => {
           setDataLoaded(true);
 
           // Include the favorited information in the state
-          navigate('/pets-specific-location', {
+          navigate('/location-specific-pets', {
             state: {
               data,
               petType,
@@ -178,7 +177,7 @@ const SearchBar = ({ onSearch }) => {
           <option value="bird">Bird</option>
           <option value="barnyard">Barnyard</option>
         </select>
-        <Link to="/pets-specific-location">
+        <Link to="/location-specific-pets">
           <button className="search-button" onClick={handleSearch} >Search</button>
         </Link>
       </div>

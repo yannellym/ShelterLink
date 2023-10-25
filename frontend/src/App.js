@@ -69,7 +69,7 @@ const App = () => {
             />} 
           />
           <Route path="/all-pets/:category" element={<AllPetsPage />} />
-          <Route path="/pets-specific-location" element={
+          <Route path="/location-specific-pets" element={
             <LocationSpecificPets 
               favoritePets={favoritePets} 
               setFavoritePets={setFavoritePets} 

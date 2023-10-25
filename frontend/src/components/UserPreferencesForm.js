@@ -55,10 +55,12 @@ const UserPreferencesForm = ({ onPreferencesSubmit }) => {
 
     return formattedMessage;
   };
+  const [buttonText, setButtonText] = useState('Find My Match'); // State to manage button text
 
-  const handleSubmit = (event) => {
+  
+  const handleSubmit =  async(event) => {
     event.preventDefault();
-    console.log('Submit button clicked'); 
+
     const userPreferences = {
       type,
       size,
@@ -66,9 +68,13 @@ const UserPreferencesForm = ({ onPreferencesSubmit }) => {
       gender,
       temperament,
     };
-    console.log(userPreferences, "userpref");
+    setButtonText('Finding Match...'); // Update button text to indicate "Finding Match"
+    // Simulate a call for 3 seconds
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+    // find the match
     onPreferencesSubmit(userPreferences);
   };
+
 
   return (
     <div className="container">
@@ -199,7 +205,7 @@ const UserPreferencesForm = ({ onPreferencesSubmit }) => {
             <p>Great choices. Let's find your perfect match!</p>
           </div>
         )}
-        <button className= "find-match-button" type="submit">Find My Match</button>
+        <button className= "find-match-button" type="submit">{buttonText}</button>
       </form>
     </div>
   );
