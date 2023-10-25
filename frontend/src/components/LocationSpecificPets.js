@@ -1,65 +1,80 @@
+
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import PetCard from './PetCard';
 import '../styles/LocationSpecificPets.css';
 
-const LocationSpecificPets = ({
+import usePetfinderAPI from '../hooks/usePetFinderAPI';
+
+function LocationSpecificPets({
   favoritePets,
   addToFavorites,
   removeFromFavorites
-}) => {
+}) {
   const location = useLocation();
   const state = location.state;
 
   // Define the currentPage state at the top level
   const [currentPage, setCurrentPage] = useState(1);
+  const [petsToDisplay, setPetsToDisplay] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [maxPage, setMaxPage] = useState(9);
 
-  if (!state || !state.data) {
-    return <div className="loading">Loading...</div>;
-  }
+  const dependencies = [state.petType, currentPage];
 
-  // unpack the values received from the state
-  const { data, petType, searchText } = state;
-  const { total_pages } = data.pagination;
+  const { data, loading: apiLoading, error } = usePetfinderAPI(
+    `http://localhost:3002/api/petfinder?type=${state.petType}&location=${state.searchText}&limit=20&page=${currentPage}`,
+    dependencies
+  );
 
-  const itemsPerPage = 20;
-
-  // Function to handle moving to the previous page
-  const handlePreviousPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= maxPage) {
+      setCurrentPage(newPage);
+      // Scroll to the top of the page
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
-  // Function to handle moving to the next page
-  const handleNextPage = () => {
-    if (currentPage < total_pages) {
-      setCurrentPage(currentPage + 1);
+  const updateMaxPage = () => {
+    if (currentPage === maxPage) {
+      setMaxPage(maxPage + 10);
     }
   };
 
-  // Function to handle clicking on a specific page number
-  const handlePageChange = (pageNumber) => {
-    if (pageNumber >= 1 && pageNumber <= total_pages) {
-      setCurrentPage(pageNumber);
-    }
+  useEffect(() => {
+    setPetsToDisplay(data.animals || []);
+    setLoading(apiLoading);
+  }, [data, apiLoading]);
+
+  useEffect(() => {
+    updateMaxPage();
+  }, [currentPage, maxPage]);
+
+  const renderPageNumbers = () => {
+    const pageNumbers = Array.from(
+      { length: maxPage },
+      (_, i) => i + 1
+    ).filter((pageNumber) => pageNumber <= maxPage);
+    
+    return pageNumbers.map((pageNumber) => (
+      <button
+        key={pageNumber}
+        onClick={() => handlePageChange(pageNumber)}
+        className={currentPage === pageNumber ? 'active' : ''}
+      >
+        {pageNumber}
+      </button>
+    ));
   };
-
-  // Create an array of page numbers (1-9)
-  const pageNumbers = Array.from({ length: 9 }, (_, i) => i + 1);
-
-  // Calculate the index range for the current page
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-
-  const petsToDisplay = data.animals.slice(startIndex, endIndex);
 
   return (
     <div className="location-specific-pets">
       <h2 className="search-results-title">Search Results for:</h2>
-      <h3 className="pet-type-title">All {petType}s in the {searchText} area</h3>
+      <h3 className="pet-type-title">All {state.petType}s in the {state.searchText} area</h3>
       <div className="pet-card-container">
-        {petsToDisplay.length === 0 ? (
+        {loading ? (
+          <p className="loading">Loading...</p>
+        ) : petsToDisplay.length === 0 ? (
           <p className="no-animals-message">No animals found.</p>
         ) : (
           petsToDisplay.map((pet) => (
@@ -74,26 +89,24 @@ const LocationSpecificPets = ({
         )}
       </div>
       <div className="pagination">
-        <button onClick={handlePreviousPage} disabled={currentPage === 1}>
+        <button
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
           Previous Page
         </button>
         <div className="page-numbers">
-          {pageNumbers.map((pageNumber) => (
-            <button
-              key={pageNumber}
-              onClick={() => handlePageChange(pageNumber)}
-              className={currentPage === pageNumber ? 'active' : ''}
-            >
-              {pageNumber}
-            </button>
-          ))}
+          {renderPageNumbers()}
         </div>
-        <button onClick={handleNextPage} disabled={currentPage === total_pages}>
+        <button
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={petsToDisplay.length < 20}
+        >
           Next Page
         </button>
       </div>
     </div>
   );
-};
+}
 
 export default LocationSpecificPets;
