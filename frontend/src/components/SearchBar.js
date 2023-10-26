@@ -23,13 +23,12 @@ const SearchBar = ({ onSearch }) => {
         const response = await fetch(apiEndpoint);
         if (response.ok) {
           const data = await response.json();
-          console.log(data, "data")
+          console.log(data, "data");
           setDataLoaded(true);
 
           // Include the favorited information in the state
           navigate('/location-specific-pets', {
             state: {
-              data,
               petType,
               searchText
             },
@@ -45,60 +44,31 @@ const SearchBar = ({ onSearch }) => {
     }
   };
 
-  // Function to check if the input is a 5-digit number (ZIP code)
   function isZipCode(text) {
     return /^\d{5}$/.test(text);
   }
 
-  // Function to handle location selection
   const handleSelect = async (address, placeId) => {
-    if (isZipCode(address)) {
-      // If the input is a 5-digit number (ZIP code), show the location options
-      setShowLocationOptions(true);
-      setSearchText(address);
-    } else {
-      // Hide the location options
-      setShowLocationOptions(false);
-      try {
-        const results = await geocodeByAddress(address);
-        const cityState = results[0].address_components.reduce((acc, component) => {
-          if (component.types.includes('locality')) {
-            acc.city = component.long_name;
-          } else if (component.types.includes('administrative_area_level_1')) {
-            acc.state = component.short_name;
-          }
-          return acc;
-        }, {});
+    setSearchText('');
+    setShowLocationOptions(false);
+    setSearchText(address);
+  }
 
-        if (cityState.city && cityState.state) {
-          setSearchText(`${cityState.city}, ${cityState.state}`);
-        } else {
-          setSearchText(address);
-        }
-      } catch (error) {
-        console.error('Error geocoding address:', error);
-      }
-    }
-  };
-
-  // Customize the autocomplete suggestions to show only places within the USA
   const searchOptions = {
     types: isZipCode(searchText) ? ['(regions)'] : ['(cities)'],
-    componentRestrictions: { country: 'us' }, // Limit to the USA
+    componentRestrictions: { country: 'us' },
   };
 
-  // Function to share the user's location
   const handleShareLocation = () => {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(async (position) => {
         try {
           const { coords } = position;
           const { latitude, longitude } = coords;
-  
           const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
           const data = await response.json();
           const zipCode = data.address.postcode;
-  
+
           if (zipCode) {
             setSearchText(zipCode);
           }
@@ -113,13 +83,14 @@ const SearchBar = ({ onSearch }) => {
     } else {
       alert("Geolocation is not supported in your browser");
     }
-  };  
+  };
 
-  // Function to handle input click
   const handleInputClick = () => {
     setShowLocationMessage(true);
     handleShareLocation();
   };
+
+  const isSearchDisabled = !searchText || !petType;
 
   return (
     <div className="search-bar">
@@ -153,13 +124,11 @@ const SearchBar = ({ onSearch }) => {
                 </div>
                 {showLocationMessage && (
                   <button
-                  className={`location-button ${locationButtonClicked ? 'blue-border' : ''}`}
-                  onClick={handleShareLocation}
+                    className={`location-button ${locationButtonClicked ? 'blue-border' : ''}`}
+                    onClick={handleShareLocation}
                   >
-                  Share Location 📍
-
-                </button>
-                
+                    Share Location 📍
+                  </button>
                 )}
               </div>
             )}
@@ -178,7 +147,13 @@ const SearchBar = ({ onSearch }) => {
           <option value="barnyard">Barnyard</option>
         </select>
         <Link to="/location-specific-pets">
-          <button className="search-button" onClick={handleSearch} >Search</button>
+          <button
+            className={`search-button ${isSearchDisabled ? 'search-button-disabled' : ''}`}
+            onClick={handleSearch}
+            disabled={isSearchDisabled}
+          >
+            Search
+          </button>
         </Link>
       </div>
     </div>

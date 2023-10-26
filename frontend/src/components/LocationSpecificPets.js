@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import PetCard from './PetCard';
@@ -13,6 +12,8 @@ function LocationSpecificPets({
 }) {
   const location = useLocation();
   const state = location.state;
+  const petType = state?.petType || '';
+  const searchText = state?.searchText || '';
 
   // Define the currentPage state at the top level
   const [currentPage, setCurrentPage] = useState(1);
@@ -20,10 +21,10 @@ function LocationSpecificPets({
   const [loading, setLoading] = useState(true);
   const [maxPage, setMaxPage] = useState(9);
 
-  const dependencies = [state.petType, currentPage];
+  const dependencies = [petType, currentPage, searchText]; // Update dependencies
 
   const { data, loading: apiLoading, error } = usePetfinderAPI(
-    `http://localhost:3002/api/petfinder?type=${state.petType}&location=${state.searchText}&limit=20&page=${currentPage}`,
+    `http://localhost:3002/api/petfinder?type=${petType}&location=${searchText}&limit=20&page=${currentPage}`,
     dependencies
   );
 
@@ -42,8 +43,14 @@ function LocationSpecificPets({
   };
 
   useEffect(() => {
-    setPetsToDisplay(data.animals || []);
-    setLoading(apiLoading);
+    if (apiLoading) {
+      // Data is still loading
+      setLoading(true);
+    } else {
+      // Data has loaded, update the state
+      setLoading(false);
+      setPetsToDisplay(data.animals || []);
+    }
   }, [data, apiLoading]);
 
   useEffect(() => {
@@ -55,7 +62,7 @@ function LocationSpecificPets({
       { length: maxPage },
       (_, i) => i + 1
     ).filter((pageNumber) => pageNumber <= maxPage);
-    
+
     return pageNumbers.map((pageNumber) => (
       <button
         key={pageNumber}
@@ -70,12 +77,10 @@ function LocationSpecificPets({
   return (
     <div className="location-specific-pets">
       <h2 className="search-results-title">Search Results for:</h2>
-      <h3 className="pet-type-title">All {state.petType}s in the {state.searchText} area</h3>
+      <h3 className="pet-type-title">All {petType}s in the {searchText} area</h3>
       <div className="pet-card-container">
         {loading ? (
           <p className="loading">Loading...</p>
-        ) : petsToDisplay.length === 0 ? (
-          <p className="no-animals-message">No animals found.</p>
         ) : (
           petsToDisplay.map((pet) => (
             <PetCard
