@@ -17,11 +17,12 @@ function LocationSpecificPets({
 
   // Define the currentPage state at the top level
   const [currentPage, setCurrentPage] = useState(1);
-  const [petsToDisplay, setPetsToDisplay] = useState([]);
+  const [petsToDisplay, setPetsToDisplay] = useState([]); // Add this line
   const [loading, setLoading] = useState(true);
   const [maxPage, setMaxPage] = useState(9);
+  const [showOnlyPetsWithImages, setShowOnlyPetsWithImages] = useState(false);
 
-  const dependencies = [petType, currentPage, searchText]; // Update dependencies
+  const dependencies = [petType, currentPage, searchText, showOnlyPetsWithImages]; // Update dependencies
 
   const { data, loading: apiLoading, error } = usePetfinderAPI(
     `http://localhost:3002/api/petfinder?type=${petType}&location=${searchText}&limit=20&page=${currentPage}`,
@@ -49,19 +50,31 @@ function LocationSpecificPets({
     } else {
       // Data has loaded, update the state
       setLoading(false);
-      setPetsToDisplay(data.animals || []);
+      const filteredPets = showOnlyPetsWithImages
+        ? data.animals.filter((pet) => pet.photos.length > 0)
+        : data.animals; // Filter only if the checkbox is checked
+      setPetsToDisplay(filteredPets || []);
     }
-  }, [data, apiLoading]);
+  }, [data, apiLoading, showOnlyPetsWithImages]);
 
   useEffect(() => {
     updateMaxPage();
   }, [currentPage, maxPage]);
 
   const renderPageNumbers = () => {
-    const pageNumbers = Array.from(
-      { length: maxPage },
-      (_, i) => i + 1
-    ).filter((pageNumber) => pageNumber <= maxPage);
+    const totalPageCount = data?.pagination?.total_pages || 1;
+    const displayedPages = 9;
+    const middlePage = Math.floor(displayedPages / 2);
+    let startPage = Math.max(1, currentPage - middlePage);
+    let endPage = Math.min(totalPageCount, startPage + displayedPages - 1);
+
+    if (endPage - startPage + 1 < displayedPages) {
+      // Adjust the range when there are fewer pages available
+      endPage = Math.min(totalPageCount, startPage + displayedPages - 1);
+      startPage = Math.max(1, endPage - displayedPages + 1);
+    }
+
+    const pageNumbers = Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
 
     return pageNumbers.map((pageNumber) => (
       <button
@@ -74,10 +87,24 @@ function LocationSpecificPets({
     ));
   };
 
+  const handleShowOnlyPetsWithImages = () => {
+    setShowOnlyPetsWithImages(!showOnlyPetsWithImages);
+  };
+
   return (
     <div className="location-specific-pets">
       <h2 className="search-results-title">Search Results for:</h2>
       <h3 className="pet-type-title">All {petType}s in the {searchText} area</h3>
+      <div className="filter-pets">
+        <label>
+          <input
+            type="checkbox"
+            checked={showOnlyPetsWithImages}
+            onChange={handleShowOnlyPetsWithImages}
+          />
+          Show only pets with images
+        </label>
+      </div>
       <div className="pet-card-container">
         {loading ? (
           <p className="loading">Loading...</p>
