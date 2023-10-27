@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import SearchBar from './SearchBar';
 import SectionLink from './SectionLink';
-import AdoptionInfoSection from './AdoptionInfoSection';
+import ResourcesSection from './ResourcesSection';
 import UserPreferencesForm from './UserPreferencesForm';
 import PetCard from './PetCard';
 import '../styles/Home.css';
@@ -105,7 +105,7 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferenc
         </div>
         <div className="resource-div">
           <h3> Resources:</h3>
-          <AdoptionInfoSection />
+          <ResourcesSection />
         </div>
         <div className="nearby-pets">
           <h3>Pets with greater need for love:</h3>

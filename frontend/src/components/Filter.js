@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import popularDogBreeds from './popularDogBreeds';
+import popularDogBreeds from '../files/popularDogBreeds';
 
 function Filter({ onFilterChange }) {
   const [selectedFilters, setSelectedFilters] = useState({

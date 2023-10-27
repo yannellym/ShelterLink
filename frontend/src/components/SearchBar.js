@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/SearchBar.css';
 import PlacesAutocomplete, {
@@ -84,6 +84,13 @@ const SearchBar = ({ onSearch }) => {
       alert("Geolocation is not supported in your browser");
     }
   };
+
+  useEffect(() => {
+    if (locationButtonClicked) {
+      // Once the location is shared, you can change the button's message
+      setShowLocationMessage(false);
+    }
+  }, [locationButtonClicked]);
 
   const handleInputClick = () => {
     setShowLocationMessage(true);

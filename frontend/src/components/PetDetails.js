@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
-import { useLocation, Link } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import '../styles/PetDetails.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import coming_soon from "../images/coming_soon.png";
 
-const PetDetails = ({addToFavorites, removeFromFavorites, isFavorite}) => {
-  const location = useLocation();
+const PetDetails = ({addToFavorites, removeFromFavorites, isFavorite }) => {
   const [favorited, setFavorited] = useState(isFavorite);
 
   // Extract the 'petData' from the query parameter in the URL
   const searchParams = new URLSearchParams(window.location.search);
   const petData = JSON.parse(decodeURIComponent(searchParams.get('petData')));
-
+  
+  // const navigate = useNavigate();
   console.log(petData);
 
   if (!petData) {
@@ -28,14 +28,18 @@ const PetDetails = ({addToFavorites, removeFromFavorites, isFavorite}) => {
     }
   };
 
+  // const handleGoBack = () => {
+  //   console.log("clicking")
+  //   navigate(-1); // Go back to the previous page
+  // };
 
   return (
     <div className="pet-details">
-      <div className="back-link-container">
-        <Link to="/find-a-pet" className="back-link">
+      {/* <div className="back-link-container">
+        <button onClick={handleGoBack} className="back-link">
           Go Back
-        </Link>
-      </div>
+        </button>
+      </div> */}
       <button
         className={`favorite-heart-${favorited ? 'favorited' : 'unfavorited'}`}
         onClick={handleToggleFavorite}
@@ -64,7 +68,7 @@ const PetDetails = ({addToFavorites, removeFromFavorites, isFavorite}) => {
             alt="Fallback"
             className="fallback-photo"
           />
-        )};
+        )}
         </div>
       </div>
       <p>{petData.description}</p>

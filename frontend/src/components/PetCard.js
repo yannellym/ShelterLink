@@ -7,7 +7,6 @@ import { faPaw } from '@fortawesome/free-solid-svg-icons';
 
 const PetCard = ({ pet, addToFavorites, removeFromFavorites, isFavorite }) => {
   const [favorited, setFavorited] = useState(isFavorite);
-  const navigate = useNavigate();
 
   const handleToggleFavorite = () => {
     setFavorited(!favorited);

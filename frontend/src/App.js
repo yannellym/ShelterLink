@@ -12,6 +12,9 @@ import SignUp from './components/SignUp';
 import PetDetails from './components/PetDetails'; 
 import AllPetsPage from './components/AllPetsPage.js';
 import LocationSpecificPets from './components/LocationSpecificPets'; 
+import PetAdoption from './components/PetAdoption';
+import Faqs from './components/Faqs';
+import PetFoster from './components/PetFoster';
 
 
 const App = () => {
@@ -31,7 +34,7 @@ const App = () => {
   };
 
   return (
-    <BrowserRouter>
+    <div>
       <Header />
         <Routes>
           <Route path="/" element={
@@ -77,9 +80,21 @@ const App = () => {
               removeFromFavorites={removeFromFavorites}  
             />} 
           />
+          <Route path="/pet-adoption" element = {
+            <PetAdoption 
+            />}
+          />
+          <Route path="/pet-faqs" element = {
+            <Faqs
+            />}
+          />
+          <Route path="/pet-foster" element = {
+            <PetFoster
+            />}
+          />
         </Routes>
       <Footer />
-    </BrowserRouter>
+    </div>
   );
 };
 
