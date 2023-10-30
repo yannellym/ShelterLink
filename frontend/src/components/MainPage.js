@@ -13,6 +13,9 @@ function MainPage({ favoritePets, addToFavorites, removeFromFavorites }) {
   const [totalPages, setTotalPages] = useState(0);
   const maxPaginationButtons = 10; 
 
+  const [showOnlyPetsWithImages, setShowOnlyPetsWithImages] = useState(false);
+  const [minPetsPerPage] = useState(20); // Minimum number of pets per page
+
   // Filters state
   const [selectedFilters, setSelectedFilters] = useState({
     type: 'any',
@@ -44,7 +47,9 @@ function MainPage({ favoritePets, addToFavorites, removeFromFavorites }) {
         // Set the cached data to the new data
         setCachedData(data.animals);
         setSearchResults(applyFilters(data.animals, filters)); // Apply filters to the new data
+        // remove the loading indicator
         setLoading(false);
+        // set the new data 
         setCurrentPage(page);
         setTotalPages(data.pagination.total_pages);
       }
@@ -56,7 +61,7 @@ function MainPage({ favoritePets, addToFavorites, removeFromFavorites }) {
 
   useEffect(() => {
     // Fetch pets for the initial page when the component mounts
-    fetchPetsForPage(currentPage);
+    fetchPetsForPage([currentPage]);
   }, []);
 
   const handlePageChange = (page) => {
@@ -93,16 +98,19 @@ function MainPage({ favoritePets, addToFavorites, removeFromFavorites }) {
           endpoint += `&${filterKey}=${newFilters[filterKey]}`;
         }
       }
-  
+
       const response = await fetch(endpoint);
       const data = await response.json();
-  
+
       console.log('API Response:', data);
-  
+
       if (data && data.animals) {
         // Add the fetched data to the cache
         setCachedData(data.animals);
+
+        // Apply filters to the new data, including the "showOnlyPetsWithImages" filter
         setSearchResults(applyFilters(data.animals, newFilters));
+
         setLoading(false);
       }
     } catch (error) {
@@ -110,7 +118,6 @@ function MainPage({ favoritePets, addToFavorites, removeFromFavorites }) {
       setLoading(false);
     }
   };
-  
   
 // Function to filter pet data based on selected filters
 const applyFilters = (data, filters) => {
@@ -157,6 +164,11 @@ const applyFilters = (data, filters) => {
           break; // Exit the loop early if there's no match
         }
       }
+    }
+
+    // Filter pets with images
+    if (showOnlyPetsWithImages && (!pet.photos || pet.photos.length === 0)) {
+      matchesAllFilters = false;
     }
 
     // If the pet matches all filters, include it in the results
@@ -213,6 +225,22 @@ const generatePaginationButtons = () => {
   return buttons; // Return the generated pagination buttons
 };
 
+  // Function to apply filters to the results based on selected filters and showOnlyPetsWithImages flag
+  const applyFiltersToResults = (filters, showOnlyPetsWithImages) => {
+    // Apply filters to the cached data
+    const filteredResults = applyFilters(cachedData, filters, showOnlyPetsWithImages);
+
+    // Set the filtered results as the search results
+    setSearchResults(filteredResults);
+  };
+
+  // Update the handleShowOnlyPetsWithImages function to call applyFiltersToResults
+  const handleShowOnlyPetsWithImages = () => {
+    setShowOnlyPetsWithImages(!showOnlyPetsWithImages);
+
+    // Reapply filters when the checkbox is toggled
+    applyFiltersToResults(selectedFilters, !showOnlyPetsWithImages);
+  };
 
   return (
     <div className="main-page">
@@ -222,6 +250,16 @@ const generatePaginationButtons = () => {
         </div>
       </div>
       <div className="content">
+        <div className="filter-pets">
+          <label>
+            <input
+              type="checkbox"
+              checked={showOnlyPetsWithImages}
+              onChange={handleShowOnlyPetsWithImages}
+            />
+            Show only pets with images
+          </label>
+        </div>
         <div className="pet-card-list">
           {renderPetCards()}
         </div>

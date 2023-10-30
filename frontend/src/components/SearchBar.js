@@ -13,36 +13,47 @@ const SearchBar = ({ onSearch }) => {
   const [showLocationMessage, setShowLocationMessage] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(false);
   const [locationButtonClicked, setLocationButtonClicked] = useState(false);
+  const [shareLocation, setShareLocation] = useState(false);
+
   const navigate = useNavigate();
 
   const handleSearch = async () => {
     if (searchText && petType) {
-      const apiEndpoint = `http://localhost:3002/api/petfinder?perPage=200&location=${searchText}&type=${petType}`;
-
-      try {
-        const response = await fetch(apiEndpoint);
-        if (response.ok) {
-          const data = await response.json();
-          console.log(data, "data");
-          setDataLoaded(true);
-
-          // Include the favorited information in the state
-          navigate('/location-specific-pets', {
-            state: {
-              petType,
-              searchText
-            },
-          });
-        } else {
-          console.error('API request failed:', response.statusText);
+      // Extract the ZIP code from the user's input
+      const zipCode = searchText.match(/\b\d{5}\b/);
+      console.log(zipCode)
+      if (zipCode) {
+        const apiEndpoint = `http://localhost:3002/api/petfinder?perPage=200&location=${zipCode}&type=${petType}`;
+  
+        try {
+          const response = await fetch(apiEndpoint);
+          if (response.ok) {
+            const data = await response.json();
+            console.log(data, "data");
+            setDataLoaded(true);
+  
+            // Include the favorited information in the state
+            navigate('/location-specific-pets', {
+              state: {
+                petType,
+                searchText: zipCode[0] // Set searchText to the extracted ZIP code
+              },
+            });
+          } else {
+            console.error('API request failed:', response.statusText);
+          }
+        } catch (error) {
+          console.error('API request error:', error);
         }
-      } catch (error) {
-        console.error('API request error:', error);
+      } else {
+        alert('Please enter a valid ZIP code to search.');
       }
     } else {
       alert('Please enter both location and pet type to search.');
     }
   };
+  
+  
 
   function isZipCode(text) {
     return /^\d{5}$/.test(text);
@@ -59,42 +70,42 @@ const SearchBar = ({ onSearch }) => {
     componentRestrictions: { country: 'us' },
   };
 
-  const handleShareLocation = () => {
+  const handleShareLocation = async () => {
+    setShareLocation(true);
+  
     if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(async (position) => {
-        try {
-          const { coords } = position;
-          const { latitude, longitude } = coords;
-          const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
-          const data = await response.json();
-          const zipCode = data.address.postcode;
-
-          if (zipCode) {
-            setSearchText(zipCode);
-          }
-        } catch (error) {
-          console.error("Error getting zip code:", error);
-        } finally {
-          setLocationButtonClicked(true);
+      try {
+        const position = await new Promise((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(resolve, reject);
+        });
+        const { coords } = position;
+        const { latitude, longitude } = coords;
+        const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
+        const data = await response.json();
+        const zipCode = data.address.postcode;
+  
+        if (zipCode) {
+          setSearchText(zipCode);
         }
-      }, (error) => {
-        alert(`Error getting location: ${error.message}`);
-      });
+      } catch (error) {
+        console.error("Error getting zip code:", error);
+      }
     } else {
       alert("Geolocation is not supported in your browser");
     }
+  
+    // Reset the button text after sharing location
+    setShowLocationMessage(false);
   };
 
   useEffect(() => {
     if (locationButtonClicked) {
-      // Once the location is shared, you can change the button's message
       setShowLocationMessage(false);
     }
   }, [locationButtonClicked]);
 
   const handleInputClick = () => {
     setShowLocationMessage(true);
-    handleShareLocation();
   };
 
   const isSearchDisabled = !searchText || !petType;
@@ -134,7 +145,7 @@ const SearchBar = ({ onSearch }) => {
                     className={`location-button ${locationButtonClicked ? 'blue-border' : ''}`}
                     onClick={handleShareLocation}
                   >
-                    Share Location 📍
+                    {shareLocation? 'Sharing Location...' : 'Share Location 📍'}
                   </button>
                 )}
               </div>

@@ -9,7 +9,7 @@ import dog2 from '../images/dog.jpg';
 import kitten from '../images/kitten.jpg';
 import hamster from '../images/hamster.jpg';
 import paw from '../images/paw.png';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import usePetFinderAPI from '../hooks/usePetFinderAPI'; // hook
 import useAnimalsBasedOnPreferencesAPI from '../hooks/useAnimalsBasedOnPreferencesAPI'; // hook
 
@@ -17,8 +17,9 @@ import useAnimalsBasedOnPreferencesAPI from '../hooks/useAnimalsBasedOnPreferenc
 function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferences }) {
   const [loading, setLoading] = useState(true);
   const [selectedAnimals, setSelectedAnimals] = useState([]);
+  const [selectedPetIndex, setSelectedPetIndex] = useState(0); // Track the currently displayed pet
 
-  const { data: petData, loading: petDataLoading } = usePetFinderAPI(
+  const { data: petData } = usePetFinderAPI(
     'http://localhost:3002/api/petfinder?perPage=200',
     []
   );
@@ -41,16 +42,22 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferenc
   }, [petData]);
 
 
-  const { preferredAnimals, loading: preferredAnimalsLoading, fetchAnimalsBasedOnPreferences } = useAnimalsBasedOnPreferencesAPI();
+  const { preferredAnimals, fetchAnimalsBasedOnPreferences } = useAnimalsBasedOnPreferencesAPI();
 
   const handlePreferencesSubmit = (preferences) => {
     fetchAnimalsBasedOnPreferences(preferences);
   }
 
-  const toggleForm = () => {
+  const fetchNewPet = () => {
+    // Update the selected pet index to cycle through the available pets
+    setSelectedPetIndex((prevIndex) => (prevIndex + 1) % preferredAnimals.length);
+  };
+
+  const backToForm = () => {
     // reload the page so we see the form again
     window.location.reload();
   };
+
 
   return (
     <div className="Home">
@@ -65,14 +72,25 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferenc
               // if we have pets in the preferredAnimals array, display their information using the petCard component
               <div>
                 <PetCard
-                  key={preferredAnimals[0].id}
-                  pet={preferredAnimals[0]}
+                  key={preferredAnimals[selectedPetIndex].id}
+                  pet={preferredAnimals[selectedPetIndex]}
                   addToFavorites={addToFavorites}
                   removeFromFavorites={removeFromFavorites}
-                  isFavorite={favoritePets.some((favoritePet) => favoritePet.id === preferredAnimals[0].id)}
+                  isFavorite={favoritePets.some((favoritePet) => favoritePet.id === preferredAnimals[selectedPetIndex].id)}
                   className="matched-pet-card"
                 />
-                <button className="back-to-form" onClick={toggleForm}>Find another match</button>
+                {selectedPetIndex +1 < preferredAnimals.length? 
+                  (
+                    <button className="fetch-new-pet" onClick={fetchNewPet}>Find another match</button>
+                  )
+                  : 
+                  (
+                  <div>
+                    <h2>No more matches  </h2> 
+                    <button className="back-to-form" onClick={backToForm}>Back to form</button>
+                  </div>
+                  )
+                }
               </div>
             )}
           </div>
