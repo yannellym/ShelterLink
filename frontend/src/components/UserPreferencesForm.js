@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import '../styles/UserPreferencesForm.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 const UserPreferencesForm = ({ onPreferencesSubmit }) => {
   const ageCategories = {
@@ -16,7 +18,8 @@ const UserPreferencesForm = ({ onPreferencesSubmit }) => {
   const [gender, setGender] = useState('Male');
   const [temperament, setTemperament] = useState([]);
   const [messageVisible, setMessageVisible] = useState(false); // State to control message visibility
-
+  // Additional state to manage the visibility of the spinner
+  const [isFindingMatch, setIsFindingMatch] = useState(false);
 
 
   const handleAgeChange = (event) => {
@@ -68,6 +71,7 @@ const UserPreferencesForm = ({ onPreferencesSubmit }) => {
       gender,
       temperament,
     };
+    setIsFindingMatch(true); // Show the spinner when submitting
     setButtonText('Finding Match...'); // Update button text to indicate "Finding Match"
     // Simulate a call for 3 seconds
     await new Promise((resolve) => setTimeout(resolve, 3000));
@@ -205,7 +209,11 @@ const UserPreferencesForm = ({ onPreferencesSubmit }) => {
             <p>Great choices. Let's find your perfect match!</p>
           </div>
         )}
-        <button className= "find-match-button" type="submit">{buttonText}</button>
+        <button className= "find-match-button" type="submit">  {isFindingMatch ? (
+          <FontAwesomeIcon icon={faSpinner} spin /> // Display spinner when isFindingMatch is true
+          ) : (
+            'Find My Match' // Display "Find My Match" text when isFindingMatch is false
+          )}</button>
       </form>
     </div>
   );
