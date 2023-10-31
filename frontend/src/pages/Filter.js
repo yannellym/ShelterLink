@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import popularDogBreeds from '../files/popularDogBreeds';
+import popularDogBreeds from '../data/popularDogBreeds';
 
 function Filter({ onFilterChange }) {
   const [selectedFilters, setSelectedFilters] = useState({
@@ -84,7 +84,6 @@ function Filter({ onFilterChange }) {
               <option value="unknown">Unknown</option>
             </select>
           </div>
-          {/* Add more cat-specific filters here */}
         </>
       );
     } else {

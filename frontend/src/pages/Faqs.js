@@ -1,6 +1,6 @@
 // Faqs.js
 import React, { useState } from 'react';
-import faqData from '../files/faqData';
+import faqData from '../data/faqData';
 import '../styles/Faqs.css';
 
 const Faqs = () => {

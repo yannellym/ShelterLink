@@ -1,3 +1,4 @@
+// form to match the user to a pet
 import React, { useState } from 'react';
 import '../styles/UserPreferencesForm.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

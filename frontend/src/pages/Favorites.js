@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/FavoritesPage.css';
-import PetCard from './PetCard';
+import PetCard from '../components/PetCard';
 import SadLab from '../images/sadlab.jpg';
 
-function FavoritesPage({ favoritePets, removeFromFavorites }) {
+function Favorites({ favoritePets, removeFromFavorites }) {
   return (
     <div className="pet-card-container">
       <div className="title-container">
@@ -36,4 +36,4 @@ function FavoritesPage({ favoritePets, removeFromFavorites }) {
   );
 }
 
-export default FavoritesPage;
+export default Favorites;

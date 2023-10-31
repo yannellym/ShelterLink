@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/MainPage.css';
-import PetCard from './PetCard';
+import PetCard from '../components/PetCard';
 import Filter from './Filter';
 
-function MainPage({ favoritePets, addToFavorites, removeFromFavorites }) {
+function FindApet({ favoritePets, addToFavorites, removeFromFavorites }) {
   // State variables
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -271,4 +271,4 @@ const generatePaginationButtons = () => {
   );
 }
 
-export default MainPage;
+export default FindApet;

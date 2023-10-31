@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import PetCard from './PetCard';
+import PetCard from '../components/PetCard';
 import '../styles/LocationSpecificPets.css';
 
 import usePetfinderAPI from '../hooks/usePetFinderAPI';

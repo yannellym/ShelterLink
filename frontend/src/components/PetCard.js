@@ -1,6 +1,7 @@
+//card to display a preview of the pet's information
 import React, { useState } from 'react';
 import '../styles/PetCard.css';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import coming_soon from "../images/coming_soon.png";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart} from '@fortawesome/free-solid-svg-icons';

@@ -1,3 +1,4 @@
+// card to display a detailed view of the pet's information
 import React, { useState } from 'react';
 import {useNavigate} from 'react-router-dom';
 import '../styles/PetDetails.css';

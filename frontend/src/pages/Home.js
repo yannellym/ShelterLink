@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import SearchBar from './SearchBar';
-import SectionLink from './SectionLink';
+import SearchBar from '../components/SearchBar';
+import CategoryCard from '../components/CategoryCard';
 import ResourcesSection from './ResourcesSection';
-import UserPreferencesForm from './UserPreferencesForm';
-import PetCard from './PetCard';
+import UserPreferencesForm from '../components/UserPreferencesForm';
+import PetCard from '../components/PetCard';
 import '../styles/Home.css';
 import dog2 from '../images/dog.jpg';
 import kitten from '../images/kitten.jpg';
@@ -112,9 +112,9 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferenc
         <div className="section-links-div">
           <h3> Find your fur-ever friend:</h3>
           <div className="section-links-inner-div">
-            <SectionLink title="All Dogs" imageSrc={dog2} link="/all-pets/dog" />
-            <SectionLink title="All Cats" imageSrc={kitten} link="/all-pets/cat" />
-            <SectionLink title="Other Animals" imageSrc={hamster} link="/all-pets/other" />
+            <CategoryCard title="All Dogs" imageSrc={dog2} link="/all-pets/dog" />
+            <CategoryCard title="All Cats" imageSrc={kitten} link="/all-pets/cat" />
+            <CategoryCard title="Other Animals" imageSrc={hamster} link="/all-pets/other" />
             <a href="https://www.chewy.com/g/animal-shelters-and-rescues" className="shelters-cards">
               <img width="64" height="64" src={paw} alt="right" />
               <p><strong>View all shelters & rescues near you.</strong></p>

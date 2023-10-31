@@ -1,3 +1,4 @@
+// search bar in the homepage
 import React, { useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/SearchBar.css';

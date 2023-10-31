@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Header from './components/Header';
-import Footer from './components/Footer';
-import MainPage from './components/MainPage'; 
-import Home from './components/Home'; 
-import About from './components/About';
-import Resources from './components/Resources'; 
-import FavoritesPage from './components/FavoritesPage';
-import SignIn from './components/SignIn';
-import SignUp from './components/SignUp';
+import { Route, Routes } from 'react-router-dom';
+import Header from './pages/Header';
+import Footer from './pages/Footer';
+import FindApet from './pages/FindApet'; 
+import Home from './pages/Home'; 
+import About from './pages/About';
+import Resources from './pages/Resources'; 
+import Favorites from './pages/Favorites';
+import SignIn from './pages/SignIn';
+import SignUp from './pages/SignUp';
 import PetDetails from './components/PetDetails'; 
-import AllPetsPage from './components/AllPetsPage.js';
-import LocationSpecificPets from './components/LocationSpecificPets'; 
-import PetAdoption from './components/PetAdoption';
-import Faqs from './components/Faqs';
-import PetFoster from './components/PetFoster';
+import AllPets from './pages/AllPets.js';
+import LocationSpecificPets from './pages/LocationSpecificPets'; 
+import PetAdoption from './pages/PetAdoption';
+import Faqs from './pages/Faqs';
+import PetFoster from './pages/PetFoster';
 
 
 const App = () => {
@@ -46,7 +46,7 @@ const App = () => {
             />} 
           />
           <Route path="/find-a-pet" element={
-            <MainPage 
+            <FindApet 
               favoritePets={favoritePets} 
               setFavoritePets={setFavoritePets} 
               addToFavorites={addToFavorites} 
@@ -56,7 +56,7 @@ const App = () => {
           <Route path="/about" element={<About />} />
           <Route path="/resources" element={<Resources />} />
           <Route path="/favorites" element={
-            <FavoritesPage 
+            <Favorites
               favoritePets={favoritePets} 
               removeFromFavorites={removeFromFavorites} 
             />} 
@@ -71,7 +71,7 @@ const App = () => {
               removeFromFavorites={removeFromFavorites}
             />} 
           />
-          <Route path="/all-pets/:category" element={<AllPetsPage />} />
+          <Route path="/all-pets/:category" element={<AllPets />} />
           <Route path="/location-specific-pets" element={
             <LocationSpecificPets 
               favoritePets={favoritePets} 

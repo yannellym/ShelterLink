@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import '../styles/AllPetsPage.css';
-import PetCard from './PetCard';
+import PetCard from '../components/PetCard';
 
 function shuffleArray(array) {
   for (let i = array.length - 1; i > 0; i--) {
@@ -10,7 +10,7 @@ function shuffleArray(array) {
   }
 }
 
-function AllPetsPage() {
+function AllPets() {
   const { category } = useParams();
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1); // Declare currentPage as a state variable
@@ -140,4 +140,4 @@ function AllPetsPage() {
   );
 }
 
-export default AllPetsPage;
+export default AllPets;
