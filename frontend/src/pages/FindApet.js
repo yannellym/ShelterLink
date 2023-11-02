@@ -11,7 +11,7 @@ function FindApet({ favoritePets, addToFavorites, removeFromFavorites }) {
   const itemsPerPage = 24;
   const [cachedData, setCachedData] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
-  const maxPaginationButtons = 10;
+  const maxPaginationButtons = 9; // Change the maximum number of pagination buttons
 
   const [showOnlyPetsWithImages, setShowOnlyPetsWithImages] = useState(false);
   const [minPetsPerPage] = useState(20); // Minimum number of pets per page
@@ -40,8 +40,6 @@ function FindApet({ favoritePets, addToFavorites, removeFromFavorites }) {
 
       const response = await fetch(endpoint);
       const data = await response.json();
-
-      console.log('API Response:', data);
 
       if (data && data.animals) {
         // Set the cached data to the new data
@@ -85,10 +83,10 @@ function FindApet({ favoritePets, addToFavorites, removeFromFavorites }) {
     setLoading(true);
     // Update selected filters
     setSelectedFilters(newFilters);
-
+  
     // Set the current page to 1 when filters change
     setCurrentPage(1);
-
+  
     // Fetch new data based on the updated filters
     try {
       // Construct the API endpoint based on selected filter values
@@ -98,19 +96,28 @@ function FindApet({ favoritePets, addToFavorites, removeFromFavorites }) {
           endpoint += `&${filterKey}=${newFilters[filterKey]}`;
         }
       }
-
+  
       const response = await fetch(endpoint);
       const data = await response.json();
-
+  
       console.log('API Response:', data);
-
+  
       if (data && data.animals) {
         // Add the fetched data to the cache
         setCachedData(data.animals);
-
+  
         // Apply filters to the new data, including the "showOnlyPetsWithImages" filter
-        setSearchResults(applyFilters(data.animals, newFilters));
-
+        const filteredResults = applyFilters(data.animals, newFilters);
+  
+        if (filteredResults.length > 0) {
+          // If there are matching pets, set the search results and total pages
+          setSearchResults(filteredResults);
+          setTotalPages(data.pagination.total_pages);
+        } else {
+          // If there are no matching pets, set the total pages to 0
+          setTotalPages(0);
+        }
+  
         setLoading(false);
       }
     } catch (error) {
@@ -118,6 +125,7 @@ function FindApet({ favoritePets, addToFavorites, removeFromFavorites }) {
       setLoading(false);
     }
   };
+  
 
   // Function to filter pet data based on selected filters
   const applyFilters = (data, filters) => {
@@ -176,7 +184,7 @@ function FindApet({ favoritePets, addToFavorites, removeFromFavorites }) {
     });
   };
 
-  // Function to render the list of pet cards based on applied filters
+    // Update the renderPetCards function to check if there are no matching pets
   const renderPetCards = () => {
     if (loading) {
       return <p>Looking through all of our amazing pets...</p>;
@@ -184,8 +192,8 @@ function FindApet({ favoritePets, addToFavorites, removeFromFavorites }) {
       // Apply filters to the cached data
       const filteredResults = applyFilters(cachedData, selectedFilters);
 
-      // Check if there are matching pets after applying filters
       if (filteredResults.length > 0) {
+        // If there are matching pets, display the pet cards
         return filteredResults.map((pet) => (
           <PetCard
             key={pet.id}
@@ -196,34 +204,41 @@ function FindApet({ favoritePets, addToFavorites, removeFromFavorites }) {
           />
         ));
       } else {
-        // If no matching pets, display a message
+        // If there are no matching pets, display a message and set total pages to 0
+        setTotalPages(0);
         return <p>No pets match your criteria.</p>;
       }
     }
   };
 
-  // Function to generate pagination buttons for navigating between pages
+  // Update the generatePaginationButtons function to display buttons only when there are more than 1 page
   const generatePaginationButtons = () => {
-    const buttons = [];
-    // Calculate the starting and ending page numbers to display
-    const startPage = Math.max(1, currentPage - Math.floor(maxPaginationButtons / 2));
-    const endPage = Math.min(totalPages, startPage + maxPaginationButtons - 1);
+    if (totalPages > 1) {
+      const buttons = [];
+      // Calculate the starting and ending page numbers to display
+      const startPage = Math.max(1, currentPage - Math.floor(maxPaginationButtons / 2));
+      const endPage = Math.min(totalPages, startPage + maxPaginationButtons - 1);
 
-    // Iterate through the pages and create buttons for each page
-    for (let page = startPage; page <= endPage; page++) {
-      buttons.push(
-        <button
-          key={page}
-          onClick={() => handlePageChange(page)} // Set an onClick handler to change the page
-          className={currentPage === page ? 'active' : ''} // Apply the 'active' class to the current page
-        >
-          {page} {/* Display the page number as button text */}
-        </button>
-      );
+      // Iterate through the pages and create buttons for each page
+      for (let page = startPage; page <= endPage; page++) {
+        buttons.push(
+          <button
+            key={page}
+            onClick={() => handlePageChange(page)} // Set an onClick handler to change the page
+            className={currentPage === page ? 'active' : ''} // Apply the 'active' class to the current page
+          >
+            {page} {/* Display the page number as button text */}
+          </button>
+        );
+      }
+
+      return buttons; // Return the generated pagination buttons
+    } else {
+      // If there's only one page or no pages, return null to hide the buttons
+      return null;
     }
-
-    return buttons; // Return the generated pagination buttons
   };
+
 
   // Function to apply filters to the results based on selected filters and showOnlyPetsWithImages flag
   const applyFiltersToResults = (filters, showOnlyPetsWithImages) => {
@@ -238,12 +253,20 @@ function FindApet({ favoritePets, addToFavorites, removeFromFavorites }) {
     return filteredResults;
   };
 
-  // Update the handleShowOnlyPetsWithImages function to call applyFiltersToResults
   const handleShowOnlyPetsWithImages = () => {
     setShowOnlyPetsWithImages(!showOnlyPetsWithImages);
-
-    // Reapply filters when the checkbox is toggled
-    setSearchResults(applyFiltersToResults(selectedFilters, !showOnlyPetsWithImages));
+  
+    // Apply filters to the cached data
+    const filteredResults = applyFilters(cachedData, selectedFilters);
+  
+    // Apply the "showOnlyPetsWithImages" filter
+    let filteredPets = filteredResults;
+  
+    if (showOnlyPetsWithImages) {
+      filteredPets = filteredResults.filter((pet) => pet.photos && pet.photos.length > 0);
+    }
+  
+    setSearchResults(filteredPets);
   };
 
   return (

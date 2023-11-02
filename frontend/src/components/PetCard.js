@@ -36,7 +36,7 @@ const PetCard = ({ pet, addToFavorites, removeFromFavorites, isFavorite }) => {
   };
   
   return (
-    <Link to={`/pet-details/${pet.id}?petData=${encodeURIComponent(JSON.stringify(pet))}`}  className="pet-card-link">
+    <Link to={`/pet-details/${pet.id}?petData=${encodeURIComponent(JSON.stringify(pet))}`} target="_blank" className="pet-card-link">
       <div className="pet-card" >
         {pet.photos && pet.photos.length > 0 ? (
           <img src={pet.photos[0]?.medium} alt={pet.name} className="pet-card-image" />
