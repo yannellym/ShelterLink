@@ -9,7 +9,6 @@ function FindApet({ favoritePets, addToFavorites, removeFromFavorites }) {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 24;
-  const [cachedData, setCachedData] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
   const maxPaginationButtons = 9; // Change the maximum number of pagination buttons
 
@@ -42,8 +41,6 @@ function FindApet({ favoritePets, addToFavorites, removeFromFavorites }) {
       const data = await response.json();
 
       if (data && data.animals) {
-        // Set the cached data to the new data
-        setCachedData(data.animals);
         setSearchResults(applyFilters(data.animals, filters)); // Apply filters to the new data
         // remove the loading indicator
         setLoading(false);
@@ -76,8 +73,6 @@ function FindApet({ favoritePets, addToFavorites, removeFromFavorites }) {
   };
 
   const handleFilterChange = async (newFilters) => {
-    // Clear the cached data and search results
-    setCachedData([]);
     setSearchResults([]);
     // Set loading to true before fetching new data (this will allow our "looking through" message to display)
     setLoading(true);
@@ -103,8 +98,6 @@ function FindApet({ favoritePets, addToFavorites, removeFromFavorites }) {
       console.log('API Response:', data);
   
       if (data && data.animals) {
-        // Add the fetched data to the cache
-        setCachedData(data.animals);
   
         // Apply filters to the new data, including the "showOnlyPetsWithImages" filter
         const filteredResults = applyFilters(data.animals, newFilters);
@@ -184,17 +177,13 @@ function FindApet({ favoritePets, addToFavorites, removeFromFavorites }) {
     });
   };
 
-    // Update the renderPetCards function to check if there are no matching pets
   const renderPetCards = () => {
     if (loading) {
       return <p>Looking through all of our amazing pets...</p>;
     } else {
-      // Apply filters to the cached data
-      const filteredResults = applyFilters(cachedData, selectedFilters);
-
-      if (filteredResults.length > 0) {
+      if (searchResults.length > 0) {
         // If there are matching pets, display the pet cards
-        return filteredResults.map((pet) => (
+        return searchResults.map((pet) => (
           <PetCard
             key={pet.id}
             pet={pet}
@@ -211,7 +200,7 @@ function FindApet({ favoritePets, addToFavorites, removeFromFavorites }) {
     }
   };
 
-  // Update the generatePaginationButtons function to display buttons only when there are more than 1 page
+
   const generatePaginationButtons = () => {
     if (totalPages > 1) {
       const buttons = [];
@@ -239,35 +228,30 @@ function FindApet({ favoritePets, addToFavorites, removeFromFavorites }) {
     }
   };
 
-
-  // Function to apply filters to the results based on selected filters and showOnlyPetsWithImages flag
-  const applyFiltersToResults = (filters, showOnlyPetsWithImages) => {
-    // Apply filters to the cached data
-    const filteredResults = applyFilters(cachedData, filters);
-
-    // Apply the "showOnlyPetsWithImages" filter
-    if (showOnlyPetsWithImages) {
-      return filteredResults.filter((pet) => pet.photos && pet.photos.length > 0);
-    }
-
-    return filteredResults;
-  };
-
-  const handleShowOnlyPetsWithImages = () => {
-    setShowOnlyPetsWithImages(!showOnlyPetsWithImages);
+  const handleShowOnlyPetsWithImages = async () => {
+    // Toggle the value of showOnlyPetsWithImages
+    const updatedShowOnlyPetsWithImages = !showOnlyPetsWithImages;
   
     // Apply filters to the cached data
-    const filteredResults = applyFilters(cachedData, selectedFilters);
+    const filteredResults = applyFilters(searchResults, selectedFilters);
   
-    // Apply the "showOnlyPetsWithImages" filter
+    // Apply the "Show only pets with images" filter
     let filteredPets = filteredResults;
   
-    if (showOnlyPetsWithImages) {
+    if (updatedShowOnlyPetsWithImages) {
       filteredPets = filteredResults.filter((pet) => pet.photos && pet.photos.length > 0);
     }
   
+    // Update both showOnlyPetsWithImages and searchResults together
+    setShowOnlyPetsWithImages(updatedShowOnlyPetsWithImages);
     setSearchResults(filteredPets);
+  
+    // Reset the current page to 1 when applying the "Show only pets with images" filter
+    setCurrentPage(1);
   };
+  
+  
+  
 
   return (
     <div className="main-page">
