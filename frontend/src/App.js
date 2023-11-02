@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import Header from './pages/Header';
 import Footer from './pages/Footer';
 import FindApet from './pages/FindApet'; 
@@ -20,6 +20,12 @@ import PetFoster from './pages/PetFoster';
 const App = () => {
   const [isSignInVisible, setIsSignInVisible] = useState(true);
   const [favoritePets, setFavoritePets] = useState([]);
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
+
 
   // Functions for Managing Favorites
   const addToFavorites = (pet) => {
