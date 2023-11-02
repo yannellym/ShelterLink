@@ -8,10 +8,10 @@ function FindApet({ favoritePets, addToFavorites, removeFromFavorites }) {
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 100;
+  const itemsPerPage = 24;
   const [cachedData, setCachedData] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
-  const maxPaginationButtons = 10; 
+  const maxPaginationButtons = 10;
 
   const [showOnlyPetsWithImages, setShowOnlyPetsWithImages] = useState(false);
   const [minPetsPerPage] = useState(20); // Minimum number of pets per page
@@ -29,27 +29,27 @@ function FindApet({ favoritePets, addToFavorites, removeFromFavorites }) {
   // Function to fetch pets for a specific page
   const fetchPetsForPage = async (page, filters) => {
     try {
-      let endpoint = `http://localhost:3002/api/petfinder?page=${page}&perPage=${itemsPerPage}`;
-  
+      let endpoint = `http://localhost:3002/api/petfinder?page=${page}&limit=${showOnlyPetsWithImages ? 60 : itemsPerPage}`;
+
       // Add filter parameters to the API request
       for (const filterKey in filters) {
         if (filters[filterKey] !== 'any') {
           endpoint += `&${filterKey}=${filters[filterKey]}`;
         }
       }
-  
+
       const response = await fetch(endpoint);
       const data = await response.json();
-  
+
       console.log('API Response:', data);
-  
+
       if (data && data.animals) {
         // Set the cached data to the new data
         setCachedData(data.animals);
         setSearchResults(applyFilters(data.animals, filters)); // Apply filters to the new data
         // remove the loading indicator
         setLoading(false);
-        // set the new data 
+        // set the new data
         setCurrentPage(page);
         setTotalPages(data.pagination.total_pages);
       }
@@ -61,7 +61,7 @@ function FindApet({ favoritePets, addToFavorites, removeFromFavorites }) {
 
   useEffect(() => {
     // Fetch pets for the initial page when the component mounts
-    fetchPetsForPage([currentPage]);
+    fetchPetsForPage(currentPage, selectedFilters);
   }, []);
 
   const handlePageChange = (page) => {
@@ -70,7 +70,7 @@ function FindApet({ favoritePets, addToFavorites, removeFromFavorites }) {
 
     // Delay fetching data and scrolling to the top
     setTimeout(() => {
-      fetchPetsForPage(page);
+      fetchPetsForPage(page, selectedFilters);
 
       // After the data is loaded, scroll to the top
       window.scrollTo(0, 0); // Scroll to the top of the page
@@ -85,14 +85,14 @@ function FindApet({ favoritePets, addToFavorites, removeFromFavorites }) {
     setLoading(true);
     // Update selected filters
     setSelectedFilters(newFilters);
-    
+
     // Set the current page to 1 when filters change
     setCurrentPage(1);
-  
+
     // Fetch new data based on the updated filters
     try {
       // Construct the API endpoint based on selected filter values
-      let endpoint = `http://localhost:3002/api/petfinder?page=1&perPage=${itemsPerPage}`;
+      let endpoint = `http://localhost:3002/api/petfinder?page=1&limit=${50}`;
       for (const filterKey in newFilters) {
         if (newFilters[filterKey] !== 'any') {
           endpoint += `&${filterKey}=${newFilters[filterKey]}`;
@@ -118,120 +118,124 @@ function FindApet({ favoritePets, addToFavorites, removeFromFavorites }) {
       setLoading(false);
     }
   };
-  
-// Function to filter pet data based on selected filters
-const applyFilters = (data, filters) => {
-  return data.filter((pet) => {
-    let matchesAllFilters = true;
 
-    // Loop through each filter to check if the pet matches the criteria
-    for (const filterKey in filters) {
-      // Get the filter value and pet value, converting both to lowercase for case-insensitive comparison
-      const filterValue = filters[filterKey]?.toLowerCase();
-      const petValue = pet[filterKey]?.toLowerCase();
+  // Function to filter pet data based on selected filters
+  const applyFilters = (data, filters) => {
+    return data.filter((pet) => {
+      let matchesAllFilters = true;
 
-      // If the filter value is "any," skip this filter
-      if (filterValue === 'any') {
-        continue;
+      // Loop through each filter to check if the pet matches the criteria
+      for (const filterKey in filters) {
+        // Get the filter value and pet value, converting both to lowercase for case-insensitive comparison
+        const filterValue = filters[filterKey]?.toLowerCase();
+        const petValue = pet[filterKey]?.toLowerCase();
+
+        // If the filter value is "any," skip this filter
+        if (filterValue === 'any') {
+          continue;
+        }
+
+        // Special handling for the "type" filter to handle both "Cat" and "Dog"
+        if (filterKey === 'type') {
+          if (filterValue === 'cat' && petValue !== 'cat') {
+            matchesAllFilters = false;
+            break; // Exit the loop early if there's no match
+          }
+          if (filterValue === 'dog' && petValue !== 'dog') {
+            matchesAllFilters = false;
+            break; // Exit the loop early if there's no match
+          }
+        } else if (filterKey === 'breed') {
+          if (
+            filterValue !== 'any' &&
+            petValue &&
+            !(
+              petValue.primary.toLowerCase().includes(filterValue) ||
+              (petValue.secondary && petValue.secondary.toLowerCase().includes(filterValue))
+            )
+          ) {
+            matchesAllFilters = false;
+            break;
+          }
+        } else {
+          // For other filters, compare values directly
+          if (petValue !== filterValue) {
+            matchesAllFilters = false;
+            break; // Exit the loop early if there's no match
+          }
+        }
       }
 
-      // Special handling for the "type" filter to handle both "Cat" and "Dog"
-      if (filterKey === 'type') {
-        if (filterValue === 'cat' && petValue !== 'cat') {
-          matchesAllFilters = false;
-          break; // Exit the loop early if there's no match
-        }
-        if (filterValue === 'dog' && petValue !== 'dog') {
-          matchesAllFilters = false;
-          break; // Exit the loop early if there's no match
-        }
-      } else if (filterKey === 'breed') {
-        if (
-          filterValue !== 'any' &&
-          petValue &&
-          !(
-            petValue.primary.toLowerCase().includes(filterValue) ||
-            (petValue.secondary && petValue.secondary.toLowerCase().includes(filterValue))
-          )
-        ) {
-          matchesAllFilters = false;
-          break;
-        }
-      } else {
-        // For other filters, compare values directly
-        if (petValue !== filterValue) {
-          matchesAllFilters = false;
-          break; // Exit the loop early if there's no match
-        }
+      // Filter pets with images
+      if (showOnlyPetsWithImages && (!pet.photos || pet.photos.length === 0)) {
+        matchesAllFilters = false;
       }
-    }
 
-    // Filter pets with images
-    if (showOnlyPetsWithImages && (!pet.photos || pet.photos.length === 0)) {
-      matchesAllFilters = false;
-    }
+      // If the pet matches all filters, include it in the results
+      return matchesAllFilters;
+    });
+  };
 
-    // If the pet matches all filters, include it in the results
-    return matchesAllFilters;
-  });
-};
-
-// Function to render the list of pet cards based on applied filters
-const renderPetCards = () => {
-  if (loading) {
-    return <p>Looking through all of our amazing pets...</p>;
-  } else {
-    // Apply filters to the cached data
-    const filteredResults = applyFilters(cachedData, selectedFilters);
-
-    // Check if there are matching pets after applying filters
-    if (filteredResults.length > 0) {
-      return filteredResults.map((pet) => (
-        <PetCard
-          key={pet.id}
-          pet={pet}
-          addToFavorites={addToFavorites}
-          removeFromFavorites={removeFromFavorites}
-          isFavorite={favoritePets.some((favoritePet) => favoritePet.id === pet.id)}
-        />
-      ));
+  // Function to render the list of pet cards based on applied filters
+  const renderPetCards = () => {
+    if (loading) {
+      return <p>Looking through all of our amazing pets...</p>;
     } else {
-      // If no matching pets, display a message
-      return <p>No pets match your criteria.</p>;
+      // Apply filters to the cached data
+      const filteredResults = applyFilters(cachedData, selectedFilters);
+
+      // Check if there are matching pets after applying filters
+      if (filteredResults.length > 0) {
+        return filteredResults.map((pet) => (
+          <PetCard
+            key={pet.id}
+            pet={pet}
+            addToFavorites={addToFavorites}
+            removeFromFavorites={removeFromFavorites}
+            isFavorite={favoritePets.some((favoritePet) => favoritePet.id === pet.id)}
+          />
+        ));
+      } else {
+        // If no matching pets, display a message
+        return <p>No pets match your criteria.</p>;
+      }
     }
-  }
-};
+  };
 
-// Function to generate pagination buttons for navigating between pages
-const generatePaginationButtons = () => {
-  const buttons = [];
-  // Calculate the starting and ending page numbers to display
-  const startPage = Math.max(1, currentPage - Math.floor(maxPaginationButtons / 2));
-  const endPage = Math.min(totalPages, startPage + maxPaginationButtons - 1);
+  // Function to generate pagination buttons for navigating between pages
+  const generatePaginationButtons = () => {
+    const buttons = [];
+    // Calculate the starting and ending page numbers to display
+    const startPage = Math.max(1, currentPage - Math.floor(maxPaginationButtons / 2));
+    const endPage = Math.min(totalPages, startPage + maxPaginationButtons - 1);
 
-  // Iterate through the pages and create buttons for each page
-  for (let page = startPage; page <= endPage; page++) {
-    buttons.push(
-      <button
-        key={page}
-        onClick={() => handlePageChange(page)} // Set an onClick handler to change the page
-        className={currentPage === page ? 'active' : ''} // Apply the 'active' class to the current page
-      >
-        {page} {/* Display the page number as button text */}
-      </button>
-    );
-  }
+    // Iterate through the pages and create buttons for each page
+    for (let page = startPage; page <= endPage; page++) {
+      buttons.push(
+        <button
+          key={page}
+          onClick={() => handlePageChange(page)} // Set an onClick handler to change the page
+          className={currentPage === page ? 'active' : ''} // Apply the 'active' class to the current page
+        >
+          {page} {/* Display the page number as button text */}
+        </button>
+      );
+    }
 
-  return buttons; // Return the generated pagination buttons
-};
+    return buttons; // Return the generated pagination buttons
+  };
 
   // Function to apply filters to the results based on selected filters and showOnlyPetsWithImages flag
   const applyFiltersToResults = (filters, showOnlyPetsWithImages) => {
     // Apply filters to the cached data
-    const filteredResults = applyFilters(cachedData, filters, showOnlyPetsWithImages);
+    const filteredResults = applyFilters(cachedData, filters);
 
-    // Set the filtered results as the search results
-    setSearchResults(filteredResults);
+    // Apply the "showOnlyPetsWithImages" filter
+    if (showOnlyPetsWithImages) {
+      return filteredResults.filter((pet) => pet.photos && pet.photos.length > 0);
+    }
+
+    return filteredResults;
   };
 
   // Update the handleShowOnlyPetsWithImages function to call applyFiltersToResults
@@ -239,7 +243,7 @@ const generatePaginationButtons = () => {
     setShowOnlyPetsWithImages(!showOnlyPetsWithImages);
 
     // Reapply filters when the checkbox is toggled
-    applyFiltersToResults(selectedFilters, !showOnlyPetsWithImages);
+    setSearchResults(applyFiltersToResults(selectedFilters, !showOnlyPetsWithImages));
   };
 
   return (

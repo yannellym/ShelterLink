@@ -25,7 +25,7 @@ function LocationSpecificPets({
   const dependencies = [petType, currentPage, searchText, showOnlyPetsWithImages]; // Update dependencies
 
   const { data, loading: apiLoading, error } = usePetfinderAPI(
-    `http://localhost:3002/api/petfinder?type=${petType}&location=${searchText}&limit=20&page=${currentPage}`,
+    `http://localhost:3002/api/petfinder?type=${petType}&location=${searchText}&limit=24&page=${currentPage}`,
     dependencies
   );
 
@@ -102,7 +102,7 @@ function LocationSpecificPets({
             checked={showOnlyPetsWithImages}
             onChange={handleShowOnlyPetsWithImages}
           />
-          Show only pets with images
+          Show only {petType}s with profile images
         </label>
       </div>
       <div className="pet-card-container">
@@ -121,21 +121,9 @@ function LocationSpecificPets({
         )}
       </div>
       <div className="pagination">
-        <button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-        >
-          Previous Page
-        </button>
         <div className="page-numbers">
           {renderPageNumbers()}
         </div>
-        <button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={petsToDisplay.length < 20}
-        >
-          Next Page
-        </button>
       </div>
     </div>
   );
