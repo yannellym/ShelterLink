@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-shelterlink-dev-153937-authRole",
+      "UnauthRoleArn": "arn:aws:iam::601135941262:role/amplify-shelterlink-dev-153937-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::601135941262:role/amplify-shelterlink-dev-153937-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-shelterlink-dev-153937-deployment",
+      "UnauthRoleName": "amplify-shelterlink-dev-153937-unauthRole",
+      "StackName": "amplify-shelterlink-dev-153937",
+      "StackId": "arn:aws:cloudformation:us-east-1:601135941262:stack/amplify-shelterlink-dev-153937/ba1d50b0-7a80-11ee-adfa-0aad0bbabc27",
+      "AmplifyAppId": "dl4evxiffuqtj"
+    },
+    "categories": {
+      "auth": {
+        "shelterlink38fca8ea": {}
+      }
+    }
+  }
+}

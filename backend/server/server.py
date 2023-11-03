@@ -28,6 +28,7 @@ def fetch_petfinder_data():
         'client_id': pet_finder_api_key,
         'client_secret': pet_finder_api_secret
     }
+ 
 
     try:
         token_response = requests.post(token_url, data=token_data)
