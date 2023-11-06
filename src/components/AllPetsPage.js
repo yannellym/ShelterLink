@@ -67,7 +67,7 @@ function AllPetsPage() {
         <div className="pet-list">
           {cache.map((pet) => (
             <PetCard key={pet.id} pet={pet} />
-          )}
+          ))}
         </div>
       )}
     </div>
@@ -75,3 +75,4 @@ function AllPetsPage() {
 }
 
 export default AllPetsPage;
+

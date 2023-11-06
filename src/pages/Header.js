@@ -4,8 +4,7 @@ import '../styles/Header.css';
 
 import ShelterLinkLogo from '../images/ShelterLinkw.png';
 
-const Header = () => {
-  const [user, setUser] = useState(null); 
+const Header = ({ user, handleSignOut, handleSignIn}) => {
 
   return (
     <header className="header">
@@ -17,7 +16,7 @@ const Header = () => {
       {/* Navigation */}
       <nav className="main-navigation">
         <ul>
-          <li><Link to="/">Home</Link></li>
+          <li><Link to="/home">Home</Link></li>
           <li><Link to="/find-a-pet">Find a pet</Link></li>
           <li><Link to="/about">About</Link></li>
           <li><Link to="/resources">Resources</Link></li>
@@ -27,12 +26,14 @@ const Header = () => {
 
       {/* User profile */}
       <div className="user-profile">
-        {user ? (
-          <span>{user.name}</span>
+        {user? (
+          <Link to="/home">
+            <button onClick={handleSignOut} >Sign Out</button>
+         </Link>
         ) : (
           <div className="nav-item">
-            <Link to="/Auth">
-              <button>Sign In</button>
+            <Link to="/auth">
+              <button onClick={handleSignIn}>Sign In</button>
             </Link>
           </div>
         )}

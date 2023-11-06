@@ -1,15 +1,11 @@
-// Profile.js
-
 import React from 'react';
-import { Auth } from 'aws-amplify';
-
-const Profile = () => {
-  const user = Auth.user;
-
+const Profile = (user) => {
+ 
+  console.log(user)
   return (
     <div>
       <h2>Profile</h2>
-      <p><strong>Email:</strong> {user.attributes.email}</p>
+      <p><strong>Email:</strong></p>
     </div>
   );
 };

@@ -25,9 +25,10 @@ Amplify.configure(awsExports);
 
 
 const App = () => {
-  const [isSignInVisible, setIsSignInVisible] = useState(true);
+  const [isUserSignedIn, setIsUserSignedIn] = useState(true);
   const [favoritePets, setFavoritePets] = useState([]);
   const [showMessage, setShowMessage] = useState(true);
+  const [user, setUser] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -54,16 +55,41 @@ const App = () => {
       setTimeout(() => {
         setShowMessage(false);
         navigate('/auth');
-      }, 3000); // Wait for 3 seconds before redirecting
+      }, 2000); // Wait for 2 seconds before redirecting
     }
   }, [navigate]);
 
 
+    // Function to handle sign-in
+    const handleSignIn = async () => {
+      try {
+        await Auth.signIn();
+        const signedInUser = await Auth.currentAuthenticatedUser();
+        setUser(signedInUser);
+        console.log(user, "logedin");
+        navigate('/profile'); // Navigate to the profile route after successful sign-in
+      } catch (error) {
+        console.log('Error signing in: ', error);
+      }
+    };
+
+    // Function to handle sign-out
+    const handleSignOut = async () => {
+      try {
+        await Auth.signOut();
+        setUser(null); // Clear the user state
+        navigate('/home');
+      } catch (error) {
+        console.log('Error signing out: ', error);
+      }
+    };
+
+
   return (
     <div>
-      <Header />
+      <Header user={Auth.user} handleSignIn={handleSignIn} handleSignOut={handleSignOut}/>
         <Routes>
-          <Route path="/" element={
+          <Route path="/home" element={
            <Home 
              favoritePets={favoritePets} 
              setFavoritePets={setFavoritePets} 
@@ -82,35 +108,29 @@ const App = () => {
           />
           <Route path="/about" element={<About />} />
           <Route path="/resources" element={<Resources />} />
-          {/* if user is signed in, allow them to see the favorites. If not, prompt them to sign in */}
+          {/* if user is signed in, allow them to see the favorites. If not, redirect them to sign in */}
           <Route path="/favorites" element={
             Auth.user ? (
               <Favorites
                 favoritePets={favoritePets}
                 removeFromFavorites={removeFromFavorites}
               />
-            ) : (
-               <div>
-              {showMessage && <h1>Please log in first to view favorites!</h1>}
-              <h1>Redirecting to sign in page ... </h1>
+            ) : 
+            (
+              <div>
+                {showMessage && <h1>Please log in first to view favorites!</h1>}
+                <h1>Redirecting to sign in page ... </h1>
               </div>
             )}
           />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile" element={<Profile user={user} />} /> 
           <Route path="/auth" element={
             <Authenticator>
-            {({ signOut, user }) => (
-              <main>
-                <div className="App">
-                  <header className="App-header">
-                  <button onClick={signOut}>Sign out</button>
-                  <h1>Hello, {user.attributes.email}</h1>
-                  </header>
-                </div>
-              </main>
-            )}
-          </Authenticator>
-          } 
+              {({ signOut, user }) => (
+                navigate('/profile')
+              )}
+            </Authenticator>
+            } 
           />
           <Route path="/pet-details/:petId" element={
             <PetDetails 
