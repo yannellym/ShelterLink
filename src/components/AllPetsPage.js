@@ -75,33 +75,3 @@ function AllPetsPage() {
 }
 
 export default AllPetsPage;
-
-  
-  
-  
-
-  useEffect(() => {
-    async function fetchData() {
-      await fetchAnimalsByType(category, currentPage);
-    }
-
-    fetchData();
-  }, [category, currentPage]);
-
-  return (
-    <div className="all-pets-page">
-      <h2>{`All ${category.charAt(0).toUpperCase() + category.slice(1)}s`}</h2>
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <div className="pet-list">
-          {cache.map((pet) => (
-            <PetCard key={pet.id} pet={pet} />
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
-export default AllPetsPage;

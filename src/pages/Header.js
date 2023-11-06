@@ -5,7 +5,7 @@ import '../styles/Header.css';
 import ShelterLinkLogo from '../images/ShelterLinkw.png';
 
 const Header = () => {
-  const [user, setUser] = useState(null); // Replace with your user state logic
+  const [user, setUser] = useState(null); 
 
   return (
     <header className="header">
@@ -31,7 +31,7 @@ const Header = () => {
           <span>{user.name}</span>
         ) : (
           <div className="nav-item">
-            <Link to="/SignIn">
+            <Link to="/Auth">
               <button>Sign In</button>
             </Link>
           </div>
