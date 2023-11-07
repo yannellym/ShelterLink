@@ -28,7 +28,7 @@ const App = () => {
   const [isUserSignedIn, setIsUserSignedIn] = useState(true);
   const [favoritePets, setFavoritePets] = useState([]);
   const [showMessage, setShowMessage] = useState(true);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState( Auth.user);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -62,16 +62,16 @@ const App = () => {
 
     // Function to handle sign-in
     const handleSignIn = async () => {
+      console.log('handleSignIn function called');
       try {
         await Auth.signIn();
         const signedInUser = await Auth.currentAuthenticatedUser();
         setUser(signedInUser);
-        console.log(user, "logedin");
-        navigate('/profile'); // Navigate to the profile route after successful sign-in
+        navigate('/profile');
       } catch (error) {
         console.log('Error signing in: ', error);
       }
-    };
+    }; 
 
     // Function to handle sign-out
     const handleSignOut = async () => {
@@ -123,7 +123,9 @@ const App = () => {
               </div>
             )}
           />
-          <Route path="/profile" element={<Profile user={user} />} /> 
+          {Auth.user && (
+          <Route path="/profile" element={<Profile user={user} />} />
+          )}
           <Route path="/auth" element={
             <Authenticator>
               {({ signOut, user }) => (

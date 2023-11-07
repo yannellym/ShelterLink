@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/Header.css';
-
+import { Auth } from 'aws-amplify';
 import ShelterLinkLogo from '../images/ShelterLinkw.png';
 
 const Header = ({ user, handleSignOut, handleSignIn}) => {
-
+  
   return (
     <header className="header">
       {/* Logo */}
@@ -21,6 +21,8 @@ const Header = ({ user, handleSignOut, handleSignIn}) => {
           <li><Link to="/about">About</Link></li>
           <li><Link to="/resources">Resources</Link></li>
           <li><Link to="/favorites">Favorites</Link></li>
+          {/* only display the profile page if the user is signed in  */}
+          {user && (<li><Link to="/profile">Profile</Link></li>)}
         </ul>
       </nav>
 

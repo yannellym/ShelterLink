@@ -1,11 +1,15 @@
 import React from 'react';
-const Profile = (user) => {
+import { Auth } from 'aws-amplify';
+
+const Profile = () => {
+
+  const user = Auth.user;
+  console.log('User in Profile component:', user);
  
-  console.log(user)
   return (
     <div>
       <h2>Profile</h2>
-      <p><strong>Email:</strong></p>
+      <p><strong>Email:</strong>{user.attributes.email}</p>
     </div>
   );
 };
