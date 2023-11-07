@@ -15,7 +15,9 @@
         "signupAttributes": [
           "EMAIL"
         ],
-        "socialProviders": [],
+        "socialProviders": [
+          "GOOGLE"
+        ],
         "usernameAttributes": [
           "EMAIL"
         ],
@@ -25,6 +27,56 @@
       },
       "providerPlugin": "awscloudformation",
       "service": "Cognito"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_ShelterLinkCreateAuthChallenge_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "ShelterLinkCreateAuthChallenge"
+        }
+      ]
+    },
+    "AMPLIFY_function_ShelterLinkCreateAuthChallenge_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "ShelterLinkCreateAuthChallenge"
+        }
+      ]
+    },
+    "AMPLIFY_function_ShelterLinkDefineAuthChallenge_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "ShelterLinkDefineAuthChallenge"
+        }
+      ]
+    },
+    "AMPLIFY_function_ShelterLinkDefineAuthChallenge_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "ShelterLinkDefineAuthChallenge"
+        }
+      ]
+    },
+    "AMPLIFY_function_ShelterLinkVerifyAuthChallengeResponse_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "ShelterLinkVerifyAuthChallengeResponse"
+        }
+      ]
+    },
+    "AMPLIFY_function_ShelterLinkVerifyAuthChallengeResponse_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "ShelterLinkVerifyAuthChallengeResponse"
+        }
+      ]
     }
   }
 }

@@ -13,7 +13,22 @@
     },
     "categories": {
       "auth": {
-        "shelterlink38fca8ea": {}
+        "shelterlink38fca8ea": {},
+        "ShelterLink": {}
+      },
+      "function": {
+        "ShelterLinkCreateAuthChallenge": {
+          "deploymentBucketName": "amplify-shelterlink-dev-153937-deployment",
+          "s3Key": "amplify-builds/ShelterLinkCreateAuthChallenge-726873554f7438785851-build.zip"
+        },
+        "ShelterLinkDefineAuthChallenge": {
+          "deploymentBucketName": "amplify-shelterlink-dev-153937-deployment",
+          "s3Key": "amplify-builds/ShelterLinkDefineAuthChallenge-62577576546c77516249-build.zip"
+        },
+        "ShelterLinkVerifyAuthChallengeResponse": {
+          "deploymentBucketName": "amplify-shelterlink-dev-153937-deployment",
+          "s3Key": "amplify-builds/ShelterLinkVerifyAuthChallengeResponse-78304d554f43776b3967-build.zip"
+        }
       }
     }
   }
