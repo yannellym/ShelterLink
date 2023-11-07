@@ -34,7 +34,7 @@ const Header = ({ user, handleSignOut, handleSignIn}) => {
         ) : (
           <div className="nav-item">
             <Link to="/auth">
-              <button onClick={handleSignIn}>Sign In</button>
+              <button>Sign In</button>
             </Link>
           </div>
         )}

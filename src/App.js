@@ -28,7 +28,7 @@ const App = () => {
   const [favoritePets, setFavoritePets] = useState([]);
   const [showMessage, setShowMessage] = useState(true);
   const [previousPageURL, setPreviousPageURL] = useState('');
-  const [user, setUser] = useState( Auth.user);
+  const [user, setUser] = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -51,7 +51,8 @@ const App = () => {
   };
 
   useEffect(() => {
-    if (!Auth.user && window.location.pathname === '/favorites') {
+    if (!user && window.location.pathname === '/favorites') {
+      localStorage.setItem('previousPage', location.pathname);
       setShowMessage(true);
       setTimeout(() => {
         setShowMessage(false);
@@ -59,20 +60,6 @@ const App = () => {
       }, 2000); // Wait for 2 seconds before redirecting
     }
   }, [navigate]);
-
-
-    // Function to handle sign-in
-    const handleSignIn = async () => {
-      console.log('handleSignIn function called');
-      try {
-        await Auth.signIn();
-        const signedInUser = await Auth.currentAuthenticatedUser();
-        setUser(signedInUser);
-        navigate('/profile');
-      } catch (error) {
-        console.log('Error signing in: ', error);
-      }
-    }; 
 
     // Function to handle sign-out
     const handleSignOut = async () => {
@@ -88,7 +75,7 @@ const App = () => {
 
   return (
     <div>
-      <Header user={Auth.user} handleSignIn={handleSignIn} handleSignOut={handleSignOut}/>
+      <Header user={user} handleSignOut={handleSignOut}/>
         <Routes>
           <Route path="/home" element={
            <Home 
@@ -96,6 +83,7 @@ const App = () => {
              setFavoritePets={setFavoritePets} 
              addToFavorites={addToFavorites} 
              removeFromFavorites={removeFromFavorites} 
+             isAuthenticated={user}
            />
           }
         />
@@ -105,16 +93,18 @@ const App = () => {
               setFavoritePets={setFavoritePets} 
               addToFavorites={addToFavorites} 
               removeFromFavorites={removeFromFavorites}
+              isAuthenticated={user}
             />}
           />
           <Route path="/about" element={<About />} />
           <Route path="/resources" element={<Resources />} />
           {/* if user is signed in, allow them to see the favorites. If not, redirect them to sign in */}
           <Route path="/favorites" element={
-            Auth.user ? (
+            user ? (
               <Favorites
                 favoritePets={favoritePets}
                 removeFromFavorites={removeFromFavorites}
+                isAuthenticated={user}
               />
             ) : 
             (
@@ -124,14 +114,37 @@ const App = () => {
               </div>
             )}
           />
-          {Auth.user && (
+          {user && (
           <Route path="/profile" element={<Profile user={user} />} />
           )}
           <Route path="/auth" element={
-            <Authenticator>
-              {({ signOut, user }) => (
-                navigate('/profile')
-              )}
+              <Authenticator>
+              {({ user }) => {
+                setUser(user);
+                console.log('User state after setting:', user);
+                // Get the previously stored URL
+                const previousURL = localStorage.getItem('previousURL');
+                const favoritePetString = localStorage.getItem('favoritePet');
+                const favoritePet = JSON.parse(favoritePetString);
+                
+                if (previousURL) {
+                  if (favoritePet) {
+                    console.log(favoritePet.propertyName, "almost favorite pet")
+                    addToFavorites(favoritePet)
+                    
+                    // Clear the stored favorite pet ID in local storage
+                    localStorage.removeItem('favoritePetId');
+                  } 
+                  // Clear the stored URL
+                  localStorage.removeItem('previousURL');
+
+                  // Navigate to the previous URL
+                  navigate(previousURL);
+                } else {
+                  // If no previous URL is stored, navigate to the profile page
+                  navigate('/profile');
+                }
+              }}
             </Authenticator>
             } 
           />
@@ -151,7 +164,8 @@ const App = () => {
               setFavoritePets={setFavoritePets} 
               addToFavorites={addToFavorites} 
               removeFromFavorites={removeFromFavorites}  
-            />} 
+              isAuthenticated={user}
+            />}  
           />
           <Route path="/pet-adoption" element = {
             <PetAdoption 

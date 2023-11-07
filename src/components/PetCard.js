@@ -10,6 +10,7 @@ const PetCard = ({ pet, addToFavorites, removeFromFavorites, isFavorite, isAuthe
   const [favorited, setFavorited] = useState(isFavorite);
   const navigate = useNavigate();
 
+  console.log(isAuthenticated, "AUTHENTICATEDDD")
   
   const handleToggleFavorite = () => {
     if (isAuthenticated) {
@@ -20,6 +21,10 @@ const PetCard = ({ pet, addToFavorites, removeFromFavorites, isFavorite, isAuthe
         addToFavorites(pet);
       }
     } else {
+      // If the user is not authenticated, save the current URL and then direct them to the authentication page
+      localStorage.setItem('previousURL', window.location.pathname);
+      // Store the pet ID in local storage to remember the favorite pet
+      localStorage.setItem('favoritePet', JSON.stringify(pet));
       // If the user is not authenticated, direct them to the authentication page
       navigate('/auth');
     }

@@ -14,7 +14,7 @@ import usePetFinderAPI from '../hooks/usePetFinderAPI'; // hook
 import useAnimalsBasedOnPreferencesAPI from '../hooks/useAnimalsBasedOnPreferencesAPI'; // hook
 
 
-function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferences }) {
+function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferences, isAuthenticated }) {
   const [loading, setLoading] = useState(true);
   const [selectedAnimals, setSelectedAnimals] = useState([]);
   const [selectedPetIndex, setSelectedPetIndex] = useState(0); // Track the currently displayed pet
@@ -23,7 +23,7 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferenc
     'http://localhost:3002/api/petfinder?perPage=200',
     []
   );
-
+  console.log(isAuthenticated, "isauthenticated in home")
   useEffect(() => {
     if (petData && petData.animals) {
       setLoading(false);
@@ -77,6 +77,7 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferenc
                   addToFavorites={addToFavorites}
                   removeFromFavorites={removeFromFavorites}
                   isFavorite={favoritePets.some((favoritePet) => favoritePet.id === preferredAnimals[selectedPetIndex].id)}
+                  isAuthenticated={isAuthenticated}
                   className="matched-pet-card"
                 />
                 {selectedPetIndex +1 < preferredAnimals.length? 
@@ -139,6 +140,7 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferenc
                     addToFavorites={addToFavorites}
                     removeFromFavorites={removeFromFavorites}
                     isFavorite={favoritePets.some((favoritePet) => favoritePet.id === pet.id)}
+                    isAuthenticated={isAuthenticated}
                   />
                 )
                 }))}

@@ -5,11 +5,7 @@ import '../styles/LocationSpecificPets.css';
 
 import usePetfinderAPI from '../hooks/usePetFinderAPI';
 
-function LocationSpecificPets({
-  favoritePets,
-  addToFavorites,
-  removeFromFavorites
-}) {
+function LocationSpecificPets({ favoritePets, addToFavorites, removeFromFavorites, isAuthenticated}) {
   const location = useLocation();
   const state = location.state;
   const petType = state?.petType || '';
@@ -116,6 +112,7 @@ function LocationSpecificPets({
               addToFavorites={addToFavorites}
               removeFromFavorites={removeFromFavorites}
               isFavorite={favoritePets.some((favoritePet) => favoritePet.id === pet.id)}
+              isAuthenticated={isAuthenticated}
             />
           ))
         )}

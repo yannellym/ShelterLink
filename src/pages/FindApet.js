@@ -3,7 +3,7 @@ import '../styles/MainPage.css';
 import PetCard from '../components/PetCard';
 import Filter from './Filter';
 
-function FindApet({ favoritePets, addToFavorites, removeFromFavorites }) {
+function FindApet({ favoritePets, addToFavorites, removeFromFavorites, isAuthenticated }) {
   // State variables
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -190,6 +190,7 @@ function FindApet({ favoritePets, addToFavorites, removeFromFavorites }) {
             addToFavorites={addToFavorites}
             removeFromFavorites={removeFromFavorites}
             isFavorite={favoritePets.some((favoritePet) => favoritePet.id === pet.id)}
+            isAuthenticated={isAuthenticated}
           />
         ));
       } else {
