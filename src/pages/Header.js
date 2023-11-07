@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/Header.css';
-import { Auth } from 'aws-amplify';
 import ShelterLinkLogo from '../images/ShelterLinkw.png';
 
 const Header = ({ user, handleSignOut, handleSignIn}) => {
