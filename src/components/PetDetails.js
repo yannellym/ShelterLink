@@ -6,41 +6,35 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import coming_soon from "../images/coming_soon.png";
 
-const PetDetails = ({addToFavorites, removeFromFavorites, isFavorite }) => {
+const PetDetails = ({addToFavorites, removeFromFavorites, isFavorite, isAuthenticated }) => {
   const [favorited, setFavorited] = useState(isFavorite);
-
+  const navigate = useNavigate();
+  
   // Extract the 'petData' from the query parameter in the URL
   const searchParams = new URLSearchParams(window.location.search);
   const petData = JSON.parse(decodeURIComponent(searchParams.get('petData')));
-  
-  // const navigate = useNavigate();
-  console.log(petData);
 
   if (!petData) {
     return <p className="error-message">Error: Pet not found</p>;
   }
 
   const handleToggleFavorite = () => {
-    setFavorited(!favorited);
-    if (favorited) {
-      removeFromFavorites(petData.id);
+    if (isAuthenticated) {
+      setFavorited(!favorited);
+      if (favorited) {
+        removeFromFavorites(petData.id);
+      } else {
+        addToFavorites(petData);
+      }
     } else {
-      addToFavorites(petData);
+      // If the user is not authenticated, direct them to the authentication page
+      navigate('/auth');
     }
   };
 
-  // const handleGoBack = () => {
-  //   console.log("clicking")
-  //   navigate(-1); // Go back to the previous page
-  // };
 
   return (
     <div className="pet-details">
-      {/* <div className="back-link-container">
-        <button onClick={handleGoBack} className="back-link">
-          Go Back
-        </button>
-      </div> */}
       <button
         className={`favorite-heart-${favorited ? 'favorited' : 'unfavorited'}`}
         onClick={handleToggleFavorite}

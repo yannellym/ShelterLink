@@ -25,10 +25,11 @@ Amplify.configure(awsExports);
 
 
 const App = () => {
-  const [isUserSignedIn, setIsUserSignedIn] = useState(true);
   const [favoritePets, setFavoritePets] = useState([]);
   const [showMessage, setShowMessage] = useState(true);
+  const [previousPageURL, setPreviousPageURL] = useState('');
   const [user, setUser] = useState( Auth.user);
+
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -77,7 +78,7 @@ const App = () => {
     const handleSignOut = async () => {
       try {
         await Auth.signOut();
-        setUser(null); // Clear the user state
+        setUser(false); // Clear the user state
         navigate('/home');
       } catch (error) {
         console.log('Error signing out: ', error);
@@ -140,6 +141,7 @@ const App = () => {
               setFavoritePets={setFavoritePets} 
               addToFavorites={addToFavorites} 
               removeFromFavorites={removeFromFavorites}
+              isAuthenticated={user} 
             />} 
           />
           <Route path="/all-pets/:category" element={<AllPets />} />

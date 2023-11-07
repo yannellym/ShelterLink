@@ -28,7 +28,8 @@
         "ShelterLinkVerifyAuthChallengeResponse": {
           "deploymentBucketName": "amplify-shelterlink-dev-153937-deployment",
           "s3Key": "amplify-builds/ShelterLinkVerifyAuthChallengeResponse-78304d554f43776b3967-build.zip"
-        }
+        },
+        "shelterlinkbdd530d2": {}
       }
     }
   }

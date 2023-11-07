@@ -29,6 +29,18 @@
       "service": "Cognito"
     }
   },
+  "function": {
+    "shelterlinkba2c77cb": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "shelterlinkbdd530d2": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
   "parameters": {
     "AMPLIFY_function_ShelterLinkCreateAuthChallenge_deploymentBucketName": {
       "usedBy": [
