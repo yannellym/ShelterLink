@@ -58,9 +58,12 @@ function AllPetsPage() {
     fetchData();
   }, [currentPage]);
 
+  const title = category.charAt(0).toUpperCase() + category.slice(1)
   return (
     <div className="all-pets-page">
-      <h2>{`All ${category.charAt(0).toUpperCase() + category.slice(1)}s`}</h2>
+      <h1>WORKING</h1>
+      <h2>{`All ${type} === "Others" ? 'pets' : 'of our amazing ${title}'`}</h2>
+      <h1>WORKING</h1>
       {loading ? (
         <p>Loading...</p>
       ) : (

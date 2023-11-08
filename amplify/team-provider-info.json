@@ -1,36 +1,15 @@
 {
   "dev": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-shelterlink-dev-153937-authRole",
-      "UnauthRoleArn": "arn:aws:iam::601135941262:role/amplify-shelterlink-dev-153937-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::601135941262:role/amplify-shelterlink-dev-153937-authRole",
+      "AuthRoleName": "amplify-shelterlink-dev-163106-authRole",
+      "UnauthRoleArn": "arn:aws:iam::601135941262:role/amplify-shelterlink-dev-163106-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::601135941262:role/amplify-shelterlink-dev-163106-authRole",
       "Region": "us-east-1",
-      "DeploymentBucketName": "amplify-shelterlink-dev-153937-deployment",
-      "UnauthRoleName": "amplify-shelterlink-dev-153937-unauthRole",
-      "StackName": "amplify-shelterlink-dev-153937",
-      "StackId": "arn:aws:cloudformation:us-east-1:601135941262:stack/amplify-shelterlink-dev-153937/ba1d50b0-7a80-11ee-adfa-0aad0bbabc27",
-      "AmplifyAppId": "dl4evxiffuqtj"
-    },
-    "categories": {
-      "auth": {
-        "shelterlink38fca8ea": {},
-        "ShelterLink": {}
-      },
-      "function": {
-        "ShelterLinkCreateAuthChallenge": {
-          "deploymentBucketName": "amplify-shelterlink-dev-153937-deployment",
-          "s3Key": "amplify-builds/ShelterLinkCreateAuthChallenge-726873554f7438785851-build.zip"
-        },
-        "ShelterLinkDefineAuthChallenge": {
-          "deploymentBucketName": "amplify-shelterlink-dev-153937-deployment",
-          "s3Key": "amplify-builds/ShelterLinkDefineAuthChallenge-62577576546c77516249-build.zip"
-        },
-        "ShelterLinkVerifyAuthChallengeResponse": {
-          "deploymentBucketName": "amplify-shelterlink-dev-153937-deployment",
-          "s3Key": "amplify-builds/ShelterLinkVerifyAuthChallengeResponse-78304d554f43776b3967-build.zip"
-        },
-        "shelterlinkbdd530d2": {}
-      }
+      "DeploymentBucketName": "amplify-shelterlink-dev-163106-deployment",
+      "UnauthRoleName": "amplify-shelterlink-dev-163106-unauthRole",
+      "StackName": "amplify-shelterlink-dev-163106",
+      "StackId": "arn:aws:cloudformation:us-east-1:601135941262:stack/amplify-shelterlink-dev-163106/20c255d0-7e7e-11ee-b46d-0efa7cca07e5",
+      "AmplifyAppId": "d2h7lhxxe25ldc"
     }
   }
 }
