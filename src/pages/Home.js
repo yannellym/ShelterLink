@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import SearchBar from '../components/SearchBar';
 import CategoryCard from '../components/CategoryCard';
 import ResourcesSection from './ResourcesSection';
@@ -18,7 +19,7 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferenc
   const [loading, setLoading] = useState(true);
   const [selectedAnimals, setSelectedAnimals] = useState([]);
   const [selectedPetIndex, setSelectedPetIndex] = useState(0); // Track the currently displayed pet
-
+  const navigate = useNavigate();
   const { data: petData } = usePetFinderAPI(
     'http://localhost:3002/api/petfinder?perPage=200',
     []
@@ -59,6 +60,48 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferenc
     // reload the page so we see the form again
     window.location.reload();
   };
+  
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const userLocation = {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        };
+
+        console.log('User Location:', userLocation);
+      },
+      (error) => {
+        console.error('Error getting user location:', error.message);
+        setLoading(false);
+      }
+    );
+  }, []);
+
+  const handleViewAllPetsNearYou = () => {
+    // Get the user's location using the Geolocation API
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const userLocation = {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          };
+  
+          // Navigate to /find-a-pet with user's location in the state
+          navigate('/find-a-pet', { state: { userLocation } });
+        },
+        (error) => {
+          console.error('Error getting user location:', error.message);
+          // Handle error, maybe show a message to the user
+        }
+      );
+    } else {
+      console.error('Geolocation is not supported by your browser');
+      // Handle lack of geolocation support, maybe show a message to the user
+    }
+  };
+  
 
   return (
     <div className="Home">
@@ -145,10 +188,10 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferenc
                   />
                 )
                 }))}
-            <Link to="/find-a-pet" className="greater-need-cards">
+             <button onClick={handleViewAllPetsNearYou} className="greater-need-cards">
               <img width="64" height="64" src="https://img.icons8.com/sf-black/64/right.png" alt="right" />
               <p><strong>View all available pets near you.</strong></p>
-            </Link>
+            </button>
           </div>
         </div>
       </main>

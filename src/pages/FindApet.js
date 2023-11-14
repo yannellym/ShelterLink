@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '../styles/MainPage.css';
 import PetCard from '../components/PetCard';
 import Filter from './Filter';
+import { useLocation } from 'react-router-dom';
 
 function FindApet({ favoritePets, addToFavorites, removeFromFavorites, isAuthenticated }) {
   // State variables
@@ -15,6 +16,18 @@ function FindApet({ favoritePets, addToFavorites, removeFromFavorites, isAuthent
   const [showOnlyPetsWithImages, setShowOnlyPetsWithImages] = useState(false);
   const [minPetsPerPage] = useState(20); // Minimum number of pets per page
 
+  const location = useLocation();
+  console.log(location, "loc")
+  const [userLocation, setUserLocation] = useState(location.state?.userLocation || null);
+
+  useEffect(() => {
+    // Make API call using userLocation
+    if (userLocation) {
+      console.log(userLocation, "lcoaation");
+    }
+  }, [userLocation]);
+
+
   // Filters state
   const [selectedFilters, setSelectedFilters] = useState({
     location: 'any',
@@ -25,11 +38,13 @@ function FindApet({ favoritePets, addToFavorites, removeFromFavorites, isAuthent
     size: 'any',
     coat: 'any',
   });
-
+  console.log(userLocation, "uloca");
   const fetchPetsForPage = async (page, filters) => {
     try {
-      let endpoint = `http://localhost:3002/api/petfinder?page=${page}&limit=${showOnlyPetsWithImages ? 60 : itemsPerPage}`;
+      const { latitude, longitude } = location.state.userLocation;
 
+      let endpoint = `http://localhost:3002/api/petfinder?page=${page}&location=${latitude},${longitude}&limit=${showOnlyPetsWithImages ? 60 : itemsPerPage}`;
+      console.log(endpoint)
       for (const filterKey in filters) {
         if (filters[filterKey] !== 'any') {
           endpoint += `&${filterKey}=${filters[filterKey]}`;
@@ -119,7 +134,6 @@ function FindApet({ favoritePets, addToFavorites, removeFromFavorites, isAuthent
 
   // Function to filter pet data based on selected filters
   const applyFilters = (data, filters) => {
-    console.log(data, filters, "data and filters")
     return data.filter((pet) => {
       let matchesAllFilters = true;
 
@@ -178,7 +192,6 @@ function FindApet({ favoritePets, addToFavorites, removeFromFavorites, isAuthent
       }
 
       // If the pet matches all filters, include it in the results
-      console.log(matchesAllFilters, "matched");
       return matchesAllFilters;
     });
   };
