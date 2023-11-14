@@ -17,6 +17,7 @@ function FindApet({ favoritePets, addToFavorites, removeFromFavorites, isAuthent
 
   // Filters state
   const [selectedFilters, setSelectedFilters] = useState({
+    location: 'any',
     type: 'any',
     breed: 'any',
     age: 'any',
@@ -25,12 +26,10 @@ function FindApet({ favoritePets, addToFavorites, removeFromFavorites, isAuthent
     coat: 'any',
   });
 
-  // Function to fetch pets for a specific page
   const fetchPetsForPage = async (page, filters) => {
     try {
       let endpoint = `http://localhost:3002/api/petfinder?page=${page}&limit=${showOnlyPetsWithImages ? 60 : itemsPerPage}`;
 
-      // Add filter parameters to the API request
       for (const filterKey in filters) {
         if (filters[filterKey] !== 'any') {
           endpoint += `&${filterKey}=${filters[filterKey]}`;
@@ -41,12 +40,11 @@ function FindApet({ favoritePets, addToFavorites, removeFromFavorites, isAuthent
       const data = await response.json();
 
       if (data && data.animals) {
-        setSearchResults(applyFilters(data.animals, filters)); // Apply filters to the new data
-        // remove the loading indicator
+        const filteredResults = applyFilters(data.animals, filters);
         setLoading(false);
-        // set the new data
         setCurrentPage(page);
         setTotalPages(data.pagination.total_pages);
+        setSearchResults(filteredResults);
       }
     } catch (error) {
       console.error('Error fetching data:', error.message);
@@ -55,9 +53,9 @@ function FindApet({ favoritePets, addToFavorites, removeFromFavorites, isAuthent
   };
 
   useEffect(() => {
-    // Fetch pets for the initial page when the component mounts
     fetchPetsForPage(currentPage, selectedFilters);
-  }, []);
+  }, [currentPage, selectedFilters, showOnlyPetsWithImages]);
+
 
   const handlePageChange = (page) => {
     // Set loading to true before changing the page
@@ -91,14 +89,13 @@ function FindApet({ favoritePets, addToFavorites, removeFromFavorites, isAuthent
           endpoint += `&${filterKey}=${newFilters[filterKey]}`;
         }
       }
-  
+
       const response = await fetch(endpoint);
       const data = await response.json();
   
       console.log('API Response:', data);
   
       if (data && data.animals) {
-  
         // Apply filters to the new data, including the "showOnlyPetsWithImages" filter
         const filteredResults = applyFilters(data.animals, newFilters);
   
@@ -122,6 +119,7 @@ function FindApet({ favoritePets, addToFavorites, removeFromFavorites, isAuthent
 
   // Function to filter pet data based on selected filters
   const applyFilters = (data, filters) => {
+    console.log(data, filters, "data and filters")
     return data.filter((pet) => {
       let matchesAllFilters = true;
 
@@ -158,6 +156,13 @@ function FindApet({ favoritePets, addToFavorites, removeFromFavorites, isAuthent
             matchesAllFilters = false;
             break;
           }
+        } else if (filterKey === 'location') {
+            // Special handling for the "location" filter based on the pet's contact address state
+            const petState = pet.contact?.address?.state?.toLowerCase();
+            if (petState !== filterValue) {
+              matchesAllFilters = false;
+              break;
+            }
         } else {
           // For other filters, compare values directly
           if (petValue !== filterValue) {
@@ -173,6 +178,7 @@ function FindApet({ favoritePets, addToFavorites, removeFromFavorites, isAuthent
       }
 
       // If the pet matches all filters, include it in the results
+      console.log(matchesAllFilters, "matched");
       return matchesAllFilters;
     });
   };
@@ -251,9 +257,6 @@ function FindApet({ favoritePets, addToFavorites, removeFromFavorites, isAuthent
     setCurrentPage(1);
   };
   
-  
-  
-
   return (
     <div className="main-page">
       <div className="sidebar">

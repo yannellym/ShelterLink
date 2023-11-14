@@ -1,22 +1,31 @@
-/* Profile.css */
 .profile-container {
-    width: 300px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f4f4f4;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 2px 2px 5px #888888;
-    text-align: center;
-  }
-  
-  .profile-title {
-    font-size: 24px;
-    margin-bottom: 10px;
-  }
-  
-  .profile-info {
-    font-size: 18px;
-    margin: 10px 0;
-  }
-  
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin: 5% auto;
+}
+
+.profile-title {
+  color: #333;
+}
+
+.profile-info {
+  margin-top: 20px;
+}
+
+.avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 20px;
+}
+
+p {
+  margin: 8px 0;
+  color: #555;
+}

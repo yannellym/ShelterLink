@@ -77,3 +77,5 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 # SNS, AMPLIFY, CLOUDFORMATION, COGNITO, 
 # Google Auth
 # CI/CD - github
+# axios
+# unplash api

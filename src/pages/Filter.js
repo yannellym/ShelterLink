@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import popularDogBreeds from '../data/popularDogBreeds';
+import stateNames from '../data/stateNames';
 
 function Filter({ onFilterChange }) {
   const [selectedFilters, setSelectedFilters] = useState({
+    location: 'any',
     type: 'any',
     breed: 'any',
     age: 'any',
@@ -168,22 +170,35 @@ function Filter({ onFilterChange }) {
 
   return (
     <div className="filters">
-      <h2>Filters</h2>
-      <div className="filter-group">
-        <label htmlFor="type">Type:</label>
-        <select
-          id="type"
-          value={selectedFilters.type}
-          onChange={(event) => handleFilterSelect('type', event)}
-        >
-          <option value="any">Any</option>
-          <option value="dog">Dog</option>
-          <option value="cat">Cat</option>
-        </select>
-      </div>
-      {renderFilters()}
+    <h2>Filters</h2>
+    <div className="filter-group">
+    <label htmlFor="location">Location:</label>
+      <select
+        id="location"
+        value={selectedFilters.location}
+        onChange={(event) => handleFilterSelect('location', event)}
+      >
+        {/* Map over the stateNames array to generate <option> elements */}
+        {stateNames.map((state) => (
+          <option key={state.value} value={state.value}>
+            {state.label}
+          </option>
+        ))}
+      </select>
+      <label htmlFor="type">Type:</label>
+      <select
+        id="type"
+        value={selectedFilters.type}
+        onChange={(event) => handleFilterSelect('type', event)}
+      >
+        <option value="any">Any</option>
+        <option value="dog">Dog</option>
+        <option value="cat">Cat</option>
+      </select>
     </div>
-  );
-}
-
+    {renderFilters()}
+  </div>
+);
+};
+  
 export default Filter;

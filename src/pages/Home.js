@@ -23,7 +23,9 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferenc
     'http://localhost:3002/api/petfinder?perPage=200',
     []
   );
+
   console.log(isAuthenticated, "isauthenticated in home")
+
   useEffect(() => {
     if (petData && petData.animals) {
       setLoading(false);
@@ -57,7 +59,6 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferenc
     // reload the page so we see the form again
     window.location.reload();
   };
-
 
   return (
     <div className="Home">
