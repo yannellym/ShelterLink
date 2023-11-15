@@ -11,23 +11,14 @@ function FindApet({ favoritePets, addToFavorites, removeFromFavorites, isAuthent
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 24;
   const [totalPages, setTotalPages] = useState(0);
-  const maxPaginationButtons = 9; // Change the maximum number of pagination buttons
+  const maxPaginationButtons = 9;
 
   const [showOnlyPetsWithImages, setShowOnlyPetsWithImages] = useState(false);
-  const [minPetsPerPage] = useState(20); // Minimum number of pets per page
 
-  const location = useLocation();
-  console.log(location, "loc")
-  const [userLocation, setUserLocation] = useState(location.state?.userLocation || null);
+  const [latitude, setLatitude]  = useState(null);
+  const [longitude, setLongitude]  = useState(null);
 
-  useEffect(() => {
-    // Make API call using userLocation
-    if (userLocation) {
-      console.log(userLocation, "lcoaation");
-    }
-  }, [userLocation]);
-
-
+  
   // Filters state
   const [selectedFilters, setSelectedFilters] = useState({
     location: 'any',
@@ -38,13 +29,37 @@ function FindApet({ favoritePets, addToFavorites, removeFromFavorites, isAuthent
     size: 'any',
     coat: 'any',
   });
-  console.log(userLocation, "uloca");
-  const fetchPetsForPage = async (page, filters) => {
-    try {
-      const { latitude, longitude } = location.state.userLocation;
+  
+  useEffect(() => {
+    // Check if the Geolocation API is supported by the browser
+    if ("geolocation" in navigator) {
+      // Get the user's current position
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setLatitude(latitude);
+          setLongitude(longitude);
+          console.log("User's location:", latitude, longitude);
 
-      let endpoint = `http://localhost:3002/api/petfinder?page=${page}&location=${latitude},${longitude}&limit=${showOnlyPetsWithImages ? 60 : itemsPerPage}`;
-      console.log(endpoint)
+          // Call the API after getting the user's location
+          fetchPetsForPage(currentPage, selectedFilters, latitude, longitude);
+        },
+        (error) => {
+          console.error("Error getting user's location:", error.message);
+          setLoading(false); // Set loading to false in case of an error
+        }
+      );
+    } else {
+      console.error("Geolocation is not supported by this browser.");
+      setLoading(false); // Set loading to false if Geolocation is not supported
+    }
+  }, [currentPage, selectedFilters, showOnlyPetsWithImages]);
+
+  const fetchPetsForPage = async (page, filters, lat, lon) => {
+    try {
+      let endpoint = `http://localhost:3002/api/petfinder?page=${page}&location=${lat},${lon}&limit=${showOnlyPetsWithImages ? 60 : itemsPerPage}`;
+      console.log(endpoint);
+
       for (const filterKey in filters) {
         if (filters[filterKey] !== 'any') {
           endpoint += `&${filterKey}=${filters[filterKey]}`;
@@ -68,8 +83,12 @@ function FindApet({ favoritePets, addToFavorites, removeFromFavorites, isAuthent
   };
 
   useEffect(() => {
-    fetchPetsForPage(currentPage, selectedFilters);
-  }, [currentPage, selectedFilters, showOnlyPetsWithImages]);
+    // Call the API when the user's location changes
+    if (latitude !== null && longitude !== null) {
+      fetchPetsForPage(currentPage, selectedFilters, latitude, longitude);
+    }
+  }, [currentPage, selectedFilters, showOnlyPetsWithImages, latitude, longitude]);
+
 
 
   const handlePageChange = (page) => {
