@@ -97,7 +97,7 @@ function FindApet({ favoritePets, addToFavorites, removeFromFavorites, isAuthent
 
     // Delay fetching data and scrolling to the top
     setTimeout(() => {
-      fetchPetsForPage(page, selectedFilters);
+      fetchPetsForPage(page, selectedFilters, latitude, longitude);
 
       // After the data is loaded, scroll to the top
       window.scrollTo(0, 0); // Scroll to the top of the page
