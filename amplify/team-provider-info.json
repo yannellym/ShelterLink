@@ -16,7 +16,8 @@
         "ShelterLink": {}
       },
       "function": {
-        "shelterlink9bd1f998": {}
+        "shelterlink9bd1f998": {},
+        "apifunc": {}
       }
     }
   }
