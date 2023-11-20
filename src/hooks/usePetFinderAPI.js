@@ -1,23 +1,18 @@
-// usePetfinderAPI.js
 import { useState, useEffect } from 'react';
 
-function usePetfinderAPI(endpoint, dependencies) {
-  const [data, setData] = useState([]);
+const usePetFinderAPI = (url, dependencies) => {
+  const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(endpoint);
-        if (!response.ok) {
-          throw new Error(`Request failed with status: ${response.status}`);
-        }
+        const response = await fetch(url);
         const result = await response.json();
         setData(result);
         setLoading(false);
       } catch (error) {
-        setError(error);
+        console.error('Error fetching data:', error);
         setLoading(false);
       }
     };
@@ -25,7 +20,7 @@ function usePetfinderAPI(endpoint, dependencies) {
     fetchData();
   }, dependencies);
 
-  return { data, loading, error };
-}
+  return { data, loading };
+};
 
-export default usePetfinderAPI;
+export default usePetFinderAPI;

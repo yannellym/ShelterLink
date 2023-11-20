@@ -20,7 +20,7 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferenc
   const [selectedPetIndex, setSelectedPetIndex] = useState(0); // Track the currently displayed pet
   const navigate = useNavigate();
   const { data: petData } = usePetFinderAPI(
-    'http://localhost:3002/api/petfinder?perPage=200',
+    'https://xmqnvkqdyceusnhdybx5x4yhfi0ewmry.lambda-url.us-east-1.on.aws/',
     []
   );
 

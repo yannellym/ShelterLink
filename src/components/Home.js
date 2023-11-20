@@ -18,8 +18,11 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferenc
   const [loading, setLoading] = useState(true);
   const [selectedAnimals, setSelectedAnimals] = useState([]);
 
+  // Lambda endpoint URL
+  const lambdaEndpointUrl = 'https://xmqnvkqdyceusnhdybx5x4yhfi0ewmry.lambda-url.us-east-1.on.aws/';
+
   const { data: petData, loading: petDataLoading } = usePetFinderAPI(
-    'http://localhost:3002/api/petfinder?perPage=200',
+    lambdaEndpointUrl, // Use the Lambda endpoint URL
     []
   );
 

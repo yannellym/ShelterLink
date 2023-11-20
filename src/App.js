@@ -15,7 +15,7 @@ import PetAdoption from './pages/PetAdoption.js';
 import Faqs from './pages/Faqs.js';
 import PetFoster from './pages/PetFoster.js';
 
-import {Amplify, Auth } from 'aws-amplify';
+import { Amplify, Auth } from 'aws-amplify';
 import { Authenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 
