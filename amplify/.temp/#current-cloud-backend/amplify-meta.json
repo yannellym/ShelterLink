@@ -1,0 +1,119 @@
+{
+  "providers": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-shelterlink-dev-153937-authRole",
+      "UnauthRoleArn": "arn:aws:iam::601135941262:role/amplify-shelterlink-dev-153937-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::601135941262:role/amplify-shelterlink-dev-153937-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-shelterlink-dev-153937-deployment",
+      "UnauthRoleName": "amplify-shelterlink-dev-153937-unauthRole",
+      "StackName": "amplify-shelterlink-dev-153937",
+      "StackId": "arn:aws:cloudformation:us-east-1:601135941262:stack/amplify-shelterlink-dev-153937/ba1d50b0-7a80-11ee-adfa-0aad0bbabc27",
+      "AmplifyAppId": "dl4evxiffuqtj"
+    }
+  },
+  "auth": {
+    "ShelterLink": {
+      "customAuth": false,
+      "dependsOn": [],
+      "frontendAuthConfig": {
+        "mfaConfiguration": "OFF",
+        "mfaTypes": [
+          "SMS"
+        ],
+        "passwordProtectionSettings": {
+          "passwordPolicyMinLength": 8,
+          "passwordPolicyCharacters": [
+            "REQUIRES_LOWERCASE",
+            "REQUIRES_NUMBERS",
+            "REQUIRES_SYMBOLS",
+            "REQUIRES_UPPERCASE"
+          ]
+        },
+        "signupAttributes": [
+          "EMAIL",
+          "NAME"
+        ],
+        "socialProviders": [],
+        "usernameAttributes": [
+          "EMAIL"
+        ],
+        "verificationMechanisms": [
+          "EMAIL"
+        ]
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito",
+      "output": {
+        "UserPoolId": "us-east-1_hdBR8CajS",
+        "AppClientIDWeb": "6jn4e7sbjaa2u2g6hm7jvcuppl",
+        "AppClientID": "m4ljgc25vhk51c1dpt98f2h8s",
+        "IdentityPoolId": "us-east-1:889b2efe-7b15-4d14-87a0-2e3a19d9d0af",
+        "UserPoolArn": "arn:aws:cognito-idp:us-east-1:601135941262:userpool/us-east-1_hdBR8CajS",
+        "IdentityPoolName": "testAuthIdentityPool__dev",
+        "UserPoolName": "ShelterLink"
+      },
+      "lastPushTimeStamp": "2023-11-18T23:06:48.183Z",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-shelterlink-dev-153937-deployment/amplify-cfn-templates/auth/ShelterLink-cloudformation-template.json",
+        "logicalId": "authShelterLink"
+      },
+      "lastPushDirHash": "PkjcMm5WidiEG3ce5aW8K+zpXTk="
+    }
+  },
+  "function": {
+    "lambdaapi": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "lastBuildTimeStamp": "2023-11-18T23:05:42.313Z",
+      "lastBuildType": "PROD",
+      "lastPackageTimeStamp": "2023-11-18T23:05:42.387Z",
+      "distZipFilename": "lambdaapi-7a725a543075656f3239-build.zip",
+      "s3Bucket": {
+        "deploymentBucketName": "amplify-shelterlink-dev-153937-deployment",
+        "s3Key": "amplify-builds/lambdaapi-7a725a543075656f3239-build.zip"
+      },
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-shelterlink-dev-153937-deployment/amplify-cfn-templates/function/lambdaapi-cloudformation-template.json",
+        "logicalId": "functionlambdaapi"
+      },
+      "lastPushTimeStamp": "2023-11-18T23:06:50.131Z",
+      "output": {
+        "LambdaExecutionRoleArn": "arn:aws:iam::601135941262:role/shelterlinkLambdaRolee3e253e7-dev",
+        "Region": "us-east-1",
+        "Arn": "arn:aws:lambda:us-east-1:601135941262:function:lambdaapi-dev",
+        "Name": "lambdaapi-dev",
+        "LambdaExecutionRole": "shelterlinkLambdaRolee3e253e7-dev"
+      },
+      "lastPushDirHash": "uOf7V9Y/QrXnTig317a55s94Sk4="
+    }
+  },
+  "api": {
+    "lambdaapii": {
+      "service": "API Gateway",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [
+        {
+          "category": "function",
+          "resourceName": "lambdaapi",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
+        }
+      ],
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-shelterlink-dev-153937-deployment/amplify-cfn-templates/api/lambdaapii-cloudformation-template.json",
+        "logicalId": "apilambdaapii"
+      },
+      "lastPushTimeStamp": "2023-11-18T23:06:48.189Z",
+      "output": {
+        "ApiName": "lambdaapii",
+        "RootUrl": "https://2uvj8bs6ie.execute-api.us-east-1.amazonaws.com/dev",
+        "ApiId": "2uvj8bs6ie"
+      },
+      "lastPushDirHash": "XjFWDERnEexX6ELEjyPwqd12nzo="
+    }
+  }
+}

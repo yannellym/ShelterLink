@@ -1,4 +1,4 @@
-#!/Users/yannellym/Desktop/ShelterLink/venv/bin/python
+#!/Users/yannellym/Desktop/ShelterLink/venv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys
