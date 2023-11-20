@@ -49,3 +49,4 @@ def get_petfinder_access_token(api_key, api_secret):
 
 # make sure you're in the virtual env
 # amplify shell 
+# zip -r lambda_function.zip .    (zips all files)
