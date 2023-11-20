@@ -9,7 +9,7 @@ import dog2 from '../images/dog.jpg';
 import kitten from '../images/kitten.jpg';
 import hamster from '../images/hamster.jpg';
 import paw from '../images/paw.png';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import usePetFinderAPI from '../hooks/usePetFinderAPI'; // hook
 import useAnimalsBasedOnPreferencesAPI from '../hooks/useAnimalsBasedOnPreferencesAPI'; // hook
 
@@ -19,12 +19,13 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferenc
   const [selectedAnimals, setSelectedAnimals] = useState([]);
 
   // Lambda endpoint URL
-  const lambdaEndpointUrl = 'https://xmqnvkqdyceusnhdybx5x4yhfi0ewmry.lambda-url.us-east-1.on.aws/';
+  const lambdaEndpointUrl = 'https://lyzgx1pu9f.execute-api.us-east-1.amazonaws.com/default/lambdaapi-dev';
 
-  const { data: petData, loading: petDataLoading } = usePetFinderAPI(
+  const { data: petData, loading: petDataLoading, error: petDataError } = usePetFinderAPI(
     lambdaEndpointUrl, // Use the Lambda endpoint URL
     []
   );
+
 
   useEffect(() => {
     if (petData && petData.animals) {
@@ -43,6 +44,12 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferenc
     }
   }, [petData]);
 
+  useEffect(() => {
+    if (petDataError) {
+      console.error('Error fetching data:', petDataError);
+      // Handle the error condition here, such as displaying an error message to the user.
+    }
+  }, [petDataError]);
 
   const { preferredAnimals, loading: preferredAnimalsLoading, fetchAnimalsBasedOnPreferences } = useAnimalsBasedOnPreferencesAPI();
 

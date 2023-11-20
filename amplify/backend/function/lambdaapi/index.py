@@ -1,5 +1,6 @@
 import requests
 import os
+import json
 
 def lambda_handler(event, context):
     petfinder_api_url = 'https://api.petfinder.com/v2/animals'
@@ -15,16 +16,28 @@ def lambda_handler(event, context):
 
     # Make request to Petfinder API
     response = requests.get(petfinder_api_url, headers=headers)
+    print('Response Text:', response.text)
+
 
     if response.status_code == 200:
         return {
             'statusCode': 200,
-            'body': response.json()
+            'headers': {
+                'Access-Control-Allow-Origin': 'http://localhost:3000',
+                'Access-Control-Allow-Credentials': 'true',
+                'Content-Type': 'application/json',
+            },
+            'body': json.dumps({ "animals": [] }),
         }
     else:
         return {
             'statusCode': response.status_code,
-            'body': {'error': 'An error occurred while fetching data from Petfinder API'}
+            'headers': {
+                'Access-Control-Allow-Origin': 'http://localhost:3000',
+                'Access-Control-Allow-Credentials': 'true',
+                'Content-Type': 'application/json',
+            },
+            'body': json.dumps({'error': f'An error occurred while fetching data from Petfinder API: {response.text}'}),
         }
 
 def get_petfinder_access_token(api_key, api_secret):
@@ -44,6 +57,7 @@ def get_petfinder_access_token(api_key, api_secret):
         return access_token
     except Exception as e:
         print('Error obtaining Petfinder access token:', str(e))
+
 
 
 
