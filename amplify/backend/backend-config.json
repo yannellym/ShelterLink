@@ -48,5 +48,28 @@
       "providerPlugin": "awscloudformation",
       "service": "Cognito"
     }
+  },
+  "function": {
+    "lambdaapi": {
+      "dependsOn": []
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_lambdaapi_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "lambdaapi"
+        }
+      ]
+    },
+    "AMPLIFY_function_lambdaapi_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "lambdaapi"
+        }
+      ]
+    }
   }
 }
