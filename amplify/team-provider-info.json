@@ -14,17 +14,6 @@
     "categories": {
       "auth": {
         "ShelterLink": {}
-      },
-      "function": {
-        "shelterlink9bd1f998": {},
-        "apifunc": {},
-        "lambdaapi": {
-          "deploymentBucketName": "amplify-shelterlink-dev-153937-deployment",
-          "s3Key": "amplify-builds/lambdaapi-7a725a543075656f3239-build.zip"
-        }
-      },
-      "api": {
-        "lambdaapii": {}
       }
     }
   }
