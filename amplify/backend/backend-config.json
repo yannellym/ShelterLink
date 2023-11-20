@@ -1,20 +1,5 @@
 {
-  "api": {
-    "lambdaapii": {
-      "dependsOn": [
-        {
-          "attributes": [
-            "Name",
-            "Arn"
-          ],
-          "category": "function",
-          "resourceName": "lambdaapi"
-        }
-      ],
-      "providerPlugin": "awscloudformation",
-      "service": "API Gateway"
-    }
-  },
+  "api": {},
   "auth": {
     "ShelterLink": {
       "customAuth": false,
