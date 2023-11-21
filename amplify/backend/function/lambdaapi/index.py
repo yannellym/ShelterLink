@@ -4,8 +4,8 @@ import json
 
 def lambda_handler(event, context):
     petfinder_api_url = 'https://api.petfinder.com/v2/animals'
-    petfinder_api_key = os.environ.get('PET_FINDER_API_KEY')
-    petfinder_api_secret = os.environ.get('PET_FINDER_API_SECRET')
+    petfinder_api_key = 'Cnw2cz4Mx9Vcs8GNUcXmnX0Q4nl1Q5Q8BEVjVukFoFHojNAloy'
+    petfinder_api_secret = '27HpoImtvPi1iPEDSgAlANwrSHdVYnX3BEWbTuxy'
 
     # Obtain access token
     access_token = get_petfinder_access_token(petfinder_api_key, petfinder_api_secret)
@@ -18,8 +18,11 @@ def lambda_handler(event, context):
     response = requests.get(petfinder_api_url, headers=headers)
     print('Response Text:', response.text)
 
-
     if response.status_code == 200:
+        # Parse the Petfinder API response
+        petfinder_data = response.json()
+        animals = petfinder_data.get('animals', [])
+
         return {
             'statusCode': 200,
             'headers': {
@@ -27,7 +30,7 @@ def lambda_handler(event, context):
                 'Access-Control-Allow-Credentials': 'true',
                 'Content-Type': 'application/json',
             },
-            'body': json.dumps({ "animals": [] }),
+            'body': json.dumps({ "animals": animals }),
         }
     else:
         return {
@@ -57,6 +60,7 @@ def get_petfinder_access_token(api_key, api_secret):
         return access_token
     except Exception as e:
         print('Error obtaining Petfinder access token:', str(e))
+
 
 
 
