@@ -15,7 +15,7 @@ const Header = ({ user, handleSignOut, handleSignIn}) => {
       {/* Navigation */}
       <nav className="main-navigation">
         <ul>
-          <li><Link to="/home">Home</Link></li>
+          <li><Link to="/">Home</Link></li>
           <li><Link to="/find-a-pet">Find a pet</Link></li>
           <li><Link to="/about">About</Link></li>
           <li><Link to="/resources">Resources</Link></li>
@@ -28,7 +28,7 @@ const Header = ({ user, handleSignOut, handleSignIn}) => {
       {/* User profile */}
       <div className="user-profile">
         {user? (
-          <Link to="/home">
+          <Link to="/">
             <button onClick={handleSignOut} >Sign Out</button>
          </Link>
         ) : (

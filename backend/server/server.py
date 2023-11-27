@@ -36,7 +36,7 @@ def fetch_petfinder_data():
         access_token = token_json.get('access_token')
 
         # Use the new access_token in your API requests
-        api_url = 'https://api.petfinder.com/v2/animals'
+        api_url = ' '
         query_parameters = request.query_string.decode('utf-8')
         api_response = requests.get(f'{api_url}?{query_parameters}', headers={'Authorization': f'Bearer {access_token}'})
 

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const usePetFinderAPI = (url, dependencies) => {
   const [data, setData] = useState(null);
@@ -7,18 +7,25 @@ const usePetFinderAPI = (url, dependencies) => {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
+      let responseText = null;
 
       try {
         const response = await fetch(url);
 
         if (!response.ok) {
+          console.log( Error, "api error")
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
-        const result = await response.json();
+        // Read and log the raw response text
+        responseText = await response.text();
+
+        const result = JSON.parse(responseText);
         setData(result);
       } catch (error) {
         console.error('Error fetching data:', error);
+        // Log the detailed error response for debugging
+        console.error('Detailed error response:', responseText);
       } finally {
         setLoading(false);
       }
@@ -31,3 +38,4 @@ const usePetFinderAPI = (url, dependencies) => {
 };
 
 export default usePetFinderAPI;
+

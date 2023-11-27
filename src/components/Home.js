@@ -19,7 +19,7 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferenc
   const [selectedAnimals, setSelectedAnimals] = useState([]);
 
   // Lambda endpoint URL
-  const lambdaEndpointUrl = 'https://lyzgx1pu9f.execute-api.us-east-1.amazonaws.com/default/lambdaapi-dev';
+  const lambdaEndpointUrl = 'https://5k4tf5ic5tfvaktjbtzg2zgira0ofmwd.lambda-url.us-east-1.on.aws/';
 
   const { data: petData, loading: petDataLoading, error: petDataError } = usePetFinderAPI(
     lambdaEndpointUrl, // Use the Lambda endpoint URL

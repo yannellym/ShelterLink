@@ -57,8 +57,8 @@ function FindApet({ favoritePets, addToFavorites, removeFromFavorites, isAuthent
 
   const fetchPetsForPage = async (page, filters, lat, lon) => {
     try {
-      let endpoint = `http://localhost:3002/api/petfinder?page=${page}&location=${lat},${lon}&limit=${showOnlyPetsWithImages ? 60 : itemsPerPage}`;
-      console.log(endpoint);
+      let endpoint = `https://iyank5vavf.execute-api.us-east-1.amazonaws.com/default/lambdaapi-dev?page=${page}&location=${lat},${lon}&limit=${showOnlyPetsWithImages ? 60 : itemsPerPage}`;
+      
 
       for (const filterKey in filters) {
         if (filters[filterKey] !== 'any') {
@@ -68,7 +68,7 @@ function FindApet({ favoritePets, addToFavorites, removeFromFavorites, isAuthent
 
       const response = await fetch(endpoint);
       const data = await response.json();
-
+      console.log(endpoint, "endpoint", data,);
       if (data && data.animals) {
         const filteredResults = applyFilters(data.animals, filters);
         setLoading(false);
@@ -117,7 +117,7 @@ function FindApet({ favoritePets, addToFavorites, removeFromFavorites, isAuthent
     // Fetch new data based on the updated filters
     try {
       // Construct the API endpoint based on selected filter values
-      let endpoint = `http://localhost:3002/api/petfinder?page=1&limit=${50}`;
+      let endpoint = `https://iyank5vavf.execute-api.us-east-1.amazonaws.com/default/lambdaapi-dev?page=1&limit=${50}`;
       for (const filterKey in newFilters) {
         if (newFilters[filterKey] !== 'any') {
           endpoint += `&${filterKey}=${newFilters[filterKey]}`;

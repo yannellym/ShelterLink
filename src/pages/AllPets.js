@@ -18,18 +18,18 @@ function AllPets() {
   const petsPerPage = 20;
   const otherAnimalTypes = ["horse", "bird", "barnyard"];
   const buttonsToShow = 9; // Number of buttons to show at once
-
+  console.log(category, "category")
   const fetchAnimalsByCategory = async (category, page) => {
     let endpoint;
     let animalData;
 
     if (category === "dog" || category === "cat") {
-      endpoint = `http://localhost:3002/api/petfinder?type=${category}&limit=${100}&page=${page}`;
+      endpoint = `https://3lkwhpdzchpv4fsguwdcequbom0gjlbh.lambda-url.us-east-1.on.aws/get_all_pets/type=${category}&limit=${100}&page=${page}`;
     } else if (category === "other") {
       // Fetch animals for each type in the "other" category
       const animalPromises = otherAnimalTypes.map(async (animalType) => {
         const response = await fetch(
-          `http://localhost:3002/api/petfinder?type=${animalType}&limit=${petsPerPage}&page=${page}`
+          `https://3lkwhpdzchpv4fsguwdcequbom0gjlbh.lambda-url.us-east-1.on.aws/get_all_pets?type=${animalType}&limit=${petsPerPage}&page=${page}`
         );
         const data = await response.json();
         return data.animals || [];
@@ -37,6 +37,7 @@ function AllPets() {
 
       const animalResponses = await Promise.all(animalPromises);
       animalData = animalResponses.flat();
+      console.log(animalData, "animalData");
     }
 
     try {

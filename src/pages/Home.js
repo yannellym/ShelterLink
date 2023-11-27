@@ -12,36 +12,40 @@ import hamster from '../images/hamster.jpg';
 import paw from '../images/paw.png';
 import usePetFinderAPI from '../hooks/usePetFinderAPI'; // hook
 import useAnimalsBasedOnPreferencesAPI from '../hooks/useAnimalsBasedOnPreferencesAPI'; // hook
-
+import { Link } from 'react-router-dom';
 
 function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferences, isAuthenticated }) {
   const [loading, setLoading] = useState(true);
   const [selectedAnimals, setSelectedAnimals] = useState([]);
   const [selectedPetIndex, setSelectedPetIndex] = useState(0); // Track the currently displayed pet
   const navigate = useNavigate();
+
+   //https://3lkwhpdzchpv4fsguwdcequbom0gjlbh.lambda-url.us-east-1.on.aws/get_others?type=cat
   const { data: petData } = usePetFinderAPI(
-    'https://xmqnvkqdyceusnhdybx5x4yhfi0ewmry.lambda-url.us-east-1.on.aws/',
-    []
+    'https://2hghsit103.execute-api.us-east-1.amazonaws.com/default', []
   );
 
-  console.log(isAuthenticated, "isauthenticated in home")
+  // console.log(petData?.body, "DATA FROM API")
 
   useEffect(() => {
-    if (petData && petData.animals) {
-      setLoading(false);
-      // Select 4 animals from the fetched data
-      const animals = petData.animals.filter((animal) => animal.photos.length > 0).slice(0, 4);
-
-      if (animals.length < 4) {
-        // If there are fewer than 4 animals, fetch more data to reach 4
-        const remainingAnimalsCount = 4 - animals.length;
-        const additionalAnimals = petData.animals.slice(0, remainingAnimalsCount);
-        setSelectedAnimals([...animals, ...additionalAnimals]);
-      } else {
-        setSelectedAnimals(animals);
+    if (petData && petData.body) {
+      const responseBody = JSON.parse(petData.body);
+  
+      if (responseBody.animals) {
+        setLoading(false);
+        const animals = responseBody.animals.filter((animal) => animal.photos.length > 0).slice(0, 4);
+  
+        if (animals.length < 4) {
+          const remainingAnimalsCount = 4 - animals.length;
+          const additionalAnimals = responseBody.animals.slice(0, remainingAnimalsCount);
+          setSelectedAnimals([...animals, ...additionalAnimals]);
+        } else {
+          setSelectedAnimals(animals);
+        }
       }
     }
   }, [petData]);
+
 
 
   const { preferredAnimals, fetchAnimalsBasedOnPreferences } = useAnimalsBasedOnPreferencesAPI();
@@ -156,9 +160,9 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferenc
         <div className="section-links-div">
           <h3> Find your fur-ever friend:</h3>
           <div className="section-links-inner-div">
-            <CategoryCard title="All Dogs" imageSrc={dog2} link="/all-pets/dog" />
-            <CategoryCard title="All Cats" imageSrc={kitten} link="/all-pets/cat" />
-            <CategoryCard title="Other Animals" imageSrc={hamster} link="/all-pets/other" />
+            <Link to="/get_all_pets/dog">All Dogs</Link>
+            <CategoryCard title="All Cats" imageSrc={kitten} link="/get_all_pets/type=cat" />
+            <CategoryCard title="Other Animals" imageSrc={hamster} link="/get_all_pets/type=other" />
             <a href="https://www.chewy.com/g/animal-shelters-and-rescues" className="shelters-cards">
               <img width="64" height="64" src={paw} alt="right" />
               <p><strong>View all shelters & rescues near you.</strong></p>

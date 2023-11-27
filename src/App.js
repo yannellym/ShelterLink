@@ -66,7 +66,7 @@ const App = () => {
       try {
         await Auth.signOut();
         setUser(false); // Clear the user state
-        navigate('/home');
+        navigate('/');
       } catch (error) {
         console.log('Error signing out: ', error);
       }
@@ -77,7 +77,7 @@ const App = () => {
     <div>
       <Header user={user} handleSignOut={handleSignOut}/>
         <Routes>
-          <Route path="/home" element={
+          <Route path="/" element={
            <Home 
              favoritePets={favoritePets} 
              setFavoritePets={setFavoritePets} 
@@ -157,12 +157,12 @@ const App = () => {
               isAuthenticated={user} 
             />} 
           />
-          <Route path="/all-pets/:category" element={<AllPets />} />
+          <Route path="/get_all_pets/:type" element={<AllPets />} />
           <Route path="/location-specific-pets" element={
             <LocationSpecificPets 
               favoritePets={favoritePets} 
               setFavoritePets={setFavoritePets} 
-              addToFavorites={addToFavorites} 
+              addToFavorites={addToFavorites} e
               removeFromFavorites={removeFromFavorites}  
               isAuthenticated={user}
             />}  
