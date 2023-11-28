@@ -1,57 +1,70 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const useAnimalsBasedOnPreferencesAPI = () => {
   const [preferredAnimals, setPreferredAnimals] = useState([]);
   const [loading, setLoading] = useState(false);
+  let abortController;
 
-  const fetchAnimalsWithRetry = async (preferences, attemptsLeft = 5) => {
+  useEffect(() => {
+    setLoading(false); // This will be triggered whenever preferredAnimals changes
+  }, [preferredAnimals]);
+
+  const fetchAnimals = async (preferences) => {
     try {
-      if (attemptsLeft === 0) {
-        console.error("No matching animal found after 5 attempts.");
-        return;
-      }
-
       const gender = preferences.gender !== 'any' ? preferences.gender : 'Male';
       const size = preferences.size !== 'any' ? preferences.size : 'Large';
 
       const apiUrl = `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/pet_match?perPage=100&type=${preferences.type}&gender=${gender}&age=${preferences.age}&size=${size}`;
       console.log(apiUrl);
 
-      const response = await fetch(apiUrl);
+      // Clear the abortController on each new request
+      if (abortController) {
+        abortController.abort();
+      }
+
+      abortController = new AbortController();
+
+      const response = await fetch(apiUrl, { signal: abortController.signal });
       const prefdata = await response.json();
-      console.log(prefdata);
+      console.log(prefdata.body);
 
       let filteredAnimals = [];
 
-      if (prefdata && prefdata.animals) {
-        filteredAnimals = prefdata.animals.filter((animal) => {
-          const matchesTags = preferences.temperament.some((prefTemperament) =>
-            animal.tags.includes(prefTemperament)
-          );
-          return matchesTags || preferences.temperament.length === 0;
-        });
+      try {
+        // the response body is a JSON string. We need to parse it
+        const parsedBody = JSON.parse(prefdata.body);
+        // if we were able to parse it and it contains animals
+        if (parsedBody && parsedBody.animals) {
+          // filter based on preferences
+          filteredAnimals = parsedBody.animals.filter((animal) => {
+            const matchesTags = preferences.temperament.some((prefTemperament) =>
+              animal.tags.includes(prefTemperament)
+            );
+            return matchesTags || preferences.temperament.length === 0;
+          });
+        } else {
+          console.error('Invalid data received from the API:', parsedBody);
+        }
+      } catch (error) {
+        console.error('Error parsing JSON data:', error);
       }
+      
+      // Set the preferred animals state variable with the filtered results
+      setPreferredAnimals(filteredAnimals);
 
-      if (filteredAnimals.length === 0) {
-        // Retry with a delay using recursion
-        const delay = 1000 * Math.pow(2, 5 - attemptsLeft); // Exponential backoff
-        await new Promise(resolve => setTimeout(resolve, delay));
-        await fetchAnimalsWithRetry(preferences, attemptsLeft - 1);
-      } else {
-        // Set the preferred animals state variable with the filtered results
-        setPreferredAnimals(filteredAnimals);
-      }
+      // Stop retrying after the first attempt
+      setLoading(false);
     } catch (error) {
       console.error('Error fetching pet data:', error);
-      // Handle errors in your UI or provide user feedback
-    } finally {
+
+      // Stop retrying after encountering an error
       setLoading(false);
     }
   };
 
   const fetchAnimalsBasedOnPreferences = (preferences) => {
     setLoading(true);
-    fetchAnimalsWithRetry(preferences);
+    fetchAnimals(preferences);
   };
 
   return {
