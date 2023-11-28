@@ -20,11 +20,15 @@ const SearchBar = ({ onSearch }) => {
 
   const handleSearch = async () => {
     if (searchText && petType) {
-      // Extract the ZIP code from the user's input
-      const zipCode = searchText.match(/\b\d{5}\b/);
-      console.log(zipCode)
-      if (zipCode) {
-        const apiEndpoint = `http://localhost:3002/api/petfinder?perPage=200&location=${zipCode}&type=${petType}`;
+      // Extract the city and state from the user's input
+      const cityStateRegex = /([^,]+),\s*([^,]+)/;
+      const match = searchText.match(cityStateRegex);
+  
+      if (match) {
+        const city = match[1].trim();
+        const state = match[2].trim();
+  
+        const apiEndpoint = `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/pet_zip_search?location=${city},${state}&type=${petType}`;
   
         try {
           const response = await fetch(apiEndpoint);
@@ -37,7 +41,7 @@ const SearchBar = ({ onSearch }) => {
             navigate('/location-specific-pets', {
               state: {
                 petType,
-                searchText: zipCode[0] // Set searchText to the extracted ZIP code
+                searchText: `${city}, ${state}`, // Set searchText to the extracted city and state
               },
             });
           } else {
@@ -47,12 +51,14 @@ const SearchBar = ({ onSearch }) => {
           console.error('API request error:', error);
         }
       } else {
-        alert('Please enter a valid ZIP code to search.');
+        alert('Please enter a valid city and state to search.');
       }
     } else {
       alert('Please enter both location and pet type to search.');
     }
   };
+  
+  
   
   
 

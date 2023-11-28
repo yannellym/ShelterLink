@@ -157,7 +157,7 @@ const App = () => {
               isAuthenticated={user} 
             />} 
           />
-          <Route path="/get_all_pets/:type" element={<AllPets />} />
+          <Route path="/all_pets/:type" element={<AllPets />} />
           <Route path="/location-specific-pets" element={
             <LocationSpecificPets 
               favoritePets={favoritePets} 

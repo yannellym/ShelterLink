@@ -5,68 +5,54 @@ import '../styles/LocationSpecificPets.css';
 
 import usePetfinderAPI from '../hooks/usePetFinderAPI';
 
-function LocationSpecificPets({ favoritePets, addToFavorites, removeFromFavorites, isAuthenticated}) {
+function LocationSpecificPets({ favoritePets, addToFavorites, removeFromFavorites, isAuthenticated }) {
   const location = useLocation();
   const state = location.state;
   const petType = state?.petType || '';
   const searchText = state?.searchText || '';
 
-  // Define the currentPage state at the top level
   const [currentPage, setCurrentPage] = useState(1);
-  const [petsToDisplay, setPetsToDisplay] = useState([]); // Add this line
+  const [petsToDisplay, setPetsToDisplay] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [maxPage, setMaxPage] = useState(9);
+  const [maxPage, setMaxPage] = useState(1);
   const [showOnlyPetsWithImages, setShowOnlyPetsWithImages] = useState(false);
 
-  const dependencies = [petType, currentPage, searchText, showOnlyPetsWithImages]; // Update dependencies
+  const dependencies = [petType, searchText, showOnlyPetsWithImages, currentPage];
 
   const { data, loading: apiLoading, error } = usePetfinderAPI(
-    `http://localhost:3002/api/petfinder?type=${petType}&location=${searchText}&limit=24&page=${currentPage}`,
+    `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/pet_zip_search?type=${petType}&location=${searchText}&page=${currentPage}`,
     dependencies
   );
 
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= maxPage) {
       setCurrentPage(newPage);
-      // Scroll to the top of the page
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  };
-
-  const updateMaxPage = () => {
-    if (currentPage === maxPage) {
-      setMaxPage(maxPage + 10);
     }
   };
 
   useEffect(() => {
     if (apiLoading) {
-      // Data is still loading
       setLoading(true);
     } else {
-      // Data has loaded, update the state
       setLoading(false);
+      const parsedData = JSON.parse(data.body);
+      console.log("Parsed Data Pagination Response:", parsedData.pagination);
       const filteredPets = showOnlyPetsWithImages
-        ? data.animals.filter((pet) => pet.photos.length > 0)
-        : data.animals; // Filter only if the checkbox is checked
+        ? parsedData.animals.filter((pet) => pet.photos.length > 0)
+        : parsedData.animals;
       setPetsToDisplay(filteredPets || []);
+      setMaxPage(parsedData.pagination?.total_pages || 1);
     }
   }, [data, apiLoading, showOnlyPetsWithImages]);
 
-  useEffect(() => {
-    updateMaxPage();
-  }, [currentPage, maxPage]);
-
   const renderPageNumbers = () => {
-    const totalPageCount = data?.pagination?.total_pages || 1;
     const displayedPages = 9;
     const middlePage = Math.floor(displayedPages / 2);
     let startPage = Math.max(1, currentPage - middlePage);
-    let endPage = Math.min(totalPageCount, startPage + displayedPages - 1);
+    let endPage = Math.min(maxPage, startPage + displayedPages - 1);
 
     if (endPage - startPage + 1 < displayedPages) {
-      // Adjust the range when there are fewer pages available
-      endPage = Math.min(totalPageCount, startPage + displayedPages - 1);
+      endPage = Math.min(maxPage, startPage + displayedPages - 1);
       startPage = Math.max(1, endPage - displayedPages + 1);
     }
 

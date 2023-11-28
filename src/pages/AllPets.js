@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import '../styles/AllPetsPage.css';
@@ -10,86 +11,65 @@ function shuffleArray(array) {
   }
 }
 
+async function fetchAnimalsByType(type, page) {
+  if (type === 'dog' || type === 'cat') {
+    const endpoint = `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/all_pets?type=${type}&limit=100&page=${page}`;
+    const response = await fetch(endpoint);
+    const dataRaw = await response.json();
+    const stringData = JSON.stringify(dataRaw);
+    const parsedData = JSON.parse(stringData);
+    const petData = JSON.parse(parsedData.body);
+    
+    return petData.animals.filter((animal) => animal && animal.photos.length > 0);
+  } else if (type === 'other') {
+    const otherAnimalTypes = ['horse', 'bird', 'barnyard'];
+    const animalData = [];
+
+    for (const animalType of otherAnimalTypes) {
+      const response = await fetch(
+        `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/all_pets?type=${animalType}&limit=20&page=${page}`
+      );
+
+      if (response.ok) {
+        const dataRaw = await response.json();
+        const stringData = JSON.stringify(dataRaw);
+        const parsedData = JSON.parse(stringData);
+        const animalDataReceived = JSON.parse(parsedData.body);
+        console.log(animalDataReceived, "animalData");
+
+        animalData.push(...(animalDataReceived.animals || []));
+      } else {
+        console.error(`Error fetching data for ${animalType}:`, response.status, response.statusText);
+      }
+    }
+
+    return animalData.filter((animal) => animal && animal.photos.length > 0);
+  }
+
+  return [];
+}
 function AllPets() {
-  const { category } = useParams();
+  const { type } = useParams();
   const [loading, setLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1); // Declare currentPage as a state variable
+  const [currentPage, setCurrentPage] = useState(1);
   const [cache, setCache] = useState([]);
   const petsPerPage = 20;
-  const otherAnimalTypes = ["horse", "bird", "barnyard"];
-  const buttonsToShow = 9; // Number of buttons to show at once
-  console.log(category, "category")
-  const fetchAnimalsByCategory = async (category, page) => {
-    let endpoint;
-    let animalData;
+  const buttonsToShow = 9;
 
-    if (category === "dog" || category === "cat") {
-      endpoint = `https://3lkwhpdzchpv4fsguwdcequbom0gjlbh.lambda-url.us-east-1.on.aws/get_all_pets/type=${category}&limit=${100}&page=${page}`;
-    } else if (category === "other") {
-      // Fetch animals for each type in the "other" category
-      const animalPromises = otherAnimalTypes.map(async (animalType) => {
-        const response = await fetch(
-          `https://3lkwhpdzchpv4fsguwdcequbom0gjlbh.lambda-url.us-east-1.on.aws/get_all_pets?type=${animalType}&limit=${petsPerPage}&page=${page}`
-        );
-        const data = await response.json();
-        return data.animals || [];
-      });
-
-      const animalResponses = await Promise.all(animalPromises);
-      animalData = animalResponses.flat();
-      console.log(animalData, "animalData");
-    }
-
+  const fetchPetsForCurrentPage = async (type, page) => {
     try {
-      if (animalData) {
-        return animalData.filter((animal) => animal && animal.photos.length > 0);
-      } else if (endpoint) {
-        const response = await fetch(endpoint);
-        const data = await response.json();
-        if (data && data.animals) {
-          return data.animals.filter((animal) => animal.photos.length > 0);
-        }
-      }
-    } catch (error) {
-      console.error('Error fetching data:', error.message);
-    }
-
-    return [];
-  };
-
-  const fetchPetsForCurrentPage = async (category, page) => {
-    const animals = await fetchAnimalsByCategory(category, page);
-
-    if (animals.length < petsPerPage) {
-      // If there are not enough pets with photos on this page, make additional API calls
-      let remainingPetsToFetch = petsPerPage - animals.length;
-      let nextPage = page + 1;
-
-      while (remainingPetsToFetch > 0) {
-        const additionalAnimals = await fetchAnimalsByCategory(category, nextPage);
-        animals.push(...additionalAnimals);
-        nextPage++;
-        remainingPetsToFetch -= additionalAnimals.length;
-      }
-    }
-
-    // Shuffle the animals array
-    shuffleArray(animals);
-
-    return animals.slice(0, petsPerPage);
-  };
-
-  useEffect(() => {
-    async function fetchData() {
-      const animals = await fetchPetsForCurrentPage(category, currentPage);
-
+      const animals = await fetchAnimalsByType(type, page);
       setCache(animals);
       setLoading(false);
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (error) {
+      console.error('Error fetching data:', error.message);
     }
+  };
 
-    fetchData();
-  }, [category, currentPage]);
+  useEffect(() => {
+    fetchPetsForCurrentPage(type, currentPage);
+  }, [type, currentPage]);
 
   const handlePageChange = (newPage) => {
     if (newPage >= 1) {
@@ -97,7 +77,6 @@ function AllPets() {
     }
   };
 
-  // Calculate the range of page buttons to display
   const startPage = Math.max(1, currentPage - Math.floor(buttonsToShow / 2));
   const endPage = startPage + buttonsToShow - 1;
 
@@ -105,7 +84,7 @@ function AllPets() {
 
   return (
     <div className="all-pets-page">
-      <h2>{`All ${category.charAt(0).toUpperCase() + category.slice(1)}s`}</h2>
+      <h2>{`All ${type.charAt(0).toUpperCase() + type.slice(1)}s`}</h2>
       {loading ? (
         <p>Loading...</p>
       ) : (
@@ -131,11 +110,7 @@ function AllPets() {
             {page}
           </button>
         ))}
-        <button
-          onClick={() => handlePageChange(currentPage + 1)}
-        >
-          Next
-        </button>
+        <button onClick={() => handlePageChange(currentPage + 1)}>Next</button>
       </div>
     </div>
   );

@@ -20,12 +20,10 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferenc
   const [selectedPetIndex, setSelectedPetIndex] = useState(0); // Track the currently displayed pet
   const navigate = useNavigate();
 
-   //https://3lkwhpdzchpv4fsguwdcequbom0gjlbh.lambda-url.us-east-1.on.aws/get_others?type=cat
   const { data: petData } = usePetFinderAPI(
     'https://2hghsit103.execute-api.us-east-1.amazonaws.com/default', []
   );
 
-  // console.log(petData?.body, "DATA FROM API")
 
   useEffect(() => {
     if (petData && petData.body) {
@@ -160,9 +158,9 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferenc
         <div className="section-links-div">
           <h3> Find your fur-ever friend:</h3>
           <div className="section-links-inner-div">
-            <Link to="/get_all_pets/dog">All Dogs</Link>
-            <CategoryCard title="All Cats" imageSrc={kitten} link="/get_all_pets/type=cat" />
-            <CategoryCard title="Other Animals" imageSrc={hamster} link="/get_all_pets/type=other" />
+            <CategoryCard title="All Dogs" imageSrc={dog2} link="/all_pets/dog" />
+            <CategoryCard title="All Cats" imageSrc={kitten} link="/all_pets/cat" />
+            <CategoryCard title="Other Animals" imageSrc={hamster} link="/all_pets/other" />
             <a href="https://www.chewy.com/g/animal-shelters-and-rescues" className="shelters-cards">
               <img width="64" height="64" src={paw} alt="right" />
               <p><strong>View all shelters & rescues near you.</strong></p>
