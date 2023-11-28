@@ -1,7 +1,8 @@
-import requests
-import os
+# Import the necessary libraries
 import json
+import requests
 from datetime import datetime, timedelta
+import os
 
 def lambda_handler(event, context):
     try:
@@ -13,9 +14,27 @@ def lambda_handler(event, context):
 
         # Check if 'location' parameter is present and construct the URL accordingly
         if 'location' in params:
-            # For 'location', use the latitude and longitude values separately
-            latitude, longitude = params['location'].split(',')
-            petfinder_api_url += f'?location={latitude},{longitude}'
+            location = params['location']
+            
+            # Check if the location is a ZIP code
+            if location.isdigit() and len(location) == 5:
+                # Convert ZIP code to latitude and longitude using a geocoding service
+                coordinates = get_coordinates_from_zipcode(location)
+                if coordinates:
+                    petfinder_api_url += f'?location={coordinates["latitude"]},{coordinates["longitude"]}'
+                else:
+                    return {
+                        'statusCode': 500,
+                        'headers': {
+                            'Access-Control-Allow-Origin': '*',
+                            'Access-Control-Allow-Credentials': 'true',
+                            'Content-Type': 'application/json',
+                        },
+                        'body': json.dumps({'error': 'Failed to convert ZIP code to coordinates'}),
+                    }
+            else:
+                # Use the provided location directly
+                petfinder_api_url += f'?location={location}'
         else:
             petfinder_api_url += '?'  # If 'location' is not provided, add a question mark to start the query string
 
@@ -35,9 +54,11 @@ def lambda_handler(event, context):
             
             # Check if 'animals' key is present in the API response
             animals = petfinder_data.get('animals')
+            pagination = petfinder_data.get('pagination')
             
             if animals is not None:
                 # 'animals' key is present, proceed with constructing the response
+                response_data = {"animals": animals, "pagination": pagination}
                 return {
                     'statusCode': 200,
                     'headers': {
@@ -45,7 +66,7 @@ def lambda_handler(event, context):
                         'Access-Control-Allow-Credentials': 'true',
                         'Content-Type': 'application/json',
                     },
-                    'body': json.dumps({"animals": animals}),
+                    'body': json.dumps(response_data),
                 }
             else:
                 # 'animals' key is not present in the API response
@@ -79,7 +100,9 @@ def lambda_handler(event, context):
                 'Content-Type': 'application/json',
             },
             'body': json.dumps({'error': error_message}),
-    }
+        }
+
+
 
 def get_petfinder_access_token():
     petfinder_api_key = os.environ['PETFINDER_API_KEY']
@@ -120,10 +143,26 @@ def get_petfinder_access_token():
         return access_token
     except requests.exceptions.RequestException as err:
         print('Error obtaining Petfinder access token:', err)
-        print('Response:', err.response.text)  # Add this line for detailed error response
+        print('Response:', err.response.text)  
         return None
 
+def get_coordinates_from_zipcode(zipcode):
+    try:
+        zip_key = os.environ.get('MAPS_ZIP_KEY')
+        # Use a geocoding service to convert ZIP code to coordinates
+        geocoding_endpoint = f'https://maps.googleapis.com/maps/api/geocode/json?address={zipcode}&key={zip_key}'
+        geocoding_response = requests.get(geocoding_endpoint)
 
+        if geocoding_response.status_code == 200:
+            geocoding_data = geocoding_response.json()
+            location = geocoding_data.get('results', [])[0].get('geometry', {}).get('location', {})
+            return {'latitude': location.get('lat'), 'longitude': location.get('lng')}
+        else:
+            print('Geocoding request failed:', geocoding_response.text)
+            return None
+    except Exception as e:
+        print('Error during geocoding:', str(e))
+        return None
 
 
 # make sure you're in the virtual env
