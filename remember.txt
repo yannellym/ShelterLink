@@ -1,0 +1,11 @@
+git rev-list --all --objects | \
+  awk -v git_dir="$(git rev-parse --git-dir)" \
+    '/^[0-9a-f]{40} / {print $2}' | \
+  xargs -I {} du -k -d 0 "$git_dir/objects/{}" | \
+  sort -n
+
+# to sort files in ascending order by size. Largest at bottom
+
+
+git gc --prune=all
+# git garbage collector : cleans up the Git history and remove references to non-existing files

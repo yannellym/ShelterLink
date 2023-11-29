@@ -12,12 +12,12 @@ import hamster from '../images/hamster.jpg';
 import paw from '../images/paw.png';
 import usePetFinderAPI from '../hooks/usePetFinderAPI'; // hook
 import useAnimalsBasedOnPreferencesAPI from '../hooks/useAnimalsBasedOnPreferencesAPI'; // hook
-import { Link } from 'react-router-dom';
 
 function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferences, isAuthenticated }) {
   const [loading, setLoading] = useState(true);
   const [selectedAnimals, setSelectedAnimals] = useState([]);
   const [selectedPetIndex, setSelectedPetIndex] = useState(0); // Track the currently displayed pet
+  const [userLocation, setUserLocation] = useState(null); // Initialize with null or a default value
   const navigate = useNavigate();
 
   const { data: petData } = usePetFinderAPI(
@@ -69,7 +69,7 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferenc
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
         };
-
+        setUserLocation(userLocation); // Update the userLocation state
         console.log('User Location:', userLocation);
       },
       (error) => {
@@ -189,10 +189,11 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferenc
             <CategoryCard title="All Dogs" imageSrc={dog2} link="/all_pets/dog" />
             <CategoryCard title="All Cats" imageSrc={kitten} link="/all_pets/cat" />
             <CategoryCard title="Other Animals" imageSrc={hamster} link="/all_pets/other" />
-            <a href="https://www.chewy.com/g/animal-shelters-and-rescues" className="shelters-cards">
-              <img width="64" height="64" src={paw} alt="right" />
-              <p><strong>View all shelters & rescues near you.</strong></p>
-            </a>
+            <CategoryCard
+              title="Shelters nearby"
+              imageSrc={paw}
+              link={`/nearby_shelters?latitude=${userLocation?.latitude}&longitude=${userLocation?.longitude}`}
+            />
           </div>
         </div>
         <div className="resource-div">

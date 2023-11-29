@@ -14,6 +14,7 @@ import LocationSpecificPets from './pages/LocationSpecificPets.js';
 import PetAdoption from './pages/PetAdoption.js';
 import Faqs from './pages/Faqs.js';
 import PetFoster from './pages/PetFoster.js';
+import NearbyShelters from './pages/NearbyShelters.js';
 
 import { Amplify, Auth } from 'aws-amplify';
 import { Authenticator } from '@aws-amplify/ui-react';
@@ -177,6 +178,10 @@ const App = () => {
           />
           <Route path="/pet-foster" element = {
             <PetFoster
+            />}
+          />
+          <Route path="/nearby_shelters" element = {
+            <NearbyShelters 
             />}
           />
         </Routes>
