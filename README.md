@@ -74,10 +74,10 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 # Google: places API, Maps JavaScript  API, and Geocoding API 
 # https://fontawesome.com/ for icons
 # react hooks and custom hooks
-# SNS, AMPLIFY, CLOUDFORMATION, COGNITO, S3, lambda, api gateway, cloudwatch, IAM, cloudfront, Lambda@Edge
+# SNS, AMPLIFY, CLOUDFORMATION, COGNITO, S3, lambda, api gateway, cloudwatch, IAM, cloudfront, Lambda@Edge,aws pinpoint, 
 # Google Auth
 # JSON
 # CI/CD - github
 # axios
-# unplash api
+# unplash api for profile image and to generate images for animals that dont have one
 # 

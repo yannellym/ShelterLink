@@ -28,10 +28,10 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferenc
   useEffect(() => {
     if (petData && petData.body) {
       const responseBody = JSON.parse(petData.body);
-  
+      console.log(responseBody)
       if (responseBody.animals) {
         setLoading(false);
-        const animals = responseBody.animals.filter((animal) => animal.photos.length > 0).slice(0, 4);
+        const animals = responseBody.animals.filter((animal) => animal.photos.length > 1).slice(0, 4);
   
         if (animals.length < 4) {
           const remainingAnimalsCount = 4 - animals.length;
@@ -83,14 +83,42 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferenc
     // Get the user's location using the Geolocation API
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const userLocation = {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-          };
+        async (position) => {
+          try {
+            const userLocation = {
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+            };
   
-          // Navigate to /find-a-pet with user's location in the state
-          navigate('/find-a-pet', { state: { userLocation } });
+            // Construct the URL with the latitude and longitude parameters
+            const apiUrl = `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/pet_zip_search?location=${userLocation.latitude},${userLocation.longitude}`;
+  
+            // Make a fetch request to the new API endpoint
+            const response = await fetch(apiUrl);
+  
+            // Check if the request was successful (status code 2xx)
+            if (response.ok) {
+              // Parse the response body as JSON
+              const prefData= await response.json();
+              let parsedBody;
+
+              try {
+                parsedBody = JSON.parse(prefData.body);
+              } catch (parseError) {
+                console.error('Error parsing JSON:', parseError);
+                return; // Stop execution if parsing fails
+              }
+
+              console.log('Response Data:', parsedBody);
+              navigate('/find-a-pet', { state: { userLocation } } );
+            } else {
+              // Handle error response (status code other than 2xx)
+              console.error('Error:', response.statusText);
+            }
+          } catch (error) {
+            console.error('Error:', error.message);
+            // Handle other errors, maybe show a message to the user
+          }
         },
         (error) => {
           console.error('Error getting user location:', error.message);
@@ -101,7 +129,7 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferenc
       console.error('Geolocation is not supported by your browser');
       // Handle lack of geolocation support, maybe show a message to the user
     }
-  };
+  };;
   
 
   return (

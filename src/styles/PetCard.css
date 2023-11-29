@@ -119,3 +119,18 @@
 .more-info-button:hover {
   background-color: #000000;
 }
+.pet-card-image-container {
+  position: relative;
+}
+
+.overlay-text {
+  position: absolute;
+  top: 80%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.628);
+  color: rgba(255, 255, 255, 0.689);
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 14px;
+}

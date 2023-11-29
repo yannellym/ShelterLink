@@ -26,7 +26,6 @@ const useAnimalsBasedOnPreferencesAPI = () => {
 
       const response = await fetch(apiUrl, { signal: abortController.signal });
       const prefdata = await response.json();
-      console.log(prefdata.body);
 
       let filteredAnimals = [];
 
