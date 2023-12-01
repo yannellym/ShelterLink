@@ -9,3 +9,13 @@ git rev-list --all --objects | \
 
 git gc --prune=all
 # git garbage collector : cleans up the Git history and remove references to non-existing files
+
+# to get the sizes of the files
+git ls-files -z | xargs -0 du -sh
+
+
+# git lfs tracking 
+git lfs track ziX8TAn5
+
+# BFG Repo-Cleaner (to delete large files)
+brew install bfg 
