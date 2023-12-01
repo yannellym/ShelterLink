@@ -37,6 +37,11 @@
   "function": {
     "lambdaapi": {
       "dependsOn": []
+    },
+    "petfOrganizations": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
     }
   },
   "parameters": {
@@ -53,6 +58,22 @@
         {
           "category": "function",
           "resourceName": "lambdaapi"
+        }
+      ]
+    },
+    "AMPLIFY_function_petfOrganizations_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "petfOrganizations"
+        }
+      ]
+    },
+    "AMPLIFY_function_petfOrganizations_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "petfOrganizations"
         }
       ]
     }

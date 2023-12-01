@@ -19,3 +19,25 @@ git lfs track ziX8TAn5
 
 # BFG Repo-Cleaner (to delete large files)
 brew install bfg 
+
+# create virutal env
+python3 -m venv venv
+
+# activate virtual env 
+source venv/bin/activate
+
+
+# creating lambda 
+amplify create function
+create virtual env*
+pip install pipenv
+pipenv install
+pipenv shell
+
+
+
+pip install -r requirements.txt
+
+
+# to create lambda
+make sure python version is the same in all 3 files and run the amplify shell
