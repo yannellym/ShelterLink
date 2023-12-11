@@ -20,43 +20,56 @@ const SearchBar = ({ onSearch }) => {
 
   const handleSearch = async () => {
     if (searchText && petType) {
-      // Extract the city and state from the user's input
-      const cityStateRegex = /([^,]+),\s*([^,]+)/;
-      const match = searchText.match(cityStateRegex);
+      let apiEndpoint;
+      let searchTextForApi;
   
-      if (match) {
-        const city = match[1].trim();
-        const state = match[2].trim();
-  
-        const apiEndpoint = `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/pet_zip_search?location=${city},${state}&type=${petType}`;
-  
-        try {
-          const response = await fetch(apiEndpoint);
-          if (response.ok) {
-            const data = await response.json();
-            console.log(data, "data");
-            setDataLoaded(true);
-  
-            // Include the favorited information in the state
-            navigate('/location-specific-pets', {
-              state: {
-                petType,
-                searchText: `${city}, ${state}`, // Set searchText to the extracted city and state
-              },
-            });
-          } else {
-            console.error('API request failed:', response.statusText);
-          }
-        } catch (error) {
-          console.error('API request error:', error);
-        }
+      if (isZipCode(searchText)) {
+        // If the input is a zipcode, use it directly
+        apiEndpoint = `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/pet_zip_search?location=${searchText}&type=${petType}`;
+        searchTextForApi = searchText;
       } else {
-        alert('Please enter a valid city and state to search.');
+        // If the input is a city or city and state, extract the city and state
+        const cityStateRegex = /([^,]+),?\s*([^,]+)?/;
+        const match = searchText.match(cityStateRegex);
+  
+        if (match) {
+          const city = match[1].trim();
+          const state = match[2] ? match[2].trim() : '';
+  
+          apiEndpoint = `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/pet_zip_search?location=${city},${state}&type=${petType}`;
+          searchTextForApi = `${city}${state ? `, ${state}` : ''}`;
+        } else {
+          alert('Please enter a valid city and state or a zipcode to search.');
+          return;
+        }
+      }
+  
+      try {
+        const response = await fetch(apiEndpoint);
+  
+        if (response.ok) {
+          const data = await response.json();
+          console.log(data, 'data');
+          setDataLoaded(true);
+  
+          // Include the favorited information in the state
+          navigate('/location-specific-pets', {
+            state: {
+              petType,
+              searchText: searchTextForApi,
+            },
+          });
+        } else {
+          console.error('API request failed:', response.statusText);
+        }
+      } catch (error) {
+        console.error('API request error:', error);
       }
     } else {
       alert('Please enter both location and pet type to search.');
     }
   };
+  
   
   function isZipCode(text) {
     return /^\d{5}$/.test(text);

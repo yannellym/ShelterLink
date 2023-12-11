@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-const useNearbyShelters = ({ userLocation }) => {
+const useNearbyShelters = ({ userLocation, page, limit}) => {
   const [shelters, setShelters] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -8,10 +8,11 @@ const useNearbyShelters = ({ userLocation }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const apiUrl = `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/nearby_shelters?location=${userLocation.latitude},${userLocation.longitude}`;
+        const apiUrl = `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/nearby_shelters?location=${userLocation.latitude},${userLocation.longitude}&page=${page}&limit=${limit}`;
         const response = await fetch(apiUrl);
         const responseData = await response.json(); // Parse the outer JSON string
         const data = JSON.parse(responseData.body); // Parse the inner JSON string
+        console.log(data, "res")
         // set our shelters data
         setShelters(data);
         setLoading(false);
