@@ -1,9 +1,12 @@
 // AdoptionInfoSection.js
 import React from 'react';
 import { Link } from 'react-router-dom';
-
 import '../styles/AdoptionInfoSection.css';
 
+/* component to display resources for the user
+  parameters: 
+  returns: 
+*/
 function ResourcesSection() {
   return (
     <div className="adoption-info-section">

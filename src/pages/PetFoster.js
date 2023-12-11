@@ -1,6 +1,10 @@
 import React from 'react';
 import '../styles/PetFoster.css';
 
+/* component that shows information about fostering a pet
+  parameters: 
+  returns: 
+*/
 const PetFoster = () => {
   return (
     <div className="pet-foster">

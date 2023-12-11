@@ -58,10 +58,6 @@ const SearchBar = ({ onSearch }) => {
     }
   };
   
-  
-  
-  
-
   function isZipCode(text) {
     return /^\d{5}$/.test(text);
   }

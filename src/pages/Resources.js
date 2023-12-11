@@ -1,6 +1,11 @@
 import React from 'react';
 import '../styles/Resources.css';
 
+/* component to display resources for the user
+  parameters: 
+  returns: 
+*/
+//TODO: CHECK WHERE FUNCTION IS BEING CALLED
 const Resources = () => {
   const resources = [
     {

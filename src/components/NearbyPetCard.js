@@ -1,6 +1,7 @@
 import React from 'react';
 import '../styles/NearbyPetCard.css'; 
 
+// card to display pets nearby the user
 function NearbyPetCard({ imageSrc, name }) {
   // If the imageSrc is null, use a default Google image link
   const fallbackImage = './images/dog2.jpg';

@@ -4,6 +4,7 @@ import '../styles/FavoritesPage.css';
 import PetCard from '../components/PetCard';
 import SadLab from '../images/sadlab.jpg';
 
+// component to show pets that were favorited by the user
 function Favorites({ favoritePets, removeFromFavorites }) {
   return (
     <div className="pet-card-container">

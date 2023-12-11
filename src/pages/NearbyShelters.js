@@ -5,23 +5,20 @@ import '../styles/NearbyShelters.css';
 import animal_shelter from '../images/animal_shelter.jpg'
 
 const SheltersNearbyPage = () => {
+  // get location of the user
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const userLocation = {
     latitude: queryParams.get('latitude'),
     longitude: queryParams.get('longitude'),
   };
-  // console.log(userLocation, "user loc in nearbypage");
-
-    // console.log("Before useNearbyShelters:", userLocation);
-    const { shelters, loading, error } = useNearbyShelters({userLocation});
-    console.log(shelters, "shelters")
-    console.log("Type of Shelters:", typeof shelters);
+  // fetch nearby shelters based on user's selected location
+  const { shelters, loading, error } = useNearbyShelters({userLocation});
 
   if (loading) {
     return <p>Loading...</p>;
   }
-
+  
   if (error) {
     return <p className="error-message">Error fetching data: {error.message}</p>;
   }
@@ -36,15 +33,15 @@ const SheltersNearbyPage = () => {
             alt={`Shelter ${index}`}
           />
           <ul>
-            <li>Shelter Name: {shelter.name}</li>
-            <li>Shelter Email: {shelter.email}</li>
-            <li>Shelter Phone: {shelter.phone}</li>
-            <li>Shelter website: {shelter.website}</li>
-            <li>Shelter distance from you: {shelter.distance} miles</li>
+            <li><strong>Shelter's Name: </strong>{shelter.name}</li>
+            <li><strong>Email:</strong>{shelter.email}</li>
+            <li><strong>Phone: </strong>{shelter.phone}</li>
+            <li><strong>Website: </strong>{shelter.website}</li>
+            <li><strong>Distance from you:</strong> {shelter.distance} miles</li>
             {shelter.social_media && (
               <React.Fragment>
-                <li>Facebook {shelter.social_media.facebook || 'N/A'}</li>
-                <li>Instagram {shelter.social_media.instagram || 'N/A'}</li>
+                <li><strong>Facebook </strong>{shelter.social_media.facebook || 'N/A'}</li>
+                <li><strong>Instagram </strong>{shelter.social_media.instagram || 'N/A'}</li>
               </React.Fragment>
             )}
           </ul>

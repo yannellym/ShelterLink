@@ -13,6 +13,10 @@ import paw from '../images/paw.png';
 import usePetFinderAPI from '../hooks/usePetFinderAPI'; // hook
 import useAnimalsBasedOnPreferencesAPI from '../hooks/useAnimalsBasedOnPreferencesAPI'; // hook
 
+/* component shows UserPreferencesForm, petCards, categoryCards, and resources section
+  parameters: favoritePets: array, addToFavorites: array,  userPreferences: array, removeFromFavorites:array, isAuthenticated: string
+  returns: 
+*/
 function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferences, isAuthenticated }) {
   const [loading, setLoading] = useState(true);
   const [selectedAnimals, setSelectedAnimals] = useState([]);
@@ -20,34 +24,13 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferenc
   const [userLocation, setUserLocation] = useState(null); // Initialize with null or a default value
   const navigate = useNavigate();
 
+  // fetches animals without any filters
   const { data: petData } = usePetFinderAPI(
     'https://2hghsit103.execute-api.us-east-1.amazonaws.com/default', []
   );
 
-
-  useEffect(() => {
-    if (petData && petData.body) {
-      const responseBody = JSON.parse(petData.body);
-      console.log(responseBody)
-      if (responseBody.animals) {
-        setLoading(false);
-        const animals = responseBody.animals.filter((animal) => animal.photos.length > 1).slice(0, 4);
-  
-        if (animals.length < 4) {
-          const remainingAnimalsCount = 4 - animals.length;
-          const additionalAnimals = responseBody.animals.slice(0, remainingAnimalsCount);
-          setSelectedAnimals([...animals, ...additionalAnimals]);
-        } else {
-          setSelectedAnimals(animals);
-        }
-      }
-    }
-  }, [petData]);
-
-
-
   const { preferredAnimals, fetchAnimalsBasedOnPreferences } = useAnimalsBasedOnPreferencesAPI();
-
+  // once the user selects a filter, call fetchAnimalsBasedOnPreferences to use the user's preferences
   const handlePreferencesSubmit = (preferences) => {
     fetchAnimalsBasedOnPreferences(preferences);
   }
@@ -61,8 +44,30 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferenc
     // reload the page so we see the form again
     window.location.reload();
   };
+
+  useEffect(() => {
+    // if we received data
+    if (petData && petData.body) {
+      // parse the json string
+      const responseBody = JSON.parse(petData.body);
+      if (responseBody.animals) {
+        setLoading(false);
+        // filter for only animals that have more than one photo and save these 4 pets.
+        const animals = responseBody.animals.filter((animal) => animal.photos.length > 1).slice(0, 4);
+        // if the animal's array is less than 4, lets keeps trying to get more animals until we have 4 total
+        if (animals.length < 4) {
+          const remainingAnimalsCount = 4 - animals.length;
+          const additionalAnimals = responseBody.animals.slice(0, remainingAnimalsCount);
+          setSelectedAnimals([...animals, ...additionalAnimals]);
+        } else {
+          setSelectedAnimals(animals);
+        }
+      }
+    }
+  }, [petData]);
   
   useEffect(() => {
+    // get the location of the user
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const userLocation = {
@@ -79,6 +84,10 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferenc
     );
   }, []);
 
+  /* function that fetches animals based on user's selected location
+  parameters: 
+  returns: 
+  */
   const handleViewAllPetsNearYou = () => {
     // Get the user's location using the Geolocation API
     if (navigator.geolocation) {
@@ -89,27 +98,23 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferenc
               latitude: position.coords.latitude,
               longitude: position.coords.longitude,
             };
-  
             // Construct the URL with the latitude and longitude parameters
             const apiUrl = `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/pet_zip_search?location=${userLocation.latitude},${userLocation.longitude}`;
-  
             // Make a fetch request to the new API endpoint
             const response = await fetch(apiUrl);
-  
             // Check if the request was successful (status code 2xx)
             if (response.ok) {
               // Parse the response body as JSON
               const prefData= await response.json();
               let parsedBody;
-
               try {
                 parsedBody = JSON.parse(prefData.body);
               } catch (parseError) {
                 console.error('Error parsing JSON:', parseError);
                 return; // Stop execution if parsing fails
               }
-
               console.log('Response Data:', parsedBody);
+              // take user to find-a-pet page to render the results
               navigate('/find-a-pet', { state: { userLocation } } );
             } else {
               // Handle error response (status code other than 2xx)
@@ -131,7 +136,6 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferenc
     }
   };;
   
-
   return (
     <div className="Home">
       <main className="main-container">

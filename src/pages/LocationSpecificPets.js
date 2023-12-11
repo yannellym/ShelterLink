@@ -2,9 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import PetCard from '../components/PetCard';
 import '../styles/LocationSpecificPets.css';
-
 import usePetfinderAPI from '../hooks/usePetFinderAPI';
 
+/* component that shows nearby shelters based on user;s location
+  parameters: favoritePets: array, addToFavorites: array, removeFromFavorites:array, isAuthenticated: string
+  returns: 
+*/
 function LocationSpecificPets({ favoritePets, addToFavorites, removeFromFavorites, isAuthenticated }) {
   const location = useLocation();
   const state = location.state;

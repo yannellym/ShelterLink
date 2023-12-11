@@ -32,7 +32,6 @@ const PetDetails = ({addToFavorites, removeFromFavorites, isFavorite, isAuthenti
     }
   };
 
-
   return (
     <div className="pet-details">
       <button

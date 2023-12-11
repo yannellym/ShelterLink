@@ -5,7 +5,8 @@ import '../styles/Faqs.css';
 
 const Faqs = () => {
   const [faqs, setFaqs] = useState(faqData);
-
+  
+  // function to toggle the focus between question and answer
   const toggleAccordion = (index) => {
     setFaqs((prevFaqs) =>
       prevFaqs.map((faq, i) => ({

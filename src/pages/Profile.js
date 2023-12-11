@@ -4,12 +4,16 @@ import axios from 'axios';
 import '../styles/Profile.css';
 import userAvatar from '../images/user_icon.png';
 
+/* component that shows the user's information/profile
+  parameters: 
+  returns: 
+*/
+//TODO: set userAvatar as photo in case the response fails
 const Profile = () => {
   const [randomPhoto, setRandomPhoto] = useState(null);
   const user = Auth.user;
 
   useEffect(() => {
-    // Fetch a random photo from Unsplash API
     const fetchRandomPhoto = async () => {
       try {
         const response = await axios.get('https://source.unsplash.com/random');
@@ -18,7 +22,7 @@ const Profile = () => {
         console.error('Error fetching random photo:', error);
       }
     };
-
+    // Fetch a random photo from Unsplash API
     fetchRandomPhoto();
   }, []); // Empty dependency array ensures this effect runs once when the component mounts
 

@@ -11,17 +11,21 @@ const PetCard = ({ pet, addToFavorites, removeFromFavorites, isFavorite, isAuthe
   const navigate = useNavigate();
   const [imageSource, setImageSource] = useState(null);
 
-  //console.log(isAuthenticated, "AUTHENTICATEDDD")
-  
+  // func to handle adding/removing pets to favorites
   const handleToggleFavorite = () => {
+    // if the user is authenticated
     if (isAuthenticated) {
+      // reverse the status of favorites
       setFavorited(!favorited);
+      // if its in favorites, remove it
       if (favorited) {
         removeFromFavorites(pet.id);
       } else {
+        // else, add it
         addToFavorites(pet);
       }
     } else {
+      //TODO: INCORPORATE DATABASE FOR FAVORITE PETS - DB 
       // If the user is not authenticated, save the current URL and then direct them to the authentication page
       localStorage.setItem('previousURL', window.location.pathname);
       // Store the pet ID in local storage to remember the favorite pet
@@ -31,14 +35,11 @@ const PetCard = ({ pet, addToFavorites, removeFromFavorites, isFavorite, isAuthe
     }
   };
 
-
   const handleMoreInfoClick = () => {
     // Create the URL for the new window, including the 'petData' query parameter
     const moreInfoUrl = `/pet-details/${pet.id}?petData=${encodeURIComponent(JSON.stringify(pet))}`;
-  
     // Open the new window with the generated URL
     const newWindow = window.open(moreInfoUrl, '_blank');
-  
     // Check if the new window was successfully opened
     if (newWindow) {
       // If opened successfully, focus on the new window
@@ -48,7 +49,8 @@ const PetCard = ({ pet, addToFavorites, removeFromFavorites, isFavorite, isAuthe
       alert('Please allow pop-ups for this site to view more details.');
     }
   };
-  
+  // FUNCTION to fetch a random image of the type of animal and the breed in case the pet doesn't
+  // have a photo. In case this fails, use our coming_soon photo.
   const fetchPlaceholderImage = async (type, breed) => {
     try {
       const response = await fetch(`https://source.unsplash.com/200x200/?${type},${breed}`);
@@ -66,16 +68,17 @@ const PetCard = ({ pet, addToFavorites, removeFromFavorites, isFavorite, isAuthe
 
   useEffect(() => {
     const fetchImage = async () => {
+      // if the pet has at least 1 photo, set its image to one of its photos
       if (pet.photos && pet.photos.length > 0) {
         setImageSource({ url: pet.photos[0]?.medium, generated: false });
       } else {
+        // if the pet doesnt have any photos, fetch an image based on type and breed
         const placeholderImage = await fetchPlaceholderImage(pet.type, pet.breeds.primary || pet.type, pet.breeds.secondary);
         console.log("generated image for", pet.name)
+        // set the image and create a label to let users know it was generated
         setImageSource({ url: placeholderImage, generated: true });
-
       }
     };
-
     fetchImage();
   }, [pet]);
   

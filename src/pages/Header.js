@@ -24,7 +24,6 @@ const Header = ({ user, handleSignOut, handleSignIn}) => {
           {user && (<li><Link to="/profile">Profile</Link></li>)}
         </ul>
       </nav>
-
       {/* User profile */}
       <div className="user-profile">
         {user? (
