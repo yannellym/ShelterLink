@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import useNearbyShelters from '../hooks/useNearbyShelters';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import '../styles/NearbyShelters.css';
 import animal_shelter from '../images/animal_shelter.jpg';
 
@@ -14,10 +14,13 @@ const SheltersNearbyPage = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [zipCode, setZipCode] = useState('');
   const sheltersPerPage = 10; 
 
-  const { shelters, loading: sheltersLoading, error } = useNearbyShelters({
-    userLocation,
+  const navigate = useNavigate();
+
+  const { loading: sheltersLoading, shelters, error } = useNearbyShelters({
+    userLocation: userLocation.latitude && userLocation.longitude ? userLocation : '75070',
     page: currentPage,
     limit: sheltersPerPage,
     key: currentPage,
@@ -48,6 +51,11 @@ const SheltersNearbyPage = () => {
     ) : link;
   };
 
+  // const handleZipCodeSubmit = async () => {
+  //   pass
+      
+  // };
+
   const totalPages = shelters?.pagination?.total_pages || 0;
 
   const startPage = Math.max(1, Math.min(currentPage - 4, totalPages - 8));
@@ -58,75 +66,90 @@ const SheltersNearbyPage = () => {
   return (
     <div>
       <h1 className="title">Shelters Nearby</h1>
-      <div className="grid-container">
-        {loading ? (
-          <p>Loading...</p>
-        ) : (
-          shelters.organizations.map((shelter, index) => (
-            <div key={index} className="card">
-              <img
-                src={
-                  shelter.photos?.length > 0
-                    ? shelter.photos[0]?.full || shelter.photos[0]?.medium
-                    : animal_shelter
-                }
-                alt={`Shelter ${index}`}
-              />
-              <ul>
-                <li>
-                  <strong>Shelter's Name: </strong>
-                  {shelter.name}
-                </li>
-                <li>
-                  <strong>Email:</strong> {shelter.email}
-                </li>
-                <li>
-                  <strong>Phone: </strong>
-                  {shelter.phone || "N/A"}
-                </li>
-                <li>
-                  <strong>Website: </strong>
-                  {shelter.website ? (
-                    <a href={shelter.website} target="_blank">
-                      {formatSocialMediaLink(shelter.website)}
-                    </a>
-                  ) : (
-                    "N/A"
+      {userLocation.latitude && userLocation.longitude ? (
+        <div className="grid-container">
+          {loading ? (
+            <p>Loading...</p>
+          ) : shelters?.organizations ? (
+            shelters.organizations.map((shelter, index) => (
+              <div key={index} className="card">
+                <img
+                  src={
+                    shelter.photos?.length > 0
+                      ? shelter.photos[0]?.full || shelter.photos[0]?.medium
+                      : animal_shelter
+                  }
+                  alt={`Shelter ${index}`}
+                />
+                <ul>
+                  <li>
+                    <strong>Shelter's Name: </strong>
+                    {shelter.name}
+                  </li>
+                  <li>
+                    <strong>Email:</strong> {shelter.email}
+                  </li>
+                  <li>
+                    <strong>Phone: </strong>
+                    {shelter.phone || "N/A"}
+                  </li>
+                  <li>
+                    <strong>Website: </strong>
+                    {shelter.website ? (
+                      <a href={shelter.website} target="_blank" rel="noreferrer">
+                        {formatSocialMediaLink(shelter.website)}
+                      </a>
+                    ) : (
+                      "N/A"
+                    )}
+                  </li>
+                  <li className="distance">
+                    <strong>Distance from you:</strong>{' '}
+                    <span className="red-text">{shelter.distance.toFixed(1)} miles</span>
+                  </li>
+                  {shelter.social_media && (
+                    <React.Fragment>
+                      <li>
+                        <strong>Facebook: </strong>
+                        {shelter.social_media.facebook ? (
+                          <a href={shelter.social_media.facebook} target="_blank" rel="noreferrer">
+                            {formatSocialMediaLink(shelter.social_media.facebook)}
+                          </a>
+                        ) : (
+                          "N/A"
+                        )}
+                      </li>
+                      <li>
+                        <strong>Instagram: </strong>
+                        {shelter.social_media.instagram ? (
+                          <a href={shelter.social_media.instagram} target="_blank" rel="noreferrer">
+                            {formatSocialMediaLink(shelter.social_media.instagram)}
+                          </a>
+                        ) : (
+                          "N/A"
+                        )}
+                      </li>
+                    </React.Fragment>
                   )}
-                </li>
-                <li className="distance">
-                  <strong>Distance from you:</strong>{' '}
-                  <span className="red-text">{shelter.distance.toFixed(1)} miles</span>
-                </li>
-                {shelter.social_media && (
-                  <React.Fragment>
-                    <li>
-                      <strong>Facebook: </strong>
-                      {shelter.social_media.facebook ? (
-                        <a href={shelter.social_media.facebook} target="_blank" rel="noreferrer">
-                          {formatSocialMediaLink(shelter.social_media.facebook)}
-                        </a>
-                      ) : (
-                        "N/A"
-                      )}
-                    </li>
-                    <li>
-                      <strong>Instagram: </strong>
-                      {shelter.social_media.instagram ? (
-                        <a href={shelter.social_media.instagram} target="_blank" rel="noreferrer">
-                          {formatSocialMediaLink(shelter.social_media.instagram)}
-                        </a>
-                      ) : (
-                        "N/A"
-                      )}
-                    </li>
-                  </React.Fragment>
-                )}
-              </ul>
-            </div>
-          ))
-        )}
-      </div>
+                </ul>
+              </div>
+            ))
+          ) : (
+              <p>No location was shared. Please share location and try again.</p>
+          )}
+        </div>
+      ) : (
+        <div className="zip-code-input">
+          <label htmlFor="zipCode">Enter Your Zip Code:</label>
+          <input
+            type="text"
+            id="zipCode"
+            value={zipCode}
+            onChange={(e) => setZipCode(e.target.value)}
+          />
+          <button onClick={''}>Submit</button>
+        </div>
+      )}
       <div className="pagination">
         <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
           Previous
@@ -146,6 +169,6 @@ const SheltersNearbyPage = () => {
       </div>
     </div>
   );
-};
-
-export default SheltersNearbyPage;
+  };
+  
+  export default SheltersNearbyPage;

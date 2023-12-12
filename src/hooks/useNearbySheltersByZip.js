@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-const useNearbyShelters = ({ userLocation, page, limit}) => {
+const useNearbySheltersByZip = ({ userLocation, page, limit}) => {
   const [shelters, setShelters] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -9,7 +9,7 @@ const useNearbyShelters = ({ userLocation, page, limit}) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const apiUrl = `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/nearby_shelters?location=${userLocation.latitude},${userLocation.longitude}&page=${page}&limit=${limit}`;
+        const apiUrl = `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/nearby_shelters?location=${userLocation}&page=${page}&limit=${limit}`;
         const response = await fetch(apiUrl);
         const responseData = await response.json(); // Parse the outer JSON string
         const data = JSON.parse(responseData.body); // Parse the inner JSON string
@@ -30,4 +30,4 @@ const useNearbyShelters = ({ userLocation, page, limit}) => {
   return { shelters, loading, error };
 };
 
-export default useNearbyShelters;
+export default useNearbySheltersByZip;
