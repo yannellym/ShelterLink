@@ -22,8 +22,6 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferenc
   const [selectedAnimals, setSelectedAnimals] = useState([]);
   const [selectedPetIndex, setSelectedPetIndex] = useState(0); // Track the currently displayed pet
   const [userLocation, setUserLocation] = useState(null); // Initialize with null or a default value
-  const [showZipCodePrompt, setShowZipCodePrompt] = useState(false); // State to control zip code prompt
-  const [zipCode, setZipCode] = useState(''); // State to store user-entered zip code
   const navigate = useNavigate();
 
   // fetches animals without any filters
@@ -56,7 +54,7 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferenc
         setLoading(false);
         // filter for only animals that have more than one photo and save these 4 pets.
         const animals = responseBody.animals.filter((animal) => animal.photos.length > 1).slice(0, 4);
-        // if the animal's array is less than 4, let's keep trying to get more animals until we have 4 total
+        // if the animal's array is less than 4, lets keeps trying to get more animals until we have 4 total
         if (animals.length < 4) {
           const remainingAnimalsCount = 4 - animals.length;
           const additionalAnimals = responseBody.animals.slice(0, remainingAnimalsCount);
@@ -81,65 +79,61 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferenc
       },
       (error) => {
         console.error('Error getting user location:', error.message);
-        // If geolocation is not allowed, show the zip code prompt
-        setShowZipCodePrompt(true);
+        setLoading(false);
       }
     );
   }, []);
-
-  const handleZipCodeSubmit = () => {
-    // Use the entered zip code for further actions, e.g., fetching data based on zip code
-    console.log('User entered zip code:', zipCode);
-    // Close the zip code prompt
-    setShowZipCodePrompt(false);
-  };
 
   /* function that fetches animals based on user's selected location
   parameters: 
   returns: 
   */
-  const handleViewAllPetsNearYou = () => {
-    // Check if userLocation is available
-    if (userLocation) {
-      // Construct the URL with the latitude and longitude parameters
-      const apiUrl = `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/pet_zip_search?location=${userLocation.latitude},${userLocation.longitude}`;
-      // Make a fetch request to the new API endpoint
-      fetchAnimals(apiUrl);
-    } else {
-      // If user location is not available, show the zip code prompt
-      setShowZipCodePrompt(true);
-    }
-  };
-
-  const fetchAnimals = async (apiUrl) => {
-    // Make a fetch request to the new API endpoint
+  const handleViewAllPetsNearYou = async () => {
     try {
-      const response = await fetch(apiUrl);
-      // Check if the request was successful (status code 2xx)
-      if (response.ok) {
-        // Parse the response body as JSON
-        const prefData = await response.json();
-        let parsedBody;
-        try {
-          parsedBody = JSON.parse(prefData.body);
-        } catch (parseError) {
-          console.error('Error parsing JSON:', parseError);
-          return; // Stop execution if parsing fails
-        }
-        console.log('Response Data:', parsedBody);
-        // take user to find-a-pet page to render the results
-        navigate('/find-a-pet', { state: { userLocation } });
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          async (position) => {
+            try {
+              const { latitude, longitude } = position.coords;
+  
+              // Use reverse geocoding to get the address components, including the ZIP code
+              const response = await fetch(
+                `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=AIzaSyDNZzuD8O2UcYuQpL58TAAceGgUaUW71GM`
+              );
+              const data = await response.json();
+  
+              // Extract the ZIP code from the response
+              const zipCode = data.results[0]?.address_components.find(
+                (component) => component.types.includes('postal_code')
+              )?.short_name;
+  
+              const userLocation = {
+                latitude,
+                longitude,
+                zipCode,
+              };
+              console.log(userLocation);
+              // Take the user to the find-a-pet page and pass the userLocation
+              navigate('/nearby_pets', { state: { userLocation } });
+            } catch (error) {
+              console.error('Error navigating to /nearby_pets:', error);
+              // Handle other errors, maybe show a message to the user
+            }
+          },
+          (error) => {
+            console.error('Error getting user location:', error.message);
+            // Handle error, maybe show a message to the user
+          }
+        );
       } else {
-        // Handle error response (status code other than 2xx)
-        console.error('Error:', response.statusText);
+        console.error('Geolocation is not supported by your browser');
+        // Handle lack of geolocation support, maybe show a message to the user
       }
     } catch (error) {
       console.error('Error:', error.message);
-      // Handle other errors, maybe show a message to the user
     }
   };
 
-  
   return (
     <div className="Home">
       <main className="main-container">
