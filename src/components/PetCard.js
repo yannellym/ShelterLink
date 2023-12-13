@@ -115,11 +115,11 @@ const PetCard = ({ pet, addToFavorites, removeFromFavorites, isFavorite, isAuthe
           <p className="pet-card-description">
             {pet.description && pet.description.length > 100
               ? `${pet.description.substring(0, 100)}...`
-              : `${pet.description} (This image is generated)`}
+              : `${pet.description}`}
           </p>
         ) : (
           <p className="pet-card-description">This pet doesn't have a description.</p>
-        )}
+      )}
       </Link>
       <div className="pet-card-footer">
         <button className="more-info-button" onClick={handleMoreInfoClick}>

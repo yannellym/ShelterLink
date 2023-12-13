@@ -14,13 +14,25 @@ function NearbyPets() {
     count_per_page: 25,
   });
   const buttonsToShow = 9;
-
+  console.log("user location in nearby pets", userLocation)
   useEffect(() => {
     const fetchNearbyPets = async (page) => {
       try {
         setLoading(true);
         // Make your API request here using the user location and current page
-        const response = await fetch(`https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/nearby_pets?location=${userLocation.zipCode}&limit=25&page=${page}`);
+        const response = await fetch(
+          userLocation.latitude && userLocation.longitude
+            ? `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/nearby_pets?location=${userLocation.latitude},${userLocation.longitude}&limit=25&page=${page}`
+            : userLocation.zipCode
+            ? `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/nearby_pets?location=${userLocation.zipCode}&limit=25&page=${page}`
+            : (userLocation.zipCode = prompt('Please enter your zip code:'))
+            ? `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/nearby_pets?location=${userLocation.zipCode}&limit=25&page=${page}`
+            : null 
+          );
+        
+        if (!response) {
+          console.error('No location information available for API call');
+        }
         const responseData = await response.json(); // Parse the outer JSON string
         const apiData = JSON.parse(responseData.body); // Parse the inner JSON string
         console.log(apiData, "data");

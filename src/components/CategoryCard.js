@@ -1,5 +1,5 @@
 import React from 'react';
-import '../styles/SectionLink.css'; 
+import '../styles/CategoryCard.css'; 
 
 // card to display the pet categories in the home page
 function CategoryCard({ title, link, imageSrc, userLocation }) {

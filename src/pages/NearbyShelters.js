@@ -20,7 +20,7 @@ const SheltersNearbyPage = () => {
   const navigate = useNavigate();
 
   const { loading: sheltersLoading, shelters, error } = useNearbyShelters({
-    userLocation: userLocation.latitude && userLocation.longitude ? userLocation : '75070',
+    userLocation: userLocation.latitude && userLocation.longitude ? userLocation : '11208',
     page: currentPage,
     limit: sheltersPerPage,
     key: currentPage,
@@ -87,11 +87,20 @@ const SheltersNearbyPage = () => {
                     {shelter.name}
                   </li>
                   <li>
-                    <strong>Email:</strong> {shelter.email}
+                    <strong>Email: </strong>
+                    {shelter.email ? (
+                      <a href={`mailto:${shelter.email}`}>{shelter.email}</a>
+                    ) : (
+                      "N/A"
+                    )}
                   </li>
                   <li>
-                    <strong>Phone: </strong>
-                    {shelter.phone || "N/A"}
+                  <strong>Phone: </strong>
+                    {shelter.phone ? (
+                      <a href={`tel:${shelter.phone}`}>{shelter.phone}</a>
+                    ) : (
+                      "N/A"
+                    )}
                   </li>
                   <li>
                     <strong>Website: </strong>

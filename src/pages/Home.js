@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SearchBar from '../components/SearchBar';
 import CategoryCard from '../components/CategoryCard';
+import NoLocationCard from '../components/NoLocationCard'; 
 import ResourcesSection from './ResourcesSection';
 import UserPreferencesForm from '../components/UserPreferencesForm';
 import PetCard from '../components/PetCard';
@@ -98,7 +99,7 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferenc
   
               // Use reverse geocoding to get the address components, including the ZIP code
               const response = await fetch(
-                `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=AIzaSyDNZzuD8O2UcYuQpL58TAAceGgUaUW71GM`
+                `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&AIzaSyDNZzuD8O2UcYuQpL58TAAceGgUaUW71GM`
               );
               const data = await response.json();
   
@@ -113,6 +114,7 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferenc
                 zipCode,
               };
               console.log(userLocation);
+  
               // Take the user to the find-a-pet page and pass the userLocation
               navigate('/nearby_pets', { state: { userLocation } });
             } catch (error) {
@@ -122,18 +124,46 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferenc
           },
           (error) => {
             console.error('Error getting user location:', error.message);
-            // Handle error, maybe show a message to the user
-          }
+            
+            // If user denies location access or there's an error, prompt them to enter their ZIP code
+            const userEnteredZipCode = prompt('We were not able to obtain your location. Please enter your ZIP code:');
+            if (userEnteredZipCode) {
+              const userLocation = {
+                zipCode: userEnteredZipCode,
+              };
+              console.log(userLocation);
+  
+              // Take the user to the find-a-pet page and pass the userLocation
+              navigate('/nearby_pets', { state: { userLocation } });
+            } else {
+              // Handle the case where the user cancels the prompt or does not enter a ZIP code
+              console.log('User did not enter a ZIP code');
+            }
+          },
+          { enableHighAccuracy: true }
         );
       } else {
         console.error('Geolocation is not supported by your browser');
-        // Handle lack of geolocation support, maybe show a message to the user
+        // If there is no geolocation support, prompt the user to enter their ZIP code
+        const userEnteredZipCode = prompt('Please enter your ZIP code:');
+        if (userEnteredZipCode) {
+          const userLocation = {
+            zipCode: userEnteredZipCode,
+          };
+          console.log(userLocation);
+
+          // Take the user to the find-a-pet page and pass the userLocation
+          navigate('/nearby_pets', { state: { userLocation } });
+        } else {
+          // Handle the case where the user cancels the prompt or does not enter a ZIP code
+          console.log('User did not enter a ZIP code');
+        }
       }
     } catch (error) {
       console.error('Error:', error.message);
     }
   };
-
+  
   return (
     <div className="Home">
       <main className="main-container">
@@ -191,11 +221,15 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferenc
             <CategoryCard title="All Dogs" imageSrc={dog2} link="/all_pets/dog" />
             <CategoryCard title="All Cats" imageSrc={kitten} link="/all_pets/cat" />
             <CategoryCard title="Other Animals" imageSrc={hamster} link="/all_pets/other" />
-            <CategoryCard
-              title="Shelters nearby"
-              imageSrc={paw}
-              link={`/nearby_shelters?latitude=${userLocation?.latitude}&longitude=${userLocation?.longitude}`}
-            />
+            {userLocation ? (
+              <CategoryCard
+                title="Shelters nearby"
+                imageSrc={paw}
+                link={`/nearby_shelters?latitude=${userLocation.latitude}&longitude=${userLocation.longitude}`}
+              />
+            ) : (
+              <NoLocationCard onClick={handleViewAllPetsNearYou} message="Please provide your location to view nearby shelters." />
+            )}
           </div>
         </div>
         <div className="resource-div">
@@ -207,23 +241,25 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferenc
           <div className="nearby-pet-cards">
             {loading ? (
               <p>Loading...</p>
-            ) : (
-              selectedAnimals.map((pet) => {
-                return (
-                  <PetCard
-                    key={pet.id}
-                    pet={pet}
-                    addToFavorites={addToFavorites}
-                    removeFromFavorites={removeFromFavorites}
-                    isFavorite={favoritePets.some((favoritePet) => favoritePet.id === pet.id)}
-                    isAuthenticated={isAuthenticated}
-                  />
-                )
-                }))}
-             <button onClick={handleViewAllPetsNearYou} className="greater-need-cards">
+            ) : selectedAnimals.map((pet) => (
+              <PetCard
+                key={pet.id}
+                pet={pet}
+                addToFavorites={addToFavorites}
+                removeFromFavorites={removeFromFavorites}
+                isFavorite={favoritePets.some((favoritePet) => favoritePet.id === pet.id)}
+                isAuthenticated={isAuthenticated}
+              />
+            ))}
+            {userLocation ? (
+            <button onClick={handleViewAllPetsNearYou} className="greater-need-cards">
               <img width="64" height="64" src="https://img.icons8.com/sf-black/64/right.png" alt="right" />
               <p><strong>View all available pets near you.</strong></p>
             </button>
+            ) : (
+              <NoLocationCard onClick={handleViewAllPetsNearYou} message="Please provide your location to view nearby pets" />
+            )
+          }
           </div>
         </div>
       </main>

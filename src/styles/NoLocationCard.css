@@ -1,0 +1,41 @@
+/* Define a basic card style */
+.category-card {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 180px;
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-right: 10px; 
+    flex-direction: column;
+    padding: 10px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Style the content inside the card */
+  .category-card-content {
+    text-align: center;
+  }
+  
+  /* Style the button */
+  .category-card-content button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 10px;
+  }
+  
+  .category-card-content button:hover {
+    background-color: #0056b3;
+  }
+  
