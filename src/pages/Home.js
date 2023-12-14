@@ -126,10 +126,10 @@ const handleZipCodeInput = () => {
   // Prompt the user to enter their ZIP code
   const userEnteredZipCode = prompt('Please enter your ZIP code:');
   if (userEnteredZipCode) {
-    const userLocation = {
+    const fetchedUserLocation = {
       zipCode: userEnteredZipCode,
     };
-    navigate('/nearby_pets', { state: { userLocation } });
+    navigate('/nearby_pets', { state: { fetchedUserLocation} });
   } else {
     // Handle the case where the user cancels the prompt or does not enter a ZIP code
     console.log('User did not enter a ZIP code');

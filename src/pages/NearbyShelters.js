@@ -23,53 +23,48 @@ const SheltersNearbyPage = () => {
   const [loading, setLoading] = useState(true);
   const [zipCode, setZipCode] = useState('');
 
+  const fetchNearbySheltersForCurrentPage = async (page) => {
+    try {
+      setLoading(true);
 
+      const response = await fetch(
+        userLocation.zipCode
+          ? `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/nearby_shelters?location=${userLocation.zipCode}&limit=${pagination.count_per_page}&page=${page}`
+          : `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/nearby_shelters?location=75070&limit=${pagination.count_per_page}&page=${page}`
+      );
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch data: ${response.status}`);
+      }
+
+      const responseData = await response.json();
+      const apiData = JSON.parse(responseData.body);
+      console.log(apiData, "data received");
+      setData(apiData.organizations || []);
+      setPagination({
+        current_page: apiData.pagination.current_page,
+        total_pages: apiData.pagination.total_pages,
+        count_per_page: apiData.pagination.count_per_page,
+      });
+    } catch (error) {
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchNearbyShelters = async (page) => {
-      try {
-        setLoading(true);
-        // Make your API request here using the user location and current page
-        const response = await fetch(
-          userLocation.zipCode? `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/nearby_shelters?location=${userLocation.zipCode}&limit=${pagination.count_per_page}&page=${page}`
-            : `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/nearby_shelters?location=75070&limit=${pagination.count_per_page}&page=${page}`
-
-          );
-        
-        if (!response) {
-          console.error('No location information available for API call');
-        }
-        const responseData = await response.json(); // Parse the outer JSON string
-        const apiData = JSON.parse(responseData.body); // Parse the inner JSON string
-        console.log(apiData, "data");
-
-        // Update state with new data and pagination information
-        setData(apiData.animals || []);
-        setPagination({
-          current_page: apiData.pagination.current_page,
-          total_pages: apiData.pagination.total_pages,
-          count_per_page: apiData.pagination.count_per_page,
-        });
-      } catch (error) {
-        setError(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    // Fetch data when the component mounts
-    fetchNearbyShelters(pagination.current_page);
-    }, [data, pagination.current_page]);
-
+    fetchNearbySheltersForCurrentPage(currentPage);
+  }, [currentPage]);
 
   const handlePageChange = (newPage) => {
-    if (newPage >= 1) {
+    if (newPage >= 1 && newPage <= pagination.total_pages) {
       setCurrentPage(newPage);
+      fetchNearbySheltersForCurrentPage(newPage);
     }
   };
 
   const formatSocialMediaLink = (link) => {
-    // Add a line break if the link is longer than 100 characters
     return link.length > 30 ? (
       <>
         {link.substring(0, 30)}
@@ -79,7 +74,7 @@ const SheltersNearbyPage = () => {
     ) : link;
   };
 
-  const totalPages = data?.pagination?.total_pages || 0;
+  const totalPages = pagination.total_pages || 0;
 
   const startPage = Math.max(1, Math.min(currentPage - 4, totalPages - 8));
   const endPage = Math.min(totalPages, startPage + 8);
@@ -93,8 +88,8 @@ const SheltersNearbyPage = () => {
         <div className="grid-container">
           {loading ? (
             <p>Loading...</p>
-          ) : data?.organizations ? (
-            data.organizations.map((shelter, index) => (
+          ) : data? (
+            data.map((shelter, index) => (
               <div key={index} className="card">
                 <img
                   src={
