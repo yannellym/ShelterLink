@@ -188,10 +188,12 @@ const App = () => {
           />
           <Route path="/nearby_pets" element = {
             <NearbyPets
+              userLocation={fetchedUserLocation}
             />}
           />
           <Route path="/nearby_shelters" element = {
-            <NearbyShelters 
+            <NearbyShelters
+              userLocation={fetchedUserLocation}
             />}
           />
         </Routes>

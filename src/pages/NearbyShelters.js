@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import useNearbyShelters from '../hooks/useNearbyShelters';
-import { useLocation, useNavigate } from 'react-router-dom';
 import '../styles/NearbyShelters.css';
 import animal_shelter from '../images/animal_shelter.jpg';
+import { useLocation } from 'react-router-dom';
 
-const SheltersNearbyPage = () => {
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const userLocation = {
-    latitude: queryParams.get('latitude'),
-    longitude: queryParams.get('longitude'),
-    zipCode: queryParams.get('zipCode'),
-  };
+const SheltersNearbyPage = ({userLocation} ) => {
+  const { state } = useLocation();
+  const fetchedUserLocation = state?.fetchedUserLocation || null;
+ 
+  const [newUserLocation, setUserLocation] = useState(null);
   const [data, setData] = useState([]);
+  const [zipCode, setZipCode] = useState([]);
+
   const [pagination, setPagination] = useState({
     current_page: 1,
     total_pages: 1,
@@ -21,16 +19,23 @@ const SheltersNearbyPage = () => {
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [zipCode, setZipCode] = useState('');
+  // console.log(userLocation?.zipCode, "user loc", fetchedUserLocation, "FETCHED USER LOCATION")
+
+  const locationToUse = fetchedUserLocation?.zipCode || (newUserLocation) || '11208';
+
+  useEffect(() => {
+    // Update the user location state when it's fetched
+    if (userLocation) {
+      setUserLocation(userLocation.zipCode);
+    }
+  }, [userLocation]);
 
   const fetchNearbySheltersForCurrentPage = async (page) => {
     try {
       setLoading(true);
 
       const response = await fetch(
-        userLocation.zipCode
-          ? `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/nearby_shelters?location=${userLocation.zipCode}&limit=${pagination.count_per_page}&page=${page}`
-          : `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/nearby_shelters?location=75070&limit=${pagination.count_per_page}&page=${page}`
+        `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/nearby_shelters?location=${locationToUse}&limit=${pagination.count_per_page}&page=${page}`
       );
 
       if (!response.ok) {
@@ -54,8 +59,11 @@ const SheltersNearbyPage = () => {
   };
 
   useEffect(() => {
-    fetchNearbySheltersForCurrentPage(currentPage);
-  }, [currentPage]);
+    // Fetch nearby shelters only if the user location is available
+    if ( newUserLocation || fetchedUserLocation?.zipCode  !== null) {
+      fetchNearbySheltersForCurrentPage(currentPage);
+    }
+  }, [ newUserLocation || fetchedUserLocation?.zipCode , currentPage]);
 
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= pagination.total_pages) {
@@ -83,8 +91,8 @@ const SheltersNearbyPage = () => {
 
   return (
     <div>
-      <h1 className="title">Shelters Nearby {userLocation.zipCode} </h1>
-      {userLocation.zipCode ? (
+      <h1 className="title">Shelters Nearby {newUserLocation || fetchedUserLocation?.zipCode } </h1>
+      { newUserLocation || fetchedUserLocation?.zipCode  ? (
         <div className="grid-container">
           {loading ? (
             <p>Loading...</p>

@@ -13,7 +13,6 @@ import hamster from '../images/hamster.jpg';
 import paw from '../images/paw.png';
 import usePetFinderAPI from '../hooks/usePetFinderAPI'; // hook
 import useAnimalsBasedOnPreferencesAPI from '../hooks/useAnimalsBasedOnPreferencesAPI'; // hook
-import useUserLocation from '../hooks/useUserLocation'; 
 
 /* component shows UserPreferencesForm, petCards, categoryCards, and resources section
   parameters: favoritePets: array, addToFavorites: array,  userPreferences: array, removeFromFavorites:array, isAuthenticated: string
@@ -73,13 +72,13 @@ function Home({ userLocation, favoritePets, addToFavorites, removeFromFavorites,
   parameters: 
   returns: 
   */
-  const handleViewAllPetsNearYou = (e) => {
-    console.log(fetchedUserLocation, "loc with zip")
+  const handleViewAllPetsNearYou = ({ targetPage }) => {
+    console.log(fetchedUserLocation, "loc with zip");
     try {
       if (fetchedUserLocation) {
         // If userLocation is available, directly navigate to the nearby_pets page
-        console.log("sending", fetchedUserLocation)
-        navigate('/nearby_pets', { state: { fetchedUserLocation } });
+        console.log("sending", fetchedUserLocation);
+        navigate(`/${targetPage}`, { state: { fetchedUserLocation } });
       } else if (navigator.geolocation) {
         // If geolocation is supported, attempt to get the user's current position
         navigator.geolocation.getCurrentPosition(
@@ -89,40 +88,40 @@ function Home({ userLocation, favoritePets, addToFavorites, removeFromFavorites,
               latitude,
               longitude,
             };
-            navigate('/nearby_pets', { state: { userLocation } });
+            navigate(`/${targetPage}`, { state: { userLocation } });
           },
           (error) => {
             console.error('Error getting user location:', error.message);
             // If there's an error or user denies location access, prompt them to enter their ZIP code
-            handleZipCodeInput();
+            handleZipCodeInput(targetPage);
           },
           { enableHighAccuracy: true }
         );
       } else {
         console.error('Geolocation is not supported by your browser');
         // If there is no geolocation support, prompt the user to enter their ZIP code
-        handleZipCodeInput();
+        handleZipCodeInput(targetPage);
       }
     } catch (error) {
       console.error('Error:', error.message);
     }
   };
   
-
-const handleZipCodeInput = () => {
-  // Prompt the user to enter their ZIP code
-  const userEnteredZipCode = prompt('Please enter your ZIP code:');
-  if (userEnteredZipCode) {
-    const fetchedUserLocation = {
-      zipCode: userEnteredZipCode,
-    };
-    navigate('/nearby_pets', { state: { fetchedUserLocation} });
-  } else {
-    // Handle the case where the user cancels the prompt or does not enter a ZIP code
-    console.log('User did not enter a ZIP code');
-  }
-};
-
+  const handleZipCodeInput = (targetPage) => {
+    // Prompt the user to enter their ZIP code
+    const userEnteredZipCode = prompt('Please enter your ZIP code:');
+    if (userEnteredZipCode) {
+      const fetchedUserLocation = {
+        zipCode: userEnteredZipCode,
+      };
+      navigate(`/${targetPage}`, { state: { fetchedUserLocation } });
+    } else {
+      // Handle the case where the user cancels the prompt or does not enter a ZIP code
+      console.log('User did not enter a ZIP code');
+    }
+  };
+  
+  
   
   return (
     <div className="Home">
@@ -181,14 +180,17 @@ const handleZipCodeInput = () => {
             <CategoryCard title="All Dogs" imageSrc={dog2} link="/all_pets/dog" />
             <CategoryCard title="All Cats" imageSrc={kitten} link="/all_pets/cat" />
             <CategoryCard title="Other Animals" imageSrc={hamster} link="/all_pets/other" />
-            {fetchedUserLocation ? (
+            {fetchedUserLocation || userLocation ? (
               <CategoryCard
                 title="Shelters nearby"
                 imageSrc={paw}
                 link={`/nearby_shelters?zipCode=${fetchedUserLocation?.zipCode}`}
               />
             ) : (
-              <NoLocationCard onClick={handleViewAllPetsNearYou} message="Please provide your location to view nearby shelters." />
+              <NoLocationCard  
+                onClick={() => handleViewAllPetsNearYou({ targetPage: 'nearby_shelters' })} 
+                message="Please provide your location to view nearby shelters." 
+              />
             )}
           </div>
         </div>
@@ -211,13 +213,16 @@ const handleZipCodeInput = () => {
                 isAuthenticated={isAuthenticated}
               />
             ))}
-            {fetchedUserLocation ? (
+            {fetchedUserLocation || userLocation ? (
             <button onClick={handleViewAllPetsNearYou} className="greater-need-cards">
               <img width="64" height="64" src="https://img.icons8.com/sf-black/64/right.png" alt="right" />
               <p><strong>View all available pets near you.</strong></p>
             </button>
             ) : (
-              <NoLocationCard onClick={handleViewAllPetsNearYou} message="Please provide your location to view nearby pets" />
+              <NoLocationCard 
+                onClick={() => handleViewAllPetsNearYou({ targetPage: 'nearby_pets' })} 
+                message="Please provide your location to view nearby pets" 
+              />
             )
           }
           </div>

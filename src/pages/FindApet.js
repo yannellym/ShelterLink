@@ -44,7 +44,7 @@ function FindApet({ userLocation, favoritePets, addToFavorites, removeFromFavori
 
       if (data && data.body) {
         const responseBody = JSON.parse(data.body);
-        setSearchResults(applyFilters(responseBody.animals, filters)); // Apply filters to the new data
+        setSearchResults(responseBody.animals); // Apply filters to the new data
         // remove the loading indicator
         setLoading(false);
         // set the new data
@@ -62,6 +62,14 @@ function FindApet({ userLocation, favoritePets, addToFavorites, removeFromFavori
     fetchPetsForPage(currentPage, selectedFilters, userLocation?.zipCode || 11208);
   }, [userLocation]);
 
+  const handleFilterChange = async (newFilters) => {
+    setSearchResults([]);
+    setLoading(true);
+    setSelectedFilters(newFilters);
+    setCurrentPage(1);
+    }
+  
+
   const handlePageChange = (page) => {
     // Set loading to true before changing the page
     setLoading(true);
@@ -73,37 +81,6 @@ function FindApet({ userLocation, favoritePets, addToFavorites, removeFromFavori
       // After the data is loaded, scroll to the top
       window.scrollTo(0, 0); // Scroll to the top of the page
     }, 500); // 500 milliseconds (0.5 second) delay
-  };
-  const handleFilterChange = async (newFilters) => {
-    setSearchResults([]);
-    setLoading(true);
-    setSelectedFilters(newFilters);
-    setCurrentPage(1);
-    try {
-      let endpoint = `https://iyank5vavf.execute-api.us-east-1.amazonaws.com/default/lambdaapi-dev?page=1&limit=${50}`; 
-      for (const filterKey in newFilters) {
-        if (newFilters[filterKey] !== 'any') {
-          endpoint += `&${filterKey}=${newFilters[filterKey]}`;
-        }
-      }
-
-      const response = await fetch(endpoint);
-      const data = await response.json();
-
-      if (data && data.animals) {
-        const filteredResults = applyFilters(data.animals, newFilters);
-        if (filteredResults.length > 0) {
-          setSearchResults(filteredResults);
-          setTotalPages(data.pagination.total_pages);
-        } else {
-          setTotalPages(0);
-        }
-        setLoading(false);
-      }
-    } catch (error) {
-      console.error('Error fetching data:', error.message);
-      setLoading(false);
-    }
   };
 
   const applyFilters = (data, filters) => {
