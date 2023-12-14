@@ -13,6 +13,7 @@ import hamster from '../images/hamster.jpg';
 import paw from '../images/paw.png';
 import usePetFinderAPI from '../hooks/usePetFinderAPI'; // hook
 import useAnimalsBasedOnPreferencesAPI from '../hooks/useAnimalsBasedOnPreferencesAPI'; // hook
+import useUserLocation from '../hooks/useUserLocation'; 
 
 /* component shows UserPreferencesForm, petCards, categoryCards, and resources section
   parameters: favoritePets: array, addToFavorites: array,  userPreferences: array, removeFromFavorites:array, isAuthenticated: string
@@ -21,41 +22,55 @@ import useAnimalsBasedOnPreferencesAPI from '../hooks/useAnimalsBasedOnPreferenc
 function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferences, isAuthenticated }) {
   const [loading, setLoading] = useState(true);
   const [selectedAnimals, setSelectedAnimals] = useState([]);
-  const [selectedPetIndex, setSelectedPetIndex] = useState(0); // Track the currently displayed pet
-  const [userLocation, setUserLocation] = useState(null); // Initialize with null or a default value
+  const [selectedPetIndex, setSelectedPetIndex] = useState(0);
+  const [userLocation, setUserLocation] = useState(null);
   const navigate = useNavigate();
-
-  // fetches animals without any filters
+  
   const { data: petData } = usePetFinderAPI(
     'https://2hghsit103.execute-api.us-east-1.amazonaws.com/default', []
   );
 
   const { preferredAnimals, fetchAnimalsBasedOnPreferences } = useAnimalsBasedOnPreferencesAPI();
-  // once the user selects a filter, call fetchAnimalsBasedOnPreferences to use the user's preferences
+  const { userLocation: fetchedUserLocation, loading: locationLoading, error: locationError, ready } = useUserLocation();
+  console.log("userlocation1:", fetchedUserLocation);
+
   const handlePreferencesSubmit = (preferences) => {
     fetchAnimalsBasedOnPreferences(preferences);
-  }
+  };
 
   const fetchNewPet = () => {
-    // Update the selected pet index to cycle through the available pets
     setSelectedPetIndex((prevIndex) => (prevIndex + 1) % preferredAnimals.length);
   };
 
   const backToForm = () => {
-    // reload the page so we see the form again
     window.location.reload();
   };
 
   useEffect(() => {
-    // if we received data
+    if (locationLoading) {
+      setLoading(true);
+    } else if (locationError) {
+      console.error('Error getting user location:', locationError.message);
+      setLoading(false);
+    } else if (fetchedUserLocation && ready) {
+      setLoading(false);
+      setUserLocation(fetchedUserLocation);
+
+      // Extract ZIP code from the userLocation response
+      const { zipCode } = fetchedUserLocation;
+      console.log('ZIP Code:', zipCode);
+
+      // Directly call the handleViewAllPetsNearYou function with the ZIP code
+      handleViewAllPetsNearYou();
+    }
+  }, [fetchedUserLocation, locationLoading, locationError, ready]);
+
+  useEffect(() => {
     if (petData && petData.body) {
-      // parse the json string
       const responseBody = JSON.parse(petData.body);
       if (responseBody.animals) {
         setLoading(false);
-        // filter for only animals that have more than one photo and save these 4 pets.
         const animals = responseBody.animals.filter((animal) => animal.photos.length > 1).slice(0, 4);
-        // if the animal's array is less than 4, lets keeps trying to get more animals until we have 4 total
         if (animals.length < 4) {
           const remainingAnimalsCount = 4 - animals.length;
           const additionalAnimals = responseBody.animals.slice(0, remainingAnimalsCount);
@@ -66,103 +81,60 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferenc
       }
     }
   }, [petData]);
-  
-  useEffect(() => {
-    // get the location of the user
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const userLocation = {
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-        };
-        setUserLocation(userLocation); // Update the userLocation state
-        console.log('User Location:', userLocation);
-      },
-      (error) => {
-        console.error('Error getting user location:', error.message);
-        setLoading(false);
-      }
-    );
-  }, []);
 
   /* function that fetches animals based on user's selected location
   parameters: 
   returns: 
   */
-  const handleViewAllPetsNearYou = async () => {
+  const handleViewAllPetsNearYou = (e) => {
+    console.log(fetchedUserLocation, "loc with zip")
     try {
-      if (navigator.geolocation) {
+      if (fetchedUserLocation) {
+        // If userLocation is available, directly navigate to the nearby_pets page
+        navigate('/nearby_pets', { state: { fetchedUserLocation } });
+      } else if (navigator.geolocation) {
+        // If geolocation is supported, attempt to get the user's current position
         navigator.geolocation.getCurrentPosition(
-          async (position) => {
-            try {
-              const { latitude, longitude } = position.coords;
-  
-              // Use reverse geocoding to get the address components, including the ZIP code
-              const response = await fetch(
-                `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&AIzaSyDNZzuD8O2UcYuQpL58TAAceGgUaUW71GM`
-              );
-              const data = await response.json();
-  
-              // Extract the ZIP code from the response
-              const zipCode = data.results[0]?.address_components.find(
-                (component) => component.types.includes('postal_code')
-              )?.short_name;
-  
-              const userLocation = {
-                latitude,
-                longitude,
-                zipCode,
-              };
-              console.log(userLocation);
-  
-              // Take the user to the find-a-pet page and pass the userLocation
-              navigate('/nearby_pets', { state: { userLocation } });
-            } catch (error) {
-              console.error('Error navigating to /nearby_pets:', error);
-              // Handle other errors, maybe show a message to the user
-            }
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            const userLocation = {
+              latitude,
+              longitude,
+            };
+            navigate('/nearby_pets', { state: { userLocation } });
           },
           (error) => {
             console.error('Error getting user location:', error.message);
-            
-            // If user denies location access or there's an error, prompt them to enter their ZIP code
-            const userEnteredZipCode = prompt('We were not able to obtain your location. Please enter your ZIP code:');
-            if (userEnteredZipCode) {
-              const userLocation = {
-                zipCode: userEnteredZipCode,
-              };
-              console.log(userLocation);
-  
-              // Take the user to the find-a-pet page and pass the userLocation
-              navigate('/nearby_pets', { state: { userLocation } });
-            } else {
-              // Handle the case where the user cancels the prompt or does not enter a ZIP code
-              console.log('User did not enter a ZIP code');
-            }
+            // If there's an error or user denies location access, prompt them to enter their ZIP code
+            handleZipCodeInput();
           },
           { enableHighAccuracy: true }
         );
       } else {
         console.error('Geolocation is not supported by your browser');
         // If there is no geolocation support, prompt the user to enter their ZIP code
-        const userEnteredZipCode = prompt('Please enter your ZIP code:');
-        if (userEnteredZipCode) {
-          const userLocation = {
-            zipCode: userEnteredZipCode,
-          };
-          console.log(userLocation);
-
-          // Take the user to the find-a-pet page and pass the userLocation
-          navigate('/nearby_pets', { state: { userLocation } });
-        } else {
-          // Handle the case where the user cancels the prompt or does not enter a ZIP code
-          console.log('User did not enter a ZIP code');
-        }
+        handleZipCodeInput();
       }
     } catch (error) {
       console.error('Error:', error.message);
     }
   };
+  
+
+const handleZipCodeInput = () => {
+  // Prompt the user to enter their ZIP code
+  const userEnteredZipCode = prompt('Please enter your ZIP code:');
+  if (userEnteredZipCode) {
+    const userLocation = {
+      zipCode: userEnteredZipCode,
+    };
+    navigate('/nearby_pets', { state: { userLocation } });
+  } else {
+    // Handle the case where the user cancels the prompt or does not enter a ZIP code
+    console.log('User did not enter a ZIP code');
+  }
+};
+
   
   return (
     <div className="Home">
@@ -221,11 +193,11 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferenc
             <CategoryCard title="All Dogs" imageSrc={dog2} link="/all_pets/dog" />
             <CategoryCard title="All Cats" imageSrc={kitten} link="/all_pets/cat" />
             <CategoryCard title="Other Animals" imageSrc={hamster} link="/all_pets/other" />
-            {userLocation ? (
+            {fetchedUserLocation ? (
               <CategoryCard
                 title="Shelters nearby"
                 imageSrc={paw}
-                link={`/nearby_shelters?latitude=${userLocation.latitude}&longitude=${userLocation.longitude}`}
+                link={`/nearby_shelters?latitude=${fetchedUserLocation.latitude}&longitude=${fetchedUserLocation.longitude}`}
               />
             ) : (
               <NoLocationCard onClick={handleViewAllPetsNearYou} message="Please provide your location to view nearby shelters." />
@@ -251,7 +223,7 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferenc
                 isAuthenticated={isAuthenticated}
               />
             ))}
-            {userLocation ? (
+            {fetchedUserLocation ? (
             <button onClick={handleViewAllPetsNearYou} className="greater-need-cards">
               <img width="64" height="64" src="https://img.icons8.com/sf-black/64/right.png" alt="right" />
               <p><strong>View all available pets near you.</strong></p>

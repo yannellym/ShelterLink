@@ -1,0 +1,41 @@
+
+  
+  .pet-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .pet-list .card {
+    max-width: 300px;
+  }
+  
+  .pagination {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .pagination button {
+    padding: 8px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    background-color: #fff;
+  }
+  
+  .pagination button:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .pagination button:disabled {
+    color: #999;
+    cursor: not-allowed;
+  }
+  
+  .pagination button.active {
+    background-color: #3498db;
+    color: #fff;
+  }
+  

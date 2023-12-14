@@ -4,29 +4,29 @@ import '../styles/NearbyPetsPage.css';
 import PetCard from '../components/PetCard';
 
 function NearbyPets() {
-  const { state: { userLocation } } = useLocation();
+  const { state: { fetchedUserLocation } } = useLocation();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [pagination, setPagination] = useState({
     current_page: 1,
     total_pages: 1,
-    count_per_page: 25,
+    count_per_page: 24,
   });
   const buttonsToShow = 9;
-  console.log("user location in nearby pets", userLocation)
+  console.log(fetchedUserLocation, "location i")
   useEffect(() => {
     const fetchNearbyPets = async (page) => {
       try {
         setLoading(true);
         // Make your API request here using the user location and current page
         const response = await fetch(
-          userLocation.latitude && userLocation.longitude
-            ? `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/nearby_pets?location=${userLocation.latitude},${userLocation.longitude}&limit=25&page=${page}`
-            : userLocation.zipCode
-            ? `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/nearby_pets?location=${userLocation.zipCode}&limit=25&page=${page}`
-            : (userLocation.zipCode = prompt('Please enter your zip code:'))
-            ? `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/nearby_pets?location=${userLocation.zipCode}&limit=25&page=${page}`
+          fetchedUserLocation.latitude && fetchedUserLocation.longitude
+            ? `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/nearby_pets?location=${fetchedUserLocation.latitude},${fetchedUserLocation.longitude}&limit=${pagination.count_per_page}&page=${page}`
+            : fetchedUserLocation.zipCode
+            ? `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/nearby_pets?location=${fetchedUserLocation.zipCode}&limit=${pagination.count_per_page}&page=${page}`
+            : (fetchedUserLocation.zipCode = prompt('Please enter your zip code:'))
+            ? `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/nearby_pets?location=${fetchedUserLocation.zipCode}&limit=${pagination.count_per_page}&page=${page}`
             : null 
           );
         
@@ -53,7 +53,7 @@ function NearbyPets() {
 
     // Fetch data when the component mounts
     fetchNearbyPets(pagination.current_page);
-  }, [userLocation, pagination.current_page]);
+  }, [fetchedUserLocation, pagination.current_page]);
 
   const handlePageChange = (newPage) => {
     // Update the current page and trigger a new data fetch
@@ -72,7 +72,7 @@ function NearbyPets() {
 
   return (
     <div className="nearby-pets-component">
-      <h2>Nearby Pets in {userLocation.zipCode}</h2>
+      <h2>Nearby Pets in {fetchedUserLocation.zipCode}</h2>
       {loading ? (
         <p>Loading...</p>
       ) : (
