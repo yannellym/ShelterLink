@@ -19,6 +19,7 @@ function NearbyPets() {
     const fetchNearbyPets = async (page) => {
       try {
         setLoading(true);
+        console.log("fetching new dtaa")
         // Make your API request here using the user location and current page
         const response = await fetch(
           fetchedUserLocation.latitude && fetchedUserLocation.longitude
