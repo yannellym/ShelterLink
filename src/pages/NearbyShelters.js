@@ -12,26 +12,55 @@ const SheltersNearbyPage = () => {
     longitude: queryParams.get('longitude'),
     zipCode: queryParams.get('zipCode'),
   };
-
+  const [data, setData] = useState([]);
+  const [pagination, setPagination] = useState({
+    current_page: 1,
+    total_pages: 1,
+    count_per_page: 24,
+  });
+  const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [zipCode, setZipCode] = useState('');
-  const sheltersPerPage = 10; 
 
-  const { loading: sheltersLoading, shelters, error } = useNearbyShelters({
-    userLocation: userLocation? userLocation.zipCode : '11208',
-    page: currentPage,
-    limit: sheltersPerPage,
-    key: currentPage,
-  });
+
 
   useEffect(() => {
-    if (!sheltersLoading) {
-      console.log(shelters, "shelters");
-      setLoading(false);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  }, [shelters, sheltersLoading, currentPage]);
+    const fetchNearbyShelters = async (page) => {
+      try {
+        setLoading(true);
+        // Make your API request here using the user location and current page
+        const response = await fetch(
+          userLocation.zipCode? `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/nearby_shelters?location=${userLocation.zipCode}&limit=${pagination.count_per_page}&page=${page}`
+            : `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/nearby_shelters?location=75070&limit=${pagination.count_per_page}&page=${page}`
+
+          );
+        
+        if (!response) {
+          console.error('No location information available for API call');
+        }
+        const responseData = await response.json(); // Parse the outer JSON string
+        const apiData = JSON.parse(responseData.body); // Parse the inner JSON string
+        console.log(apiData, "data");
+
+        // Update state with new data and pagination information
+        setData(apiData.animals || []);
+        setPagination({
+          current_page: apiData.pagination.current_page,
+          total_pages: apiData.pagination.total_pages,
+          count_per_page: apiData.pagination.count_per_page,
+        });
+      } catch (error) {
+        setError(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    // Fetch data when the component mounts
+    fetchNearbyShelters(pagination.current_page);
+    }, [data, pagination.current_page]);
+
 
   const handlePageChange = (newPage) => {
     if (newPage >= 1) {
@@ -50,7 +79,7 @@ const SheltersNearbyPage = () => {
     ) : link;
   };
 
-  const totalPages = shelters?.pagination?.total_pages || 0;
+  const totalPages = data?.pagination?.total_pages || 0;
 
   const startPage = Math.max(1, Math.min(currentPage - 4, totalPages - 8));
   const endPage = Math.min(totalPages, startPage + 8);
@@ -64,8 +93,8 @@ const SheltersNearbyPage = () => {
         <div className="grid-container">
           {loading ? (
             <p>Loading...</p>
-          ) : shelters?.organizations ? (
-            shelters.organizations.map((shelter, index) => (
+          ) : data?.organizations ? (
+            data.organizations.map((shelter, index) => (
               <div key={index} className="card">
                 <img
                   src={

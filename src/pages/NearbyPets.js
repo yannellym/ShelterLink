@@ -14,7 +14,7 @@ function NearbyPets() {
     count_per_page: 24,
   });
   const buttonsToShow = 9;
-  console.log(fetchedUserLocation, "location i")
+
   useEffect(() => {
     const fetchNearbyPets = async (page) => {
       try {
