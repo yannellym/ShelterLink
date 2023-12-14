@@ -19,20 +19,18 @@ import useUserLocation from '../hooks/useUserLocation';
   parameters: favoritePets: array, addToFavorites: array,  userPreferences: array, removeFromFavorites:array, isAuthenticated: string
   returns: 
 */
-function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferences, isAuthenticated }) {
+function Home({ userLocation, favoritePets, addToFavorites, removeFromFavorites, userPreferences, isAuthenticated }) {
   const [loading, setLoading] = useState(true);
   const [selectedAnimals, setSelectedAnimals] = useState([]);
   const [selectedPetIndex, setSelectedPetIndex] = useState(0);
-  const [userLocation, setUserLocation] = useState(null);
+  const [fetchedUserLocation, setUserLocation] = useState(userLocation?.zipCode);
   const navigate = useNavigate();
-  
+
   const { data: petData } = usePetFinderAPI(
     'https://2hghsit103.execute-api.us-east-1.amazonaws.com/default', []
   );
 
   const { preferredAnimals, fetchAnimalsBasedOnPreferences } = useAnimalsBasedOnPreferencesAPI();
-  const { userLocation: fetchedUserLocation, loading: locationLoading, error: locationError, ready } = useUserLocation();
-  console.log("userlocation1:", fetchedUserLocation);
 
   const handlePreferencesSubmit = (preferences) => {
     fetchAnimalsBasedOnPreferences(preferences);
@@ -47,23 +45,12 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferenc
   };
 
   useEffect(() => {
-    if (locationLoading) {
-      setLoading(true);
-    } else if (locationError) {
-      console.error('Error getting user location:', locationError.message);
-      setLoading(false);
-    } else if (fetchedUserLocation && ready) {
-      setLoading(false);
-      setUserLocation(fetchedUserLocation);
-
-      // Extract ZIP code from the userLocation response
-      const { zipCode } = fetchedUserLocation;
-      console.log('ZIP Code:', zipCode);
-
-      // Directly call the handleViewAllPetsNearYou function with the ZIP code
-      handleViewAllPetsNearYou();
+    // Update the user location state when it's fetched
+    if (userLocation) {
+      setUserLocation(userLocation.zipCode);
     }
-  }, [fetchedUserLocation, locationLoading, locationError, ready]);
+  }, [userLocation]);
+
 
   useEffect(() => {
     if (petData && petData.body) {

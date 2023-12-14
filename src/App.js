@@ -16,6 +16,7 @@ import Faqs from './pages/Faqs.js';
 import PetFoster from './pages/PetFoster.js';
 import NearbyShelters from './pages/NearbyShelters.js';
 import NearbyPets from './pages/NearbyPets.js';
+import useUserLocation from './hooks/useUserLocation.js'; 
 
 import { Amplify, Auth } from 'aws-amplify';
 import { Authenticator } from '@aws-amplify/ui-react';
@@ -30,10 +31,13 @@ const App = () => {
   const [showMessage, setShowMessage] = useState(true);
   const [previousPageURL, setPreviousPageURL] = useState('');
   const [user, setUser] = useState(false);
+  const { userLocation: fetchedUserLocation, loading: locationLoading, error: locationError, ready } = useUserLocation();
 
   const location = useLocation();
   const navigate = useNavigate();
 
+
+  console.log(fetchedUserLocation, "user loc in app")
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -80,16 +84,18 @@ const App = () => {
         <Routes>
           <Route path="/" element={
            <Home 
-             favoritePets={favoritePets} 
-             setFavoritePets={setFavoritePets} 
-             addToFavorites={addToFavorites} 
-             removeFromFavorites={removeFromFavorites} 
-             isAuthenticated={user}
+              userLocation={fetchedUserLocation}
+              favoritePets={favoritePets} 
+              setFavoritePets={setFavoritePets} 
+              addToFavorites={addToFavorites} 
+              removeFromFavorites={removeFromFavorites} 
+              isAuthenticated={user}
            />
           }
         />
           <Route path="/find-a-pet" element={
             <FindApet 
+              userLocation={fetchedUserLocation}
               favoritePets={favoritePets} 
               setFavoritePets={setFavoritePets} 
               addToFavorites={addToFavorites} 

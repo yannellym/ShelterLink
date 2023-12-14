@@ -4,7 +4,7 @@ import '../styles/MainPage.css';
 import PetCard from '../components/PetCard';
 import Filter from './Filter';
 
-function FindApet({ favoritePets, addToFavorites, removeFromFavorites, isAuthenticated }) {
+function FindApet({ userLocation, favoritePets, addToFavorites, removeFromFavorites, isAuthenticated }) {
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -13,9 +13,6 @@ function FindApet({ favoritePets, addToFavorites, removeFromFavorites, isAuthent
   const maxPaginationButtons = 9;
 
   const [showOnlyPetsWithImages, setShowOnlyPetsWithImages] = useState(false);
-
-  const [latitude, setLatitude]  = useState(null);
-  const [longitude, setLongitude]  = useState(null);
 
   const [selectedFilters, setSelectedFilters] = useState({
     location: 'any',
@@ -27,179 +24,141 @@ function FindApet({ favoritePets, addToFavorites, removeFromFavorites, isAuthent
     coat: 'any',
   });
 
-  const location = useLocation();
 
-  useEffect(() => {
-    console.log("being called")
-    // Check if the location state contains pets
-    if (location.state && location.state.pets) {
-
-      setSearchResults(location.state.pets.animals);
-      setTotalPages(location.state.pets.pagination.total_pages);
-      setCurrentPage(location.state.pets.pagination.current_page);
-      setLatitude(location.state.userLocation.latitude);
-      setLongitude(location.state.userLocation.longitude);
-      setLoading(false);
-    } else {
-      // If no pets in location state, fetch from API
-      if ("geolocation" in navigator) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            const { latitude, longitude } = position.coords;
-            setLatitude(latitude);
-            setLongitude(longitude);
-
-            fetchPetsForPage(currentPage, selectedFilters, latitude, longitude);
-            setLoading(false);
-          },
-          (error) => {
-            console.error("Error getting user's location:", error.message);
-            setLoading(false);
-          }
-        );
-      } else {
-        console.error("Geolocation is not supported by this browser.");
-        setLoading(false);
-      }
-    }
-  }, [currentPage, selectedFilters, showOnlyPetsWithImages, location.state]);
-
-  const fetchPetsForPage = async (page, filters, lat, lon) => {
+  // Function to fetch pets for a specific page
+  const fetchPetsForPage = async (page, filters, zipCode) => {
     try {
-      let endpoint = `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/pet_zip_search?page=${page}&location=${lat},${lon}&limit=${showOnlyPetsWithImages ? 24 : itemsPerPage}&timestamp=${Date.now()}`;
+      let endpoint = `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/pet_zip_search?page=${page}&location=${zipCode || '11208'}&limit=${showOnlyPetsWithImages ? 24 : itemsPerPage}&timestamp=${Date.now()}`;
 
+      // Add filter parameters to the API request
       for (const filterKey in filters) {
         if (filters[filterKey] !== 'any') {
           endpoint += `&${filterKey}=${filters[filterKey]}`;
         }
       }
 
-      // console.log('Fetching data with endpoint:', endpoint);
-
       const response = await fetch(endpoint);
-      const rawData = await response.json();
-      const data = JSON.parse(rawData.body);
-      console.log("received data", data);
+      const data = await response.json();
 
-      if (data && data.animals) {
-        console.log("setting results to", data)
-        setSearchResults(data.animals);
+      console.log('API Response:', data.body.animals);
+
+      if (data && data.body) {
+        const responseBody = JSON.parse(data.body);
+        setSearchResults(applyFilters(responseBody.animals, filters)); // Apply filters to the new data
+        // remove the loading indicator
+        setLoading(false);
+        // set the new data
         setCurrentPage(page);
-        setTotalPages(data.pagination.total_pages);
+        setTotalPages(responseBody.pagination.total_pages);
       }
-
-      setLoading(false);
     } catch (error) {
       console.error('Error fetching data:', error.message);
       setLoading(false);
     }
   };
 
+  useEffect(() => {
+    // Fetch pets for the initial page when the component mounts
+    fetchPetsForPage(currentPage, selectedFilters, userLocation?.zipCode || 11208);
+  }, [userLocation]);
+
   const handlePageChange = (page) => {
-    console.log("page clicked", page);
+    // Set loading to true before changing the page
     setLoading(true);
-  
-    // Capture the current page value in a variable
-    const currentPageValue = page;
-  
+
+    // Delay fetching data and scrolling to the top
     setTimeout(() => {
-      fetchPetsForPage(currentPageValue, selectedFilters, latitude, longitude);
-      window.scrollTo(0, 0);
-    }, 500);
+      fetchPetsForPage(page, selectedFilters, userLocation.zipCode || 11208);
+
+      // After the data is loaded, scroll to the top
+      window.scrollTo(0, 0); // Scroll to the top of the page
+    }, 500); // 500 milliseconds (0.5 second) delay
+  };
+  const handleFilterChange = async (newFilters) => {
+    setSearchResults([]);
+    setLoading(true);
+    setSelectedFilters(newFilters);
+    setCurrentPage(1);
+    try {
+      let endpoint = `https://iyank5vavf.execute-api.us-east-1.amazonaws.com/default/lambdaapi-dev?page=1&limit=${50}`; 
+      for (const filterKey in newFilters) {
+        if (newFilters[filterKey] !== 'any') {
+          endpoint += `&${filterKey}=${newFilters[filterKey]}`;
+        }
+      }
+
+      const response = await fetch(endpoint);
+      const data = await response.json();
+
+      if (data && data.animals) {
+        const filteredResults = applyFilters(data.animals, newFilters);
+        if (filteredResults.length > 0) {
+          setSearchResults(filteredResults);
+          setTotalPages(data.pagination.total_pages);
+        } else {
+          setTotalPages(0);
+        }
+        setLoading(false);
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error.message);
+      setLoading(false);
+    }
   };
 
+  const applyFilters = (data, filters) => {
+    return data.filter((pet) => {
+      let matchesAllFilters = true;
+      for (const filterKey in filters) {
+        const filterValue = filters[filterKey]?.toLowerCase();
+        const petValue = pet[filterKey]?.toLowerCase();
 
-  // useEffect(() => {
-  //   if (latitude !== null && longitude !== null) {
-  //     fetchPetsForPage(currentPage, selectedFilters, latitude, longitude);
-  //   }
-  // }, [currentPage, selectedFilters, showOnlyPetsWithImages, latitude, longitude]);
+        if (filterValue === 'any') {
+          continue;
+        }
 
-  // const handleFilterChange = async (newFilters) => {
-  //   setSearchResults([]);
-  //   setLoading(true);
-  //   setSelectedFilters(newFilters);
-  //   setCurrentPage(1);
-  //   try {
-  //     let endpoint = `https://iyank5vavf.execute-api.us-east-1.amazonaws.com/default/lambdaapi-dev?page=1&limit=${50}`;
-  //     for (const filterKey in newFilters) {
-  //       if (newFilters[filterKey] !== 'any') {
-  //         endpoint += `&${filterKey}=${newFilters[filterKey]}`;
-  //       }
-  //     }
+        if (filterKey === 'type') {
+          if (filterValue === 'cat' && petValue !== 'cat') {
+            matchesAllFilters = false;
+            break;
+          }
+          if (filterValue === 'dog' && petValue !== 'dog') {
+            matchesAllFilters = false;
+            break;
+          }
+        } else if (filterKey === 'breed') {
+          if (
+            filterValue !== 'any' &&
+            petValue &&
+            !(
+              petValue.primary.toLowerCase().includes(filterValue) ||
+              (petValue.secondary && petValue.secondary.toLowerCase().includes(filterValue))
+            )
+          ) {
+            matchesAllFilters = false;
+            break;
+          }
+        } else if (filterKey === 'location') {
+          const petState = pet.contact?.address?.state?.toLowerCase();
+          if (petState !== filterValue) {
+            matchesAllFilters = false;
+            break;
+          }
+        } else {
+          if (petValue !== filterValue) {
+            matchesAllFilters = false;
+            break;
+          }
+        }
+      }
 
-  //     const response = await fetch(endpoint);
-  //     const data = await response.json();
+      if (showOnlyPetsWithImages && (!pet.photos || pet.photos.length === 0)) {
+        matchesAllFilters = false;
+      }
 
-  //     if (data && data.animals) {
-  //       const filteredResults = applyFilters(data.animals, newFilters);
-  //       if (filteredResults.length > 0) {
-  //         setSearchResults(filteredResults);
-  //         setTotalPages(data.pagination.total_pages);
-  //       } else {
-  //         setTotalPages(0);
-  //       }
-  //       setLoading(false);
-  //     }
-  //   } catch (error) {
-  //     console.error('Error fetching data:', error.message);
-  //     setLoading(false);
-  //   }
-  // };
-
-  // const applyFilters = (data, filters) => {
-  //   return data.filter((pet) => {
-  //     let matchesAllFilters = true;
-  //     for (const filterKey in filters) {
-  //       const filterValue = filters[filterKey]?.toLowerCase();
-  //       const petValue = pet[filterKey]?.toLowerCase();
-
-  //       if (filterValue === 'any') {
-  //         continue;
-  //       }
-
-  //       if (filterKey === 'type') {
-  //         if (filterValue === 'cat' && petValue !== 'cat') {
-  //           matchesAllFilters = false;
-  //           break;
-  //         }
-  //         if (filterValue === 'dog' && petValue !== 'dog') {
-  //           matchesAllFilters = false;
-  //           break;
-  //         }
-  //       } else if (filterKey === 'breed') {
-  //         if (
-  //           filterValue !== 'any' &&
-  //           petValue &&
-  //           !(
-  //             petValue.primary.toLowerCase().includes(filterValue) ||
-  //             (petValue.secondary && petValue.secondary.toLowerCase().includes(filterValue))
-  //           )
-  //         ) {
-  //           matchesAllFilters = false;
-  //           break;
-  //         }
-  //       } else if (filterKey === 'location') {
-  //         const petState = pet.contact?.address?.state?.toLowerCase();
-  //         if (petState !== filterValue) {
-  //           matchesAllFilters = false;
-  //           break;
-  //         }
-  //       } else {
-  //         if (petValue !== filterValue) {
-  //           matchesAllFilters = false;
-  //           break;
-  //         }
-  //       }
-  //     }
-
-  //     if (showOnlyPetsWithImages && (!pet.photos || pet.photos.length === 0)) {
-  //       matchesAllFilters = false;
-  //     }
-
-  //     return matchesAllFilters;
-  //   });
-  // };
+      return matchesAllFilters;
+    });
+  };
 
   const renderPetCards = () => {
     if (loading) {
@@ -245,35 +204,35 @@ function FindApet({ favoritePets, addToFavorites, removeFromFavorites, isAuthent
     }
   };
 
-  // const handleShowOnlyPetsWithImages = async () => {
-  //   const updatedShowOnlyPetsWithImages = !showOnlyPetsWithImages;
-  //   const filteredResults = applyFilters(searchResults, selectedFilters);
-  //   let filteredPets = filteredResults;
-  //   if (updatedShowOnlyPetsWithImages) {
-  //     filteredPets = filteredResults.filter((pet) => pet.photos && pet.photos.length > 0);
-  //   }
-  //   setShowOnlyPetsWithImages(updatedShowOnlyPetsWithImages);
-  //   setSearchResults(filteredPets);
-  //   setCurrentPage(1);
-  // };
+  const handleShowOnlyPetsWithImages = async () => {
+    const updatedShowOnlyPetsWithImages = !showOnlyPetsWithImages;
+    const filteredResults = applyFilters(searchResults, selectedFilters);
+    let filteredPets = filteredResults;
+    if (updatedShowOnlyPetsWithImages) {
+      filteredPets = filteredResults.filter((pet) => pet.photos && pet.photos.length > 0);
+    }
+    setShowOnlyPetsWithImages(updatedShowOnlyPetsWithImages);
+    setSearchResults(filteredPets);
+    setCurrentPage(1);
+  };
 
   return (
     <div className="main-page">
       <div className="sidebar">
         <div className="filters">
-          {/* { <Filter onFilterChange={handleFilterChange} /> } */}
+          { <Filter onFilterChange={handleFilterChange} /> }
         </div>
       </div>
       <div className="content">
         <div className="filter-pets">
-          {/* <label>
+          <label>
             <input
               type="checkbox"
               checked={showOnlyPetsWithImages}
               onChange={handleShowOnlyPetsWithImages}
             />
             Show only pets with images
-          </label> */}
+          </label>
         </div>
         <div className="pet-card-list">
           {renderPetCards()}

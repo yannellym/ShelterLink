@@ -1,10 +1,17 @@
+// Header.js
+
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../styles/Header.css';
 import ShelterLinkLogo from '../images/ShelterLinkw.png';
 
-const Header = ({ user, handleSignOut, handleSignIn}) => {
-  
+const Header = ({ user, handleSignOut, handleSignIn, userLocation }) => {
+  const navigate = useNavigate();
+
+  const handleFindAPetClick = () => {
+    navigate('/find-a-pet', { state: { userLocation } });
+  };
+
   return (
     <header className="header">
       {/* Logo */}
@@ -16,7 +23,8 @@ const Header = ({ user, handleSignOut, handleSignIn}) => {
       <nav className="main-navigation">
         <ul>
           <li><Link to="/">Home</Link></li>
-          <li><Link to="/find-a-pet">Find a pet</Link></li>
+          {/* Pass the userLocation as state when the link is clicked */}
+          <li><Link to="/find-a-pet" onClick={handleFindAPetClick}>Find a pet</Link></li>
           <li><Link to="/about">About</Link></li>
           <li><Link to="/resources">Resources</Link></li>
           <li><Link to="/favorites">Favorites</Link></li>
@@ -26,10 +34,10 @@ const Header = ({ user, handleSignOut, handleSignIn}) => {
       </nav>
       {/* User profile */}
       <div className="user-profile">
-        {user? (
+        {user ? (
           <Link to="/">
-            <button onClick={handleSignOut} >Sign Out</button>
-         </Link>
+            <button onClick={handleSignOut}>Sign Out</button>
+          </Link>
         ) : (
           <div className="nav-item">
             <Link to="/auth">
@@ -40,6 +48,6 @@ const Header = ({ user, handleSignOut, handleSignIn}) => {
       </div>
     </header>
   );
-}
+};
 
 export default Header;
