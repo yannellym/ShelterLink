@@ -91,6 +91,7 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferenc
     try {
       if (fetchedUserLocation) {
         // If userLocation is available, directly navigate to the nearby_pets page
+        console.log("sending", fetchedUserLocation)
         navigate('/nearby_pets', { state: { fetchedUserLocation } });
       } else if (navigator.geolocation) {
         // If geolocation is supported, attempt to get the user's current position
@@ -197,7 +198,7 @@ const handleZipCodeInput = () => {
               <CategoryCard
                 title="Shelters nearby"
                 imageSrc={paw}
-                link={`/nearby_shelters?latitude=${fetchedUserLocation.latitude}&longitude=${fetchedUserLocation.longitude}`}
+                link={`/nearby_shelters?zipCode=${fetchedUserLocation?.zipCode}`}
               />
             ) : (
               <NoLocationCard onClick={handleViewAllPetsNearYou} message="Please provide your location to view nearby shelters." />

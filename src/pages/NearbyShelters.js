@@ -10,6 +10,7 @@ const SheltersNearbyPage = () => {
   const userLocation = {
     latitude: queryParams.get('latitude'),
     longitude: queryParams.get('longitude'),
+    zipCode: queryParams.get('zipCode'),
   };
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -17,10 +18,8 @@ const SheltersNearbyPage = () => {
   const [zipCode, setZipCode] = useState('');
   const sheltersPerPage = 10; 
 
-  const navigate = useNavigate();
-
   const { loading: sheltersLoading, shelters, error } = useNearbyShelters({
-    userLocation: userLocation.latitude && userLocation.longitude ? userLocation : '11208',
+    userLocation: userLocation? userLocation.zipCode : '11208',
     page: currentPage,
     limit: sheltersPerPage,
     key: currentPage,
@@ -51,11 +50,6 @@ const SheltersNearbyPage = () => {
     ) : link;
   };
 
-  // const handleZipCodeSubmit = async () => {
-  //   pass
-      
-  // };
-
   const totalPages = shelters?.pagination?.total_pages || 0;
 
   const startPage = Math.max(1, Math.min(currentPage - 4, totalPages - 8));
@@ -65,8 +59,8 @@ const SheltersNearbyPage = () => {
 
   return (
     <div>
-      <h1 className="title">Shelters Nearby</h1>
-      {userLocation.latitude && userLocation.longitude ? (
+      <h1 className="title">Shelters Nearby {userLocation.zipCode} </h1>
+      {userLocation.zipCode ? (
         <div className="grid-container">
           {loading ? (
             <p>Loading...</p>
