@@ -12,7 +12,7 @@ returns: array of animals according to given type
 async function fetchAnimalsByType(type, page) {
   // if the type is dog or cat, fetch from the given endpoint
   if (type === 'dog' || type === 'cat') {
-    const endpoint = `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/all_pets?type=${type}&limit=100&page=${page}`;
+    const endpoint = `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/all_pets?type=${type}&limit=24&page=${page}`;
     const response = await fetch(endpoint);
     // response is a json string
     const dataRaw = await response.json();

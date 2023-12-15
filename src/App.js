@@ -36,9 +36,6 @@ const App = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-
-  console.log(fetchedUserLocation, "user loc in app")
-
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location]);

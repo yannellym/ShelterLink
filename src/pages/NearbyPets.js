@@ -19,13 +19,12 @@ function NearbyPets() {
     const fetchNearbyPets = async (page) => {
       try {
         setLoading(true);
-        console.log("fetching new dtaa")
         // Make your API request here using the user location and current page
         const response = await fetch(
           fetchedUserLocation.latitude && fetchedUserLocation.longitude
             ? `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/nearby_pets?location=${fetchedUserLocation.latitude},${fetchedUserLocation.longitude}&limit=${pagination.count_per_page}&page=${page}`
-            : fetchedUserLocation.zipCode
-            ? `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/nearby_pets?location=${fetchedUserLocation.zipCode}&limit=${pagination.count_per_page}&page=${page}`
+            : fetchedUserLocation.zipCode || fetchedUserLocation
+            ? `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/nearby_pets?location=${fetchedUserLocation.zipCode || fetchedUserLocation}&limit=${pagination.count_per_page}&page=${page}`
             : (fetchedUserLocation.zipCode = prompt('Please enter your zip code:'))
             ? `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/nearby_pets?location=${fetchedUserLocation.zipCode}&limit=${pagination.count_per_page}&page=${page}`
             : null 
@@ -36,7 +35,6 @@ function NearbyPets() {
         }
         const responseData = await response.json(); // Parse the outer JSON string
         const apiData = JSON.parse(responseData.body); // Parse the inner JSON string
-        console.log(apiData, "data");
 
         // Update state with new data and pagination information
         setData(apiData.animals || []);
@@ -73,7 +71,7 @@ function NearbyPets() {
 
   return (
     <div className="nearby-pets-component">
-      <h2>Nearby Pets in {fetchedUserLocation.zipCode}</h2>
+      <h2>Nearby Pets in {fetchedUserLocation.zipCode || fetchedUserLocation}</h2>
       {loading ? (
         <p>Loading...</p>
       ) : (

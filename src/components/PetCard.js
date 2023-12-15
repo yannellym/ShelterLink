@@ -74,7 +74,6 @@ const PetCard = ({ pet, addToFavorites, removeFromFavorites, isFavorite, isAuthe
       } else {
         // if the pet doesnt have any photos, fetch an image based on type and breed
         const placeholderImage = await fetchPlaceholderImage(pet.type, pet.breeds.primary || pet.type, pet.breeds.secondary);
-        console.log("generated image for", pet.name)
         // set the image and create a label to let users know it was generated
         setImageSource({ url: placeholderImage, generated: true });
       }

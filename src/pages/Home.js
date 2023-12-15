@@ -4,6 +4,7 @@ import SearchBar from '../components/SearchBar';
 import CategoryCard from '../components/CategoryCard';
 import NoLocationCard from '../components/NoLocationCard'; 
 import ResourcesSection from './ResourcesSection';
+import AdoptedAnimalsSection from './AdoptedAnimalsSection';
 import UserPreferencesForm from '../components/UserPreferencesForm';
 import PetCard from '../components/PetCard';
 import '../styles/Home.css';
@@ -56,28 +57,27 @@ function Home({ userLocation, favoritePets, addToFavorites, removeFromFavorites,
       const responseBody = JSON.parse(petData.body);
       if (responseBody.animals) {
         setLoading(false);
-        const animals = responseBody.animals.filter((animal) => animal.photos.length > 1).slice(0, 4);
-        if (animals.length < 4) {
-          const remainingAnimalsCount = 4 - animals.length;
-          const additionalAnimals = responseBody.animals.slice(0, remainingAnimalsCount);
-          setSelectedAnimals([...animals, ...additionalAnimals]);
-        } else {
-          setSelectedAnimals(animals);
-        }
-      }
+          
+      // Filter and slice to get animals with photos
+      const animalsWithPhotos = responseBody.animals.filter((animal) => animal.photos.length > 1).slice(0, 4);
+      // If there are not enough animals with photos, get additional animals
+      const additionalAnimals = responseBody.animals.slice(0, Math.max(0, 4 - animalsWithPhotos.length));
+      // Concatenate the arrays and slice to ensure exactly 4 pets
+      const allAnimals = animalsWithPhotos.concat(additionalAnimals).slice(0, 4);
+      // set these as our animals to display
+      setSelectedAnimals(allAnimals);
     }
-  }, [petData]);
+  }
+}, [petData]);
 
   /* function that fetches animals based on user's selected location
   parameters: 
   returns: 
   */
   const handleViewAllPetsNearYou = ({ targetPage }) => {
-    console.log(fetchedUserLocation, "loc with zip");
     try {
       if (fetchedUserLocation) {
         // If userLocation is available, directly navigate to the nearby_pets page
-        console.log("sending", fetchedUserLocation);
         navigate(`/${targetPage}`, { state: { fetchedUserLocation } });
       } else if (navigator.geolocation) {
         // If geolocation is supported, attempt to get the user's current position
@@ -121,8 +121,7 @@ function Home({ userLocation, favoritePets, addToFavorites, removeFromFavorites,
     }
   };
   
-  
-  
+
   return (
     <div className="Home">
       <main className="main-container">
@@ -194,6 +193,9 @@ function Home({ userLocation, favoritePets, addToFavorites, removeFromFavorites,
             )}
           </div>
         </div>
+        <div className="adopted-animals-section">
+          <AdoptedAnimalsSection />
+        </div>
         <div className="resource-div">
           <h3> Resources:</h3>
           <ResourcesSection />
@@ -214,7 +216,7 @@ function Home({ userLocation, favoritePets, addToFavorites, removeFromFavorites,
               />
             ))}
             {fetchedUserLocation || userLocation ? (
-            <button onClick={handleViewAllPetsNearYou} className="greater-need-cards">
+            <button onClick={() => handleViewAllPetsNearYou({ targetPage: 'nearby_pets' })}  className="greater-need-cards">
               <img width="64" height="64" src="https://img.icons8.com/sf-black/64/right.png" alt="right" />
               <p><strong>View all available pets near you.</strong></p>
             </button>
