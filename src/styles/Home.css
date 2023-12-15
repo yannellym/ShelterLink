@@ -18,25 +18,35 @@
   color: rgb(255, 255, 255);
 }
 
-/* nearby pets section */
-.nearby-pets {
+
+/* adopted-animals-section  */
+.adopted-animals-section {
+  width: 100vw;
+  height: 65vh;
+  background-color: rgba(255, 255, 255, 0.109);
+  color: rgb(0, 0, 0);
+}
+
+/* greater-need-for-love-section */
+.greater-need-for-love-section {
   width: 100vw;
   height: 85vh;
   background-color: rgba(200, 82, 36, 0.309);
   font-size: 30px; 
   color: rgb(0, 0, 0);
 }
-.nearby-pets > h3 {
+.greater-need-for-love-section > h3 {
   color: rgb(0, 0, 0);
 }
 
 /* resources section */
-.resources-div {
+.resources-section {
   width: 100vw;
-  background-color: rgb(255, 255, 255);
+  background-color: rgb(0, 0, 0);
 }
-.resources-div h3 {
+.resources-section > h3 {
   font-size: 34px;
+  color: white;
 }
 
 /* inner divs */

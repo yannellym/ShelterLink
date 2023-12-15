@@ -196,11 +196,11 @@ function Home({ userLocation, favoritePets, addToFavorites, removeFromFavorites,
         <div className="adopted-animals-section">
           <AdoptedAnimalsSection />
         </div>
-        <div className="resource-div">
+        <div className="resources-section">
           <h3> Resources:</h3>
           <ResourcesSection />
         </div>
-        <div className="nearby-pets">
+        <div className="greater-need-for-love-section">
           <h3>Pets with greater need for love:</h3>
           <div className="nearby-pet-cards">
             {loading ? (

@@ -13,9 +13,28 @@
     margin-right: 16px;
     width: 300px;
   }
+  .adopted-animal-card > p {
+    font-weight: bold;
+  }
+
+  .adopted-animal-card > img {
+    height: 20vh;
+    max-width: 300px;
+    min-width: 280px;
+  }
+
+  .adopted-animal-card > p {
+    font-weight: bold;
+  }
+
+  .red-text {
+    color:red;
+  }
+
+
   .slick-dots {
     position: absolute;
-    bottom: 10px;
+    bottom: -40px;
     list-style: none;
     display: flex;
     justify-content: center;
@@ -54,7 +73,7 @@
     position: absolute;
     top: 10px;
     left: 10px;
-    background-color: #ff1e00; 
+    background-color: #ac1362d2; 
     padding: 5px;
     border-radius: 5px;
     font-weight: bold;

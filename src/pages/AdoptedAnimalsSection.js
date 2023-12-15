@@ -10,12 +10,11 @@ const AdoptedAnimalsSection = () => {
   useEffect(() => {
     const fetchAdoptedAnimals = async () => {
       try {
-        const response = await fetch('https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/adopted_pets?status=adopted');
+        const response = await fetch('https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/adopted_pets?status=adopted&limit=100');
         const dataRaw = await response.json();
         const stringData = JSON.stringify(dataRaw);
         const parsedData = JSON.parse(stringData);
         const petData = JSON.parse(parsedData.body);
-        console.log(petData, "data in adopted")
         setRecentlyAdoptedAnimals(petData.animals);
       } catch (error) {
         console.error('Error fetching adopted animals:', error);
@@ -37,18 +36,22 @@ const AdoptedAnimalsSection = () => {
 
   return (
     <div className="adopted-animals-container">
-      <h3>Recently Adopted Animals:</h3>
+      <h2>Recently Adopted Animals:</h2>
       <Slider {...settings}>
-        {recentlyAdoptedAnimals?.map((adoptedAnimal) => (
+        {recentlyAdoptedAnimals.map((adoptedAnimal) => (
           adoptedAnimal.photos.length > 0 && (
-            <div key={adoptedAnimal.id} className="adopted-animal-card">
-              {/* Add the adopted label */}
-              <div className="adopted-label">Adopted!</div>
-              {/* Render the image */}
+            <div key={adoptedAnimal.id && adoptedAnimal.organization_animal_id} className="adopted-animal-card">
+              {/* adopted label */}
+              <div className="adopted-label">Adopted ❤️ </div>
+              {/* the image */}
               <img src={adoptedAnimal.photos[0].medium} alt={adoptedAnimal.name} />
-              {/* Render other information */}
-              <p>Name: {adoptedAnimal.name}</p>
-              <p>Date Adopted: {new Date(adoptedAnimal.status_changed_at).toLocaleDateString()}</p>
+              {/* other information */}
+              <p>Name: <span className="red-text">{adoptedAnimal.name}</span></p>
+              <p>Adopted in 
+                <span className="red-text"> {adoptedAnimal.contact.address.city}, {adoptedAnimal.contact.address.state} </span>
+                on 
+                <span className="red-text"> {new Date(adoptedAnimal.status_changed_at).toLocaleDateString()}</span>
+              </p>
             </div>
           )
         ))}
