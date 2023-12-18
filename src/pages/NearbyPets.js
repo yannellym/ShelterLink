@@ -43,6 +43,7 @@ function NearbyPets() {
           total_pages: apiData.pagination.total_pages,
           count_per_page: apiData.pagination.count_per_page,
         });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       } catch (error) {
         setError(error);
       } finally {

@@ -8,11 +8,9 @@ function FindApet({ userLocation, favoritePets, addToFavorites, removeFromFavori
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 24;
+  const itemsPerPage = 27;
   const [totalPages, setTotalPages] = useState(0);
   const maxPaginationButtons = 9;
-
-  const [showOnlyPetsWithImages, setShowOnlyPetsWithImages] = useState(false);
 
   const [selectedFilters, setSelectedFilters] = useState({
     location: 'any',
@@ -26,12 +24,11 @@ function FindApet({ userLocation, favoritePets, addToFavorites, removeFromFavori
 
 
   // Function to fetch pets for a specific page
-  const fetchPetsForPage = async (page, filters, zipCode) => {
-    console.log(filters, "filter selc")
-    console.log("fetching")
+  const fetchPetsForPage = async (page, filters) => {
+    console.log(filters, "filter selc");
+    console.log("fetching");
     try {
-      let endpoint = 
-      `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/pet_filter?page=${page}`;
+      let endpoint = `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/pet_filter?page=${page}&limit=${itemsPerPage}`;
 
       // Add filter parameters to the API request
       for (const filterKey in filters) {
@@ -39,18 +36,22 @@ function FindApet({ userLocation, favoritePets, addToFavorites, removeFromFavori
           endpoint += `&${filterKey}=${filters[filterKey]}`;
         }
       }
-      console.log(endpoint)
+      console.log(endpoint);
       const response = await fetch(endpoint);
       const responseData = await response.json(); // Parse the outer JSON string
       const data = JSON.parse(responseData.body); // Parse the inner JSON string
 
-      console.log(data)
-      if (data) {
+      console.log(data);
+      if (data && data.animals.length > 0) {
         setSearchResults(data.animals); // new filtered data
         // remove the loading indicator
         setLoading(false);
         setCurrentPage(page);
         setTotalPages(data.pagination.total_pages);
+      } else {
+        // If there are no pets matching the criteria
+        setSearchResults([]);
+        setLoading(false);
       }
     } catch (error) {
       console.error('Error fetching data:', error.message);
@@ -74,7 +75,6 @@ function FindApet({ userLocation, favoritePets, addToFavorites, removeFromFavori
   const handlePageChange = (page) => {
     // Set loading to true before changing the page
     setLoading(true);
-
     // Delay fetching data and scrolling to the top
     setTimeout(() => {
       fetchPetsForPage(page, selectedFilters, userLocation.zipCode || 11208);
@@ -84,87 +84,38 @@ function FindApet({ userLocation, favoritePets, addToFavorites, removeFromFavori
     }, 500); // 500 milliseconds (0.5 second) delay
   };
 
-  // const applyFilters = (data, filters) => {
-  //   return data.filter((pet) => {
-  //     let matchesAllFilters = true;
-  //     for (const filterKey in filters) {
-  //       const filterValue = filters[filterKey]?.toLowerCase();
-  //       const petValue = pet[filterKey]?.toLowerCase();
-
-  //       if (filterValue === 'any') {
-  //         continue;
-  //       }
-
-  //       if (filterKey === 'type') {
-  //         if (filterValue === 'cat' && petValue !== 'cat') {
-  //           matchesAllFilters = false;
-  //           break;
-  //         }
-  //         if (filterValue === 'dog' && petValue !== 'dog') {
-  //           matchesAllFilters = false;
-  //           break;
-  //         }
-  //       } else if (filterKey === 'breed') {
-  //         if (
-  //           filterValue !== 'any' &&
-  //           petValue &&
-  //           !(
-  //             petValue.primary.toLowerCase().includes(filterValue) ||
-  //             (petValue.secondary && petValue.secondary.toLowerCase().includes(filterValue))
-  //           )
-  //         ) {
-  //           matchesAllFilters = false;
-  //           break;
-  //         }
-  //       } else if (filterKey === 'location') {
-  //         const petState = pet.contact?.address?.state?.toLowerCase();
-  //         if (petState !== filterValue) {
-  //           matchesAllFilters = false;
-  //           break;
-  //         }
-  //       } else {
-  //         if (petValue !== filterValue) {
-  //           matchesAllFilters = false;
-  //           break;
-  //         }
-  //       }
-  //     }
-
-  //     if (showOnlyPetsWithImages && (!pet.photos || pet.photos.length === 0)) {
-  //       matchesAllFilters = false;
-  //     }
-
-  //     return matchesAllFilters;
-  //   });
-  // };
-
   const renderPetCards = () => {
     if (loading) {
       console.log(searchResults, "search res")
       return <p>Looking through all of our amazing pets...</p>;
-    } else {if (searchResults?.length > 0) {
-      return searchResults.map((pet) => (
-        <PetCard
-          key={pet.id}
-          pet={pet}
-          addToFavorites={addToFavorites}
-          removeFromFavorites={removeFromFavorites}
-          isFavorite={favoritePets.some((favoritePet) => favoritePet.id === pet.id)}
-          isAuthenticated={isAuthenticated}
-        />
-      ));
     } else {
-      setTotalPages(0);
-      return <p>No pets match your criteria.</p>;}
-    }
+      if (searchResults?.length > 0) {
+        return searchResults.map((pet) => (
+          <PetCard
+            key={pet.id}
+            pet={pet}
+            addToFavorites={addToFavorites}
+            removeFromFavorites={removeFromFavorites}
+            isFavorite={favoritePets.some((favoritePet) => favoritePet.id === pet.id)}
+            isAuthenticated={isAuthenticated}
+          />
+      ));
+      } else {
+        return (
+          <div>
+            <p>No pets match your criteria.</p>
+          </div>
+        );
+      }
+    } 
   };
 
   const generatePaginationButtons = () => {
-    if (totalPages > 1) {
+    if (totalPages > 1 && searchResults.length > 0) {
       const buttons = [];
       const startPage = Math.max(1, currentPage - Math.floor(maxPaginationButtons / 2));
       const endPage = Math.min(totalPages, startPage + maxPaginationButtons - 1);
-
+  
       for (let page = startPage; page <= endPage; page++) {
         buttons.push(
           <button
@@ -182,18 +133,6 @@ function FindApet({ userLocation, favoritePets, addToFavorites, removeFromFavori
     }
   };
 
-  // const handleShowOnlyPetsWithImages = async () => {
-  //   const updatedShowOnlyPetsWithImages = !showOnlyPetsWithImages;
-  //   const filteredResults = applyFilters(searchResults, selectedFilters);
-  //   let filteredPets = filteredResults;
-  //   if (updatedShowOnlyPetsWithImages) {
-  //     filteredPets = filteredResults.filter((pet) => pet.photos && pet.photos.length > 0);
-  //   }
-  //   setShowOnlyPetsWithImages(updatedShowOnlyPetsWithImages);
-  //   setSearchResults(filteredPets);
-  //   setCurrentPage(1);
-  // };
-
   return (
     <div className="main-page">
       <div className="sidebar">
@@ -202,16 +141,6 @@ function FindApet({ userLocation, favoritePets, addToFavorites, removeFromFavori
         </div>
       </div>
       <div className="content">
-        {/* <div className="filter-pets">
-          <label>
-            <input
-              type="checkbox"
-              checked={showOnlyPetsWithImages}
-              onChange={handleShowOnlyPetsWithImages}
-            />
-            Show only pets with images
-          </label>
-        </div> */}
         <div className="pet-card-list">
           {renderPetCards()}
         </div>

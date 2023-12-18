@@ -12,7 +12,7 @@ returns: array of animals according to given type
 async function fetchAnimalsByType(type, page) {
   // if the type is dog or cat, fetch from the given endpoint
   if (type === 'dog' || type === 'cat') {
-    const endpoint = `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/all_pets?type=${type}&limit=24&page=${page}`;
+    const endpoint = `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/all_pets?type=${type}&limit=30&page=${page}`;
     const response = await fetch(endpoint);
     // response is a json string
     const dataRaw = await response.json();
@@ -20,8 +20,7 @@ async function fetchAnimalsByType(type, page) {
     // parse the string data
     const parsedData = JSON.parse(stringData);
     const petData = JSON.parse(parsedData.body);
-    // return the animals after filtering for animals that have at least 1 photo
-    return petData.animals.filter((animal) => animal && animal.photos.length > 0);
+    return petData.animals
     // if the type equals other, let's search for other animal types
   } else if (type === 'other') {
     const otherAnimalTypes = ['horse', 'bird', 'barnyard'];
@@ -29,7 +28,7 @@ async function fetchAnimalsByType(type, page) {
     // fetch data for each animal type in otherAnimalTypes
     for (const animalType of otherAnimalTypes) {
       const response = await fetch(
-        `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/all_pets?type=${animalType}&limit=20&page=${page}`
+        `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/all_pets?type=${animalType}&limit=30&page=${page}`
       );
 
       if (response.ok) {
@@ -47,7 +46,7 @@ async function fetchAnimalsByType(type, page) {
       }
     }
     // return the animals after filtering for animals that have at least 1 photo
-    return animalData.filter((animal) => animal && animal.photos.length > 0);
+    return animalData
   }
   // if no animals matched the type, return an empty array
   return [];

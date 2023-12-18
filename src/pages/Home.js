@@ -59,7 +59,7 @@ function Home({ userLocation, favoritePets, addToFavorites, removeFromFavorites,
         setLoading(false);
           
       // Filter and slice to get animals with photos
-      const animalsWithPhotos = responseBody.animals.filter((animal) => animal.photos.length > 1).slice(0, 4);
+      const animalsWithPhotos = responseBody.animals.filter((animal) => animal.photos.length > 1).slice(0,4);
       // If there are not enough animals with photos, get additional animals
       const additionalAnimals = responseBody.animals.slice(0, Math.max(0, 4 - animalsWithPhotos.length));
       // Concatenate the arrays and slice to ensure exactly 4 pets
@@ -197,7 +197,7 @@ function Home({ userLocation, favoritePets, addToFavorites, removeFromFavorites,
           <AdoptedAnimalsSection />
         </div>
         <div className="resources-section">
-          <h3> Resources:</h3>
+          <h1> Resources:</h1>
           <ResourcesSection />
         </div>
         <div className="greater-need-for-love-section">
@@ -205,9 +205,9 @@ function Home({ userLocation, favoritePets, addToFavorites, removeFromFavorites,
           <div className="nearby-pet-cards">
             {loading ? (
               <p>Loading...</p>
-            ) : selectedAnimals.map((pet) => (
+            ) : selectedAnimals?.map((pet, index) => (
               <PetCard
-                key={pet.id}
+                key={`${pet.id}-${index}`}  // Combines pet ID and index to create a unique key
                 pet={pet}
                 addToFavorites={addToFavorites}
                 removeFromFavorites={removeFromFavorites}
@@ -216,7 +216,7 @@ function Home({ userLocation, favoritePets, addToFavorites, removeFromFavorites,
               />
             ))}
             {fetchedUserLocation || userLocation ? (
-            <button onClick={() => handleViewAllPetsNearYou({ targetPage: 'nearby_pets' })}  className="greater-need-cards">
+            <button onClick={() => handleViewAllPetsNearYou({ targetPage: 'nearby_pets' })}  className="all-pets-near-card">
               <img width="64" height="64" src="https://img.icons8.com/sf-black/64/right.png" alt="right" />
               <p><strong>View all available pets near you.</strong></p>
             </button>

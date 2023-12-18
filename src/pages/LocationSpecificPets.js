@@ -31,6 +31,9 @@ function LocationSpecificPets({ favoritePets, addToFavorites, removeFromFavorite
     if (newPage >= 1 && newPage <= maxPage) {
       setCurrentPage(newPage);
     }
+
+    // Scroll to the top of the page when a new page is clicked
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   useEffect(() => {

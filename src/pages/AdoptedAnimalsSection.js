@@ -15,6 +15,7 @@ const AdoptedAnimalsSection = () => {
         const stringData = JSON.stringify(dataRaw);
         const parsedData = JSON.parse(stringData);
         const petData = JSON.parse(parsedData.body);
+        console.log(petData);
         setRecentlyAdoptedAnimals(petData.animals);
       } catch (error) {
         console.error('Error fetching adopted animals:', error);
@@ -25,10 +26,10 @@ const AdoptedAnimalsSection = () => {
   }, []);
 
   const settings = {
-    dots: true,
+    dots: false,
     infinite: true,
     speed: 500,
-    slidesToShow: 3, // Set the number of slides to show at once
+    slidesToShow: Math.min(3, recentlyAdoptedAnimals.length),
     slidesToScroll: 1,
     autoplay: true, // Enable autoplay
     autoplaySpeed: 3000, // Set autoplay speed in milliseconds
@@ -38,7 +39,7 @@ const AdoptedAnimalsSection = () => {
     <div className="adopted-animals-container">
       <h2>Recently Adopted Animals:</h2>
       <Slider {...settings}>
-        {recentlyAdoptedAnimals.map((adoptedAnimal) => (
+        {recentlyAdoptedAnimals.map((adoptedAnimal, index) => (
           adoptedAnimal.photos.length > 0 && (
             <div key={adoptedAnimal.id && adoptedAnimal.organization_animal_id} className="adopted-animal-card">
               {/* adopted label */}

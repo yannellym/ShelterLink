@@ -19,8 +19,7 @@
 
   .adopted-animal-card > img {
     height: 20vh;
-    max-width: 300px;
-    min-width: 280px;
+    width: 330px;
   }
 
   .adopted-animal-card > p {
