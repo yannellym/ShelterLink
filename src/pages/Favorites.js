@@ -1,11 +1,30 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/FavoritesPage.css';
 import PetCard from '../components/PetCard';
 import SadLab from '../images/sadlab.jpg';
+import { API, graphqlOperation } from 'aws-amplify';
+import { listUserFavoritePets } from '../graphql/queries';
 
 // component to show pets that were favorited by the user
-function Favorites({ favoritePets, removeFromFavorites }) {
+function Favorites({ removeFromFavorites }) {
+  const [favoritePets, setFavoritePets] = useState([]);
+
+  useEffect(() => {
+    const fetchFavoritePets = async () => {
+      try {
+        const response = await API.graphql(graphqlOperation(listUserFavoritePets));
+        const pets = response.data.listUserFavoritePets.items;
+        console.log(pets, "users fav pets")
+        setFavoritePets(pets);
+      } catch (error) {
+        console.error('Error fetching favorite pets:', error);
+      }
+    };
+
+    fetchFavoritePets();
+  }, []);
+
   return (
     <div className="pet-card-container">
       <div className="title-container">
@@ -24,12 +43,13 @@ function Favorites({ favoritePets, removeFromFavorites }) {
       ) : (
         <div className="pet-card-list">
           {favoritePets.map((pet) => (
-            <PetCard
-              key={pet.id}
-              pet={pet}
-              removeFromFavorites={removeFromFavorites}
-              isFavorite={favoritePets.some((favoritePet) => favoritePet.id === pet.id)}
-            />
+            <p>{pet.petId}</p>
+            // <PetCard
+            //   key={pet.petId}
+            //   pet={pet.pet} // Assuming that the favorite pet has a "pet" field
+            //   removeFromFavorites={removeFromFavorites}
+            //   isFavorite={favoritePets.some((favoritePet) => favoritePet.id === pet.id)}
+            // />
           ))}
         </div>
       )}

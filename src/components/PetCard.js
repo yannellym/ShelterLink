@@ -6,34 +6,45 @@ import coming_soon from "../images/coming_soon.png";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart} from '@fortawesome/free-solid-svg-icons';
 
-const PetCard = ({ pet, addToFavorites, removeFromFavorites, isFavorite, isAuthenticated }) => {
+import { API, graphqlOperation } from 'aws-amplify';
+import { createUserFavoritePet, deleteUserFavoritePet } from '../graphql/mutations';
+
+const PetCard = ({ pet, isFavorite, isAuthenticated }) => {
   const [favorited, setFavorited] = useState(isFavorite);
   const navigate = useNavigate();
   const [imageSource, setImageSource] = useState(null);
 
-  // func to handle adding/removing pets to favorites
-  const handleToggleFavorite = () => {
-    // if the user is authenticated
+  const handleToggleFavorite = async () => {
     if (isAuthenticated) {
-      // reverse the status of favorites
       setFavorited(!favorited);
-      // if its in favorites, remove it
-      if (favorited) {
-        removeFromFavorites(pet.id);
-      } else {
-        // else, add it
-        addToFavorites(pet);
+  
+      try {
+        const userId = isAuthenticated.attributes.sub;
+        const petId = pet.id;
+  
+        if (favorited) {
+          // Remove pet from user's favorite pets
+          await API.graphql(graphqlOperation(deleteUserFavoritePet, { input: { userId, petId } }));
+          console.log("Pet removed from user's favorites");
+        } else {
+          // Add pet to user's favorite pets
+          await API.graphql(graphqlOperation(createUserFavoritePet, { input: { userId, petId } }));
+          console.log("Pet added to user's favorites");
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        // Handle error, e.g., show a message to the user
       }
     } else {
-      //TODO: INCORPORATE DATABASE FOR FAVORITE PETS - DB 
-      // If the user is not authenticated, save the current URL and then direct them to the authentication page
+      // Redirect to the authentication page
       localStorage.setItem('previousURL', window.location.pathname);
-      // Store the pet ID in local storage to remember the favorite pet
       localStorage.setItem('favoritePet', JSON.stringify(pet));
-      // If the user is not authenticated, direct them to the authentication page
       navigate('/auth');
     }
   };
+  
+  
+  
 
   const handleMoreInfoClick = () => {
     // Create the URL for the new window, including the 'petData' query parameter

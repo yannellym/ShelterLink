@@ -81,6 +81,6 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 # axios
 # unplash api for profile image and to generate images for animals that dont have one
 # react slick libraru for carousel images
-# dynamoDB
+# Amplify dataStore, creates dynamoDB table
 
 

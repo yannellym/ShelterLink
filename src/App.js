@@ -31,7 +31,6 @@ Amplify.configure(awsExports);
 const App = () => {
   const [favoritePets, setFavoritePets] = useState([]);
   const [showMessage, setShowMessage] = useState(true);
-  const [previousPageURL, setPreviousPageURL] = useState('');
   const [user, setUser] = useState(false);
   const { userLocation: fetchedUserLocation, loading: locationLoading, error: locationError, ready } = useUserLocation();
 

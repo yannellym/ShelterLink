@@ -27,6 +27,9 @@
       },
       "storage": {
         "shelterLinkDB": {}
+      },
+      "api": {
+        "shelterlink": {}
       }
     }
   }
