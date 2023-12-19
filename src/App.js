@@ -18,6 +18,8 @@ import NearbyShelters from './pages/NearbyShelters.js';
 import NearbyPets from './pages/NearbyPets.js';
 import useUserLocation from './hooks/useUserLocation.js'; 
 
+import './styles/App.css';
+
 import { Amplify, Auth } from 'aws-amplify';
 import { Authenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
@@ -121,36 +123,40 @@ const App = () => {
           {user && (
           <Route path="/profile" element={<Profile user={user} />} />
           )}
-          <Route path="/auth" element={
-              <Authenticator>
-              {({ user }) => {
-                setUser(user);
-                console.log('User state after setting:', user);
-                // Get the previously stored URL
-                const previousURL = localStorage.getItem('previousURL');
-                const favoritePetString = localStorage.getItem('favoritePet');
-                const favoritePet = JSON.parse(favoritePetString);
-                
-                if (previousURL) {
-                  if (favoritePet) {
-                    console.log(favoritePet.propertyName, "almost favorite pet")
-                    addToFavorites(favoritePet)
-                    
-                    // Clear the stored favorite pet ID in local storage
-                    localStorage.removeItem('favoritePetId');
-                  } 
-                  // Clear the stored URL
-                  localStorage.removeItem('previousURL');
+          <Route
+            path="/auth"
+            element={
+              <div className="auth-container"> 
+                <Authenticator>
+                  {({ user }) => {
+                    setUser(user);
+                    console.log('User state after setting:', user);
+                    // Get the previously stored URL
+                    const previousURL = localStorage.getItem('previousURL');
+                    const favoritePetString = localStorage.getItem('favoritePet');
+                    const favoritePet = JSON.parse(favoritePetString);
 
-                  // Navigate to the previous URL
-                  navigate(previousURL);
-                } else {
-                  // If no previous URL is stored, navigate to the profile page
-                  navigate('/profile');
-                }
-              }}
-            </Authenticator>
-            } 
+                    if (previousURL) {
+                      if (favoritePet) {
+                        console.log(favoritePet.propertyName, 'almost favorite pet');
+                        addToFavorites(favoritePet);
+
+                        // Clear the stored favorite pet ID in local storage
+                        localStorage.removeItem('favoritePetId');
+                      }
+                      // Clear the stored URL
+                      localStorage.removeItem('previousURL');
+
+                      // Navigate to the previous URL
+                      navigate(previousURL);
+                    } else {
+                      // If no previous URL is stored, navigate to the profile page
+                      navigate('/profile');
+                    }
+                  }}
+                </Authenticator>
+              </div>
+            }
           />
           <Route path="/pet-details/:petId" element={
             <PetDetails 

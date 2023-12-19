@@ -77,5 +77,11 @@
         }
       ]
     }
+  },
+  "storage": {
+    "shelterLinkDB": {
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB"
+    }
   }
 }
