@@ -22,7 +22,7 @@ function LocationSpecificPets({ favoritePets, addToFavorites, removeFromFavorite
 
   const dependencies = [petType, searchText, showOnlyPetsWithImages, currentPage];
   console.log(searchText, 'loc')
-  const { data, loading: apiLoading, error } = usePetfinderAPI(
+  const { data, loading: apiLoading } = usePetfinderAPI(
     `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/pet_zip_search?type=${petType}&location=${searchText}&page=${currentPage}`,
     dependencies
   );

@@ -1,19 +1,14 @@
 // search bar in the homepage
-import React, { useState, useEffect} from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/SearchBar.css';
-import PlacesAutocomplete, {
-  geocodeByAddress
-} from 'react-places-autocomplete';
+import PlacesAutocomplete from 'react-places-autocomplete';
 import { Link } from 'react-router-dom';
 
 const SearchBar = ({ onSearch }) => {
   const [searchText, setSearchText] = useState('');
   const [petType, setPetType] = useState('');
-  const [showLocationOptions, setShowLocationOptions] = useState(false);
   const [showLocationMessage, setShowLocationMessage] = useState(false);
-  const [dataLoaded, setDataLoaded] = useState(false);
-  const [locationButtonClicked, setLocationButtonClicked] = useState(false);
   const [shareLocation, setShareLocation] = useState(false);
 
   const navigate = useNavigate();
@@ -73,17 +68,14 @@ const SearchBar = ({ onSearch }) => {
         return;
       }
     }
-  
-  
     const apiEndpoint = `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/pet_zip_search?location=${location}&type=${petType}`;
-  
+
     try {
       const response = await fetch(apiEndpoint);
   
       if (response.ok) {
         const data = await response.json();
         console.log(data, 'data');
-        setDataLoaded(true);
   
         // Include the favorited information in the state
         navigate('/location-specific-pets', {
@@ -105,9 +97,8 @@ const SearchBar = ({ onSearch }) => {
     return /^\d{5}$/.test(text);
   }
 
-  const handleSelect = async (address, placeId) => {
+  const handleSelect = async (address) => {
     setSearchText('');
-    setShowLocationOptions(false);
     setSearchText(address);
   }
 
@@ -143,12 +134,6 @@ const SearchBar = ({ onSearch }) => {
     // Reset the button text after sharing location
     setShowLocationMessage(false);
   };
-
-  useEffect(() => {
-    if (locationButtonClicked) {
-      setShowLocationMessage(false);
-    }
-  }, [locationButtonClicked]);
 
   const handleInputClick = () => {
     setShowLocationMessage(true);
@@ -189,7 +174,7 @@ const SearchBar = ({ onSearch }) => {
                 </div>
                 {showLocationMessage && (
                   <button
-                    className={`location-button ${locationButtonClicked ? 'blue-border' : ''}`}
+                    className="location-button"
                     onClick={handleShareLocation}
                   >
                     {shareLocation? 'Sharing Location...' : 'Share Location 📍'}
