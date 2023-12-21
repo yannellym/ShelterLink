@@ -1,51 +1,52 @@
-input AMPLIFY { globalAuthRule: AuthRule = { allow: private, operations: [create, read, update, delete] } }
+# This "input" configures a global authorization rule to enable public access to
+# all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
+input AMPLIFY {
+  globalAuthRule: AuthRule = { allow: public }
+}
 
 type User @model {
   id: ID!
   username: String!
   email: String!
-  favoritePets: [UserPetFavorite] @connection(keyName: "byUser", fields: ["id"])
-}
-
-type Address {
-  city: String
-  state: String
+  favoritePets: [UserPetFavorite]
 }
 
 type Pet @model {
   id: ID!
   name: String!
-  age: Int
+  age: String
   gender: String
   size: String
   breeds: Breeds
   description: String
   imageUrl: String
   contact: Contact
-  favoriteUsers: [UserPetFavorite] @connection(keyName: "byPet", fields: ["id"])
+  favoriteUsers: [UserPetFavorite]
 }
 
-type Contact {
-  address: Address
+type UserPetFavorite @model {
+  id: ID!
+  userId: ID!
+  petId: ID!
+  createdAt: AWSDateTime!
+  user: User
+  pet: Pet
 }
 
 type Breeds {
   primary: String
   secondary: String
+  mixed: Boolean
+  unknown: Boolean
 }
 
-type UserPetFavorite @model
-  @key(name: "byUser", fields: ["userId", "petId"])
-  @key(name: "byPet", fields: ["petId", "userId"]) {
-  id: ID!
-  userId: ID!
-  petId: ID!
-  createdAt: AWSDateTime!
-  user: User @belongsTo(fields: ["userId"])
-  pet: Pet @belongsTo(fields: ["petId"])
+type Contact {
+  address: Address
+  email: String
+  phone: String
 }
-input CreateUserPetFavoriteInput {
-  userId: ID!
-  petId: ID!
-  createdAt: AWSDateTime!
+
+type Address {
+  city: String
+  state: String
 }

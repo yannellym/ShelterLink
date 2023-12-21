@@ -1,25 +1,145 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const getUserFavoritePet = /* GraphQL */ `
-  query GetUserFavoritePet($id: ID!) {
-    getUserFavoritePet(id: $id) {
+export const getUser = /* GraphQL */ `
+  query GetUser($id: ID!) {
+    getUser(id: $id) {
       id
-      userId
-      petId
+      username
+      email
+      favoritePets {
+        id
+        userId
+        petId
+        createdAt
+        updatedAt
+        __typename
+      }
       createdAt
       updatedAt
       __typename
     }
   }
 `;
-export const listUserFavoritePets = /* GraphQL */ `
-  query ListUserFavoritePets(
-    $filter: ModelUserFavoritePetFilterInput
+export const listUsers = /* GraphQL */ `
+  query ListUsers(
+    $filter: ModelUserFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listUserFavoritePets(
+    listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        username
+        email
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+export const getPet = /* GraphQL */ `
+  query GetPet($id: ID!) {
+    getPet(id: $id) {
+      id
+      name
+      age
+      gender
+      size
+      breeds {
+        primary
+        secondary
+        mixed
+        unknown
+        __typename
+      }
+      description
+      imageUrl
+      contact {
+        email
+        phone
+        __typename
+      }
+      favoriteUsers {
+        id
+        userId
+        petId
+        createdAt
+        updatedAt
+        __typename
+      }
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const listPets = /* GraphQL */ `
+  query ListPets(
+    $filter: ModelPetFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listPets(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        name
+        age
+        gender
+        size
+        description
+        imageUrl
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+export const getUserPetFavorite = /* GraphQL */ `
+  query GetUserPetFavorite($id: ID!) {
+    getUserPetFavorite(id: $id) {
+      id
+      userId
+      petId
+      createdAt
+      user {
+        id
+        username
+        email
+        createdAt
+        updatedAt
+        __typename
+      }
+      pet {
+        id
+        name
+        age
+        gender
+        size
+        description
+        imageUrl
+        createdAt
+        updatedAt
+        __typename
+      }
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const listUserPetFavorites = /* GraphQL */ `
+  query ListUserPetFavorites(
+    $filter: ModelUserPetFavoriteFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listUserPetFavorites(
       filter: $filter
       limit: $limit
       nextToken: $nextToken

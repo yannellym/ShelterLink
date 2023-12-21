@@ -1,3 +1,4 @@
+
 //card to display a preview of the pet's information
 import React, { useState, useEffect } from 'react';
 import '../styles/PetCard.css';
@@ -7,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart} from '@fortawesome/free-solid-svg-icons';
 
 import { API, graphqlOperation } from 'aws-amplify';
-import { createUserFavoritePet, deleteUserFavoritePet } from '../graphql/mutations';
+import { createUserPetFavorite, deleteUserPetFavorite } from '../graphql/mutations';
 
 const PetCard = ({ pet, isFavorite, isAuthenticated }) => {
   const [favorited, setFavorited] = useState(isFavorite);
@@ -17,18 +18,24 @@ const PetCard = ({ pet, isFavorite, isAuthenticated }) => {
   const handleToggleFavorite = async () => {
     if (isAuthenticated) {
       setFavorited(!favorited);
-  
+
       try {
         const userId = isAuthenticated.attributes.sub;
         const petId = pet.id;
-  
+
         if (favorited) {
           // Remove pet from user's favorite pets
-          await API.graphql(graphqlOperation(deleteUserFavoritePet, { input: { userId, petId } }));
+          await API.graphql(graphqlOperation(deleteUserPetFavorite, { input: { userId, petId } }));
           console.log("Pet removed from user's favorites");
         } else {
           // Add pet to user's favorite pets
-          await API.graphql(graphqlOperation(createUserFavoritePet, { input: { userId, petId } }));
+          await API.graphql(graphqlOperation(createUserPetFavorite, {
+            input: {
+              userId,
+              petId,
+              createdAt: new Date().toISOString(),
+            },
+          }));
           console.log("Pet added to user's favorites");
         }
       } catch (error) {
@@ -42,8 +49,7 @@ const PetCard = ({ pet, isFavorite, isAuthenticated }) => {
       navigate('/auth');
     }
   };
-  
-  
+
   
 
   const handleMoreInfoClick = () => {

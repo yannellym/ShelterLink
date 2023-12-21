@@ -4,7 +4,7 @@ import '../styles/FavoritesPage.css';
 import PetCard from '../components/PetCard';
 import SadLab from '../images/sadlab.jpg';
 import { API, graphqlOperation } from 'aws-amplify';
-import { listUserFavoritePets } from '../graphql/queries';
+import { listUserPetFavorites } from '../graphql/queries';
 
 // component to show pets that were favorited by the user
 function Favorites({ removeFromFavorites }) {
@@ -13,8 +13,8 @@ function Favorites({ removeFromFavorites }) {
   useEffect(() => {
     const fetchFavoritePets = async () => {
       try {
-        const response = await API.graphql(graphqlOperation(listUserFavoritePets));
-        const pets = response.data.listUserFavoritePets.items;
+        const response = await API.graphql(graphqlOperation(listUserPetFavorites ));
+        const pets = response.data.listUserPetFavorites.items;
         console.log(pets, "users fav pets")
         setFavoritePets(pets);
       } catch (error) {
