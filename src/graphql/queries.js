@@ -59,10 +59,17 @@ export const getPet = /* GraphQL */ `
       description
       imageUrl
       contact {
+        address {
+          address1
+          address2
+          city 
+          state
+        }
         email
         phone
         __typename
       }
+      url
       favoriteUsers {
         id
         userId
@@ -92,6 +99,7 @@ export const listPets = /* GraphQL */ `
         size
         description
         imageUrl
+        url
         createdAt
         updatedAt
         __typename
@@ -124,6 +132,7 @@ export const getUserPetFavorite = /* GraphQL */ `
         size
         description
         imageUrl
+        url
         createdAt
         updatedAt
         __typename

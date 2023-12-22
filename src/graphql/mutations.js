@@ -2,11 +2,22 @@
 // this is an auto generated file. This will be overwritten
 
 export const createUser = /* GraphQL */ `
-  mutation CreateUser($input: CreateUserInput!, $condition: ModelUserConditionInput) {
+  mutation CreateUser(
+    $input: CreateUserInput!
+    $condition: ModelUserConditionInput
+  ) {
     createUser(input: $input, condition: $condition) {
       id
       username
       email
+      favoritePets {
+        id
+        userId
+        petId
+        createdAt
+        updatedAt
+        __typename
+      }
       createdAt
       updatedAt
       __typename
@@ -80,10 +91,17 @@ export const createPet = /* GraphQL */ `
       description
       imageUrl
       contact {
+        address {
+          address1
+          address2
+          city 
+          state
+        }
         email
         phone
         __typename
       }
+      url
       favoriteUsers {
         id
         userId
@@ -119,10 +137,17 @@ export const updatePet = /* GraphQL */ `
       description
       imageUrl
       contact {
+        address {
+          address1
+          address2
+          city 
+          state
+        }
         email
         phone
         __typename
       }
+      url
       favoriteUsers {
         id
         userId
@@ -158,10 +183,17 @@ export const deletePet = /* GraphQL */ `
       description
       imageUrl
       contact {
+        address {
+          address1
+          address2
+          city 
+          state
+        }
         email
         phone
         __typename
       }
+      url
       favoriteUsers {
         id
         userId
@@ -202,6 +234,7 @@ export const createUserPetFavorite = /* GraphQL */ `
         size
         description
         imageUrl
+        url
         createdAt
         updatedAt
         __typename
@@ -237,6 +270,7 @@ export const updateUserPetFavorite = /* GraphQL */ `
         size
         description
         imageUrl
+        url
         createdAt
         updatedAt
         __typename
@@ -272,22 +306,11 @@ export const deleteUserPetFavorite = /* GraphQL */ `
         size
         description
         imageUrl
+        url
         createdAt
         updatedAt
         __typename
       }
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const AddFavoritePet = /* GraphQL */ `
-  mutation AddFavoritePet($userId: ID!, $petId: ID!) {
-    createFavoritePet(input: { userId: $userId, petId: $petId }) {
-      id
-      userId
-      petId
-      createdAt
       updatedAt
       __typename
     }

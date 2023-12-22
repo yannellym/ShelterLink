@@ -28,6 +28,7 @@ export default function PetCreateForm(props) {
     size: "",
     description: "",
     imageUrl: "",
+    url: "",
   };
   const [name, setName] = React.useState(initialValues.name);
   const [age, setAge] = React.useState(initialValues.age);
@@ -37,6 +38,7 @@ export default function PetCreateForm(props) {
     initialValues.description
   );
   const [imageUrl, setImageUrl] = React.useState(initialValues.imageUrl);
+  const [url, setUrl] = React.useState(initialValues.url);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.name);
@@ -45,6 +47,7 @@ export default function PetCreateForm(props) {
     setSize(initialValues.size);
     setDescription(initialValues.description);
     setImageUrl(initialValues.imageUrl);
+    setUrl(initialValues.url);
     setErrors({});
   };
   const validations = {
@@ -54,6 +57,7 @@ export default function PetCreateForm(props) {
     size: [],
     description: [],
     imageUrl: [],
+    url: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -87,6 +91,7 @@ export default function PetCreateForm(props) {
           size,
           description,
           imageUrl,
+          url,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -155,6 +160,7 @@ export default function PetCreateForm(props) {
               size,
               description,
               imageUrl,
+              url,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -184,6 +190,7 @@ export default function PetCreateForm(props) {
               size,
               description,
               imageUrl,
+              url,
             };
             const result = onChange(modelFields);
             value = result?.age ?? value;
@@ -213,6 +220,7 @@ export default function PetCreateForm(props) {
               size,
               description,
               imageUrl,
+              url,
             };
             const result = onChange(modelFields);
             value = result?.gender ?? value;
@@ -242,6 +250,7 @@ export default function PetCreateForm(props) {
               size: value,
               description,
               imageUrl,
+              url,
             };
             const result = onChange(modelFields);
             value = result?.size ?? value;
@@ -271,6 +280,7 @@ export default function PetCreateForm(props) {
               size,
               description: value,
               imageUrl,
+              url,
             };
             const result = onChange(modelFields);
             value = result?.description ?? value;
@@ -300,6 +310,7 @@ export default function PetCreateForm(props) {
               size,
               description,
               imageUrl: value,
+              url,
             };
             const result = onChange(modelFields);
             value = result?.imageUrl ?? value;
@@ -313,6 +324,36 @@ export default function PetCreateForm(props) {
         errorMessage={errors.imageUrl?.errorMessage}
         hasError={errors.imageUrl?.hasError}
         {...getOverrideProps(overrides, "imageUrl")}
+      ></TextField>
+      <TextField
+        label="Url"
+        isRequired={false}
+        isReadOnly={false}
+        value={url}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              age,
+              gender,
+              size,
+              description,
+              imageUrl,
+              url: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.url ?? value;
+          }
+          if (errors.url?.hasError) {
+            runValidationTasks("url", value);
+          }
+          setUrl(value);
+        }}
+        onBlur={() => runValidationTasks("url", url)}
+        errorMessage={errors.url?.errorMessage}
+        hasError={errors.url?.hasError}
+        {...getOverrideProps(overrides, "url")}
       ></TextField>
       <Flex
         justifyContent="space-between"

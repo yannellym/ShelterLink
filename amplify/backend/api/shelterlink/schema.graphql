@@ -21,6 +21,7 @@ type Pet @model {
   description: String
   imageUrl: String
   contact: Contact
+  url: String
   favoriteUsers: [UserPetFavorite]
 }
 
@@ -47,6 +48,8 @@ type Contact {
 }
 
 type Address {
+  address1: String
+  address2: String
   city: String
   state: String
 }

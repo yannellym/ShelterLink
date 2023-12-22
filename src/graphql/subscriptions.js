@@ -83,6 +83,7 @@ export const onCreatePet = /* GraphQL */ `
         phone
         __typename
       }
+      url
       favoriteUsers {
         id
         userId
@@ -119,6 +120,7 @@ export const onUpdatePet = /* GraphQL */ `
         phone
         __typename
       }
+      url
       favoriteUsers {
         id
         userId
@@ -155,6 +157,7 @@ export const onDeletePet = /* GraphQL */ `
         phone
         __typename
       }
+      url
       favoriteUsers {
         id
         userId
@@ -194,6 +197,7 @@ export const onCreateUserPetFavorite = /* GraphQL */ `
         size
         description
         imageUrl
+        url
         createdAt
         updatedAt
         __typename
@@ -228,6 +232,7 @@ export const onUpdateUserPetFavorite = /* GraphQL */ `
         size
         description
         imageUrl
+        url
         createdAt
         updatedAt
         __typename
@@ -262,6 +267,7 @@ export const onDeleteUserPetFavorite = /* GraphQL */ `
         size
         description
         imageUrl
+        url
         createdAt
         updatedAt
         __typename

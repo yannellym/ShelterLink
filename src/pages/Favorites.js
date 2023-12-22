@@ -4,7 +4,7 @@ import '../styles/FavoritesPage.css';
 import PetCard from '../components/PetCard';
 import SadLab from '../images/sadlab.jpg';
 import { API, graphqlOperation } from 'aws-amplify';
-import { listUserPetFavorites } from '../graphql/queries';
+import { listUserPetFavorites, getPet } from '../graphql/queries';
 
 // component to show pets that were favorited by the user
 function Favorites({ removeFromFavorites }) {
@@ -13,18 +13,32 @@ function Favorites({ removeFromFavorites }) {
   useEffect(() => {
     const fetchFavoritePets = async () => {
       try {
-        const response = await API.graphql(graphqlOperation(listUserPetFavorites ));
+        const response = await API.graphql(graphqlOperation(listUserPetFavorites));
         const pets = response.data.listUserPetFavorites.items;
-        console.log(pets, "users fav pets")
-        setFavoritePets(pets);
+        console.log(pets, "pets from the user's favs")
+  
+        // Fetch details for each favorite pet
+        const petsWithDetails = await Promise.all(
+          pets.map(async (pet) => {
+            const petDetails = await API.graphql(graphqlOperation(getPet, { id: pet.petId }));
+            console.log(petDetails, "pet detials from pet table")
+            return petDetails.data.getPet;
+          })
+        );
+  
+        setFavoritePets(petsWithDetails);
       } catch (error) {
         console.error('Error fetching favorite pets:', error);
       }
     };
-
+  
     fetchFavoritePets();
   }, []);
-
+  
+  useEffect(() => {
+  }, [favoritePets]); // Log changes to favoritePets
+  
+  console.log("favorite pets before render", favoritePets)
   return (
     <div className="pet-card-container">
       <div className="title-container">
@@ -43,13 +57,12 @@ function Favorites({ removeFromFavorites }) {
       ) : (
         <div className="pet-card-list">
           {favoritePets.map((pet) => (
-            <p>{pet.petId}</p>
-            // <PetCard
-            //   key={pet.petId}
-            //   pet={pet.pet} // Assuming that the favorite pet has a "pet" field
-            //   removeFromFavorites={removeFromFavorites}
-            //   isFavorite={favoritePets.some((favoritePet) => favoritePet.id === pet.id)}
-            // />
+            <PetCard
+              key={pet.id}
+              pet={pet}
+              // removeFromFavorites={removeFromFavorites}
+              // isFavorite={favoritePets.some((favoritePet) => favoritePet.id === pet.id)}
+            />
           ))}
         </div>
       )}
