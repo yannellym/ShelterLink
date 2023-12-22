@@ -48,7 +48,12 @@ const PetCard = ({ pet, isFavorite, isAuthenticated }) => {
                 unknown: pet.breeds?.unknown || false,
               },
               description: pet.description || "No available description for this pet.",
-              imageUrl: pet.photos?.[0]?.full || require('../images/coming_soon.png'),
+              photos: pet.photos?.map((photo) => ({
+                full: photo.full || require('../images/coming_soon.png'),
+                large: photo.large || require('../images/coming_soon.png'),
+                medium: photo.medium || require('../images/coming_soon.png'),
+                small: photo.small || require('../images/coming_soon.png'),
+              })) || [],
               contact: {
                 address: {
                   address1: pet.contact?.address?.address1 || "No address provided.",
@@ -59,8 +64,8 @@ const PetCard = ({ pet, isFavorite, isAuthenticated }) => {
                 email: pet.contact?.email || "No email provided",
                 phone: pet.contact?.phone || "No phone provided",
               },
-              url: pet.url
-            };
+              url: pet.url,
+            };            
             console.log("creating pet in DB", petInput);
   
             // Now create the pet

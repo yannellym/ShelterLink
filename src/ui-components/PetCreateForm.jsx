@@ -27,7 +27,6 @@ export default function PetCreateForm(props) {
     gender: "",
     size: "",
     description: "",
-    imageUrl: "",
     url: "",
   };
   const [name, setName] = React.useState(initialValues.name);
@@ -37,7 +36,6 @@ export default function PetCreateForm(props) {
   const [description, setDescription] = React.useState(
     initialValues.description
   );
-  const [imageUrl, setImageUrl] = React.useState(initialValues.imageUrl);
   const [url, setUrl] = React.useState(initialValues.url);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
@@ -46,7 +44,6 @@ export default function PetCreateForm(props) {
     setGender(initialValues.gender);
     setSize(initialValues.size);
     setDescription(initialValues.description);
-    setImageUrl(initialValues.imageUrl);
     setUrl(initialValues.url);
     setErrors({});
   };
@@ -56,7 +53,6 @@ export default function PetCreateForm(props) {
     gender: [],
     size: [],
     description: [],
-    imageUrl: [],
     url: [],
   };
   const runValidationTasks = async (
@@ -90,7 +86,6 @@ export default function PetCreateForm(props) {
           gender,
           size,
           description,
-          imageUrl,
           url,
         };
         const validationResponses = await Promise.all(
@@ -159,7 +154,6 @@ export default function PetCreateForm(props) {
               gender,
               size,
               description,
-              imageUrl,
               url,
             };
             const result = onChange(modelFields);
@@ -189,7 +183,6 @@ export default function PetCreateForm(props) {
               gender,
               size,
               description,
-              imageUrl,
               url,
             };
             const result = onChange(modelFields);
@@ -219,7 +212,6 @@ export default function PetCreateForm(props) {
               gender: value,
               size,
               description,
-              imageUrl,
               url,
             };
             const result = onChange(modelFields);
@@ -249,7 +241,6 @@ export default function PetCreateForm(props) {
               gender,
               size: value,
               description,
-              imageUrl,
               url,
             };
             const result = onChange(modelFields);
@@ -279,7 +270,6 @@ export default function PetCreateForm(props) {
               gender,
               size,
               description: value,
-              imageUrl,
               url,
             };
             const result = onChange(modelFields);
@@ -296,36 +286,6 @@ export default function PetCreateForm(props) {
         {...getOverrideProps(overrides, "description")}
       ></TextField>
       <TextField
-        label="Image url"
-        isRequired={false}
-        isReadOnly={false}
-        value={imageUrl}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              name,
-              age,
-              gender,
-              size,
-              description,
-              imageUrl: value,
-              url,
-            };
-            const result = onChange(modelFields);
-            value = result?.imageUrl ?? value;
-          }
-          if (errors.imageUrl?.hasError) {
-            runValidationTasks("imageUrl", value);
-          }
-          setImageUrl(value);
-        }}
-        onBlur={() => runValidationTasks("imageUrl", imageUrl)}
-        errorMessage={errors.imageUrl?.errorMessage}
-        hasError={errors.imageUrl?.hasError}
-        {...getOverrideProps(overrides, "imageUrl")}
-      ></TextField>
-      <TextField
         label="Url"
         isRequired={false}
         isReadOnly={false}
@@ -339,7 +299,6 @@ export default function PetCreateForm(props) {
               gender,
               size,
               description,
-              imageUrl,
               url: value,
             };
             const result = onChange(modelFields);

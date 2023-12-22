@@ -19,7 +19,7 @@ type Pet @model {
   size: String
   breeds: Breeds
   description: String
-  imageUrl: String
+  photos: [Photos]
   contact: Contact
   url: String
   favoriteUsers: [UserPetFavorite]
@@ -32,6 +32,13 @@ type UserPetFavorite @model {
   createdAt: AWSDateTime!
   user: User
   pet: Pet
+}
+
+type Photos {
+  full: String
+  large: String
+  medium: String
+  small: String
 }
 
 type Breeds {

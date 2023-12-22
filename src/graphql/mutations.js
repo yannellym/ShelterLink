@@ -70,6 +70,8 @@ export const deleteUser = /* GraphQL */ `
     }
   }
 `;
+
+// PET MUTATIONS // 
 export const createPet = /* GraphQL */ `
   mutation CreatePet(
     $input: CreatePetInput!
@@ -89,13 +91,20 @@ export const createPet = /* GraphQL */ `
         __typename
       }
       description
-      imageUrl
+      photos {
+        full
+        large
+        medium
+        small
+        __typename
+      }
       contact {
         address {
           address1
           address2
-          city 
+          city
           state
+          __typename
         }
         email
         phone
@@ -135,13 +144,20 @@ export const updatePet = /* GraphQL */ `
         __typename
       }
       description
-      imageUrl
+      photos {
+        full
+        large
+        medium
+        small
+        __typename
+      }
       contact {
         address {
           address1
           address2
-          city 
+          city
           state
+          __typename
         }
         email
         phone
@@ -181,13 +197,20 @@ export const deletePet = /* GraphQL */ `
         __typename
       }
       description
-      imageUrl
+      photos {
+        full
+        large
+        medium
+        small
+        __typename
+      }
       contact {
         address {
           address1
           address2
-          city 
+          city
           state
+          __typename
         }
         email
         phone
@@ -233,7 +256,6 @@ export const createUserPetFavorite = /* GraphQL */ `
         gender
         size
         description
-        imageUrl
         url
         createdAt
         updatedAt
@@ -269,7 +291,6 @@ export const updateUserPetFavorite = /* GraphQL */ `
         gender
         size
         description
-        imageUrl
         url
         createdAt
         updatedAt
@@ -305,7 +326,6 @@ export const deleteUserPetFavorite = /* GraphQL */ `
         gender
         size
         description
-        imageUrl
         url
         createdAt
         updatedAt

@@ -29,7 +29,6 @@ export default function PetUpdateForm(props) {
     gender: "",
     size: "",
     description: "",
-    imageUrl: "",
     url: "",
   };
   const [name, setName] = React.useState(initialValues.name);
@@ -39,7 +38,6 @@ export default function PetUpdateForm(props) {
   const [description, setDescription] = React.useState(
     initialValues.description
   );
-  const [imageUrl, setImageUrl] = React.useState(initialValues.imageUrl);
   const [url, setUrl] = React.useState(initialValues.url);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
@@ -51,7 +49,6 @@ export default function PetUpdateForm(props) {
     setGender(cleanValues.gender);
     setSize(cleanValues.size);
     setDescription(cleanValues.description);
-    setImageUrl(cleanValues.imageUrl);
     setUrl(cleanValues.url);
     setErrors({});
   };
@@ -77,7 +74,6 @@ export default function PetUpdateForm(props) {
     gender: [],
     size: [],
     description: [],
-    imageUrl: [],
     url: [],
   };
   const runValidationTasks = async (
@@ -111,7 +107,6 @@ export default function PetUpdateForm(props) {
           gender: gender ?? null,
           size: size ?? null,
           description: description ?? null,
-          imageUrl: imageUrl ?? null,
           url: url ?? null,
         };
         const validationResponses = await Promise.all(
@@ -178,7 +173,6 @@ export default function PetUpdateForm(props) {
               gender,
               size,
               description,
-              imageUrl,
               url,
             };
             const result = onChange(modelFields);
@@ -208,7 +202,6 @@ export default function PetUpdateForm(props) {
               gender,
               size,
               description,
-              imageUrl,
               url,
             };
             const result = onChange(modelFields);
@@ -238,7 +231,6 @@ export default function PetUpdateForm(props) {
               gender: value,
               size,
               description,
-              imageUrl,
               url,
             };
             const result = onChange(modelFields);
@@ -268,7 +260,6 @@ export default function PetUpdateForm(props) {
               gender,
               size: value,
               description,
-              imageUrl,
               url,
             };
             const result = onChange(modelFields);
@@ -298,7 +289,6 @@ export default function PetUpdateForm(props) {
               gender,
               size,
               description: value,
-              imageUrl,
               url,
             };
             const result = onChange(modelFields);
@@ -315,36 +305,6 @@ export default function PetUpdateForm(props) {
         {...getOverrideProps(overrides, "description")}
       ></TextField>
       <TextField
-        label="Image url"
-        isRequired={false}
-        isReadOnly={false}
-        value={imageUrl}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              name,
-              age,
-              gender,
-              size,
-              description,
-              imageUrl: value,
-              url,
-            };
-            const result = onChange(modelFields);
-            value = result?.imageUrl ?? value;
-          }
-          if (errors.imageUrl?.hasError) {
-            runValidationTasks("imageUrl", value);
-          }
-          setImageUrl(value);
-        }}
-        onBlur={() => runValidationTasks("imageUrl", imageUrl)}
-        errorMessage={errors.imageUrl?.errorMessage}
-        hasError={errors.imageUrl?.hasError}
-        {...getOverrideProps(overrides, "imageUrl")}
-      ></TextField>
-      <TextField
         label="Url"
         isRequired={false}
         isReadOnly={false}
@@ -358,7 +318,6 @@ export default function PetUpdateForm(props) {
               gender,
               size,
               description,
-              imageUrl,
               url: value,
             };
             const result = onChange(modelFields);
