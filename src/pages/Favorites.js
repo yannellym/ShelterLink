@@ -7,7 +7,7 @@ import { API, graphqlOperation, Auth } from 'aws-amplify';
 import { listUserPetFavorites, getPet } from '../graphql/queries';
 import { onCreateUserPetFavorite, onDeleteUserPetFavorite } from '../graphql/subscriptions';
 
-function Favorites({ user, removePetFromFavorites, handleToggleFavorite }) {
+function Favorites({ user, handleToggleFavorite }) {
   const [favoritePets, setFavoritePets] = useState([]);
 
   useEffect(() => {
@@ -70,9 +70,8 @@ function Favorites({ user, removePetFromFavorites, handleToggleFavorite }) {
               key={pet.id}
               pet={pet}
               user={user}
-              isFavorite={true}
+              favorited={true}
               handleToggleFavorite={() => handleToggleFavorite(pet)} 
-              removePetFromFavorites={removePetFromFavorites}
             />
           ))}
         </div>

@@ -55,7 +55,7 @@ const AuthenticatorComponent = ({ setUser, navigate }) => {
             id: authenticatedUser.attributes.sub,
             username: authenticatedUser.attributes.name || '',
             email: authenticatedUser.attributes.email || '',
-          };
+          }; 
 
           // Call the createUser mutation
           const createdUser = await API.graphql(graphqlOperation(createUser, { input: newUser }));
@@ -111,12 +111,9 @@ const App = () => {
   // if yes, add it to the user's favorite pets
   const handleToggleFavorite = async (pet) => {
     if (user) {
-      console.log('USER AUTHENTICATED')
       setFavorited(!favorited);
 
       try {
-
-        console.log(user, pet, "USER SAND PET ID") 
         const userId = user.attributes.sub;
         const petId = pet.id;
         // Check if the pet is already favorited
@@ -132,7 +129,8 @@ const App = () => {
           const response = await API.graphql(graphqlOperation(deleteUserPetFavorite, { input: { id: userPetFavorite.id} }));
           console.log(response, "RES OF REMOVIGN")
           // Update the list of favorite pets in the component state
-          removePetFromFavorites(petId);
+          removePetFromFavoritesState(petId);
+          console.log(favoritePets, "fav pets array")
           const remaining_pets = await API.graphql(graphqlOperation(listUserPetFavorites));
           console.log(remaining_pets, "REmaining pets")
         } else {
@@ -180,7 +178,6 @@ const App = () => {
               // Log any errors in the response
               console.error('Error creating pet:', createPetResponse.errors);
             }
-            console.log("createPetResponse:", createPetResponse);
 
             const createdPetId = createPetResponse.data.createPet.id;
             console.log(createdPetId, "created a pet with id");
@@ -193,6 +190,8 @@ const App = () => {
             };
 
             await API.graphql(graphqlOperation(createUserPetFavorite, { input: userPetFavoriteInput }));
+            addPetToFavoritesState(petId)
+            console.log(favoritePets, "fav pets array")
             console.log("Pet added to user's favorites");
           } else {
             // The pet already exists, link it to the user in userPetFavorite table
@@ -203,6 +202,8 @@ const App = () => {
             };
 
             await API.graphql(graphqlOperation(createUserPetFavorite, { input: userPetFavoriteInput }));
+            addPetToFavoritesState(petId)
+            console.log(favoritePets, "fav pets array")
             console.log("Pet added to user's favorites");
           }
         }
@@ -221,8 +222,13 @@ const App = () => {
   };
   
   // Function to remove a pet from the state based on its ID
-  const removePetFromFavorites = (petId) => {
+  const removePetFromFavoritesState = (petId) => {
     setFavoritePets((prevPets) => prevPets.filter((pet) => pet.id !== petId));
+  };
+
+  // Function to add a pet to the state
+  const addPetToFavoritesState = (petId) => {
+    setFavoritePets((prevPets) => [...prevPets, petId]);
   };
 
   useEffect(() => {
@@ -257,8 +263,8 @@ const App = () => {
             <Home
               userLocation={fetchedUserLocation}
               handleToggleFavorite={handleToggleFavorite} 
-              removePetFromFavorites={removePetFromFavorites}
               user={user}
+              favoritePets={favoritePets}
             />
           }
         />
@@ -267,9 +273,9 @@ const App = () => {
           element={
             <FindApet
               userLocation={fetchedUserLocation}
-              removePetFromFavorites={removePetFromFavorites}
               handleToggleFavorite={handleToggleFavorite}
               isAuthenticated={user}
+              favoritePets={favoritePets}
             />
           }
         />
@@ -281,9 +287,9 @@ const App = () => {
           element={
             user ? (
               <Favorites
-                removePetFromFavorites={removePetFromFavorites}
                 handleToggleFavorite={handleToggleFavorite}
                 user={user}
+                removePetFromFavoritesState={removePetFromFavoritesState}
               />
             ) : (
               <div>
@@ -308,10 +314,9 @@ const App = () => {
           path="/pet-details/:petId"
           element={
             <PetDetails
-              removePetFromFavorites={removePetFromFavorites}
-              setFavoritePets={setFavoritePets}
               handleToggleFavorite={handleToggleFavorite}
               isAuthenticated={user}
+              favoritePets={favoritePets}
             />
           }
         />
@@ -320,10 +325,10 @@ const App = () => {
           path="/location-specific-pets"
           element={
             <LocationSpecificPets
-              removePetFromFavorites={removePetFromFavorites}
               setFavoritePets={setFavoritePets}
               handleToggleFavorite={handleToggleFavorite}
               isAuthenticated={user}
+              favoritePets={favoritePets}
             />
           }
         />

@@ -8,7 +8,7 @@ import usePetfinderAPI from '../hooks/usePetFinderAPI';
   parameters: favoritePets: array, addToFavorites: array, removeFromFavorites:array, isAuthenticated: string
   returns: 
 */
-function LocationSpecificPets({ favoritePets, addToFavorites, removeFromFavorites, isAuthenticated }) {
+function LocationSpecificPets({ favoritePets, isAuthenticated }) {
   const location = useLocation();
   const state = location.state;
   const petType = state?.petType || '';
@@ -21,7 +21,7 @@ function LocationSpecificPets({ favoritePets, addToFavorites, removeFromFavorite
   const [showOnlyPetsWithImages, setShowOnlyPetsWithImages] = useState(false);
 
   const dependencies = [petType, searchText, showOnlyPetsWithImages, currentPage];
-  console.log(searchText, 'loc')
+
   const { data, loading: apiLoading } = usePetfinderAPI(
     `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/pet_zip_search?type=${petType}&location=${searchText}&page=${currentPage}`,
     dependencies
@@ -101,8 +101,6 @@ function LocationSpecificPets({ favoritePets, addToFavorites, removeFromFavorite
             <PetCard
               key={pet.id}
               pet={pet}
-              addToFavorites={addToFavorites}
-              removeFromFavorites={removeFromFavorites}
               isFavorite={favoritePets.some((favoritePet) => favoritePet.id === pet.id)}
               isAuthenticated={isAuthenticated}
             />

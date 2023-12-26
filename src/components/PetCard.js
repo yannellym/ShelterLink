@@ -11,16 +11,11 @@ import { API, graphqlOperation } from 'aws-amplify';
 import { createUserPetFavorite, deleteUserPetFavorite,  createPet } from '../graphql/mutations';
 import { getPet, listUserPetFavorites } from '../graphql/queries';
 
-const PetCard = ({ pet, isFavorite, user, removePetFromFavorites, handleToggleFavorite }) => {
-  const [favorited, setFavorited] = useState(isFavorite);
-  const navigate = useNavigate();
+const PetCard = ({ pet, favorited, handleToggleFavorite }) => {
   const [imageSource, setImageSource] = useState(null);
-
-
 
   const handleMoreInfoClick = () => {
     // Create the URL for the new window, including the 'petData' query parameter
-    console.log(pet, "PET DATA TO PET DETAILS")
     const moreInfoUrl = `/pet-details/${pet.id}?petData=${encodeURIComponent(JSON.stringify(pet))}`;
     // Open the new window with the generated URL
     const newWindow = window.open(moreInfoUrl, '_blank');

@@ -6,10 +6,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import coming_soon from "../images/coming_soon.png";
 
-const PetDetails = ({ isAuthenticated }) => {
-  const [favorited, setFavorited] = useState(true);
+const PetDetails = ({ isAuthenticated, handleToggleFavorite, favoritePets }) => {
   const navigate = useNavigate();
-  
   // Extract the 'petData' from the query parameter in the URL
   const searchParams = new URLSearchParams(window.location.search);
   const petData = JSON.parse(decodeURIComponent(searchParams.get('petData')));
@@ -18,24 +16,10 @@ const PetDetails = ({ isAuthenticated }) => {
     return <p className="error-message">Error: Pet not found</p>;
   }
 
-  const handleToggleFavorite = () => {
-    if (isAuthenticated) {
-      setFavorited(!favorited);
-      if (favorited) {
-        removeFromFavorites(petData.id);
-      } else {
-        addToFavorites(petData);
-      }
-    } else {
-      // If the user is not authenticated, direct them to the authentication page
-      navigate('/auth');
-    }
-  };
-
   return (
     <div className="pet-details">
       <button
-        className={`favorite-heart-${favorited ? 'favorited' : 'unfavorited'}`}
+        className={`favorite-heart-${favoritePets.includes(petData.id) ? 'favorited' : 'unfavorited'}`}
         onClick={handleToggleFavorite}
         tabIndex="0"
       >

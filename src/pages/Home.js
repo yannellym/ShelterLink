@@ -19,7 +19,7 @@ import useAnimalsBasedOnPreferencesAPI from '../hooks/useAnimalsBasedOnPreferenc
   parameters: favoritePets: array, addToFavorites: array,  userPreferences: array, removeFromFavorites:array, isAuthenticated: string
   returns: 
 */
-function Home({ userLocation, userPreferences, handleToggleFavorite, user, removePetFromFavorites}) {
+function Home({ userLocation, userPreferences, handleToggleFavorite, user, favoritePets}) {
   const [loading, setLoading] = useState(true);
   const [selectedAnimals, setSelectedAnimals] = useState([]);
   const [selectedPetIndex, setSelectedPetIndex] = useState(0);
@@ -138,7 +138,7 @@ function Home({ userLocation, userPreferences, handleToggleFavorite, user, remov
                   key={preferredAnimals[selectedPetIndex].id}
                   pet={preferredAnimals[selectedPetIndex]}
                   handleToggleFavorite={() => handleToggleFavorite(preferredAnimals[selectedPetIndex])}
-                  removePetFromFavorites={removePetFromFavorites}
+                  favorited={favoritePets.includes(preferredAnimals[selectedPetIndex].id)}
                   className="matched-pet-card"
                 />
                 {selectedPetIndex +1 < preferredAnimals.length? 
@@ -209,7 +209,7 @@ function Home({ userLocation, userPreferences, handleToggleFavorite, user, remov
                 pet={pet}
                 user={user}
                 handleToggleFavorite={() => handleToggleFavorite(pet)} 
-                removePetFromFavorites={removePetFromFavorites} 
+                favorited={favoritePets.includes(pet.id)}
               />
             ))}
             {fetchedUserLocation || userLocation ? (

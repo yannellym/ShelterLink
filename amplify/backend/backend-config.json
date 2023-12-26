@@ -4,14 +4,7 @@
       "dependsOn": [],
       "output": {
         "authConfig": {
-          "additionalAuthenticationProviders": [
-            {
-              "authenticationType": "AMAZON_COGNITO_USER_POOLS",
-              "userPoolConfig": {
-                "userPoolId": "authShelterLink"
-              }
-            }
-          ],
+          "additionalAuthenticationProviders": [],
           "defaultAuthentication": {
             "apiKeyConfig": {
               "apiKeyExpirationDays": 7
@@ -66,6 +59,40 @@
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_lambdaapi_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "lambdaapi"
+        }
+      ]
+    },
+    "AMPLIFY_function_lambdaapi_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "lambdaapi"
+        }
+      ]
+    },
+    "AMPLIFY_function_petfOrganizations_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "petfOrganizations"
+        }
+      ]
+    },
+    "AMPLIFY_function_petfOrganizations_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "petfOrganizations"
+        }
+      ]
     }
   },
   "storage": {
