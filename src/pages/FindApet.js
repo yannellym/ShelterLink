@@ -4,7 +4,7 @@ import '../styles/MainPage.css';
 import PetCard from '../components/PetCard';
 import Filter from './Filter';
 
-function FindApet({ userLocation, favoritePets, addToFavorites, removeFromFavorites, isAuthenticated }) {
+function FindApet({ userLocation, handleToggleFavorite, removePetFromFavorites, isAuthenticated }) {
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -95,8 +95,8 @@ function FindApet({ userLocation, favoritePets, addToFavorites, removeFromFavori
             key={pet.id}
             pet={pet}
             addToFavorites={addToFavorites}
-            removeFromFavorites={removeFromFavorites}
-            isFavorite={favoritePets.some((favoritePet) => favoritePet.id === pet.id)}
+            removePetFromFavorites={removePetFromFavorites}
+            handleToggleFavorite={() => handleToggleFavorite(pet)} 
             isAuthenticated={isAuthenticated}
           />
       ));

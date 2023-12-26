@@ -304,35 +304,9 @@ export const updateUserPetFavorite = /* GraphQL */ `
 export const deleteUserPetFavorite = /* GraphQL */ `
   mutation DeleteUserPetFavorite(
     $input: DeleteUserPetFavoriteInput!
-    $condition: ModelUserPetFavoriteConditionInput
   ) {
-    deleteUserPetFavorite(input: $input, condition: $condition) {
+    deleteUserPetFavorite(input: $input) {
       id
-      userId
-      petId
-      createdAt
-      user {
-        id
-        username
-        email
-        createdAt
-        updatedAt
-        __typename
-      }
-      pet {
-        id
-        name
-        age
-        gender
-        size
-        description
-        url
-        createdAt
-        updatedAt
-        __typename
-      }
-      updatedAt
-      __typename
     }
   }
 `;

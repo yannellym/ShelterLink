@@ -9,115 +9,18 @@ import { faHeart} from '@fortawesome/free-solid-svg-icons';
 
 import { API, graphqlOperation } from 'aws-amplify';
 import { createUserPetFavorite, deleteUserPetFavorite,  createPet } from '../graphql/mutations';
-import { getPet } from '../graphql/queries';
+import { getPet, listUserPetFavorites } from '../graphql/queries';
 
-const PetCard = ({ pet, isFavorite, isAuthenticated }) => {
+const PetCard = ({ pet, isFavorite, user, removePetFromFavorites, handleToggleFavorite }) => {
   const [favorited, setFavorited] = useState(isFavorite);
   const navigate = useNavigate();
   const [imageSource, setImageSource] = useState(null);
 
-  const handleToggleFavorite = async () => {
-    if (isAuthenticated) {
-      console.log('USER AUTHENTICATED')
-      setFavorited(!favorited);
-  
-      try {
-        const userId = isAuthenticated.attributes.sub;
-        const petId = pet.id;
-  
-        if (favorited) {
-          // Remove pet from user's favorite pets
-          await API.graphql(graphqlOperation(deleteUserPetFavorite, { input: { userId, petId } }));
-          console.log("Pet removed from user's favorites");
-        } else {
-          console.log("TRYING TO GET PET FROM TABLE");
-          const petExists = await API.graphql(graphqlOperation(getPet, { id: petId }));
-  
-          if (!petExists.data.getPet) {
-            console.log("Pet doesn't exist in the DB");
-            const petInput = {
-              id: petId,
-              name: pet.name,
-              age: pet.age,
-              gender: pet.gender,
-              size: pet.size,
-              breeds: {
-                primary: pet.breeds?.primary || '',
-                secondary: pet.breeds?.secondary || '',
-                mixed: pet.breeds?.mixed || false,
-                unknown: pet.breeds?.unknown || false,
-              },
-              description: pet.description || "No available description for this pet.",
-              photos: pet.photos?.map((photo) => ({
-                full: photo.full || require('../images/coming_soon.png'),
-                large: photo.large || require('../images/coming_soon.png'),
-                medium: photo.medium || require('../images/coming_soon.png'),
-                small: photo.small || require('../images/coming_soon.png'),
-              })) || [],
-              contact: {
-                address: {
-                  address1: pet.contact?.address?.address1 || "No address provided.",
-                  address2: pet.contact?.address?.address2 || "No address provided.",
-                  city: pet.contact?.address?.city || "No city provided.",
-                  state: pet.contact?.address?.state || "No state provided.",
-                },
-                email: pet.contact?.email || "No email provided",
-                phone: pet.contact?.phone || "No phone provided",
-              },
-              url: pet.url,
-            };            
-            console.log("creating pet in DB", petInput);
-  
-            // Now create the pet
-            const createPetResponse = await API.graphql(graphqlOperation(createPet, { input: petInput }));
-            if (createPetResponse.errors) {
-              // Log any errors in the response
-              console.error('Error creating pet:', createPetResponse.errors);
-            }
-            console.log("createPetResponse:", createPetResponse);
-  
-            const createdPetId = createPetResponse.data.createPet.id;
-            console.log(createdPetId, "created a pet with id");
-  
-            // Link the pet to the user in userPetFavorite table
-            const userPetFavoriteInput = {
-              userId: userId,
-              petId: createdPetId, // Use the ID of the newly created pet
-              createdAt: new Date().toISOString(),
-            };
-  
-            await API.graphql(graphqlOperation(createUserPetFavorite, { input: userPetFavoriteInput }));
-            console.log("Pet added to user's favorites");
-          } else {
-            // The pet already exists, link it to the user in userPetFavorite table
-            const userPetFavoriteInput = {
-              userId: userId,
-              petId: petId,
-              createdAt: new Date().toISOString(),
-            };
-  
-            await API.graphql(graphqlOperation(createUserPetFavorite, { input: userPetFavoriteInput }));
-            console.log("Pet added to user's favorites");
-          }
-        }
-      } catch (error) {
-        console.error('Error:', error);
-        // Handle error, e.g., show a message to the user
-      } finally {
-        // Re-enable the button or hide the loading indicator
-      }
-    } else {
-      // Redirect to the authentication page
-      localStorage.setItem('previousURL', window.location.pathname);
-      localStorage.setItem('favoritePet', JSON.stringify(pet));
-      navigate('/auth');
-    }
-  };
-  
-  
+
 
   const handleMoreInfoClick = () => {
     // Create the URL for the new window, including the 'petData' query parameter
+    console.log(pet, "PET DATA TO PET DETAILS")
     const moreInfoUrl = `/pet-details/${pet.id}?petData=${encodeURIComponent(JSON.stringify(pet))}`;
     // Open the new window with the generated URL
     const newWindow = window.open(moreInfoUrl, '_blank');
@@ -207,7 +110,7 @@ const PetCard = ({ pet, isFavorite, isAuthenticated }) => {
         </button>
         <button
           className={`favorite-heart-${favorited ? 'favorited' : 'unfavorited'}`}
-          onClick={handleToggleFavorite}
+          onClick={() => handleToggleFavorite(pet)}
           tabIndex="0"
         >
           <FontAwesomeIcon icon={faHeart} />

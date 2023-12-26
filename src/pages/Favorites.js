@@ -3,11 +3,11 @@ import { Link } from 'react-router-dom';
 import '../styles/FavoritesPage.css';
 import PetCard from '../components/PetCard';
 import SadLab from '../images/sadlab.jpg';
-import { API, graphqlOperation } from 'aws-amplify';
+import { API, graphqlOperation, Auth } from 'aws-amplify';
 import { listUserPetFavorites, getPet } from '../graphql/queries';
+import { onCreateUserPetFavorite, onDeleteUserPetFavorite } from '../graphql/subscriptions';
 
-// component to show pets that were favorited by the user
-function Favorites({ removeFromFavorites }) {
+function Favorites({ user, removePetFromFavorites, handleToggleFavorite }) {
   const [favoritePets, setFavoritePets] = useState([]);
 
   useEffect(() => {
@@ -15,30 +15,39 @@ function Favorites({ removeFromFavorites }) {
       try {
         const response = await API.graphql(graphqlOperation(listUserPetFavorites));
         const pets = response.data.listUserPetFavorites.items;
-        console.log(pets, "pets from the user's favs")
-  
-        // Fetch details for each favorite pet
+
         const petsWithDetails = await Promise.all(
           pets.map(async (pet) => {
             const petDetails = await API.graphql(graphqlOperation(getPet, { id: pet.petId }));
-            console.log(petDetails, "pet detials from pet table")
             return petDetails.data.getPet;
           })
         );
-  
+
         setFavoritePets(petsWithDetails);
       } catch (error) {
         console.error('Error fetching favorite pets:', error);
       }
     };
-  
+
+    // Fetch favorite pets when the component mounts
     fetchFavoritePets();
-  }, []);
-  
-  useEffect(() => {
-  }, [favoritePets]); // Log changes to favoritePets
-  
-  console.log("favorite pets before render", favoritePets)
+
+    // Subscribe to new favorites and deletions
+    const createSubscription = API.graphql(graphqlOperation(onCreateUserPetFavorite)).subscribe({
+      next: () => fetchFavoritePets(),
+    });
+
+    const deleteSubscription = API.graphql(graphqlOperation(onDeleteUserPetFavorite)).subscribe({
+      next: () => fetchFavoritePets(),
+    });
+
+    // Clean up subscriptions when the component unmounts
+    return () => {
+      createSubscription.unsubscribe();
+      deleteSubscription.unsubscribe();
+    };
+  }, []); // Empty dependency array means this effect runs once when the component mounts
+
   return (
     <div className="pet-card-container">
       <div className="title-container">
@@ -60,8 +69,10 @@ function Favorites({ removeFromFavorites }) {
             <PetCard
               key={pet.id}
               pet={pet}
-              // removeFromFavorites={removeFromFavorites}
-              // isFavorite={favoritePets.some((favoritePet) => favoritePet.id === pet.id)}
+              user={user}
+              isFavorite={true}
+              handleToggleFavorite={() => handleToggleFavorite(pet)} 
+              removePetFromFavorites={removePetFromFavorites}
             />
           ))}
         </div>

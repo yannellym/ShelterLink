@@ -19,13 +19,13 @@ import useAnimalsBasedOnPreferencesAPI from '../hooks/useAnimalsBasedOnPreferenc
   parameters: favoritePets: array, addToFavorites: array,  userPreferences: array, removeFromFavorites:array, isAuthenticated: string
   returns: 
 */
-function Home({ userLocation, favoritePets, addToFavorites, removeFromFavorites, userPreferences, isAuthenticated }) {
+function Home({ userLocation, userPreferences, handleToggleFavorite, user, removePetFromFavorites}) {
   const [loading, setLoading] = useState(true);
   const [selectedAnimals, setSelectedAnimals] = useState([]);
   const [selectedPetIndex, setSelectedPetIndex] = useState(0);
   const [fetchedUserLocation, setUserLocation] = useState(userLocation?.zipCode);
   const navigate = useNavigate();
-
+  
   const { data: petData } = usePetFinderAPI(
     'https://2hghsit103.execute-api.us-east-1.amazonaws.com/default', []
   );
@@ -138,9 +138,8 @@ function Home({ userLocation, favoritePets, addToFavorites, removeFromFavorites,
                   key={preferredAnimals[selectedPetIndex].id}
                   pet={preferredAnimals[selectedPetIndex]}
                   addToFavorites={addToFavorites}
-                  removeFromFavorites={removeFromFavorites}
-                  isFavorite={favoritePets.some((favoritePet) => favoritePet.id === preferredAnimals[selectedPetIndex].id)}
-                  isAuthenticated={isAuthenticated}
+                  handleToggleFavorite={() => handleToggleFavorite(preferredAnimals[selectedPetIndex])}
+                  removePetFromFavorites={removePetFromFavorites}
                   className="matched-pet-card"
                 />
                 {selectedPetIndex +1 < preferredAnimals.length? 
@@ -207,12 +206,11 @@ function Home({ userLocation, favoritePets, addToFavorites, removeFromFavorites,
               <p>Loading...</p>
             ) : selectedAnimals?.map((pet, index) => (
               <PetCard
-                key={`${pet.id}-${index}`}  // Combines pet ID and index to create a unique key
+                key={pet.id} 
                 pet={pet}
-                addToFavorites={addToFavorites}
-                removeFromFavorites={removeFromFavorites}
-                isFavorite={favoritePets.some((favoritePet) => favoritePet.id === pet.id)}
-                isAuthenticated={isAuthenticated}
+                user={user}
+                handleToggleFavorite={() => handleToggleFavorite(pet)} 
+                removePetFromFavorites={removePetFromFavorites} 
               />
             ))}
             {fetchedUserLocation || userLocation ? (

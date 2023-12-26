@@ -6,8 +6,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import coming_soon from "../images/coming_soon.png";
 
-const PetDetails = ({addToFavorites, removeFromFavorites, isFavorite, isAuthenticated }) => {
-  const [favorited, setFavorited] = useState(isFavorite);
+const PetDetails = ({ isAuthenticated }) => {
+  const [favorited, setFavorited] = useState(true);
   const navigate = useNavigate();
   
   // Extract the 'petData' from the query parameter in the URL
