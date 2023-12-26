@@ -41,3 +41,11 @@ pip install -r requirements.txt
 
 # to create lambda
 make sure python version is the same in all 3 files and run the amplify shell
+
+# remove and reinstall node modules 
+cd /Users/yannellym/Desktop/ShelterLink
+rm -rf node_modules package-lock.json
+npm install
+#Update react-scripts:
+npm install react-scripts@latest
+npm start

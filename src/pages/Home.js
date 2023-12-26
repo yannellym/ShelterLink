@@ -137,7 +137,6 @@ function Home({ userLocation, userPreferences, handleToggleFavorite, user, remov
                 <PetCard
                   key={preferredAnimals[selectedPetIndex].id}
                   pet={preferredAnimals[selectedPetIndex]}
-                  addToFavorites={addToFavorites}
                   handleToggleFavorite={() => handleToggleFavorite(preferredAnimals[selectedPetIndex])}
                   removePetFromFavorites={removePetFromFavorites}
                   className="matched-pet-card"

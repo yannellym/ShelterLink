@@ -126,7 +126,7 @@ const App = () => {
         
         // Find the user-pet-favorite entry based on petId
         const userPetFavorite = userFavoritedPets.find((entry) => entry.petId === String(petId));
-        
+
         if (userPetFavorite ) {
           // Remove pet from user's favorite pets
           const response = await API.graphql(graphqlOperation(deleteUserPetFavorite, { input: { id: userPetFavorite.id} }));

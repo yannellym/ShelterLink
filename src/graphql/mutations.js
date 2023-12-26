@@ -1,6 +1,4 @@
-/* eslint-disable */
 // this is an auto generated file. This will be overwritten
-
 export const createUser = /* GraphQL */ `
   mutation CreateUser(
     $input: CreateUserInput!
@@ -24,6 +22,7 @@ export const createUser = /* GraphQL */ `
     }
   }
 `;
+
 export const updateUser = /* GraphQL */ `
   mutation UpdateUser(
     $input: UpdateUserInput!
