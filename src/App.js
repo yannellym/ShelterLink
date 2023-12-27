@@ -94,7 +94,6 @@ const AuthenticatorComponent = ({ setUser, navigate }) => {
 
 const App = () => {
   const [favoritePets, setFavoritePets] = useState([]);
-  const [favorited, setFavorited] = useState(true);
   const [showMessage, setShowMessage] = useState(true);
   const [user, setUser] = useState(false);
   const { userLocation: fetchedUserLocation, loading: locationLoading, error: locationError, ready } = useUserLocation();
@@ -111,7 +110,6 @@ const App = () => {
   // if yes, add it to the user's favorite pets
   const handleToggleFavorite = async (pet) => {
     if (user) {
-      setFavorited(!favorited);
 
       try {
         const userId = user.attributes.sub;
@@ -190,8 +188,8 @@ const App = () => {
             };
 
             await API.graphql(graphqlOperation(createUserPetFavorite, { input: userPetFavoriteInput }));
-            addPetToFavoritesState(petId)
-            console.log(favoritePets, "fav pets array")
+            addPetToFavoritesState({id: createdPetId})
+            console.log("adding pet, we just created it",  {id: createdPetId})
             console.log("Pet added to user's favorites");
           } else {
             // The pet already exists, link it to the user in userPetFavorite table
@@ -202,8 +200,8 @@ const App = () => {
             };
 
             await API.graphql(graphqlOperation(createUserPetFavorite, { input: userPetFavoriteInput }));
-            addPetToFavoritesState(petId)
-            console.log(favoritePets, "fav pets array")
+            console.log("adding pet, its already created", pet) 
+            addPetToFavoritesState(pet)
             console.log("Pet added to user's favorites");
           }
         }
@@ -220,15 +218,14 @@ const App = () => {
       navigate('/auth');
     }
   };
-  
+  // Function to add a pet to the state
+  const addPetToFavoritesState = (pet) => {
+    setFavoritePets((prevPets) => [...prevPets, pet]);
+  };
+
   // Function to remove a pet from the state based on its ID
   const removePetFromFavoritesState = (petId) => {
     setFavoritePets((prevPets) => prevPets.filter((pet) => pet.id !== petId));
-  };
-
-  // Function to add a pet to the state
-  const addPetToFavoritesState = (petId) => {
-    setFavoritePets((prevPets) => [...prevPets, petId]);
   };
 
   useEffect(() => {
@@ -240,7 +237,7 @@ const App = () => {
         navigate('/auth');
       }, 2000); // Wait for 2 seconds before redirecting
     }
-  }, [user, location, navigate]);
+  }, [user, location, navigate, favoritePets]);
 
   // Function to handle sign-out
   const handleSignOut = async () => {
@@ -252,6 +249,10 @@ const App = () => {
       console.log('Error signing out: ', error);
     }
   };
+
+  useEffect(() => {
+    console.log('Updated favoritePets:', favoritePets);
+  }, [favoritePets]);
 
   return (
     <div>
@@ -289,7 +290,6 @@ const App = () => {
               <Favorites
                 handleToggleFavorite={handleToggleFavorite}
                 user={user}
-                removePetFromFavoritesState={removePetFromFavoritesState}
               />
             ) : (
               <div>

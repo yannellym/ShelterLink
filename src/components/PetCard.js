@@ -7,11 +7,8 @@ import coming_soon from "../images/coming_soon.png";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart} from '@fortawesome/free-solid-svg-icons';
 
-import { API, graphqlOperation } from 'aws-amplify';
-import { createUserPetFavorite, deleteUserPetFavorite,  createPet } from '../graphql/mutations';
-import { getPet, listUserPetFavorites } from '../graphql/queries';
-
 const PetCard = ({ pet, favorited, handleToggleFavorite }) => {
+  const [isFavorited, setIsFavorited] = useState(favorited);
   const [imageSource, setImageSource] = useState(null);
 
   const handleMoreInfoClick = () => {
@@ -60,6 +57,11 @@ const PetCard = ({ pet, favorited, handleToggleFavorite }) => {
     fetchImage();
   }, [pet]);
   
+  const handleToggleFavoriteClick = () => {
+    handleToggleFavorite(pet); // Call the parent component function
+    setIsFavorited((prevIsFavorited) => !prevIsFavorited); // Update the local state
+  };
+
 
   return (
     <div className="pet-card">
@@ -104,8 +106,8 @@ const PetCard = ({ pet, favorited, handleToggleFavorite }) => {
           More Info
         </button>
         <button
-          className={`favorite-heart-${favorited ? 'favorited' : 'unfavorited'}`}
-          onClick={() => handleToggleFavorite(pet)}
+          className={`favorite-heart-${isFavorited? 'favorited' : 'unfavorited'}`}
+          onClick={handleToggleFavoriteClick}
           tabIndex="0"
         >
           <FontAwesomeIcon icon={faHeart} />
