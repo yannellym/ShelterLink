@@ -11,8 +11,8 @@ const PetCard = ({ pet, favorited, handleToggleFavorite }) => {
   const [imageSource, setImageSource] = useState(null);
 
   const handleMoreInfoClick = () => {
-    // Create the URL for the new window, including the 'petData' query parameter
-    const moreInfoUrl = `/pet-details/${pet.id}?petData=${encodeURIComponent(JSON.stringify(pet))}`;
+    // Create the URL for the new window, including the 'petData' and 'favorited' query parameters
+    const moreInfoUrl = `/pet-details/${pet.id}?petData=${encodeURIComponent(JSON.stringify(pet))}&favorited=${isFavorited}`;
     // Open the new window with the generated URL
     const newWindow = window.open(moreInfoUrl, '_blank');
     // Check if the new window was successfully opened
@@ -24,6 +24,7 @@ const PetCard = ({ pet, favorited, handleToggleFavorite }) => {
       alert('Please allow pop-ups for this site to view more details.');
     }
   };
+  
   // FUNCTION to fetch a random image of the type of animal and the breed in case the pet doesn't
   // have a photo. In case this fails, use our coming_soon photo.
   const fetchPlaceholderImage = async (type, breed) => {

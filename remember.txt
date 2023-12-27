@@ -49,3 +49,7 @@ npm install
 #Update react-scripts:
 npm install react-scripts@latest
 npm start
+
+
+# update react scrips dependency
+npm install react-scripts@latest

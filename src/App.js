@@ -39,58 +39,69 @@ const AuthenticatorComponent = ({ setUser, navigate }) => {
       try {
         // Check if the user is authenticated
         const authenticatedUser = await Auth.currentAuthenticatedUser();
-        localStorage.setItem('previousPage', location.pathname);
+        console.log('Authenticated User:', authenticatedUser);
 
         // Check if the user is already in the database
         const userData = await API.graphql(graphqlOperation(getUser, { id: authenticatedUser.attributes.sub }));
         const existingUser = userData.data.getUser;
-        console.log("user already in the database", existingUser);
-        //Set a flag indicating whether the user is in the database
-        const isUserInDB = !!existingUser;
+        console.log('Existing User:', existingUser);
 
         if (!existingUser) {
           // If the user doesn't exist, add them to the database
-          console.log('Adding new user to the database:');
           const newUser = {
             id: authenticatedUser.attributes.sub,
             username: authenticatedUser.attributes.name || '',
             email: authenticatedUser.attributes.email || '',
-          }; 
+          };
 
           // Call the createUser mutation
           const createdUser = await API.graphql(graphqlOperation(createUser, { input: newUser }));
-          
-          setUser(authenticatedUser);
-          console.log('GraphQL Response after adding user:', createdUser);
+          console.log('User Created:', createdUser);
 
           // Redirect to the home page if the user is not in the database
           navigate('/');
         } else {
-          console.log("user already in, checking  previous page")
-          // If the user is already in the database, redirect to the previous page
-          const previousPage = localStorage.getItem('previousPage');
-          console.log(previousPage)
+          // If the user is already in the database, check the previous page
+          const previousPage = sessionStorage.getItem('previousPage');
+          console.log('Previous Page:', previousPage);
+
           if (previousPage) {
-            console.log("theres a previous page")
-            // Clear the previous page from local storage
-            localStorage.removeItem('previousPage');
-            navigate(-1); 
+            // Clear the previous page from sessionStorage
+            sessionStorage.removeItem('previousPage');
+            navigate(previousPage);
           } else {
             // If no previous page, redirect to the home page
-            return true
+            navigate('/');
           }
         }
-        console.log("setting user")
+
+        // Set the user in the state
         setUser(authenticatedUser);
+
+        // Store authentication state in sessionStorage
+        sessionStorage.setItem('authenticatedUser', JSON.stringify(authenticatedUser));
       } catch (error) {
         console.error('Error checking/creating user:', error);
       }
     };
 
+    // Check for authenticated user in sessionStorage
+    const storedUser = sessionStorage.getItem('authenticatedUser');
+    console.log('Stored User:', storedUser);
+
+    if (storedUser) {
+      // If stored user exists, set the user in the state
+      setUser(JSON.parse(storedUser));
+    }
+
     // Call the function when the component mounts
     checkUserAndNavigate();
   }, [setUser, navigate]);
+
+  return null; // or a loading indicator or component, depending on your use case
 };
+
+
 
 const App = () => {
   const [favoritePets, setFavoritePets] = useState([]);
@@ -316,7 +327,6 @@ const App = () => {
             <PetDetails
               handleToggleFavorite={handleToggleFavorite}
               isAuthenticated={user}
-              favoritePets={favoritePets}
             />
           }
         />
