@@ -3,14 +3,20 @@ import '../styles/NearbyShelters.css';
 import animal_shelter from '../images/animal_shelter.jpg';
 import { useLocation } from 'react-router-dom';
 
-const SheltersNearbyPage = ({userLocation} ) => {
-  const { state } = useLocation();
-  const fetchedUserLocation = state?.fetchedUserLocation || null;
- 
+const SheltersNearbyPage = ({ userLocation }) => {
+  const location = useLocation();
+  console.log(location, "location state");
+
+  // Prioritize the ZIP code from the state object
+  const passedInLocation = location.state?.fetchedUserLocation?.zipCode || new URLSearchParams(location.search).get('zipCode');
+  console.log(passedInLocation, "passedInLocation");
+
+  useEffect(() => {
+    console.log('Zip Code:', passedInLocation);
+  }, [passedInLocation]);
+
   const [newUserLocation, setUserLocation] = useState(null);
   const [data, setData] = useState([]);
-  const [zipCode, setZipCode] = useState([]);
-
   const [pagination, setPagination] = useState({
     current_page: 1,
     total_pages: 1,
@@ -19,9 +25,8 @@ const SheltersNearbyPage = ({userLocation} ) => {
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
-  // console.log(userLocation?.zipCode, "user loc", fetchedUserLocation, "FETCHED USER LOCATION")
 
-  const locationToUse = fetchedUserLocation?.zipCode || (newUserLocation) || '11208';
+  const locationToUse = passedInLocation || (userLocation && userLocation.zipCode) || '11208';
 
   useEffect(() => {
     // Update the user location state when it's fetched
@@ -33,17 +38,21 @@ const SheltersNearbyPage = ({userLocation} ) => {
   const fetchNearbySheltersForCurrentPage = async (page) => {
     try {
       setLoading(true);
+      console.log("calling api with loc", locationToUse);
 
       const response = await fetch(
         `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/nearby_shelters?location=${locationToUse}&limit=${pagination.count_per_page}&page=${page}`
       );
-
+        console.log(response, "RESPONSE")
       if (!response.ok) {
+        console.log("error of api", response.status);
         throw new Error(`Failed to fetch data: ${response.status}`);
       }
 
       const responseData = await response.json();
+      console.log(responseData, "response data")
       const apiData = JSON.parse(responseData.body);
+
       console.log(apiData, "data received");
       setData(apiData.organizations || []);
       setPagination({
@@ -53,6 +62,7 @@ const SheltersNearbyPage = ({userLocation} ) => {
       });
     } catch (error) {
       setError(error);
+      console.log("error", error);
     } finally {
       setLoading(false);
     }
@@ -60,10 +70,11 @@ const SheltersNearbyPage = ({userLocation} ) => {
 
   useEffect(() => {
     // Fetch nearby shelters only if the user location is available
-    if ( newUserLocation || fetchedUserLocation?.zipCode  !== null) {
+    if (locationToUse !== '11208') {
+      console.log("calling shelters");
       fetchNearbySheltersForCurrentPage(currentPage);
     }
-  }, [ newUserLocation || fetchedUserLocation?.zipCode , currentPage]);
+  }, [locationToUse, currentPage]);
 
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= pagination.total_pages) {
@@ -91,19 +102,19 @@ const SheltersNearbyPage = ({userLocation} ) => {
 
   return (
     <div>
-      <h1 className="title">Shelters Nearby {newUserLocation || fetchedUserLocation?.zipCode } </h1>
-      { newUserLocation || fetchedUserLocation?.zipCode  ? (
+      <h1 className="title">Shelters Nearby {newUserLocation || locationToUse}</h1>
+      {newUserLocation || locationToUse !== '11208' ? (
         <div className="grid-container">
           {loading ? (
             <p>Loading...</p>
-          ) : data? (
+          ) : data ? (
             data.map((shelter, index) => (
               <div key={index} className="card">
                 <img
                   src={
                     shelter.photos?.length > 0
                       ? shelter.photos[0]?.full || shelter.photos[0]?.medium
-                      : animal_shelter
+                      : { animal_shelter }
                   }
                   alt={`Shelter ${index}`}
                 />
@@ -117,15 +128,15 @@ const SheltersNearbyPage = ({userLocation} ) => {
                     {shelter.email ? (
                       <a href={`mailto:${shelter.email}`}>{shelter.email}</a>
                     ) : (
-                      "N/A"
+                      'N/A'
                     )}
                   </li>
                   <li>
-                  <strong>Phone: </strong>
+                    <strong>Phone: </strong>
                     {shelter.phone ? (
                       <a href={`tel:${shelter.phone}`}>{shelter.phone}</a>
                     ) : (
-                      "N/A"
+                      'N/A'
                     )}
                   </li>
                   <li>
@@ -135,7 +146,7 @@ const SheltersNearbyPage = ({userLocation} ) => {
                         {formatSocialMediaLink(shelter.website)}
                       </a>
                     ) : (
-                      "N/A"
+                      'N/A'
                     )}
                   </li>
                   <li className="distance">
@@ -143,7 +154,7 @@ const SheltersNearbyPage = ({userLocation} ) => {
                     <span className="red-text">{shelter.distance.toFixed(1)} miles</span>
                   </li>
                   {shelter.social_media && (
-                    <React.Fragment>
+                    <>
                       <li>
                         <strong>Facebook: </strong>
                         {shelter.social_media.facebook ? (
@@ -151,7 +162,7 @@ const SheltersNearbyPage = ({userLocation} ) => {
                             {formatSocialMediaLink(shelter.social_media.facebook)}
                           </a>
                         ) : (
-                          "N/A"
+                          'N/A'
                         )}
                       </li>
                       <li>
@@ -161,29 +172,20 @@ const SheltersNearbyPage = ({userLocation} ) => {
                             {formatSocialMediaLink(shelter.social_media.instagram)}
                           </a>
                         ) : (
-                          "N/A"
+                          'N/A'
                         )}
                       </li>
-                    </React.Fragment>
+                    </>
                   )}
                 </ul>
               </div>
             ))
           ) : (
-              <p>No location was shared. Please share location and try again.</p>
+            <p>No location was shared. Please share location and try again.</p>
           )}
         </div>
       ) : (
-        <div className="zip-code-input">
-          <label htmlFor="zipCode">Enter Your Zip Code:</label>
-          <input
-            type="text"
-            id="zipCode"
-            value={zipCode}
-            onChange={(e) => setZipCode(e.target.value)}
-          />
-          <button onClick={''}>Submit</button>
-        </div>
+        <p>No location was shared. Please share location and try again.</p>
       )}
       <div className="pagination">
         <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
@@ -204,6 +206,6 @@ const SheltersNearbyPage = ({userLocation} ) => {
       </div>
     </div>
   );
-  };
-  
-  export default SheltersNearbyPage;
+};
+
+export default SheltersNearbyPage;

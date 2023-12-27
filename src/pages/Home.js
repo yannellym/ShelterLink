@@ -1,3 +1,4 @@
+//
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SearchBar from '../components/SearchBar';
@@ -88,7 +89,7 @@ function Home({ userLocation, userPreferences, handleToggleFavorite, user, favor
               latitude,
               longitude,
             };
-            navigate(`/${targetPage}`, { state: { userLocation } });
+            navigate(`/${targetPage}`, { state: { userLocation } }); 
           },
           (error) => {
             console.error('Error getting user location:', error.message);
@@ -114,6 +115,7 @@ function Home({ userLocation, userPreferences, handleToggleFavorite, user, favor
       const fetchedUserLocation = {
         zipCode: userEnteredZipCode,
       };
+      
       navigate(`/${targetPage}`, { state: { fetchedUserLocation } });
     } else {
       // Handle the case where the user cancels the prompt or does not enter a ZIP code
@@ -181,7 +183,7 @@ function Home({ userLocation, userPreferences, handleToggleFavorite, user, favor
               <CategoryCard
                 title="Shelters nearby"
                 imageSrc={paw}
-                link={`/nearby_shelters?zipCode=${fetchedUserLocation?.zipCode}`}
+                link={`/nearby_shelters?zipCode=${fetchedUserLocation?.zipCode || userLocation.zipCode}`}
               />
             ) : (
               <NoLocationCard  

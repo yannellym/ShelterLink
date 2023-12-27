@@ -1,4 +1,3 @@
-
 //card to display a preview of the pet's information
 import React, { useState, useEffect } from 'react';
 import '../styles/PetCard.css';
