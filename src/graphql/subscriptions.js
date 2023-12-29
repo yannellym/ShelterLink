@@ -68,12 +68,21 @@ export const onCreatePet = /* GraphQL */ `
       name
       age
       gender
+      status
       size
       breeds {
         primary
         secondary
         mixed
         unknown
+        __typename
+      }
+      attributes {
+        declawed
+        house_trained
+        shots_current
+        spayed_neutered
+        special_needs
         __typename
       }
       description
@@ -111,12 +120,21 @@ export const onUpdatePet = /* GraphQL */ `
       name
       age
       gender
+      status
       size
       breeds {
         primary
         secondary
         mixed
         unknown
+        __typename
+      }
+      attributes {
+        declawed
+        house_trained
+        shots_current
+        spayed_neutered
+        special_needs
         __typename
       }
       description
@@ -154,12 +172,21 @@ export const onDeletePet = /* GraphQL */ `
       name
       age
       gender
+      status
       size
       breeds {
         primary
         secondary
         mixed
         unknown
+        __typename
+      }
+      attributes {
+        declawed
+        house_trained
+        shots_current
+        spayed_neutered
+        special_needs
         __typename
       }
       description
@@ -212,6 +239,7 @@ export const onCreateUserPetFavorite = /* GraphQL */ `
         name
         age
         gender
+        status
         size
         description
         url
@@ -246,6 +274,7 @@ export const onUpdateUserPetFavorite = /* GraphQL */ `
         name
         age
         gender
+        status
         size
         description
         url
@@ -280,6 +309,7 @@ export const onDeleteUserPetFavorite = /* GraphQL */ `
         name
         age
         gender
+        status
         size
         description
         url

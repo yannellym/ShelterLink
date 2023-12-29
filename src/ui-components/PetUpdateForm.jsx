@@ -4,6 +4,7 @@
  * Any changes to this file will be overwritten when running amplify pull. *
  **************************************************************************/
 
+/* eslint-disable */
 import * as React from "react";
 import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
@@ -26,6 +27,7 @@ export default function PetUpdateForm(props) {
     name: "",
     age: "",
     gender: "",
+    status: "",
     size: "",
     description: "",
     url: "",
@@ -33,6 +35,7 @@ export default function PetUpdateForm(props) {
   const [name, setName] = React.useState(initialValues.name);
   const [age, setAge] = React.useState(initialValues.age);
   const [gender, setGender] = React.useState(initialValues.gender);
+  const [status, setStatus] = React.useState(initialValues.status);
   const [size, setSize] = React.useState(initialValues.size);
   const [description, setDescription] = React.useState(
     initialValues.description
@@ -46,6 +49,7 @@ export default function PetUpdateForm(props) {
     setName(cleanValues.name);
     setAge(cleanValues.age);
     setGender(cleanValues.gender);
+    setStatus(cleanValues.status);
     setSize(cleanValues.size);
     setDescription(cleanValues.description);
     setUrl(cleanValues.url);
@@ -71,6 +75,7 @@ export default function PetUpdateForm(props) {
     name: [{ type: "Required" }],
     age: [],
     gender: [],
+    status: [],
     size: [],
     description: [],
     url: [],
@@ -104,6 +109,7 @@ export default function PetUpdateForm(props) {
           name,
           age: age ?? null,
           gender: gender ?? null,
+          status: status ?? null,
           size: size ?? null,
           description: description ?? null,
           url: url ?? null,
@@ -170,6 +176,7 @@ export default function PetUpdateForm(props) {
               name: value,
               age,
               gender,
+              status,
               size,
               description,
               url,
@@ -199,6 +206,7 @@ export default function PetUpdateForm(props) {
               name,
               age: value,
               gender,
+              status,
               size,
               description,
               url,
@@ -228,6 +236,7 @@ export default function PetUpdateForm(props) {
               name,
               age,
               gender: value,
+              status,
               size,
               description,
               url,
@@ -246,6 +255,36 @@ export default function PetUpdateForm(props) {
         {...getOverrideProps(overrides, "gender")}
       ></TextField>
       <TextField
+        label="Status"
+        isRequired={false}
+        isReadOnly={false}
+        value={status}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              age,
+              gender,
+              status: value,
+              size,
+              description,
+              url,
+            };
+            const result = onChange(modelFields);
+            value = result?.status ?? value;
+          }
+          if (errors.status?.hasError) {
+            runValidationTasks("status", value);
+          }
+          setStatus(value);
+        }}
+        onBlur={() => runValidationTasks("status", status)}
+        errorMessage={errors.status?.errorMessage}
+        hasError={errors.status?.hasError}
+        {...getOverrideProps(overrides, "status")}
+      ></TextField>
+      <TextField
         label="Size"
         isRequired={false}
         isReadOnly={false}
@@ -257,6 +296,7 @@ export default function PetUpdateForm(props) {
               name,
               age,
               gender,
+              status,
               size: value,
               description,
               url,
@@ -286,6 +326,7 @@ export default function PetUpdateForm(props) {
               name,
               age,
               gender,
+              status,
               size,
               description: value,
               url,
@@ -315,6 +356,7 @@ export default function PetUpdateForm(props) {
               name,
               age,
               gender,
+              status,
               size,
               description,
               url: value,

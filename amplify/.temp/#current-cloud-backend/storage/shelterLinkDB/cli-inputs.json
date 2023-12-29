@@ -1,0 +1,10 @@
+{
+  "resourceName": "shelterLinkDB",
+  "tableName": "userFavorites",
+  "partitionKey": {
+    "fieldName": "favorite_pets",
+    "fieldType": "string"
+  },
+  "gsi": [],
+  "triggerFunctions": []
+}

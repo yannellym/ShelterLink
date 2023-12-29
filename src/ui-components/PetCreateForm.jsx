@@ -25,6 +25,7 @@ export default function PetCreateForm(props) {
     name: "",
     age: "",
     gender: "",
+    status: "",
     size: "",
     description: "",
     url: "",
@@ -32,6 +33,7 @@ export default function PetCreateForm(props) {
   const [name, setName] = React.useState(initialValues.name);
   const [age, setAge] = React.useState(initialValues.age);
   const [gender, setGender] = React.useState(initialValues.gender);
+  const [status, setStatus] = React.useState(initialValues.status);
   const [size, setSize] = React.useState(initialValues.size);
   const [description, setDescription] = React.useState(
     initialValues.description
@@ -42,6 +44,7 @@ export default function PetCreateForm(props) {
     setName(initialValues.name);
     setAge(initialValues.age);
     setGender(initialValues.gender);
+    setStatus(initialValues.status);
     setSize(initialValues.size);
     setDescription(initialValues.description);
     setUrl(initialValues.url);
@@ -51,6 +54,7 @@ export default function PetCreateForm(props) {
     name: [{ type: "Required" }],
     age: [],
     gender: [],
+    status: [],
     size: [],
     description: [],
     url: [],
@@ -84,6 +88,7 @@ export default function PetCreateForm(props) {
           name,
           age,
           gender,
+          status,
           size,
           description,
           url,
@@ -152,6 +157,7 @@ export default function PetCreateForm(props) {
               name: value,
               age,
               gender,
+              status,
               size,
               description,
               url,
@@ -181,6 +187,7 @@ export default function PetCreateForm(props) {
               name,
               age: value,
               gender,
+              status,
               size,
               description,
               url,
@@ -210,6 +217,7 @@ export default function PetCreateForm(props) {
               name,
               age,
               gender: value,
+              status,
               size,
               description,
               url,
@@ -228,6 +236,36 @@ export default function PetCreateForm(props) {
         {...getOverrideProps(overrides, "gender")}
       ></TextField>
       <TextField
+        label="Status"
+        isRequired={false}
+        isReadOnly={false}
+        value={status}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              age,
+              gender,
+              status: value,
+              size,
+              description,
+              url,
+            };
+            const result = onChange(modelFields);
+            value = result?.status ?? value;
+          }
+          if (errors.status?.hasError) {
+            runValidationTasks("status", value);
+          }
+          setStatus(value);
+        }}
+        onBlur={() => runValidationTasks("status", status)}
+        errorMessage={errors.status?.errorMessage}
+        hasError={errors.status?.hasError}
+        {...getOverrideProps(overrides, "status")}
+      ></TextField>
+      <TextField
         label="Size"
         isRequired={false}
         isReadOnly={false}
@@ -239,6 +277,7 @@ export default function PetCreateForm(props) {
               name,
               age,
               gender,
+              status,
               size: value,
               description,
               url,
@@ -268,6 +307,7 @@ export default function PetCreateForm(props) {
               name,
               age,
               gender,
+              status,
               size,
               description: value,
               url,
@@ -297,6 +337,7 @@ export default function PetCreateForm(props) {
               name,
               age,
               gender,
+              status,
               size,
               description,
               url: value,

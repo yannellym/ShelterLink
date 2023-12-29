@@ -34,60 +34,46 @@ import awsExports from './aws-exports';
 Amplify.configure(awsExports);
 
 const AuthenticatorComponent = ({ setUser, navigate }) => {
-  useEffect(() => {
-    const checkUserAndNavigate = async () => {
-      try {
-        // Check if the user is authenticated
-        const authenticatedUser = await Auth.currentAuthenticatedUser();
-        console.log('Authenticated User:', authenticatedUser);
+  const checkUserAndNavigate = async () => {
+    try {
+      const authenticatedUser = await Auth.currentAuthenticatedUser();
 
-        // Check if the user is already in the database
-        const userData = await API.graphql(graphqlOperation(getUser, { id: authenticatedUser.attributes.sub }));
-        const existingUser = userData.data.getUser;
-        console.log('Existing User:', existingUser);
+      const userData = await API.graphql(graphqlOperation(getUser, { id: authenticatedUser.attributes.sub }));
+      const existingUser = userData.data.getUser;
 
-        if (!existingUser) {
-          // If the user doesn't exist, add them to the database
-          const newUser = {
-            id: authenticatedUser.attributes.sub,
-            username: authenticatedUser.attributes.name || '',
-            email: authenticatedUser.attributes.email || '',
-          };
+      if (!existingUser) {
+        const newUser = {
+          id: authenticatedUser.attributes.sub,
+          username: authenticatedUser.attributes.name || '',
+          email: authenticatedUser.attributes.email || '',
+        };
 
-          // Call the createUser mutation
-          const createdUser = await API.graphql(graphqlOperation(createUser, { input: newUser }));
-          console.log('User Created:', createdUser);
+        const createdUser = await API.graphql(graphqlOperation(createUser, { input: newUser }));
 
-          // Redirect to the home page if the user is not in the database
-          navigate('/');
+        navigate('/');
+      } else {
+        const previousPage = localStorage.getItem('previousPage');
+
+        if (previousPage) {
+          localStorage.removeItem('previousPage');
+          navigate(previousPage);
         } else {
-          // If the user is already in the database, check the previous page
-          const previousPage = sessionStorage.getItem('previousPage');
-          console.log('Previous Page:', previousPage);
-
-          if (previousPage) {
-            // Clear the previous page from sessionStorage
-            sessionStorage.removeItem('previousPage');
-            navigate(previousPage);
-          } else {
-            // If no previous page, redirect to the home page
-            navigate('/');
-          }
+          navigate('/favorites');
         }
-
-        // Set the user in the state
-        setUser(authenticatedUser);
-
-        // Store authentication state in sessionStorage
-        sessionStorage.setItem('authenticatedUser', JSON.stringify(authenticatedUser));
-      } catch (error) {
-        console.error('Error checking/creating user:', error);
       }
-    };
 
-    // Check for authenticated user in sessionStorage
-    const storedUser = sessionStorage.getItem('authenticatedUser');
-    console.log('Stored User:', storedUser);
+      setUser(authenticatedUser);
+
+      // Store authentication state in localStorage
+      localStorage.setItem('authenticatedUser', JSON.stringify(authenticatedUser));
+    } catch (error) {
+      console.error('Error checking/creating user:', error);
+    }
+  };
+
+  useEffect(() => {
+    // Check for authenticated user in localStorage
+    const storedUser = localStorage.getItem('authenticatedUser');
 
     if (storedUser) {
       // If stored user exists, set the user in the state
@@ -96,11 +82,10 @@ const AuthenticatorComponent = ({ setUser, navigate }) => {
 
     // Call the function when the component mounts
     checkUserAndNavigate();
-  }, [setUser, navigate]);
+  }, [setUser]);
 
-  return null; // or a loading indicator or component, depending on your use case
+  return null;
 };
-
 
 
 const App = () => {
@@ -139,7 +124,7 @@ const App = () => {
           console.log(response, "RES OF REMOVIGN")
           // Update the list of favorite pets in the component state
           removePetFromFavoritesState(petId);
-          console.log(favoritePets, "fav pets array")
+ 
           const remaining_pets = await API.graphql(graphqlOperation(listUserPetFavorites));
           console.log(remaining_pets, "REmaining pets")
         } else {
@@ -154,11 +139,19 @@ const App = () => {
               age: pet.age,
               gender: pet.gender,
               size: pet.size,
+              status: pet.status,
               breeds: {
-                primary: pet.breeds?.primary || '',
-                secondary: pet.breeds?.secondary || '',
+                primary: pet.breeds.primary || '',
+                secondary: pet.breeds.secondary || '',
                 mixed: pet.breeds?.mixed || false,
                 unknown: pet.breeds?.unknown || false,
+              },
+              attributes: {
+                declawed: pet.attributes.declawed || false,
+                house_trained: pet.attributes.house_trained || false,
+                shots_current: pet.attributes.shots_current || false,
+                spayed_neutered: pet.attributes.spayed_neutered || false,
+                special_needs: pet.attributes.special_needs || false
               },
               description: pet.description || "No available description for this pet.",
               photos: pet.photos?.map((photo) => ({
@@ -198,7 +191,8 @@ const App = () => {
               createdAt: new Date().toISOString(),
             };
 
-            await API.graphql(graphqlOperation(createUserPetFavorite, { input: userPetFavoriteInput }));
+            const res = await API.graphql(graphqlOperation(createUserPetFavorite, { input: userPetFavoriteInput }));
+            console.log(res, "res from adding to fav")
             addPetToFavoritesState({id: createdPetId})
             console.log("adding pet, we just created it",  {id: createdPetId})
             console.log("Pet added to user's favorites");
@@ -229,6 +223,7 @@ const App = () => {
       navigate('/auth');
     }
   };
+
   // Function to add a pet to the state
   const addPetToFavoritesState = (pet) => {
     setFavoritePets((prevPets) => [...prevPets, pet]);
@@ -236,7 +231,10 @@ const App = () => {
 
   // Function to remove a pet from the state based on its ID
   const removePetFromFavoritesState = (petId) => {
-    setFavoritePets((prevPets) => prevPets.filter((pet) => pet.id !== petId));
+    setFavoritePets((prevPets) => {
+      const updatedPets = prevPets.filter((pet) => pet.id !== String(petId)); 
+      return updatedPets;
+    });
   };
 
   useEffect(() => {

@@ -94,7 +94,7 @@ function FindApet({ userLocation, handleToggleFavorite, favoritePets, isAuthenti
           <PetCard
             key={pet.id}
             pet={pet}
-            favorited={favoritePets.includes(pet.id)}
+            favorited={favoritePets.includes(String(pet.id))}
             handleToggleFavorite={() => handleToggleFavorite(pet)} 
             isAuthenticated={isAuthenticated}
           />

@@ -48,12 +48,21 @@ export const getPet = /* GraphQL */ `
       name
       age
       gender
+      status
       size
       breeds {
         primary
         secondary
         mixed
         unknown
+        __typename
+      }
+      attributes {
+        declawed
+        house_trained
+        shots_current
+        spayed_neutered
+        special_needs
         __typename
       }
       description
@@ -70,7 +79,6 @@ export const getPet = /* GraphQL */ `
           address2
           city
           state
-          __typename
         }
         email
         phone
@@ -103,6 +111,7 @@ export const listPets = /* GraphQL */ `
         name
         age
         gender
+        status
         size
         description
         url
@@ -135,7 +144,9 @@ export const getUserPetFavorite = /* GraphQL */ `
         name
         age
         gender
+        status
         size
+        contact
         description
         url
         createdAt

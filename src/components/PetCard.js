@@ -11,6 +11,7 @@ const PetCard = ({ pet, favorited, handleToggleFavorite }) => {
   const [imageSource, setImageSource] = useState(null);
 
   const handleMoreInfoClick = () => {
+    console.log("inside handle")
     // Create the URL for the new window, including the 'petData' and 'favorited' query parameters
     const moreInfoUrl = `/pet-details/${pet.id}?petData=${encodeURIComponent(JSON.stringify(pet))}&favorited=${isFavorited}`;
     // Open the new window with the generated URL
@@ -24,7 +25,7 @@ const PetCard = ({ pet, favorited, handleToggleFavorite }) => {
       alert('Please allow pop-ups for this site to view more details.');
     }
   };
-  
+
   // FUNCTION to fetch a random image of the type of animal and the breed in case the pet doesn't
   // have a photo. In case this fails, use our coming_soon photo.
   const fetchPlaceholderImage = async (type, breed) => {
@@ -58,11 +59,12 @@ const PetCard = ({ pet, favorited, handleToggleFavorite }) => {
   }, [pet]);
   
   const handleToggleFavoriteClick = () => {
+    console.log("clicked heart toggle")
     handleToggleFavorite(pet); // Call the parent component function
     setIsFavorited((prevIsFavorited) => !prevIsFavorited); // Update the local state
   };
 
-
+  console.log(pet, "pet in pet card")
   return (
     <div className="pet-card">
       <Link

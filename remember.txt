@@ -53,3 +53,11 @@ npm start
 
 # update react scrips dependency
 npm install react-scripts@latest
+
+
+# for "amplify not connected"
+- deleted the pip files and the env within the function
+- activated the env in root
+- navigated to func folder
+- amplify push --force
+amplify

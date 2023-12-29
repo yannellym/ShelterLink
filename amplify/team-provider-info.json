@@ -22,7 +22,7 @@
         },
         "petfOrganizations": {
           "deploymentBucketName": "amplify-shelterlink-dev-153937-deployment",
-          "s3Key": "amplify-builds/petfOrganizations-6f454b66334a5365596d-build.zip"
+          "s3Key": "amplify-builds/petfOrganizations-744d4d55745432303161-build.zip"
         }
       },
       "storage": {

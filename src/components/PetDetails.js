@@ -10,6 +10,7 @@ const PetDetails = ({  handleToggleFavorite }) => {
   const searchParams = new URLSearchParams(window.location.search);
  
   const petData = JSON.parse(decodeURIComponent(searchParams.get('petData')));
+  console.log(petData, "pet dat in petdetails")
   const favorited = JSON.parse(decodeURIComponent(searchParams.get('favorited')));
   const [isFavorited, setIsFavorited] = useState(favorited);
   if (!petData) {
@@ -21,7 +22,7 @@ const PetDetails = ({  handleToggleFavorite }) => {
     handleToggleFavorite(petData);
     setIsFavorited((prevIsFavorited) => !prevIsFavorited); // Update the local state
   };
-
+  console.log(petData)
   return (
     <div className="pet-details">
       <button

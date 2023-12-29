@@ -25,6 +25,7 @@ export declare type PetCreateFormInputValues = {
     name?: string;
     age?: string;
     gender?: string;
+    status?: string;
     size?: string;
     description?: string;
     url?: string;
@@ -33,6 +34,7 @@ export declare type PetCreateFormValidationValues = {
     name?: ValidationFunction<string>;
     age?: ValidationFunction<string>;
     gender?: ValidationFunction<string>;
+    status?: ValidationFunction<string>;
     size?: ValidationFunction<string>;
     description?: ValidationFunction<string>;
     url?: ValidationFunction<string>;
@@ -43,6 +45,7 @@ export declare type PetCreateFormOverridesProps = {
     name?: PrimitiveOverrideProps<TextFieldProps>;
     age?: PrimitiveOverrideProps<TextFieldProps>;
     gender?: PrimitiveOverrideProps<TextFieldProps>;
+    status?: PrimitiveOverrideProps<TextFieldProps>;
     size?: PrimitiveOverrideProps<TextFieldProps>;
     description?: PrimitiveOverrideProps<TextFieldProps>;
     url?: PrimitiveOverrideProps<TextFieldProps>;

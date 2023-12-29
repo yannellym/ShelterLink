@@ -1,4 +1,6 @@
+/* eslint-disable */
 // this is an auto generated file. This will be overwritten
+
 export const createUser = /* GraphQL */ `
   mutation CreateUser(
     $input: CreateUserInput!
@@ -22,7 +24,6 @@ export const createUser = /* GraphQL */ `
     }
   }
 `;
-
 export const updateUser = /* GraphQL */ `
   mutation UpdateUser(
     $input: UpdateUserInput!
@@ -69,8 +70,6 @@ export const deleteUser = /* GraphQL */ `
     }
   }
 `;
-
-// PET MUTATIONS // 
 export const createPet = /* GraphQL */ `
   mutation CreatePet(
     $input: CreatePetInput!
@@ -81,12 +80,21 @@ export const createPet = /* GraphQL */ `
       name
       age
       gender
+      status
       size
       breeds {
         primary
         secondary
         mixed
         unknown
+        __typename
+      }
+      attributes {
+        declawed
+        house_trained
+        shots_current
+        spayed_neutered
+        special_needs
         __typename
       }
       description
@@ -103,7 +111,6 @@ export const createPet = /* GraphQL */ `
           address2
           city
           state
-          __typename
         }
         email
         phone
@@ -134,12 +141,21 @@ export const updatePet = /* GraphQL */ `
       name
       age
       gender
+      status
       size
       breeds {
         primary
         secondary
         mixed
         unknown
+        __typename
+      }
+      attributes {
+        declawed
+        house_trained
+        shots_current
+        spayed_neutered
+        special_needs
         __typename
       }
       description
@@ -156,7 +172,6 @@ export const updatePet = /* GraphQL */ `
           address2
           city
           state
-          __typename
         }
         email
         phone
@@ -187,12 +202,21 @@ export const deletePet = /* GraphQL */ `
       name
       age
       gender
+      status
       size
       breeds {
         primary
         secondary
         mixed
         unknown
+        __typename
+      }
+      attributes {
+        declawed
+        house_trained
+        shots_current
+        spayed_neutered
+        special_needs
         __typename
       }
       description
@@ -209,7 +233,6 @@ export const deletePet = /* GraphQL */ `
           address2
           city
           state
-          __typename
         }
         email
         phone
@@ -253,6 +276,7 @@ export const createUserPetFavorite = /* GraphQL */ `
         name
         age
         gender
+        status
         size
         description
         url
@@ -288,6 +312,7 @@ export const updateUserPetFavorite = /* GraphQL */ `
         name
         age
         gender
+        status
         size
         description
         url
@@ -303,9 +328,36 @@ export const updateUserPetFavorite = /* GraphQL */ `
 export const deleteUserPetFavorite = /* GraphQL */ `
   mutation DeleteUserPetFavorite(
     $input: DeleteUserPetFavoriteInput!
+    $condition: ModelUserPetFavoriteConditionInput
   ) {
-    deleteUserPetFavorite(input: $input) {
+    deleteUserPetFavorite(input: $input, condition: $condition) {
       id
+      userId
+      petId
+      createdAt
+      user {
+        id
+        username
+        email
+        createdAt
+        updatedAt
+        __typename
+      }
+      pet {
+        id
+        name
+        age
+        gender
+        status
+        size
+        description
+        url
+        createdAt
+        updatedAt
+        __typename
+      }
+      updatedAt
+      __typename
     }
   }
 `;
