@@ -16,20 +16,14 @@
         "ShelterLink": {}
       },
       "function": {
-        "lambdaapi": {
-          "deploymentBucketName": "amplify-shelterlink-dev-153937-deployment",
-          "s3Key": "amplify-builds/lambdaapi-7a725a543075656f3239-build.zip"
-        },
         "petfOrganizations": {
           "deploymentBucketName": "amplify-shelterlink-dev-153937-deployment",
           "s3Key": "amplify-builds/petfOrganizations-554c6f336f577a4b4871-build.zip"
-        }
+        },
+        "lambdaapi": {}
       },
       "storage": {
         "shelterLinkDB": {}
-      },
-      "api": {
-        "shelterlink": {}
       }
     }
   }
