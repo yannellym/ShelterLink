@@ -74,12 +74,6 @@ export const getPet = /* GraphQL */ `
         __typename
       }
       contact {
-        address {
-          address1
-          address2
-          city
-          state
-        }
         email
         phone
         __typename
@@ -146,7 +140,6 @@ export const getUserPetFavorite = /* GraphQL */ `
         gender
         status
         size
-        contact
         description
         url
         createdAt

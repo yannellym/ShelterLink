@@ -1,0 +1,143 @@
+{
+  "providers": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-shelterlink-dev-153937-authRole",
+      "UnauthRoleArn": "arn:aws:iam::601135941262:role/amplify-shelterlink-dev-153937-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::601135941262:role/amplify-shelterlink-dev-153937-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-shelterlink-dev-153937-deployment",
+      "UnauthRoleName": "amplify-shelterlink-dev-153937-unauthRole",
+      "StackName": "amplify-shelterlink-dev-153937",
+      "StackId": "arn:aws:cloudformation:us-east-1:601135941262:stack/amplify-shelterlink-dev-153937/ba1d50b0-7a80-11ee-adfa-0aad0bbabc27",
+      "AmplifyAppId": "dl4evxiffuqtj"
+    }
+  },
+  "api": {
+    "shelterlink": {
+      "dependsOn": [],
+      "output": {
+        "authConfig": {
+          "additionalAuthenticationProviders": [],
+          "defaultAuthentication": {
+            "apiKeyConfig": {
+              "apiKeyExpirationDays": 7
+            },
+            "authenticationType": "API_KEY"
+          }
+        },
+        "GraphQLAPIIdOutput": "tns3lnu5tvgizg772c5k4rmcp4",
+        "GraphQLAPIEndpointOutput": "https://3lvh6h5zpvcstde6vv6x2wjdwu.appsync-api.us-east-1.amazonaws.com/graphql",
+        "GraphQLAPIKeyOutput": "da2-c2ddhvb5rfewxkz7ux2kswi744"
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "AppSync",
+      "lastPushTimeStamp": "2023-12-30T00:05:48.833Z",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-shelterlink-dev-153937-deployment/amplify-cfn-templates/api/cloudformation-template.json",
+        "logicalId": "apishelterlink"
+      }
+    }
+  },
+  "auth": {
+    "ShelterLink": {
+      "customAuth": false,
+      "dependsOn": [],
+      "frontendAuthConfig": {
+        "mfaConfiguration": "OFF",
+        "mfaTypes": [
+          "SMS"
+        ],
+        "passwordProtectionSettings": {
+          "passwordPolicyMinLength": 8,
+          "passwordPolicyCharacters": [
+            "REQUIRES_LOWERCASE",
+            "REQUIRES_NUMBERS",
+            "REQUIRES_SYMBOLS",
+            "REQUIRES_UPPERCASE"
+          ]
+        },
+        "signupAttributes": [
+          "EMAIL",
+          "NAME"
+        ],
+        "socialProviders": [],
+        "usernameAttributes": [
+          "EMAIL"
+        ],
+        "verificationMechanisms": [
+          "EMAIL"
+        ]
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito",
+      "output": {
+        "UserPoolId": "us-east-1_hdBR8CajS",
+        "AppClientIDWeb": "6jn4e7sbjaa2u2g6hm7jvcuppl",
+        "AppClientID": "m4ljgc25vhk51c1dpt98f2h8s",
+        "IdentityPoolId": "us-east-1:889b2efe-7b15-4d14-87a0-2e3a19d9d0af",
+        "UserPoolArn": "arn:aws:cognito-idp:us-east-1:601135941262:userpool/us-east-1_hdBR8CajS",
+        "IdentityPoolName": "testAuthIdentityPool__dev",
+        "UserPoolName": "ShelterLink"
+      },
+      "lastPushTimeStamp": "2023-12-30T00:05:48.835Z",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-shelterlink-dev-153937-deployment/amplify-cfn-templates/auth/ShelterLink-cloudformation-template.json",
+        "logicalId": "authShelterLink"
+      }
+    }
+  },
+  "function": {
+    "lambdaapi": {
+      "dependsOn": [],
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-shelterlink-dev-153937-deployment/amplify-cfn-templates/function/lambdaapi-cloudformation-template.json",
+        "logicalId": "functionlambdaapi"
+      }
+    },
+    "petfOrganizations": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "output": {
+        "LambdaExecutionRoleArn": "arn:aws:iam::601135941262:role/shelterlinkLambdaRoleeb98c9ed-dev",
+        "Region": "us-east-1",
+        "Arn": "arn:aws:lambda:us-east-1:601135941262:function:petfOrganizations-dev",
+        "Name": "petfOrganizations-dev",
+        "LambdaExecutionRole": "shelterlinkLambdaRoleeb98c9ed-dev"
+      },
+      "lastPushTimeStamp": "2023-12-30T00:05:50.138Z",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-shelterlink-dev-153937-deployment/amplify-cfn-templates/function/petfOrganizations-cloudformation-template.json",
+        "logicalId": "functionpetfOrganizations"
+      },
+      "s3Bucket": {
+        "deploymentBucketName": "amplify-shelterlink-dev-153937-deployment",
+        "s3Key": "amplify-builds/petfOrganizations-70452b54326938524259-build.zip"
+      },
+      "lastBuildTimeStamp": "2023-12-30T00:04:40.194Z",
+      "lastBuildType": "PROD",
+      "lastPackageTimeStamp": "2023-12-30T00:04:44.002Z",
+      "distZipFilename": "petfOrganizations-70452b54326938524259-build.zip",
+      "lastPushDirHash": "ZjXvS/cyHX4gTeVgxxzQBWjCRb8="
+    }
+  },
+  "storage": {
+    "shelterLinkDB": {
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB",
+      "output": {
+        "PartitionKeyName": "favorite_pets",
+        "Region": "us-east-1",
+        "Arn": "arn:aws:dynamodb:us-east-1:601135941262:table/userFavorites-dev",
+        "StreamArn": "arn:aws:dynamodb:us-east-1:601135941262:table/userFavorites-dev/stream/2023-12-18T23:15:23.782",
+        "PartitionKeyType": "S",
+        "Name": "userFavorites-dev"
+      },
+      "lastPushTimeStamp": "2023-12-30T00:05:48.838Z",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-shelterlink-dev-153937-deployment/amplify-cfn-templates/storage/shelterLinkDB-cloudformation-template.json",
+        "logicalId": "storageshelterLinkDB"
+      }
+    }
+  }
+}

@@ -106,12 +106,6 @@ export const createPet = /* GraphQL */ `
         __typename
       }
       contact {
-        address {
-          address1
-          address2
-          city
-          state
-        }
         email
         phone
         __typename
@@ -167,12 +161,6 @@ export const updatePet = /* GraphQL */ `
         __typename
       }
       contact {
-        address {
-          address1
-          address2
-          city
-          state
-        }
         email
         phone
         __typename
@@ -228,12 +216,6 @@ export const deletePet = /* GraphQL */ `
         __typename
       }
       contact {
-        address {
-          address1
-          address2
-          city
-          state
-        }
         email
         phone
         __typename
