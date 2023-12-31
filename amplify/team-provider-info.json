@@ -18,12 +18,15 @@
       "function": {
         "petfOrganizations": {
           "deploymentBucketName": "amplify-shelterlink-dev-153937-deployment",
-          "s3Key": "amplify-builds/petfOrganizations-554c6f336f577a4b4871-build.zip"
+          "s3Key": "amplify-builds/petfOrganizations-6d385631545359694d6c-build.zip"
         },
         "lambdaapi": {}
       },
       "storage": {
         "shelterLinkDB": {}
+      },
+      "api": {
+        "shelterlink": {}
       }
     }
   }
