@@ -4,8 +4,6 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-requests = "==2.26.0"
-urllib3 = "==1.25.11"
 
 [dev-packages]
 
