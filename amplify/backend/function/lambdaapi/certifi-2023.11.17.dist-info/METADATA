@@ -20,7 +20,7 @@ Classifier: Programming Language :: Python :: 3.8
 Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
-Requires-Python: >=3.6
+Requires-Python: >=3.10
 License-File: LICENSE
 
 Certifi: Python SSL Certificates
@@ -46,12 +46,12 @@ built-in function::
     >>> import certifi
 
     >>> certifi.where()
-    '/usr/local/lib/python3.7/site-packages/certifi/cacert.pem'
+    '/usr/local/lib/python3.10/site-packages/certifi/cacert.pem'
 
 Or from the command line::
 
     $ python -m certifi
-    /usr/local/lib/python3.7/site-packages/certifi/cacert.pem
+    /usr/local/lib/python3.10/site-packages/certifi/cacert.pem
 
 Enjoy!
 
