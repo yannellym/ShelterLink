@@ -9,4 +9,4 @@
     "amplify/backend/awscloudformation": true
   },
   "git.ignoreLimitWarning": true
-}
+}   
