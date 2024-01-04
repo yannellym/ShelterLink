@@ -1,44 +1,21 @@
 //card to display a preview of the pet's information
 import React, { useState, useEffect } from 'react';
 import '../styles/PetCard.css';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import coming_soon from "../images/coming_soon.png";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart} from '@fortawesome/free-solid-svg-icons';
 
-const PetCard = ({ pet, addToFavorites, removeFromFavorites, isFavorite, isAuthenticated }) => {
-  const [favorited, setFavorited] = useState(isFavorite);
-  const navigate = useNavigate();
+const PetCard = ({ pet, favorited, handleToggleFavorite }) => {
+  const [isFavorited, setIsFavorited] = useState(favorited);
   const [imageSource, setImageSource] = useState(null);
 
-  //console.log(isAuthenticated, "AUTHENTICATEDDD")
-  
-  const handleToggleFavorite = () => {
-    if (isAuthenticated) {
-      setFavorited(!favorited);
-      if (favorited) {
-        removeFromFavorites(pet.id);
-      } else {
-        addToFavorites(pet);
-      }
-    } else {
-      // If the user is not authenticated, save the current URL and then direct them to the authentication page
-      localStorage.setItem('previousURL', window.location.pathname);
-      // Store the pet ID in local storage to remember the favorite pet
-      localStorage.setItem('favoritePet', JSON.stringify(pet));
-      // If the user is not authenticated, direct them to the authentication page
-      navigate('/auth');
-    }
-  };
-
-
   const handleMoreInfoClick = () => {
-    // Create the URL for the new window, including the 'petData' query parameter
-    const moreInfoUrl = `/pet-details/${pet.id}?petData=${encodeURIComponent(JSON.stringify(pet))}`;
-  
+    console.log("inside handle")
+    // Create the URL for the new window, including the 'petData' and 'favorited' query parameters
+    const moreInfoUrl = `/pet-details/${pet.id}?petData=${encodeURIComponent(JSON.stringify(pet))}&favorited=${isFavorited}`;
     // Open the new window with the generated URL
     const newWindow = window.open(moreInfoUrl, '_blank');
-  
     // Check if the new window was successfully opened
     if (newWindow) {
       // If opened successfully, focus on the new window
@@ -48,7 +25,9 @@ const PetCard = ({ pet, addToFavorites, removeFromFavorites, isFavorite, isAuthe
       alert('Please allow pop-ups for this site to view more details.');
     }
   };
-  
+
+  // FUNCTION to fetch a random image of the type of animal and the breed in case the pet doesn't
+  // have a photo. In case this fails, use our coming_soon photo.
   const fetchPlaceholderImage = async (type, breed) => {
     try {
       const response = await fetch(`https://source.unsplash.com/200x200/?${type},${breed}`);
@@ -66,20 +45,26 @@ const PetCard = ({ pet, addToFavorites, removeFromFavorites, isFavorite, isAuthe
 
   useEffect(() => {
     const fetchImage = async () => {
+      // if the pet has at least 1 photo, set its image to one of its photos
       if (pet.photos && pet.photos.length > 0) {
         setImageSource({ url: pet.photos[0]?.medium, generated: false });
       } else {
+        // if the pet doesnt have any photos, fetch an image based on type and breed
         const placeholderImage = await fetchPlaceholderImage(pet.type, pet.breeds.primary || pet.type, pet.breeds.secondary);
-        console.log("generated image for", pet.name)
+        // set the image and create a label to let users know it was generated
         setImageSource({ url: placeholderImage, generated: true });
-
       }
     };
-
     fetchImage();
   }, [pet]);
   
+  const handleToggleFavoriteClick = () => {
+    console.log("clicked heart toggle")
+    handleToggleFavorite(pet); // Call the parent component function
+    setIsFavorited((prevIsFavorited) => !prevIsFavorited); // Update the local state
+  };
 
+  console.log(pet, "pet in pet card")
   return (
     <div className="pet-card">
       <Link
@@ -112,19 +97,19 @@ const PetCard = ({ pet, addToFavorites, removeFromFavorites, isFavorite, isAuthe
           <p className="pet-card-description">
             {pet.description && pet.description.length > 100
               ? `${pet.description.substring(0, 100)}...`
-              : `${pet.description} (This image is generated)`}
+              : `${pet.description}`}
           </p>
         ) : (
           <p className="pet-card-description">This pet doesn't have a description.</p>
-        )}
+      )}
       </Link>
       <div className="pet-card-footer">
         <button className="more-info-button" onClick={handleMoreInfoClick}>
           More Info
         </button>
         <button
-          className={`favorite-heart-${favorited ? 'favorited' : 'unfavorited'}`}
-          onClick={handleToggleFavorite}
+          className={`favorite-heart-${isFavorited? 'favorited' : 'unfavorited'}`}
+          onClick={handleToggleFavoriteClick}
           tabIndex="0"
         >
           <FontAwesomeIcon icon={faHeart} />

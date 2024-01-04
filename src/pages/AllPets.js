@@ -1,61 +1,67 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import '../styles/AllPetsPage.css';
 import PetCard from '../components/PetCard';
 
-function shuffleArray(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-}
 
+/* function to fetch animals by type
+parameters: type: String, page: Int
+returns: array of animals according to given type
+*/
 async function fetchAnimalsByType(type, page) {
+  // if the type is dog or cat, fetch from the given endpoint
   if (type === 'dog' || type === 'cat') {
-    const endpoint = `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/all_pets?type=${type}&limit=100&page=${page}`;
+    const endpoint = `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/all_pets?type=${type}&limit=30&page=${page}`;
     const response = await fetch(endpoint);
+    // response is a json string
     const dataRaw = await response.json();
     const stringData = JSON.stringify(dataRaw);
+    // parse the string data
     const parsedData = JSON.parse(stringData);
     const petData = JSON.parse(parsedData.body);
-    
-    return petData.animals.filter((animal) => animal && animal.photos.length > 0);
+    return petData.animals
+    // if the type equals other, let's search for other animal types
   } else if (type === 'other') {
     const otherAnimalTypes = ['horse', 'bird', 'barnyard'];
     const animalData = [];
-
+    // fetch data for each animal type in otherAnimalTypes
     for (const animalType of otherAnimalTypes) {
       const response = await fetch(
-        `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/all_pets?type=${animalType}&limit=20&page=${page}`
+        `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/all_pets?type=${animalType}&limit=30&page=${page}`
       );
 
       if (response.ok) {
         const dataRaw = await response.json();
+        // response is a json string
         const stringData = JSON.stringify(dataRaw);
+        // parse the json string
         const parsedData = JSON.parse(stringData);
         const animalDataReceived = JSON.parse(parsedData.body);
         console.log(animalDataReceived, "animalData");
-
+        // save all of the animals in animalData
         animalData.push(...(animalDataReceived.animals || []));
       } else {
         console.error(`Error fetching data for ${animalType}:`, response.status, response.statusText);
       }
     }
-
-    return animalData.filter((animal) => animal && animal.photos.length > 0);
+    // return the animals after filtering for animals that have at least 1 photo
+    return animalData
   }
-
+  // if no animals matched the type, return an empty array
   return [];
 }
+
 function AllPets() {
   const { type } = useParams();
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [cache, setCache] = useState([]);
-  const petsPerPage = 20;
   const buttonsToShow = 9;
-
+  
+  /* function to fetch animals for the current page. Calls fetchAnimalsByType and adds to cache.
+  parameters: type: String, page: Int
+  returns: array of animals according to given type
+  */
   const fetchPetsForCurrentPage = async (type, page) => {
     try {
       const animals = await fetchAnimalsByType(type, page);
@@ -76,9 +82,10 @@ function AllPets() {
       setCurrentPage(newPage);
     }
   };
-
+  
+  // Pagination
   const startPage = Math.max(1, currentPage - Math.floor(buttonsToShow / 2));
-  const endPage = startPage + buttonsToShow - 1;
+  // const endPage = startPage + buttonsToShow - 1;
 
   const pageButtons = Array.from({ length: buttonsToShow }, (_, i) => startPage + i);
 

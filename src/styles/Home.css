@@ -10,7 +10,7 @@
 /* pet links section */
 .section-links-div {
   width: 100vw;
-  height: 50vh;
+  height: 35vh;
   background-color: rgb(0, 0, 0);
 }
 .section-links-div > h3 {
@@ -18,29 +18,45 @@
   color: rgb(255, 255, 255);
 }
 
-/* nearby pets section */
-.nearby-pets {
+
+/* adopted-animals-section  */
+.adopted-animals-section {
   width: 100vw;
-  height: 85vh;
+  height: 40vh;
+  background-color: rgba(255, 255, 255, 0.109);
+  color: rgb(0, 0, 0);
+}
+
+/* greater-need-for-love-section */
+.greater-need-for-love-section {
+  width: 100vw;
+  height: 60vh;
   background-color: rgba(200, 82, 36, 0.309);
   font-size: 30px; 
   color: rgb(0, 0, 0);
 }
-.nearby-pets > h3 {
+.greater-need-for-love-section > h3 {
   color: rgb(0, 0, 0);
 }
 
 /* resources section */
-.resources-div {
+.resources-section {
   width: 100vw;
-  background-color: rgb(255, 255, 255);
+  height: 55vh;
+  background-color: rgb(0, 0, 0);
 }
-.resources-div h3 {
-  font-size: 34px;
+.resources-section > h1 {
+  color: white;
+  font-size: 30px;
 }
 
 /* inner divs */
-.nearby-pet-cards, .section-links-inner-div{
+.nearby-pet-cards{
+  display: flex;
+  margin-left: 10vw;
+  width: 80vw;
+}
+.section-links-inner-div{
   display: flex;
 }
 .background-image {
@@ -122,7 +138,7 @@
   padding: 50% 0;
 }
 
-.greater-need-cards {
+.all-pets-near-card {
   flex-direction: column;
   align-items: center;
   background-color: #ffffff;
@@ -131,22 +147,22 @@
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.14s, box-shadow 0.2s;
   cursor: pointer;
-  width: 60px;
+  width: 90px;
   height: 200px;
   margin-top: 10vh;
 }
 
-.greater-need-cards:hover {
+.all-pets-near-card:hover {
   transform: translateY(-5px);
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.15);
 }
 
-.greater-need-cards p {
+.all-pets-near-card p {
   margin-top: 5px;
   font-size: 14px;
   color: #ff0000;
 }
-.greater-need-cards img {
+.all-pets-near-card img {
   max-width: 100%;
   border-radius: 5px;
 }

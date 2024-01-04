@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
-import '../styles/SignIn.css'; // Import your custom CSS for SignIn
+import '../styles/SignIn.css'; 
 
+/* component to display resources for the user
+  parameters: 
+  returns: 
+*/
+//TODO: IMPLEMENT SIG IN FUNC
 const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import popularDogBreeds from '../data/popularDogBreeds';
 import stateNames from '../data/stateNames';
 
+// component to filter for pets based on user preferences
 function Filter({ onFilterChange }) {
   const [selectedFilters, setSelectedFilters] = useState({
     location: 'any',
@@ -12,7 +13,11 @@ function Filter({ onFilterChange }) {
     size: 'any',
     coat: 'any',
   });
-
+  
+  /* function to handle the selection of the given filter by the user. Calls onFilterChanged
+  parameters: filterName: String, event: onClickEvent
+  returns: None
+  */
   const handleFilterSelect = (filterName, event) => {
     const selectedValue = event.target.value;
 
@@ -40,7 +45,7 @@ function Filter({ onFilterChange }) {
     }
   };
 
-
+  // component to render the filters for user to filter animals by preference
   const renderFilters = () => {
     if (selectedFilters.type === 'cat') {
       return (

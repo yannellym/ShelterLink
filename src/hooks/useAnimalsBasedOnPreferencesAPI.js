@@ -11,11 +11,11 @@ const useAnimalsBasedOnPreferencesAPI = () => {
 
   const fetchAnimals = async (preferences) => {
     try {
+      // default values in case user doesnt choose any for gender and/or size
       const gender = preferences.gender !== 'any' ? preferences.gender : 'Male';
       const size = preferences.size !== 'any' ? preferences.size : 'Large';
 
       const apiUrl = `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/pet_match?perPage=100&type=${preferences.type}&gender=${gender}&age=${preferences.age}&size=${size}`;
-      console.log(apiUrl);
 
       // Clear the abortController on each new request
       if (abortController) {
@@ -47,15 +47,12 @@ const useAnimalsBasedOnPreferencesAPI = () => {
       } catch (error) {
         console.error('Error parsing JSON data:', error);
       }
-      
       // Set the preferred animals state variable with the filtered results
       setPreferredAnimals(filteredAnimals);
-
       // Stop retrying after the first attempt
       setLoading(false);
     } catch (error) {
       console.error('Error fetching pet data:', error);
-
       // Stop retrying after encountering an error
       setLoading(false);
     }

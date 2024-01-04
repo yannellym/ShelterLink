@@ -59,7 +59,6 @@ const UserPreferencesForm = ({ onPreferencesSubmit }) => {
 
     return formattedMessage;
   };
-  const [buttonText, setButtonText] = useState('Find My Match'); // State to manage button text
 
   
   const handleSubmit =  async(event) => {
@@ -73,7 +72,6 @@ const UserPreferencesForm = ({ onPreferencesSubmit }) => {
       temperament,
     };
     setIsFindingMatch(true); // Show the spinner when submitting
-    setButtonText('Finding Match...'); // Update button text to indicate "Finding Match"
     // Simulate a call for 3 seconds
     await new Promise((resolve) => setTimeout(resolve, 3000));
     // find the match

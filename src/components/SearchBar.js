@@ -1,74 +1,104 @@
 // search bar in the homepage
-import React, { useState, useEffect} from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/SearchBar.css';
-import PlacesAutocomplete, {
-  geocodeByAddress
-} from 'react-places-autocomplete';
+import PlacesAutocomplete from 'react-places-autocomplete';
 import { Link } from 'react-router-dom';
 
 const SearchBar = ({ onSearch }) => {
   const [searchText, setSearchText] = useState('');
   const [petType, setPetType] = useState('');
-  const [showLocationOptions, setShowLocationOptions] = useState(false);
   const [showLocationMessage, setShowLocationMessage] = useState(false);
-  const [dataLoaded, setDataLoaded] = useState(false);
-  const [locationButtonClicked, setLocationButtonClicked] = useState(false);
   const [shareLocation, setShareLocation] = useState(false);
 
   const navigate = useNavigate();
 
   const handleSearch = async () => {
-    if (searchText && petType) {
-      // Extract the city and state from the user's input
-      const cityStateRegex = /([^,]+),\s*([^,]+)/;
+    if (!searchText || !petType) {
+      alert('Please enter both location and pet type to search.');
+      return;
+    }
+  
+    let location;
+    let searchTextForApi;
+  
+    if (isZipCode(searchText)) {
+      // If the input is a zipcode, use it directly
+      location = searchText;
+      searchTextForApi = searchText;
+    } else {
+      // If the input is a city or city and state, extract the city/state
+      const cityStateRegex = /([^,]+),?\s*([^,]+)?/;
       const match = searchText.match(cityStateRegex);
   
       if (match) {
-        const city = match[1].trim();
-        const state = match[2].trim();
-  
-        const apiEndpoint = `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/pet_zip_search?location=${city},${state}&type=${petType}`;
-  
-        try {
-          const response = await fetch(apiEndpoint);
-          if (response.ok) {
-            const data = await response.json();
-            console.log(data, "data");
-            setDataLoaded(true);
-  
-            // Include the favorited information in the state
-            navigate('/location-specific-pets', {
-              state: {
-                petType,
-                searchText: `${city}, ${state}`, // Set searchText to the extracted city and state
-              },
-            });
-          } else {
-            console.error('API request failed:', response.statusText);
-          }
-        } catch (error) {
-          console.error('API request error:', error);
+        const [city, state] = match[0].split(" ").map(part => part.replace(',', '').toUpperCase());
+      
+        if (!state) {
+          let newLocation;
+          
+          // Keep prompting the user until valid input is provided
+          do {
+            // If no state is provided, prompt the user to enter both city and state
+            const newAns = prompt('Please enter the state along with the city (e.g., City, State):');
+            
+            if (!newAns) {
+              // If the user cancels or doesn't provide a new state, return
+              return;
+            }
+      
+            // Normalize the user's input for city and state
+            const [newCity, newState] = newAns.split(" ").map(part => part.replace(',', '').toUpperCase());
+      
+            if (newCity && newState) {
+              newLocation = `${newCity},${newState}`;
+              searchTextForApi = `${newCity}, ${newState}`;
+            } else {
+              alert('Invalid input. Please enter the city and state in the correct format.');
+            }
+          } while (!newLocation); // Continue until valid input is provided
+      
+          location = newLocation;
+        } else {
+          location = `${city},${state}`;
+          searchTextForApi = `${city}, ${state}`;
         }
       } else {
-        alert('Please enter a valid city and state to search.');
+        alert('Please enter a valid city and state or a zipcode to search.');
+        return;
       }
-    } else {
-      alert('Please enter both location and pet type to search.');
+    }
+    const apiEndpoint = `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/pet_zip_search?location=${location}&type=${petType}`;
+
+    try {
+      const response = await fetch(apiEndpoint);
+  
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data, 'data');
+  
+        // Include the favorited information in the state
+        navigate('/location-specific-pets', {
+          state: {
+            petType,
+            searchText: searchTextForApi,
+          },
+        });
+      } else {
+        console.error('API request failed:', response.statusText);
+      }
+    } catch (error) {
+      console.error('API request error:', error);
     }
   };
-  
-  
-  
   
 
   function isZipCode(text) {
     return /^\d{5}$/.test(text);
   }
 
-  const handleSelect = async (address, placeId) => {
+  const handleSelect = async (address) => {
     setSearchText('');
-    setShowLocationOptions(false);
     setSearchText(address);
   }
 
@@ -105,12 +135,6 @@ const SearchBar = ({ onSearch }) => {
     setShowLocationMessage(false);
   };
 
-  useEffect(() => {
-    if (locationButtonClicked) {
-      setShowLocationMessage(false);
-    }
-  }, [locationButtonClicked]);
-
   const handleInputClick = () => {
     setShowLocationMessage(true);
   };
@@ -126,6 +150,7 @@ const SearchBar = ({ onSearch }) => {
             onChange={setSearchText}
             onSelect={handleSelect}
             searchOptions={searchOptions}
+            disableSearch={true} 
           >
             {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
               <div>
@@ -149,7 +174,7 @@ const SearchBar = ({ onSearch }) => {
                 </div>
                 {showLocationMessage && (
                   <button
-                    className={`location-button ${locationButtonClicked ? 'blue-border' : ''}`}
+                    className="location-button"
                     onClick={handleShareLocation}
                   >
                     {shareLocation? 'Sharing Location...' : 'Share Location 📍'}

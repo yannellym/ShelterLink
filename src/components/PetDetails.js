@@ -1,43 +1,33 @@
 // card to display a detailed view of the pet's information
 import React, { useState } from 'react';
-import {useNavigate} from 'react-router-dom';
 import '../styles/PetDetails.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import coming_soon from "../images/coming_soon.png";
 
-const PetDetails = ({addToFavorites, removeFromFavorites, isFavorite, isAuthenticated }) => {
-  const [favorited, setFavorited] = useState(isFavorite);
-  const navigate = useNavigate();
-  
+const PetDetails = ({  handleToggleFavorite }) => {
   // Extract the 'petData' from the query parameter in the URL
   const searchParams = new URLSearchParams(window.location.search);
+ 
   const petData = JSON.parse(decodeURIComponent(searchParams.get('petData')));
-
+  console.log(petData, "pet dat in petdetails")
+  const favorited = JSON.parse(decodeURIComponent(searchParams.get('favorited')));
+  const [isFavorited, setIsFavorited] = useState(favorited);
   if (!petData) {
     return <p className="error-message">Error: Pet not found</p>;
   }
 
-  const handleToggleFavorite = () => {
-    if (isAuthenticated) {
-      setFavorited(!favorited);
-      if (favorited) {
-        removeFromFavorites(petData.id);
-      } else {
-        addToFavorites(petData);
-      }
-    } else {
-      // If the user is not authenticated, direct them to the authentication page
-      navigate('/auth');
-    }
+  const handleFavoriteClick = () => {
+    // Call the provided handleToggleFavorite function
+    handleToggleFavorite(petData);
+    setIsFavorited((prevIsFavorited) => !prevIsFavorited); // Update the local state
   };
-
-
+  console.log(petData)
   return (
     <div className="pet-details">
       <button
-        className={`favorite-heart-${favorited ? 'favorited' : 'unfavorited'}`}
-        onClick={handleToggleFavorite}
+        className={`favorite-heart-${isFavorited ? 'favorited' : 'unfavorited'}`}
+        onClick={handleFavoriteClick}
         tabIndex="0"
       >
         <FontAwesomeIcon icon={faHeart} />

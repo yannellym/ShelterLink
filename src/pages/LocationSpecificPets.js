@@ -2,10 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import PetCard from '../components/PetCard';
 import '../styles/LocationSpecificPets.css';
-
 import usePetfinderAPI from '../hooks/usePetFinderAPI';
 
-function LocationSpecificPets({ favoritePets, addToFavorites, removeFromFavorites, isAuthenticated }) {
+/* component that shows nearby shelters based on user;s location
+  parameters: favoritePets: array, addToFavorites: array, removeFromFavorites:array, isAuthenticated: string
+  returns: 
+*/
+function LocationSpecificPets({ favoritePets, isAuthenticated }) {
   const location = useLocation();
   const state = location.state;
   const petType = state?.petType || '';
@@ -19,7 +22,7 @@ function LocationSpecificPets({ favoritePets, addToFavorites, removeFromFavorite
 
   const dependencies = [petType, searchText, showOnlyPetsWithImages, currentPage];
 
-  const { data, loading: apiLoading, error } = usePetfinderAPI(
+  const { data, loading: apiLoading } = usePetfinderAPI(
     `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/pet_zip_search?type=${petType}&location=${searchText}&page=${currentPage}`,
     dependencies
   );
@@ -28,6 +31,9 @@ function LocationSpecificPets({ favoritePets, addToFavorites, removeFromFavorite
     if (newPage >= 1 && newPage <= maxPage) {
       setCurrentPage(newPage);
     }
+
+    // Scroll to the top of the page when a new page is clicked
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   useEffect(() => {
@@ -95,8 +101,6 @@ function LocationSpecificPets({ favoritePets, addToFavorites, removeFromFavorite
             <PetCard
               key={pet.id}
               pet={pet}
-              addToFavorites={addToFavorites}
-              removeFromFavorites={removeFromFavorites}
               isFavorite={favoritePets.some((favoritePet) => favoritePet.id === pet.id)}
               isAuthenticated={isAuthenticated}
             />

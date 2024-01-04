@@ -1,8 +1,11 @@
+//
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SearchBar from '../components/SearchBar';
 import CategoryCard from '../components/CategoryCard';
+import NoLocationCard from '../components/NoLocationCard'; 
 import ResourcesSection from './ResourcesSection';
+import AdoptedAnimalsSection from './AdoptedAnimalsSection';
 import UserPreferencesForm from '../components/UserPreferencesForm';
 import PetCard from '../components/PetCard';
 import '../styles/Home.css';
@@ -13,123 +16,112 @@ import paw from '../images/paw.png';
 import usePetFinderAPI from '../hooks/usePetFinderAPI'; // hook
 import useAnimalsBasedOnPreferencesAPI from '../hooks/useAnimalsBasedOnPreferencesAPI'; // hook
 
-function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferences, isAuthenticated }) {
+/* component shows UserPreferencesForm, petCards, categoryCards, and resources section
+  parameters: favoritePets: array, addToFavorites: array,  userPreferences: array, removeFromFavorites:array, isAuthenticated: string
+  returns: 
+*/
+function Home({ userLocation, userPreferences, handleToggleFavorite, user, favoritePets}) {
   const [loading, setLoading] = useState(true);
   const [selectedAnimals, setSelectedAnimals] = useState([]);
-  const [selectedPetIndex, setSelectedPetIndex] = useState(0); // Track the currently displayed pet
-  const [userLocation, setUserLocation] = useState(null); // Initialize with null or a default value
+  const [selectedPetIndex, setSelectedPetIndex] = useState(0);
+  const [fetchedUserLocation, setUserLocation] = useState(userLocation?.zipCode);
   const navigate = useNavigate();
-
+  
   const { data: petData } = usePetFinderAPI(
     'https://2hghsit103.execute-api.us-east-1.amazonaws.com/default', []
   );
-
-
-  useEffect(() => {
-    if (petData && petData.body) {
-      const responseBody = JSON.parse(petData.body);
-      console.log(responseBody)
-      if (responseBody.animals) {
-        setLoading(false);
-        const animals = responseBody.animals.filter((animal) => animal.photos.length > 1).slice(0, 4);
-  
-        if (animals.length < 4) {
-          const remainingAnimalsCount = 4 - animals.length;
-          const additionalAnimals = responseBody.animals.slice(0, remainingAnimalsCount);
-          setSelectedAnimals([...animals, ...additionalAnimals]);
-        } else {
-          setSelectedAnimals(animals);
-        }
-      }
-    }
-  }, [petData]);
-
-
 
   const { preferredAnimals, fetchAnimalsBasedOnPreferences } = useAnimalsBasedOnPreferencesAPI();
 
   const handlePreferencesSubmit = (preferences) => {
     fetchAnimalsBasedOnPreferences(preferences);
-  }
+  };
 
   const fetchNewPet = () => {
-    // Update the selected pet index to cycle through the available pets
     setSelectedPetIndex((prevIndex) => (prevIndex + 1) % preferredAnimals.length);
   };
 
   const backToForm = () => {
-    // reload the page so we see the form again
     window.location.reload();
   };
-  
+
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const userLocation = {
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-        };
-        setUserLocation(userLocation); // Update the userLocation state
-        console.log('User Location:', userLocation);
-      },
-      (error) => {
-        console.error('Error getting user location:', error.message);
-        setLoading(false);
-      }
-    );
-  }, []);
-
-  const handleViewAllPetsNearYou = () => {
-    // Get the user's location using the Geolocation API
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        async (position) => {
-          try {
-            const userLocation = {
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude,
-            };
-  
-            // Construct the URL with the latitude and longitude parameters
-            const apiUrl = `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/pet_zip_search?location=${userLocation.latitude},${userLocation.longitude}`;
-  
-            // Make a fetch request to the new API endpoint
-            const response = await fetch(apiUrl);
-  
-            // Check if the request was successful (status code 2xx)
-            if (response.ok) {
-              // Parse the response body as JSON
-              const prefData= await response.json();
-              let parsedBody;
-
-              try {
-                parsedBody = JSON.parse(prefData.body);
-              } catch (parseError) {
-                console.error('Error parsing JSON:', parseError);
-                return; // Stop execution if parsing fails
-              }
-
-              console.log('Response Data:', parsedBody);
-              navigate('/find-a-pet', { state: { userLocation } } );
-            } else {
-              // Handle error response (status code other than 2xx)
-              console.error('Error:', response.statusText);
-            }
-          } catch (error) {
-            console.error('Error:', error.message);
-            // Handle other errors, maybe show a message to the user
-          }
-        },
-        (error) => {
-          console.error('Error getting user location:', error.message);
-          // Handle error, maybe show a message to the user
-        }
-      );
-    } else {
-      console.error('Geolocation is not supported by your browser');
-      // Handle lack of geolocation support, maybe show a message to the user
+    // Update the user location state when it's fetched
+    if (userLocation) {
+      setUserLocation(userLocation.zipCode);
     }
-  };;
+  }, [userLocation]);
+
+
+  useEffect(() => {
+    if (petData && petData.body) {
+      const responseBody = JSON.parse(petData.body);
+      if (responseBody.animals) {
+        setLoading(false);
+          
+      // Filter and slice to get animals with photos
+      const animalsWithPhotos = responseBody.animals.filter((animal) => animal.photos.length > 1).slice(0,4);
+      // If there are not enough animals with photos, get additional animals
+      const additionalAnimals = responseBody.animals.slice(0, Math.max(0, 4 - animalsWithPhotos.length));
+      // Concatenate the arrays and slice to ensure exactly 4 pets
+      const allAnimals = animalsWithPhotos.concat(additionalAnimals).slice(0, 4);
+      // set these as our animals to display
+      setSelectedAnimals(allAnimals);
+    }
+  }
+}, [petData]);
+
+  /* function that fetches animals based on user's selected location
+  parameters: 
+  returns: 
+  */
+  const handleViewAllPetsNearYou = ({ targetPage }) => {
+    try {
+      if (fetchedUserLocation) {
+        // If userLocation is available, directly navigate to the nearby_pets page
+        navigate(`/${targetPage}`, { state: { fetchedUserLocation } });
+      } else if (navigator.geolocation) {
+        // If geolocation is supported, attempt to get the user's current position
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            const userLocation = {
+              latitude,
+              longitude,
+            };
+            navigate(`/${targetPage}`, { state: { userLocation } }); 
+          },
+          (error) => {
+            console.error('Error getting user location:', error.message);
+            // If there's an error or user denies location access, prompt them to enter their ZIP code
+            handleZipCodeInput(targetPage);
+          },
+          { enableHighAccuracy: true }
+        );
+      } else {
+        console.error('Geolocation is not supported by your browser');
+        // If there is no geolocation support, prompt the user to enter their ZIP code
+        handleZipCodeInput(targetPage);
+      }
+    } catch (error) {
+      console.error('Error:', error.message);
+    }
+  };
+  
+  const handleZipCodeInput = (targetPage) => {
+    // Prompt the user to enter their ZIP code
+    const userEnteredZipCode = prompt('Please enter your ZIP code:');
+    if (userEnteredZipCode) {
+      const fetchedUserLocation = {
+        zipCode: userEnteredZipCode,
+      };
+      
+      navigate(`/${targetPage}`, { state: { fetchedUserLocation } });
+    } else {
+      // Handle the case where the user cancels the prompt or does not enter a ZIP code
+      console.log('User did not enter a ZIP code');
+    }
+  };
   
 
   return (
@@ -147,10 +139,8 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferenc
                 <PetCard
                   key={preferredAnimals[selectedPetIndex].id}
                   pet={preferredAnimals[selectedPetIndex]}
-                  addToFavorites={addToFavorites}
-                  removeFromFavorites={removeFromFavorites}
-                  isFavorite={favoritePets.some((favoritePet) => favoritePet.id === preferredAnimals[selectedPetIndex].id)}
-                  isAuthenticated={isAuthenticated}
+                  handleToggleFavorite={() => handleToggleFavorite(preferredAnimals[selectedPetIndex])}
+                  favorited={favoritePets.includes(preferredAnimals[selectedPetIndex].id)}
                   className="matched-pet-card"
                 />
                 {selectedPetIndex +1 < preferredAnimals.length? 
@@ -189,39 +179,53 @@ function Home({ favoritePets, addToFavorites, removeFromFavorites, userPreferenc
             <CategoryCard title="All Dogs" imageSrc={dog2} link="/all_pets/dog" />
             <CategoryCard title="All Cats" imageSrc={kitten} link="/all_pets/cat" />
             <CategoryCard title="Other Animals" imageSrc={hamster} link="/all_pets/other" />
-            <CategoryCard
-              title="Shelters nearby"
-              imageSrc={paw}
-              link={`/nearby_shelters?latitude=${userLocation?.latitude}&longitude=${userLocation?.longitude}`}
-            />
+            {fetchedUserLocation || userLocation ? (
+              <CategoryCard
+                title="Shelters nearby"
+                imageSrc={paw}
+                link={`/nearby_shelters?zipCode=${fetchedUserLocation?.zipCode || userLocation.zipCode}`}
+              />
+            ) : (
+              <NoLocationCard  
+                onClick={() => handleViewAllPetsNearYou({ targetPage: 'nearby_shelters' })} 
+                message="Please provide your location to view nearby shelters." 
+              />
+            )}
           </div>
         </div>
-        <div className="resource-div">
-          <h3> Resources:</h3>
+        <div className="adopted-animals-section">
+          <AdoptedAnimalsSection />
+        </div>
+        <div className="resources-section">
+          <h1> Resources:</h1>
           <ResourcesSection />
         </div>
-        <div className="nearby-pets">
+        <div className="greater-need-for-love-section">
           <h3>Pets with greater need for love:</h3>
           <div className="nearby-pet-cards">
             {loading ? (
               <p>Loading...</p>
-            ) : (
-              selectedAnimals.map((pet) => {
-                return (
-                  <PetCard
-                    key={pet.id}
-                    pet={pet}
-                    addToFavorites={addToFavorites}
-                    removeFromFavorites={removeFromFavorites}
-                    isFavorite={favoritePets.some((favoritePet) => favoritePet.id === pet.id)}
-                    isAuthenticated={isAuthenticated}
-                  />
-                )
-                }))}
-             <button onClick={handleViewAllPetsNearYou} className="greater-need-cards">
+            ) : selectedAnimals?.map((pet, index) => (
+              <PetCard
+                key={pet.id} 
+                pet={pet}
+                user={user}
+                handleToggleFavorite={() => handleToggleFavorite(pet)} 
+                favorited={favoritePets.includes(pet.id)}
+              />
+            ))}
+            {fetchedUserLocation || userLocation ? (
+            <button onClick={() => handleViewAllPetsNearYou({ targetPage: 'nearby_pets' })}  className="all-pets-near-card">
               <img width="64" height="64" src="https://img.icons8.com/sf-black/64/right.png" alt="right" />
               <p><strong>View all available pets near you.</strong></p>
             </button>
+            ) : (
+              <NoLocationCard 
+                onClick={() => handleViewAllPetsNearYou({ targetPage: 'nearby_pets' })} 
+                message="Please provide your location to view nearby pets" 
+              />
+            )
+          }
           </div>
         </div>
       </main>
