@@ -1,0 +1,48 @@
+version: 1
+backend:
+  phases:
+    pre_build:
+      commands:
+        - echo "Checking Current Working Directory..."
+        - pwd
+        - echo "Checking Current Python Version..."
+        - python3 --version
+        - brew install pyenv
+        - echo "if command -v pyenv 1>/dev/null 2>&1; then eval \"\$(pyenv init --path)\"; eval \"\$(pyenv virtualenv-init -)\"; fi" >> $HOME/.zshrc
+        - export PATH="$HOME/.pyenv/bin:$PATH"
+        - pyenv install 3.9.15
+        - pyenv global 3.9.15
+    
+  build:
+    commands:
+      - echo "Current Working Directory: $(pwd)"
+      - echo "Current Python Version: $(python3 --version)"
+      - python3 --version
+      - python3 -m pip install --user pipenv
+      - amplify status
+      - amplifyPush --simple
+
+  post_build:
+    commands:
+      - echo "Custom post-build commands go here"
+
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - npm ci
+    build:
+      commands:
+        - npm run build
+        - echo "running build..going into artifacts"
+        - cd src
+        - echo "into src"
+        - pwd
+        - aws-exports.js
+  artifacts:
+    baseDirectory: build
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - node_modules/**/*

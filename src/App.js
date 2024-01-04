@@ -30,7 +30,7 @@ import { createUser,  createUserPetFavorite, deleteUserPetFavorite,  createPet }
 import { getPet, listUserPetFavorites } from './graphql/queries'; 
 
 
-import awsExports from './aws-exports';
+import awsExports from './aws-exports.js';
 Amplify.configure(awsExports);
 
 const AuthenticatorComponent = ({ setUser, navigate }) => {
