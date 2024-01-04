@@ -48,14 +48,12 @@ export const getPet = /* GraphQL */ `
       name
       age
       gender
-      status
       size
       breeds {
         primary
         secondary
         mixed
         unknown
-        __typename
       }
       attributes {
         declawed
@@ -63,7 +61,6 @@ export const getPet = /* GraphQL */ `
         shots_current
         spayed_neutered
         special_needs
-        __typename
       }
       description
       photos {
@@ -71,21 +68,23 @@ export const getPet = /* GraphQL */ `
         large
         medium
         small
-        __typename
       }
       contact {
+        address {
+          address1
+          address2
+          city
+          state
+        }
         email
         phone
-        __typename
       }
       url
       favoriteUsers {
         id
         userId
-        petId
         createdAt
         updatedAt
-        __typename
       }
       createdAt
       updatedAt
@@ -93,6 +92,8 @@ export const getPet = /* GraphQL */ `
     }
   }
 `;
+
+
 export const listPets = /* GraphQL */ `
   query ListPets(
     $filter: ModelPetFilterInput
@@ -105,9 +106,9 @@ export const listPets = /* GraphQL */ `
         name
         age
         gender
-        status
         size
         description
+        imageUrl
         url
         createdAt
         updatedAt
@@ -138,9 +139,9 @@ export const getUserPetFavorite = /* GraphQL */ `
         name
         age
         gender
-        status
         size
         description
+        imageUrl
         url
         createdAt
         updatedAt

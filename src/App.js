@@ -129,8 +129,9 @@ const App = () => {
           console.log(remaining_pets, "REmaining pets")
         } else {
           console.log("TRYING TO GET PET FROM TABLE");
-          const petExists = await API.graphql(graphqlOperation(getPet, { id: petId }));
-
+          const petExists = await API.graphql(graphqlOperation(getPet, { id: String(petId) }));
+          console.log(petExists, "pet exists or not");
+ 
           if (!petExists.data.getPet) {
             console.log("Pet doesn't exist in the DB");
             const petInput = {

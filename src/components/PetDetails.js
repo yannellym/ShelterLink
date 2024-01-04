@@ -5,13 +5,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import coming_soon from "../images/coming_soon.png";
 
-const PetDetails = ({  handleToggleFavorite }) => {
+const PetDetails = ({  handleToggleFavorite, favorited }) => {
   // Extract the 'petData' from the query parameter in the URL
   const searchParams = new URLSearchParams(window.location.search);
  
   const petData = JSON.parse(decodeURIComponent(searchParams.get('petData')));
   console.log(petData, "pet dat in petdetails")
-  const favorited = JSON.parse(decodeURIComponent(searchParams.get('favorited')));
   const [isFavorited, setIsFavorited] = useState(favorited);
   if (!petData) {
     return <p className="error-message">Error: Pet not found</p>;
@@ -22,7 +21,7 @@ const PetDetails = ({  handleToggleFavorite }) => {
     handleToggleFavorite(petData);
     setIsFavorited((prevIsFavorited) => !prevIsFavorited); // Update the local state
   };
-  console.log(petData)
+  console.log(petData, "BEFORE RENDER")
   return (
     <div className="pet-details">
       <button

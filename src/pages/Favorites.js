@@ -19,6 +19,7 @@ function Favorites({ user, handleToggleFavorite }) {
         const petsWithDetails = await Promise.all(
           pets.map(async (pet) => {
             const petDetails = await API.graphql(graphqlOperation(getPet, { id: pet.petId }));
+            console.log("user fav pets", petDetails)
             return petDetails.data.getPet;
           })
         );

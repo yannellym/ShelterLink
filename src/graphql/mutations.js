@@ -80,14 +80,12 @@ export const createPet = /* GraphQL */ `
       name
       age
       gender
-      status
       size
       breeds {
         primary
         secondary
         mixed
         unknown
-        __typename
       }
       attributes {
         declawed
@@ -95,7 +93,6 @@ export const createPet = /* GraphQL */ `
         shots_current
         spayed_neutered
         special_needs
-        __typename
       }
       description
       photos {
@@ -103,28 +100,32 @@ export const createPet = /* GraphQL */ `
         large
         medium
         small
-        __typename
       }
       contact {
+        address {
+          address1
+          address2
+          city
+          state
+        }
         email
         phone
-        __typename
       }
       url
+      createdAt
+      updatedAt
       favoriteUsers {
         id
         userId
         petId
         createdAt
         updatedAt
-        __typename
       }
-      createdAt
-      updatedAt
       __typename
     }
   }
 `;
+
 export const updatePet = /* GraphQL */ `
   mutation UpdatePet(
     $input: UpdatePetInput!
@@ -135,7 +136,6 @@ export const updatePet = /* GraphQL */ `
       name
       age
       gender
-      status
       size
       breeds {
         primary
@@ -144,23 +144,15 @@ export const updatePet = /* GraphQL */ `
         unknown
         __typename
       }
-      attributes {
-        declawed
-        house_trained
-        shots_current
-        spayed_neutered
-        special_needs
-        __typename
-      }
       description
-      photos {
-        full
-        large
-        medium
-        small
-        __typename
-      }
+      imageUrl
       contact {
+        address {
+          address1
+          address2
+          city 
+          state
+        }
         email
         phone
         __typename
@@ -190,7 +182,6 @@ export const deletePet = /* GraphQL */ `
       name
       age
       gender
-      status
       size
       breeds {
         primary
@@ -199,23 +190,15 @@ export const deletePet = /* GraphQL */ `
         unknown
         __typename
       }
-      attributes {
-        declawed
-        house_trained
-        shots_current
-        spayed_neutered
-        special_needs
-        __typename
-      }
       description
-      photos {
-        full
-        large
-        medium
-        small
-        __typename
-      }
+      imageUrl
       contact {
+        address {
+          address1
+          address2
+          city 
+          state
+        }
         email
         phone
         __typename
@@ -245,32 +228,59 @@ export const createUserPetFavorite = /* GraphQL */ `
       userId
       petId
       createdAt
+      updatedAt
       user {
         id
         username
         email
         createdAt
         updatedAt
-        __typename
       }
       pet {
         id
         name
         age
         gender
-        status
         size
+        breeds {
+          primary
+          secondary
+          mixed
+          unknown
+        }
+        attributes {
+          declawed
+          house_trained
+          shots_current
+          spayed_neutered
+          special_needs
+        }
         description
+        photos {
+          full
+          large
+          medium
+          small
+        }
+        contact {
+          address {
+            address1
+            address2
+            city
+            state
+          }
+          email
+          phone
+        }
         url
         createdAt
         updatedAt
-        __typename
       }
-      updatedAt
       __typename
     }
   }
 `;
+
 export const updateUserPetFavorite = /* GraphQL */ `
   mutation UpdateUserPetFavorite(
     $input: UpdateUserPetFavoriteInput!
@@ -294,9 +304,9 @@ export const updateUserPetFavorite = /* GraphQL */ `
         name
         age
         gender
-        status
         size
         description
+        imageUrl
         url
         createdAt
         updatedAt
@@ -330,9 +340,9 @@ export const deleteUserPetFavorite = /* GraphQL */ `
         name
         age
         gender
-        status
         size
         description
+        imageUrl
         url
         createdAt
         updatedAt
