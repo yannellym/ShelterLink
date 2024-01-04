@@ -1,4 +1,35 @@
 {
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-amplifye47021affd174-staging-161834-authRole",
+      "UnauthRoleArn": "arn:aws:iam::601135941262:role/amplify-amplifye47021affd174-staging-161834-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::601135941262:role/amplify-amplifye47021affd174-staging-161834-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-amplifye47021affd174-staging-161834-deployment",
+      "UnauthRoleName": "amplify-amplifye47021affd174-staging-161834-unauthRole",
+      "StackName": "amplify-amplifye47021affd174-staging-161834",
+      "StackId": "arn:aws:cloudformation:us-east-1:601135941262:stack/amplify-amplifye47021affd174-staging-161834/e8d87d40-ab1c-11ee-ab4a-0a642b36a093",
+      "AmplifyAppId": "dl4evxiffuqtj"
+    },
+    "categories": {
+      "auth": {
+        "ShelterLink": {}
+      },
+      "function": {
+        "lambdaapi": {},
+        "petfOrganizations": {
+          "deploymentBucketName": "amplify-amplifye47021affd174-staging-161834-deployment",
+          "s3Key": "amplify-builds/petfOrganizations-75436b646b6664677143-build.zip"
+        }
+      },
+      "storage": {
+        "shelterLinkDB": {}
+      },
+      "api": {
+        "shelterlink": {}
+      }
+    }
+  },
   "dev": {
     "awscloudformation": {
       "AuthRoleName": "amplify-shelterlink-dev-153937-authRole",
