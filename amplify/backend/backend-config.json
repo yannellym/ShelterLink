@@ -1,5 +1,22 @@
 {
-  "api": {},
+  "api": {
+    "shelterlink": {
+      "dependsOn": [],
+      "output": {
+        "authConfig": {
+          "additionalAuthenticationProviders": [],
+          "defaultAuthentication": {
+            "apiKeyConfig": {
+              "apiKeyExpirationDays": 7
+            },
+            "authenticationType": "API_KEY"
+          }
+        }
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "AppSync"
+    }
+  },
   "auth": {
     "ShelterLink": {
       "customAuth": false,
@@ -37,24 +54,35 @@
   "function": {
     "lambdaapi": {
       "dependsOn": []
+    },
+    "petfOrganizations": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
     }
   },
   "parameters": {
-    "AMPLIFY_function_lambdaapi_deploymentBucketName": {
+    "AMPLIFY_function_petfOrganizations_deploymentBucketName": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "lambdaapi"
+          "resourceName": "petfOrganizations"
         }
       ]
     },
-    "AMPLIFY_function_lambdaapi_s3Key": {
+    "AMPLIFY_function_petfOrganizations_s3Key": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "lambdaapi"
+          "resourceName": "petfOrganizations"
         }
       ]
+    }
+  },
+  "storage": {
+    "shelterLinkDB": {
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB"
     }
   }
 }
