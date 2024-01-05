@@ -67,9 +67,9 @@ function Home({ userLocation, userPreferences, handleToggleFavorite, user, favor
       const allAnimals = animalsWithPhotos.concat(additionalAnimals).slice(0, 4);
       // set these as our animals to display
       setSelectedAnimals(allAnimals);
+      }
     }
-  }
-}, [petData]);
+  }, [petData]);
 
   /* function that fetches animals based on user's selected location
   parameters: 

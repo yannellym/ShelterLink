@@ -1,10 +1,22 @@
 // AdoptionInfoSection.js
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/About.css'; 
 import ShelterLinkLogo from '../images/ShelterLinknb.png';
 
-const About = () => {
+const About = (userLocation) => {
+  console.log(userLocation, "locatd passed in");
+  const [fetchedUserLocation, setUserLocation] = useState(userLocation?.zipCode);
+
+  useEffect(() => {
+    // Update the user location state when it's fetched
+    if (userLocation) {
+      setUserLocation(userLocation.zipCode);
+      console.log(fetchedUserLocation, "fetch user location in")
+    }
+  }, [userLocation]);
+  
+
   return (
     <div className="about-container">
       <div className="about-content">
@@ -36,7 +48,7 @@ const About = () => {
         </p>
       </div>
       <div className="clickable-squares">
-        <Link to="https://www.google.com/search?q=animal+shelters+near+me&sca_esv=572280770&sxsrf=AM9HkKlxuAD2GjmPPBX4r_1lHGwfbdLmpA%3A1696961336649&ei=OJMlZa2EJ_yoqtsP5fCDsAI&ved=0ahUKEwitgKzNieyBAxV8lGoFHWX4ACYQ4dUDCBA&uact=5&oq=animal+shelters+near+me&gs_lp=Egxnd3Mtd2l6LXNlcnAiF2FuaW1hbCBzaGVsdGVycyBuZWFyIG1lMggQABiKBRiRAjIIEAAYigUYkQIyCBAAGIoFGJECMgUQABiABDIGEAAYBxgeMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABDIIEAAYgAQYsQNItiBQAFiUH3AAeAGQAQCYAWqgAfYHqgEDOC4zuAEDyAEA-AEBwgIHEAAYgAQYCsICCBAAGAcYHhgKwgILEAAYBxgeGPEEGArCAgcQABgNGIAEwgIIEAAYBRgeGA3iAwQYACBBiAYB&sclient=gws-wiz-serp" className="square">
+        <Link to={`/nearby_shelters?zipCode=${ userLocation?.userLocation.zipCode}`}>
           <h3>Find a Shelter</h3>
         </Link>
         <Link to="/resources" className="square">

@@ -113,7 +113,7 @@ const SheltersNearbyPage = ({ userLocation }) => {
                   src={
                     shelter.photos?.length > 0
                       ? shelter.photos[0]?.full || shelter.photos[0]?.medium
-                      : { animal_shelter }
+                      :  animal_shelter 
                   }
                   alt={`Shelter ${index}`}
                 />

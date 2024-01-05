@@ -34,9 +34,7 @@ import awsExports from './aws-exports.js';
 Amplify.configure(awsExports);
 
 const AuthenticatorComponent = ({ setUser, navigate }) => {
-  const location = useLocation();
   
-
   useEffect(() => {
     // Check for authenticated user in localStorage
     const storedUser = localStorage.getItem('authenticatedUser');
@@ -331,8 +329,22 @@ const App = () => {
             />
           }
         />
-        <Route path="/about" element={<About />} />
-        <Route path="/resources" element={<Resources />} />
+        <Route 
+          path="/about" 
+          element={
+            <About 
+              userLocation={fetchedUserLocation}
+            />
+          } 
+        />
+        <Route 
+          path="/resources" 
+          element={
+            <Resources
+              userLocation={fetchedUserLocation}
+            />
+          } 
+        />
         {/* if the user is signed in, allow them to see the favorites. If not, redirect them to sign in */}
         <Route
           path="/favorites"
