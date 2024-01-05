@@ -141,7 +141,6 @@ export const getUserPetFavorite = /* GraphQL */ `
         gender
         size
         description
-        imageUrl
         url
         createdAt
         updatedAt

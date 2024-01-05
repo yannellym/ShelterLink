@@ -1,16 +1,28 @@
-// Header.js
-
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../styles/Header.css';
 import ShelterLinkLogo from '../images/ShelterLinkw.png';
 
 const Header = ({ user, handleSignOut, userLocation }) => {
   const navigate = useNavigate();
+  const [previousPage, setPreviousPage] = useState('');
+
+  useEffect(() => {
+    // Update the previousPage state when the component mounts
+    setPreviousPage(window.location.pathname);
+  }, []);
 
   const handleFindAPetClick = () => {
+    // Update the previousPage state before navigating
+    setPreviousPage(window.location.pathname);
     navigate('/find-a-pet', { state: { userLocation } });
   };
+
+  const handleSignInClick = () => {
+    // Store the previousPage in local storage when the sign-in button is clicked
+    localStorage.setItem('previousPage', previousPage);
+  };
+  console.log(user, "IS USER SIGNED IN?")
 
   return (
     <header className="header">
@@ -32,8 +44,8 @@ const Header = ({ user, handleSignOut, userLocation }) => {
           {user && (<li><Link to="/profile">Profile</Link></li>)}
         </ul>
       </nav>
-      {/* User profile */}
-      <div className="user-profile">
+       {/* Sign-in button */}
+       <div className="user-profile">
         {user ? (
           <Link to="/">
             <button onClick={handleSignOut}>Sign Out</button>
@@ -41,7 +53,7 @@ const Header = ({ user, handleSignOut, userLocation }) => {
         ) : (
           <div className="nav-item">
             <Link to="/auth">
-              <button>Sign In</button>
+              <button onClick={handleSignInClick}>Sign In</button>
             </Link>
           </div>
         )}

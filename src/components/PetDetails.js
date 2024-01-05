@@ -1,17 +1,22 @@
 // card to display a detailed view of the pet's information
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import '../styles/PetDetails.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import coming_soon from "../images/coming_soon.png";
 
-const PetDetails = ({  handleToggleFavorite, favorited }) => {
+
+import { API, graphqlOperation } from 'aws-amplify';
+import { listUserPetFavorites } from '../graphql/queries';
+
+const PetDetails = ({  handleToggleFavorite }) => {
   // Extract the 'petData' from the query parameter in the URL
   const searchParams = new URLSearchParams(window.location.search);
  
   const petData = JSON.parse(decodeURIComponent(searchParams.get('petData')));
-  console.log(petData, "pet dat in petdetails")
-  const [isFavorited, setIsFavorited] = useState(favorited);
+
+  const [isFavorited, setIsFavorited] = useState(false);
+  
   if (!petData) {
     return <p className="error-message">Error: Pet not found</p>;
   }
@@ -21,7 +26,27 @@ const PetDetails = ({  handleToggleFavorite, favorited }) => {
     handleToggleFavorite(petData);
     setIsFavorited((prevIsFavorited) => !prevIsFavorited); // Update the local state
   };
-  console.log(petData, "BEFORE RENDER")
+
+
+  const fetchFavoriteState = async () => {
+    try {
+      const response = await API.graphql(graphqlOperation(listUserPetFavorites));
+      const userPetFavorites = response.data.listUserPetFavorites.items;
+
+      // Check if the current pet is in the user's favorites
+      const isPetFavorited = userPetFavorites.some(favorite => favorite.petId === String(petData.id));
+
+      // Update the local state based on whether the pet is in the user's favorites
+      setIsFavorited(isPetFavorited);
+    } catch (error) {
+      console.error('Error fetching favorite pets:', error);
+    }
+  };
+
+  // Fetch and set the initial favorite state when the component mounts
+  fetchFavoriteState();
+
+
   return (
     <div className="pet-details">
       <button

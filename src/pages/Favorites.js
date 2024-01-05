@@ -19,7 +19,6 @@ function Favorites({ user, handleToggleFavorite }) {
         const petsWithDetails = await Promise.all(
           pets.map(async (pet) => {
             const petDetails = await API.graphql(graphqlOperation(getPet, { id: pet.petId }));
-            console.log("user fav pets", petDetails)
             return petDetails.data.getPet;
           })
         );
@@ -33,6 +32,14 @@ function Favorites({ user, handleToggleFavorite }) {
     // Fetch favorite pets when the component mounts
     fetchFavoritePets();
 
+    /*
+    Like queries, subscriptions enable you to fetch data. 
+    Unlike queries, subscriptions are long-lasting operations 
+    that can change their result over time. They can maintain an active 
+    connection to your GraphQL server (most commonly via WebSocket), 
+    enabling the server to push updates to the subscription's result.
+    https://www.apollographql.com/docs/react/data/subscriptions/
+    */
     // Subscribe to new favorites and deletions
     const createSubscription = API.graphql(graphqlOperation(onCreateUserPetFavorite)).subscribe({
       next: () => fetchFavoritePets(),

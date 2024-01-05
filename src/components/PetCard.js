@@ -6,6 +6,9 @@ import coming_soon from "../images/coming_soon.png";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart} from '@fortawesome/free-solid-svg-icons';
 
+import { API, graphqlOperation } from 'aws-amplify';
+import { listUserPetFavorites } from '../graphql/queries';
+
 const PetCard = ({ pet, favorited, handleToggleFavorite }) => {
   const [isFavorited, setIsFavorited] = useState(favorited);
   const [imageSource, setImageSource] = useState(null);
@@ -43,6 +46,26 @@ const PetCard = ({ pet, favorited, handleToggleFavorite }) => {
     }
   };
 
+  const fetchFavoriteState = async () => {
+    try {
+      const response = await API.graphql(graphqlOperation(listUserPetFavorites));
+      const userPetFavorites = response.data.listUserPetFavorites.items;
+
+      // Check if the current pet is in the user's favorites
+      const isPetFavorited = userPetFavorites.some(favorite => favorite.petId === String(pet.id));
+
+      // Update the local state based on whether the pet is in the user's favorites
+      setIsFavorited(isPetFavorited);
+    } catch (error) {
+      console.error('Error fetching favorite pets:', error);
+    }
+  };
+
+  useEffect(() => {
+    // Fetch and set the initial favorite state when the component mounts
+    fetchFavoriteState();
+  }, [pet]);
+
   useEffect(() => {
     const fetchImage = async () => {
       // if the pet has at least 1 photo, set its image to one of its photos
@@ -64,7 +87,6 @@ const PetCard = ({ pet, favorited, handleToggleFavorite }) => {
     setIsFavorited((prevIsFavorited) => !prevIsFavorited); // Update the local state
   };
 
-  console.log(pet, "pet in pet card")
   return (
     <div className="pet-card">
       <Link

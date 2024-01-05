@@ -77,7 +77,6 @@ export const onCreatePet = /* GraphQL */ `
         __typename
       }
       description
-      imageUrl
       contact {
         email
         phone
@@ -114,7 +113,6 @@ export const onUpdatePet = /* GraphQL */ `
         __typename
       }
       description
-      imageUrl
       contact {
         email
         phone
@@ -151,7 +149,6 @@ export const onDeletePet = /* GraphQL */ `
         __typename
       }
       description
-      imageUrl
       contact {
         email
         phone
@@ -196,7 +193,6 @@ export const onCreateUserPetFavorite = /* GraphQL */ `
         gender
         size
         description
-        imageUrl
         url
         createdAt
         updatedAt
@@ -266,7 +262,6 @@ export const onDeleteUserPetFavorite = /* GraphQL */ `
         gender
         size
         description
-        imageUrl
         url
         createdAt
         updatedAt

@@ -34,38 +34,77 @@ import awsExports from './aws-exports.js';
 Amplify.configure(awsExports);
 
 const AuthenticatorComponent = ({ setUser, navigate }) => {
+  const location = useLocation();
+  
+
+  useEffect(() => {
+    // Check for authenticated user in localStorage
+    const storedUser = localStorage.getItem('authenticatedUser');
+
+    if (storedUser) {
+      // If stored user exists, set the user in the state
+      setUser(JSON.parse(storedUser));
+    }
+
+    // Call the function when the component mounts
+    checkUserAndNavigate();
+  }, []); // Remove [setUser] from the dependencies array
+
   const checkUserAndNavigate = async () => {
     try {
+      // Check local storage for authenticated user
+      const storedUser = localStorage.getItem('authenticatedUser');
+  
+      if (storedUser) {
+        // If user exists in local storage, set the user and navigate to '/favorites'
+        setUser(JSON.parse(storedUser));
+        navigate('/favorites');
+        return;
+      }
+  
+      // If not found in local storage, proceed with authentication
       const authenticatedUser = await Auth.currentAuthenticatedUser();
-
+      console.log(authenticatedUser, "RES ABOUT AUTHENTICATED USER");
+  
       const userData = await API.graphql(graphqlOperation(getUser, { id: authenticatedUser.attributes.sub }));
       const existingUser = userData.data.getUser;
-
+      
+    
+  
+      // If user doesn't exist in the DB, create it
       if (!existingUser) {
         const newUser = {
           id: authenticatedUser.attributes.sub,
           username: authenticatedUser.attributes.name || '',
           email: authenticatedUser.attributes.email || '',
         };
-
-        // const createdUser = await API.graphql(graphqlOperation(createUser, { input: newUser }));
-
-        navigate('/');
+  
+        const createdUser = await API.graphql(graphqlOperation(createUser, { input: newUser }));
+  
+        // Set the user locally
+        setUser(createdUser);
+  
+        // Store user in local storage
+        localStorage.setItem('authenticatedUser', JSON.stringify(createdUser));
+  
+        // Navigate to user's favorites page
+        navigate('/favorites');
       } else {
+        // set the user locally
+        setUser(authenticatedUser);
+        // Store authentication state in localStorage
+        localStorage.setItem('authenticatedUser', JSON.stringify(authenticatedUser));
+        
         const previousPage = localStorage.getItem('previousPage');
 
+  
         if (previousPage) {
           localStorage.removeItem('previousPage');
-          navigate(previousPage);
+          window.history.back(); 
         } else {
           navigate('/favorites');
         }
       }
-
-      setUser(authenticatedUser);
-
-      // Store authentication state in localStorage
-      localStorage.setItem('authenticatedUser', JSON.stringify(authenticatedUser));
     } catch (error) {
       console.error('Error checking/creating user:', error);
     }
@@ -91,11 +130,12 @@ const AuthenticatorComponent = ({ setUser, navigate }) => {
 const App = () => {
   const [favoritePets, setFavoritePets] = useState([]);
   const [showMessage, setShowMessage] = useState(true);
-  const [user, setUser] = useState(false);
+  const [user, setUser] = useState(null); //  initial state  is null
   const { userLocation: fetchedUserLocation } = useUserLocation();
 
   const location = useLocation();
   const navigate = useNavigate();
+  
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -117,10 +157,10 @@ const App = () => {
         
         // Find the user-pet-favorite entry based on petId
         const userPetFavorite = userFavoritedPets.find((entry) => entry.petId === String(petId));
-
+        console.log("is user fav ", userPetFavorite)
         if (userPetFavorite ) {
           // Remove pet from user's favorite pets
-          const response = await API.graphql(graphqlOperation(deleteUserPetFavorite, { input: { id: userPetFavorite.id} }));
+          const response = await API.graphql(graphqlOperation(deleteUserPetFavorite, { input: { id: String(userPetFavorite.id)} })); 
           console.log(response, "RES OF REMOVIGN")
           // Update the list of favorite pets in the component state
           removePetFromFavoritesState(petId);
@@ -173,7 +213,7 @@ const App = () => {
               },
               url: pet.url,
             };            
-            console.log("creating pet in DB", petInput);
+            // console.log("creating pet in DB", petInput);
  
             // Now create the pet
             const createPetResponse = await API.graphql(graphqlOperation(createPet, { input: petInput }));
@@ -183,7 +223,7 @@ const App = () => {
             }
 
             const createdPetId = createPetResponse.data.createPet.id;
-            console.log(createdPetId, "created a pet with id");
+            // console.log(createdPetId, "created a pet with id");
 
             // Link the pet to the user in userPetFavorite table
             const userPetFavoriteInput = {
@@ -195,8 +235,8 @@ const App = () => {
             const res = await API.graphql(graphqlOperation(createUserPetFavorite, { input: userPetFavoriteInput }));
             console.log(res, "res from adding to fav")
             addPetToFavoritesState({id: createdPetId})
-            console.log("adding pet, we just created it",  {id: createdPetId})
-            console.log("Pet added to user's favorites");
+            // console.log("adding pet, we just created it",  {id: createdPetId})
+            // console.log("Pet added to user's favorites");
           } else {
             // The pet already exists, link it to the user in userPetFavorite table
             const userPetFavoriteInput = {
@@ -206,9 +246,9 @@ const App = () => {
             };
 
             await API.graphql(graphqlOperation(createUserPetFavorite, { input: userPetFavoriteInput }));
-            console.log("adding pet, its already created", pet) 
+            // console.log("adding pet, its already created", pet) 
             addPetToFavoritesState(pet)
-            console.log("Pet added to user's favorites");
+            // console.log("Pet added to user's favorites");
           }
         }
       } catch (error) {
@@ -219,8 +259,7 @@ const App = () => {
       }
     } else {
       // Redirect to the authentication page
-      localStorage.setItem('previousURL', window.location.pathname);
-      localStorage.setItem('favoritePet', JSON.stringify(pet));
+      localStorage.setItem('previousPage', window.location.pathname);
       navigate('/auth');
     }
   };
@@ -240,7 +279,7 @@ const App = () => {
 
   useEffect(() => {
     if (!user && window.location.pathname === '/favorites') {
-      localStorage.setItem('previousPage', location.pathname);
+      localStorage.setItem('previousPage', window.location.pathname);
       setShowMessage(true);
       setTimeout(() => {
         setShowMessage(false);
@@ -253,12 +292,14 @@ const App = () => {
   const handleSignOut = async () => {
     try {
       await Auth.signOut();
-      setUser(false); // Clear the user state
+      setUser(null); // Clear the user state
+      localStorage.removeItem('authenticatedUser'); // Remove user info from local storage
       navigate('/');
     } catch (error) {
       console.log('Error signing out: ', error);
     }
   };
+
 
   useEffect(() => {
     console.log('Updated favoritePets:', favoritePets);

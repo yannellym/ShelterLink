@@ -25,8 +25,9 @@ const useAnimalsBasedOnPreferencesAPI = () => {
       abortController = new AbortController();
 
       const response = await fetch(apiUrl, { signal: abortController.signal });
+      
       const prefdata = await response.json();
-
+      console.log("res from form", prefdata)
       let filteredAnimals = [];
 
       try {
@@ -41,22 +42,30 @@ const useAnimalsBasedOnPreferencesAPI = () => {
             );
             return matchesTags || preferences.temperament.length === 0;
           });
+      
+          // If none of the animals match preferences, include all animals
+          if (filteredAnimals.length === 0) {
+            filteredAnimals = parsedBody.animals;
+          }
         } else {
           console.error('Invalid data received from the API:', parsedBody);
         }
       } catch (error) {
         console.error('Error parsing JSON data:', error);
       }
+      
+      console.log(filteredAnimals, "matched animals");
       // Set the preferred animals state variable with the filtered results
       setPreferredAnimals(filteredAnimals);
       // Stop retrying after the first attempt
       setLoading(false);
-    } catch (error) {
-      console.error('Error fetching pet data:', error);
-      // Stop retrying after encountering an error
-      setLoading(false);
-    }
-  };
+      
+      } catch (error) {
+        console.error('Error fetching pet data:', error);
+        // Stop retrying after encountering an error
+        setLoading(false);
+      }
+    }      
 
   const fetchAnimalsBasedOnPreferences = (preferences) => {
     setLoading(true);
