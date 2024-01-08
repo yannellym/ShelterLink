@@ -14,6 +14,9 @@ const PetDetails = ({  handleToggleFavorite }) => {
   console.log(window.location.search, "window location search in pet details");
 
   const searchParams = new URLSearchParams(window.location.search);
+  console.log('URL Search Params:', searchParams.toString());
+  console.log('Decoded Pet Data:', decodeURIComponent(searchParams.get('petData')));
+
  
   const petData = JSON.parse(decodeURIComponent(searchParams.get('petData')));
 
