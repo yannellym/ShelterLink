@@ -11,6 +11,8 @@ import { listUserPetFavorites } from '../graphql/queries';
 
 const PetDetails = ({  handleToggleFavorite }) => {
   // Extract the 'petData' from the query parameter in the URL
+  console.log(window.location.search, "window location search in pet details");
+
   const searchParams = new URLSearchParams(window.location.search);
  
   const petData = JSON.parse(decodeURIComponent(searchParams.get('petData')));
