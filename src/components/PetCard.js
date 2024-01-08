@@ -16,7 +16,7 @@ const PetCard = ({ pet, favorited, handleToggleFavorite }) => {
   const handleMoreInfoClick = () => {
     console.log("inside handle")
     // Create the URL for the new window, including the 'petData' and 'favorited' query parameters
-    const moreInfoUrl = `/pet-details/${pet.id}?petData=${encodeURIComponent(JSON.stringify(pet))}&favorited=${isFavorited}`;
+    const moreInfoUrl = `${process.env.PUBLIC_URL}/pet-details/${pet.id}?petData=${encodeURIComponent(JSON.stringify(pet))}&favorited=${isFavorited}`;
     // Open the new window with the generated URL
     const newWindow = window.open(moreInfoUrl, '_blank');
     // Check if the new window was successfully opened

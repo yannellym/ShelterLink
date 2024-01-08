@@ -1,20 +1,68 @@
 // AdoptionInfoSection.js
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import '../styles/About.css'; 
 import ShelterLinkLogo from '../images/ShelterLinknb.png';
 
-const About = (userLocation) => {
-  console.log(userLocation, "locatd passed in");
+const About = ({ userLocation }) => {
+  console.log(userLocation, "location passed in");
   const [fetchedUserLocation, setUserLocation] = useState(userLocation?.zipCode);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Update the user location state when it's fetched
     if (userLocation) {
       setUserLocation(userLocation.zipCode);
-      console.log(fetchedUserLocation, "fetch user location in")
+      console.log(fetchedUserLocation, "fetch user location in");
     }
   }, [userLocation]);
+
+  const handleViewAllPetsNearYou = ({ targetPage }) => {
+    try {
+      console.log(userLocation?.zipCode, "do we have a zip code")
+      if (userLocation) {
+        // If zipCode is available, directly navigate to the nearby_pets page
+        navigate(`/${targetPage}`, { state: { fetchedUserLocation: userLocation} });
+      } else if (navigator.geolocation) {
+        // If geolocation is supported, attempt to get the user's current position
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            const userLocation = {
+              latitude,
+              longitude,
+            };
+            navigate(`/${targetPage}`, { state: { fetchedUserLocation: userLocation } });
+          },
+          // Handle geolocation error
+        );
+      } else {
+        console.error('Geolocation is not supported by your browser');
+        // Handle the case where there is no geolocation support
+        handleZipCodeInput(targetPage);
+      }
+    } catch (error) {
+      console.error('Error:', error.message);
+    }
+  };
+
+  
+  
+  const handleZipCodeInput = (targetPage) => {
+    // Prompt the user to enter their ZIP code
+    const userEnteredZipCode = prompt('Please enter your ZIP code:');
+    if (userEnteredZipCode) {
+      const fetchedUserLocation = {
+        zipCode: userEnteredZipCode,
+      };
+      
+      navigate(`/${targetPage}`, { state: { fetchedUserLocation } });
+    } else {
+      // Handle the case where the user cancels the prompt or does not enter a ZIP code
+      console.log('User did not enter a ZIP code');
+    }
+  };
   
 
   return (
@@ -48,15 +96,16 @@ const About = (userLocation) => {
         </p>
       </div>
       <div className="clickable-squares">
-        <Link to={`/nearby_shelters?zipCode=${ userLocation?.userLocation.zipCode}`}>
+        <Link to={`/nearby_shelters?zipCode=${userLocation?.zipCode}`} className="square">
           <h3>Find a Shelter</h3>
         </Link>
         <Link to="/resources" className="square">
           <h3>Resources</h3>
         </Link>
-        <Link to="/find-a-pet" className="square">
+        <Link to="#" className="square" onClick={() => handleViewAllPetsNearYou({ targetPage: 'nearby_pets' })}>
           <h3>Pets Nearby</h3>
         </Link>
+
       </div>
     </div>
   );
