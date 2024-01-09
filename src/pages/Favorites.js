@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import '../styles/FavoritesPage.css';
 import PetCard from '../components/PetCard';
 import SadLab from '../images/sadlab.jpg';
-import { API, graphqlOperation, Auth } from 'aws-amplify';
+import { API, graphqlOperation } from 'aws-amplify';
 import { listUserPetFavorites, getPet } from '../graphql/queries';
 import { onCreateUserPetFavorite, onDeleteUserPetFavorite } from '../graphql/subscriptions';
 

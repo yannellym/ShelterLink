@@ -11,16 +11,6 @@ const Header = ({ user, handleSignOut, userLocation }) => {
   useEffect(() => {
     setPreviousPage(window.location.pathname);
 
-    // Check if the user is authenticated when the component mounts
-    const checkUserAuthentication = async () => {
-      try {
-        await Auth.currentAuthenticatedUser();
-      } catch (error) {
-        console.log(error)
-      }
-    };
- 
-    checkUserAuthentication();
   }, []);
 
   const handleFindAPetClick = () => {
