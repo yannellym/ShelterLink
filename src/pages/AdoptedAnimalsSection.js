@@ -16,7 +16,7 @@ const AdoptedAnimalsSection = () => {
         const parsedData = JSON.parse(stringData);
         const petData = JSON.parse(parsedData.body);
         console.log(petData);
-        setRecentlyAdoptedAnimals(petData.animals);
+        setRecentlyAdoptedAnimals(petData.animals); 
       } catch (error) {
         console.error('Error fetching adopted animals:', error);
       }

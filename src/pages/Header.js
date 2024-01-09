@@ -2,27 +2,37 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../styles/Header.css';
 import ShelterLinkLogo from '../images/ShelterLinkw.png';
+import { Auth } from 'aws-amplify';
 
-const Header = ({ user, handleSignOut, userLocation }) => {
+const Header = ({ handleSignOut, userLocation }) => {
   const navigate = useNavigate();
   const [previousPage, setPreviousPage] = useState('');
+  const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
 
   useEffect(() => {
-    // Update the previousPage state when the component mounts
     setPreviousPage(window.location.pathname);
+
+    // Check if the user is authenticated when the component mounts
+    const checkUserAuthentication = async () => {
+      try {
+        await Auth.currentAuthenticatedUser();
+        setIsUserAuthenticated(true);
+      } catch (error) {
+        setIsUserAuthenticated(false);
+      }
+    };
+
+    checkUserAuthentication();
   }, []);
 
   const handleFindAPetClick = () => {
-    // Update the previousPage state before navigating
     setPreviousPage(window.location.pathname);
     navigate('/find-a-pet', { state: { userLocation } });
   };
 
   const handleSignInClick = () => {
-    // Store the previousPage in local storage when the sign-in button is clicked
     localStorage.setItem('previousPage', previousPage);
   };
-  console.log(user, "IS USER SIGNED IN?")
 
   return (
     <header className="header">
@@ -35,18 +45,17 @@ const Header = ({ user, handleSignOut, userLocation }) => {
       <nav className="main-navigation">
         <ul>
           <li><Link to="/">Home</Link></li>
-          {/* Pass the userLocation as state when the link is clicked */}
           <li><Link to="/find-a-pet" onClick={handleFindAPetClick}>Find a pet</Link></li>
           <li><Link to="/about">About</Link></li>
           <li><Link to="/resources">Resources</Link></li>
-          {/* only display the profile and favorite pages if the user is signed in  */}
-          {user && (<li><Link to="/favorites">Favorites</Link></li>)}
-          {user && (<li><Link to="/profile">Profile</Link></li>)}
+          {isUserAuthenticated && <li><Link to="/favorites">Favorites</Link></li>}
+          {isUserAuthenticated && <li><Link to="/profile">Profile</Link></li>}
         </ul>
       </nav>
-       {/* Sign-in button */}
-       <div className="user-profile">
-        {user ? (
+       
+      {/* Sign-in button */}
+      <div className="user-profile">
+        {isUserAuthenticated ? (
           <Link to="/">
             <button onClick={handleSignOut}>Sign Out</button>
           </Link>

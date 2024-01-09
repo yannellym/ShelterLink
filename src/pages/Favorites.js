@@ -3,12 +3,13 @@ import { Link } from 'react-router-dom';
 import '../styles/FavoritesPage.css';
 import PetCard from '../components/PetCard';
 import SadLab from '../images/sadlab.jpg';
-import { API, graphqlOperation } from 'aws-amplify';
+import { API, graphqlOperation, Auth } from 'aws-amplify';
 import { listUserPetFavorites, getPet } from '../graphql/queries';
 import { onCreateUserPetFavorite, onDeleteUserPetFavorite } from '../graphql/subscriptions';
 
-function Favorites({ user, handleToggleFavorite }) {
+function Favorites({ handleToggleFavorite }) {
   const [favoritePets, setFavoritePets] = useState([]);
+  const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
 
   useEffect(() => {
     const fetchFavoritePets = async () => {
@@ -29,39 +30,43 @@ function Favorites({ user, handleToggleFavorite }) {
       }
     };
 
-    // Fetch favorite pets when the component mounts
-    fetchFavoritePets();
-
-    /*
-    Like queries, subscriptions enable you to fetch data. 
-    Unlike queries, subscriptions are long-lasting operations 
-    that can change their result over time. They can maintain an active 
-    connection to your GraphQL server (most commonly via WebSocket), 
-    enabling the server to push updates to the subscription's result.
-    https://www.apollographql.com/docs/react/data/subscriptions/
-    */
-    // Subscribe to new favorites and deletions
-    const createSubscription = API.graphql(graphqlOperation(onCreateUserPetFavorite)).subscribe({
-      next: () => fetchFavoritePets(),
-    });
-
-    const deleteSubscription = API.graphql(graphqlOperation(onDeleteUserPetFavorite)).subscribe({
-      next: () => fetchFavoritePets(),
-    });
-
-    // Clean up subscriptions when the component unmounts
-    return () => {
-      createSubscription.unsubscribe();
-      deleteSubscription.unsubscribe();
+    const checkUserAuthentication = async () => {
+      try {
+        await Auth.currentAuthenticatedUser();
+        setIsUserAuthenticated(true);
+      } catch (error) {
+        setIsUserAuthenticated(false);
+      }
     };
-  }, []); // Empty dependency array means this effect runs once when the component mounts
+
+    // Check if the user is authenticated and fetch favorite pets when the component mounts
+    checkUserAuthentication();
+    if (isUserAuthenticated) {
+      fetchFavoritePets();
+
+      // Subscribe to new favorites and deletions
+      const createSubscription = API.graphql(graphqlOperation(onCreateUserPetFavorite)).subscribe({
+        next: () => fetchFavoritePets(),
+      });
+
+      const deleteSubscription = API.graphql(graphqlOperation(onDeleteUserPetFavorite)).subscribe({
+        next: () => fetchFavoritePets(),
+      });
+
+      // Clean up subscriptions when the component unmounts
+      return () => {
+        createSubscription.unsubscribe();
+        deleteSubscription.unsubscribe();
+      };
+    }
+  }, [isUserAuthenticated]);
 
   return (
     <div className="pet-card-container">
       <div className="title-container">
         <h1>Favorite Pets 🐾 </h1>
       </div>
-      {favoritePets.length === 0 ? (
+      {isUserAuthenticated && favoritePets.length === 0 ? (
         <div className="message-container">
           <img src={SadLab} alt="Sad Lab" className="sad-lab-image" />
           <div className="message">
@@ -77,9 +82,8 @@ function Favorites({ user, handleToggleFavorite }) {
             <PetCard
               key={pet.id}
               pet={pet}
-              user={user}
               favorited={true}
-              handleToggleFavorite={() => handleToggleFavorite(pet)} 
+              handleToggleFavorite={() => handleToggleFavorite(pet)}
             />
           ))}
         </div>
@@ -89,3 +93,12 @@ function Favorites({ user, handleToggleFavorite }) {
 }
 
 export default Favorites;
+
+/*
+Like queries, subscriptions enable you to fetch data. 
+Unlike queries, subscriptions are long-lasting operations 
+that can change their result over time. They can maintain an active 
+connection to your GraphQL server (most commonly via WebSocket), 
+enabling the server to push updates to the subscription's result.
+https://www.apollographql.com/docs/react/data/subscriptions/
+*/

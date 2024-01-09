@@ -29,97 +29,62 @@ import { API, graphqlOperation } from 'aws-amplify';
 import { createUser,  createUserPetFavorite, deleteUserPetFavorite,  createPet } from './graphql/mutations.js';
 import { getPet, listUserPetFavorites } from './graphql/queries'; 
 
+import { AuthProvider } from './AuthContext';
+
+import Cookies from 'js-cookie';
+
 
 import awsExports from './aws-exports.js';
 Amplify.configure(awsExports);
 
 const AuthenticatorComponent = ({ setUser, navigate }) => {
-  
   useEffect(() => {
-    // Check for authenticated user in localStorage
-    const storedUser = localStorage.getItem('authenticatedUser');
-
-    if (storedUser) {
-      // If stored user exists, set the user in the state
-      setUser(JSON.parse(storedUser));
-    }
-
-    // Call the function when the component mounts
-    checkUserAndNavigate();
-  }, []); // Remove [setUser] from the dependencies array
-
-  const checkUserAndNavigate = async () => {
-    try {
-      // Check local storage for authenticated user
-      const storedUser = localStorage.getItem('authenticatedUser');
-  
-      if (storedUser) {
-        // If user exists in local storage, set the user and navigate to '/favorites'
-        setUser(JSON.parse(storedUser));
-        navigate('/favorites');
-        return;
-      }
-  
-      // If not found in local storage, proceed with authentication
-      const authenticatedUser = await Auth.currentAuthenticatedUser();
-      console.log(authenticatedUser, "RES ABOUT AUTHENTICATED USER");
-  
-      const userData = await API.graphql(graphqlOperation(getUser, { id: authenticatedUser.attributes.sub }));
-      const existingUser = userData.data.getUser;
-      
+    const checkUserAndNavigate = async () => {
+      try {
+        const storedUser = Cookies.get('authenticatedUser');
     
-  
-      // If user doesn't exist in the DB, create it
-      if (!existingUser) {
-        const newUser = {
-          id: authenticatedUser.attributes.sub,
-          username: authenticatedUser.attributes.name || '',
-          email: authenticatedUser.attributes.email || '',
-        };
-  
-        const createdUser = await API.graphql(graphqlOperation(createUser, { input: newUser }));
-  
-        // Set the user locally
-        setUser(createdUser);
-  
-        // Store user in local storage
-        localStorage.setItem('authenticatedUser', JSON.stringify(createdUser));
-  
-        // Navigate to user's favorites page
-        navigate('/favorites');
-      } else {
-        // set the user locally
-        setUser(authenticatedUser);
-        // Store authentication state in localStorage
-        localStorage.setItem('authenticatedUser', JSON.stringify(authenticatedUser));
-        
-        const previousPage = localStorage.getItem('previousPage');
-
-  
-        if (previousPage) {
-          localStorage.removeItem('previousPage');
-          window.history.back(); 
-        } else {
+        if (storedUser) {
+          setUser(JSON.parse(storedUser));
           navigate('/favorites');
+          return;
         }
+    
+        const authenticatedUser = await Auth.currentAuthenticatedUser();
+        const userData = await API.graphql(graphqlOperation(getUser, { id: authenticatedUser.attributes.sub }));
+        const existingUser = userData.data.getUser;
+    
+        if (!existingUser) {
+          const newUser = {
+            id: authenticatedUser.attributes.sub,
+            username: authenticatedUser.attributes.name || '',
+            email: authenticatedUser.attributes.email || '',
+          };
+    
+          const createdUser = await API.graphql(graphqlOperation(createUser, { input: newUser }));
+    
+          setUser(createdUser);
+          Cookies.set('authenticatedUser', JSON.stringify(createdUser));
+          navigate('/favorites');
+        } else {
+          setUser(authenticatedUser);
+          Cookies.set('authenticatedUser', JSON.stringify(authenticatedUser));
+    
+          // Check if there is a stored page from previous navigation
+          const previousPage = localStorage.getItem('previousPage');
+    
+          if (previousPage) {
+            localStorage.removeItem('previousPage');
+            navigate(previousPage);
+          } else {
+            navigate('/favorites');
+          }
+        }
+      } catch (error) {
+        console.error('Error checking/creating user:', error);
       }
-    } catch (error) {
-      console.error('Error checking/creating user:', error);
-    }
-  };
-
-  useEffect(() => {
-    // Check for authenticated user in localStorage
-    const storedUser = localStorage.getItem('authenticatedUser');
-
-    if (storedUser) {
-      // If stored user exists, set the user in the state
-      setUser(JSON.parse(storedUser));
-    }
-
-    // Call the function when the component mounts
+    };    
     checkUserAndNavigate();
-  }, [setUser]);
+  }, [setUser, navigate]);
 
   return null;
 };
@@ -276,8 +241,8 @@ const App = () => {
   };
 
   useEffect(() => {
-    if (!user && window.location.pathname === '/favorites') {
-      localStorage.setItem('previousPage', window.location.pathname);
+    if (!user && localStorage.getItem('previousPage') === '/favorites') {
+      localStorage.setItem('previousPage', '/favorites');
       setShowMessage(true);
       setTimeout(() => {
         setShowMessage(false);
@@ -285,18 +250,21 @@ const App = () => {
       }, 2000); // Wait for 2 seconds before redirecting
     }
   }, [user, location, navigate, favoritePets]);
+  
 
   // Function to handle sign-out
   const handleSignOut = async () => {
     try {
       await Auth.signOut();
-      setUser(null); // Clear the user state
-      localStorage.removeItem('authenticatedUser'); // Remove user info from local storage
+      setUser(null);
+      Cookies.remove('authenticatedUser');
+      localStorage.removeItem('previousPage');
       navigate('/');
     } catch (error) {
       console.log('Error signing out: ', error);
     }
   };
+  
 
 
   useEffect(() => {
@@ -348,7 +316,7 @@ const App = () => {
         {/* if the user is signed in, allow them to see the favorites. If not, redirect them to sign in */}
         <Route
           path="/favorites"
-          element={
+          element={ 
             user ? (
               <Favorites
                 handleToggleFavorite={handleToggleFavorite}
@@ -405,4 +373,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default App; 
