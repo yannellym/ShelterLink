@@ -10,7 +10,8 @@ const SheltersNearbyPage = ({ userLocation }) => {
   // Prioritize the ZIP code from the state object
   const passedInLocation = location.state?.fetchedUserLocation?.zipCode || new URLSearchParams(location.search).get('zipCode');
   console.log(passedInLocation, "passedInLocation");
-
+  
+  
   useEffect(() => {
     console.log('Zip Code:', passedInLocation);
   }, [passedInLocation]);

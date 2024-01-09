@@ -9,10 +9,9 @@ import userAvatar from '../images/user_icon.png';
   returns: 
 */
 //TODO: set userAvatar as photo in case the response fails
-const Profile = () => {
+const Profile = ({user}) => {
   const [randomPhoto, setRandomPhoto] = useState(null);
-  const user = Auth.user;
-  console.log(user)
+  console.log(user.attributes)
   useEffect(() => {
     const fetchRandomPhoto = async () => {
       try {

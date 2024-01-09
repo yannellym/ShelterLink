@@ -15,7 +15,7 @@ const AdoptedAnimalsSection = () => {
         const stringData = JSON.stringify(dataRaw);
         const parsedData = JSON.parse(stringData);
         const petData = JSON.parse(parsedData.body);
-        console.log(petData);
+        // console.log(petData);
         setRecentlyAdoptedAnimals(petData.animals); 
       } catch (error) {
         console.error('Error fetching adopted animals:', error);
@@ -29,7 +29,7 @@ const AdoptedAnimalsSection = () => {
     dots: false,
     infinite: true,
     speed: 500,
-    slidesToShow: Math.min(3, recentlyAdoptedAnimals.length),
+    slidesToShow: Math.min(3, recentlyAdoptedAnimals.length) || 1,
     slidesToScroll: 1,
     autoplay: true, // Enable autoplay
     autoplaySpeed: 3000, // Set autoplay speed in milliseconds

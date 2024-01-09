@@ -19,6 +19,7 @@ const PetDetails = ({  handleToggleFavorite }) => {
 
  
   const petData = JSON.parse(decodeURIComponent(searchParams.get('petData')));
+  console.log(petData)
 
   const [isFavorited, setIsFavorited] = useState(false);
   
@@ -85,7 +86,8 @@ const PetDetails = ({  handleToggleFavorite }) => {
         )}
         </div>
       </div>
-      <p>{petData.description}</p>
+     {/* Comment: dangerouslySetInnerHTML is used to replace innerHTML in React and should be used with care. */}
+      <p dangerouslySetInnerHTML={{ __html: petData.description }}></p>
       <div className="petfinder-button">
         <a href={petData.url} target="_blank" rel="noopener noreferrer">
           <span> I want {petData.gender === "Female" ? "her" : "him"}! </span>

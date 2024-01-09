@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import '../styles/AdoptionInfoSection.css';
 
-function ResourcesSection() {
+function AdoptionInfoSection() {
   return (
     <div className="adoption-info-section">
       <div className="adoption-info-card">
@@ -26,4 +26,4 @@ function ResourcesSection() {
   );
 }
 
-export default ResourcesSection;
+export default AdoptionInfoSection;

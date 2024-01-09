@@ -10,7 +10,7 @@ import { API, graphqlOperation } from 'aws-amplify';
 import { listUserPetFavorites } from '../graphql/queries';
 
 const PetCard = ({ pet, favorited, handleToggleFavorite }) => {
-  const [isFavorited, setIsFavorited] = useState(favorited);
+  const [isFavorited, setIsFavorited] = useState(false);
   const [imageSource, setImageSource] = useState(null);
 
   const handleMoreInfoClick = () => {

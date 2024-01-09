@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import SearchBar from '../components/SearchBar';
 import CategoryCard from '../components/CategoryCard';
 import NoLocationCard from '../components/NoLocationCard'; 
-import ResourcesSection from './ResourcesSection';
+import AdoptionInfoSection from './AdoptionInfoSection';
 import AdoptedAnimalsSection from './AdoptedAnimalsSection';
 import UserPreferencesForm from '../components/UserPreferencesForm';
 import PetCard from '../components/PetCard';
@@ -24,9 +24,9 @@ function Home({ userLocation, userPreferences, handleToggleFavorite, user, favor
   const [loading, setLoading] = useState(true);
   const [selectedAnimals, setSelectedAnimals] = useState([]);
   const [selectedPetIndex, setSelectedPetIndex] = useState(0);
-  const [fetchedUserLocation, setUserLocation] = useState(userLocation?.zipCode);
+  const [fetchedUserLocation, setUserLocation] = useState(userLocation);
   const navigate = useNavigate();
-  
+
   const { data: petData } = usePetFinderAPI(
     'https://2hghsit103.execute-api.us-east-1.amazonaws.com/default', []
   );
@@ -48,7 +48,7 @@ function Home({ userLocation, userPreferences, handleToggleFavorite, user, favor
   useEffect(() => {
     // Update the user location state when it's fetched
     if (userLocation) {
-      setUserLocation(userLocation.zipCode);
+      setUserLocation(userLocation);
     }
   }, [userLocation]);
 
@@ -56,25 +56,43 @@ function Home({ userLocation, userPreferences, handleToggleFavorite, user, favor
   useEffect(() => {
     if (petData && petData.body) {
       const responseBody = JSON.parse(petData.body);
+      
       if (responseBody.animals) {
         setLoading(false);
-          
-      // Filter and slice to get animals with photos
-      const animalsWithPhotos = responseBody.animals.filter((animal) => animal.photos.length > 1).slice(0,4);
-      // If there are not enough animals with photos, get additional animals
-      const additionalAnimals = responseBody.animals.slice(0, Math.max(0, 4 - animalsWithPhotos.length));
-      // Concatenate the arrays and slice to ensure exactly 4 pets
-      const allAnimals = animalsWithPhotos.concat(additionalAnimals).slice(0, 4);
-      // set these as our animals to display
-      setSelectedAnimals(allAnimals);
+  
+        const uniqueIds = new Set();
+        const uniqueAnimals = [];
+  
+        // Filter and slice to get animals with photos
+        const animalsWithPhotos = responseBody.animals.filter((animal) => animal.photos.length > 1).slice(0, 4);
+  
+        // If there are not enough animals with photos, get additional animals
+        const additionalAnimals = responseBody.animals.slice(0, Math.max(0, 4 - animalsWithPhotos.length));
+  
+        // Concatenate the arrays and slice to ensure exactly 4 pets
+        const allAnimals = animalsWithPhotos.concat(additionalAnimals).slice(0, 4);
+  
+        // Check for duplicates before adding to uniqueAnimals
+        allAnimals.forEach((animal) => {
+          if (!uniqueIds.has(animal.id)) {
+            uniqueIds.add(animal.id);
+            uniqueAnimals.push(animal);
+          }
+        });
+  
+        // set these as our animals to display
+        setSelectedAnimals(uniqueAnimals);
       }
     }
   }, [petData]);
+  
+  
 
   /* function that fetches animals based on user's selected location
   parameters: 
   returns: 
   */
+ console.log("fetched use loc", fetchedUserLocation)
   const handleViewAllPetsNearYou = ({ targetPage }) => {
     try {
       if (fetchedUserLocation) {
@@ -122,7 +140,7 @@ function Home({ userLocation, userPreferences, handleToggleFavorite, user, favor
       console.log('User did not enter a ZIP code');
     }
   };
-  
+ 
 
   return (
     <div className="Home">
@@ -183,7 +201,7 @@ function Home({ userLocation, userPreferences, handleToggleFavorite, user, favor
               <CategoryCard
                 title="Shelters nearby"
                 imageSrc={paw}
-                link={`/nearby_shelters?zipCode=${fetchedUserLocation?.zipCode || userLocation.zipCode}`}
+                link={`/nearby_shelters?zipCode=${fetchedUserLocation?.zipCode || userLocation?.zipCode }`}
               />
             ) : (
               <NoLocationCard  
@@ -198,7 +216,7 @@ function Home({ userLocation, userPreferences, handleToggleFavorite, user, favor
         </div>
         <div className="resources-section">
           <h1> Resources:</h1>
-          <ResourcesSection />
+          <AdoptionInfoSection />
         </div>
         <div className="greater-need-for-love-section">
           <h3>Pets with greater need for love:</h3>
