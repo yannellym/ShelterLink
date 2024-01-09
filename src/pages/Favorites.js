@@ -7,9 +7,8 @@ import { API, graphqlOperation, Auth } from 'aws-amplify';
 import { listUserPetFavorites, getPet } from '../graphql/queries';
 import { onCreateUserPetFavorite, onDeleteUserPetFavorite } from '../graphql/subscriptions';
 
-function Favorites({ handleToggleFavorite }) {
+function Favorites({ user, handleToggleFavorite }) {
   const [favoritePets, setFavoritePets] = useState([]);
-  const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
 
   useEffect(() => {
     const fetchFavoritePets = async () => {
@@ -30,18 +29,7 @@ function Favorites({ handleToggleFavorite }) {
       }
     };
 
-    const checkUserAuthentication = async () => {
-      try {
-        await Auth.currentAuthenticatedUser();
-        setIsUserAuthenticated(true);
-      } catch (error) {
-        setIsUserAuthenticated(false);
-      }
-    };
-
-    // Check if the user is authenticated and fetch favorite pets when the component mounts
-    checkUserAuthentication();
-    if (isUserAuthenticated) {
+    if (user) {
       fetchFavoritePets();
 
       // Subscribe to new favorites and deletions
@@ -59,14 +47,14 @@ function Favorites({ handleToggleFavorite }) {
         deleteSubscription.unsubscribe();
       };
     }
-  }, [isUserAuthenticated]);
+  }, [user]);
 
   return (
     <div className="pet-card-container">
       <div className="title-container">
         <h1>Favorite Pets 🐾 </h1>
       </div>
-      {isUserAuthenticated && favoritePets.length === 0 ? (
+      {user && favoritePets.length === 0 ? (
         <div className="message-container">
           <img src={SadLab} alt="Sad Lab" className="sad-lab-image" />
           <div className="message">

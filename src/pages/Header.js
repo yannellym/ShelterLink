@@ -4,10 +4,9 @@ import '../styles/Header.css';
 import ShelterLinkLogo from '../images/ShelterLinkw.png';
 import { Auth } from 'aws-amplify';
 
-const Header = ({ handleSignOut, userLocation }) => {
+const Header = ({ user, handleSignOut, userLocation }) => {
   const navigate = useNavigate();
   const [previousPage, setPreviousPage] = useState('');
-  const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
 
   useEffect(() => {
     setPreviousPage(window.location.pathname);
@@ -16,12 +15,11 @@ const Header = ({ handleSignOut, userLocation }) => {
     const checkUserAuthentication = async () => {
       try {
         await Auth.currentAuthenticatedUser();
-        setIsUserAuthenticated(true);
       } catch (error) {
-        setIsUserAuthenticated(false);
+        console.log(error)
       }
     };
-
+ 
     checkUserAuthentication();
   }, []);
 
@@ -48,14 +46,14 @@ const Header = ({ handleSignOut, userLocation }) => {
           <li><Link to="/find-a-pet" onClick={handleFindAPetClick}>Find a pet</Link></li>
           <li><Link to="/about">About</Link></li>
           <li><Link to="/resources">Resources</Link></li>
-          {isUserAuthenticated && <li><Link to="/favorites">Favorites</Link></li>}
-          {isUserAuthenticated && <li><Link to="/profile">Profile</Link></li>}
+          {user && <li><Link to="/favorites">Favorites</Link></li>}
+          {user && <li><Link to="/profile">Profile</Link></li>}
         </ul>
       </nav>
        
       {/* Sign-in button */}
       <div className="user-profile">
-        {isUserAuthenticated ? (
+        {user? (
           <Link to="/">
             <button onClick={handleSignOut}>Sign Out</button>
           </Link>

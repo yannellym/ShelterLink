@@ -41,53 +41,49 @@ const AuthenticatorComponent = ({ setUser, navigate }) => {
   useEffect(() => {
     const checkUserAndNavigate = async () => {
       try {
-        const storedUser = Cookies.get('authenticatedUser');
-    
+        // Check if the user is already authenticated
+        const storedUser = JSON.parse(localStorage.getItem('user'));
+        console.log('Stored User:', storedUser);
         if (storedUser) {
-          setUser(JSON.parse(storedUser));
-          navigate('/favorites');
-          return;
-        }
-    
-        const authenticatedUser = await Auth.currentAuthenticatedUser();
-        const userData = await API.graphql(graphqlOperation(getUser, { id: authenticatedUser.attributes.sub }));
-        const existingUser = userData.data.getUser;
-    
-        if (!existingUser) {
-          const newUser = {
-            id: authenticatedUser.attributes.sub,
-            username: authenticatedUser.attributes.name || '',
-            email: authenticatedUser.attributes.email || '',
-          };
-    
-          const createdUser = await API.graphql(graphqlOperation(createUser, { input: newUser }));
-    
-          setUser(createdUser);
-          Cookies.set('authenticatedUser', JSON.stringify(createdUser));
+          setUser(storedUser);
           navigate('/favorites');
         } else {
-          setUser(authenticatedUser);
-          Cookies.set('authenticatedUser', JSON.stringify(authenticatedUser));
-    
-          // Check if there is a stored page from previous navigation
-          const previousPage = localStorage.getItem('previousPage');
-    
-          if (previousPage) {
-            localStorage.removeItem('previousPage');
-            navigate(previousPage);
+          // If not authenticated, check and authenticate the user
+          const authenticatedUser = await Auth.currentAuthenticatedUser();
+          const userData = await API.graphql(graphqlOperation(getUser, { id: authenticatedUser.attributes.sub }));
+          const existingUser = userData.data.getUser;
+
+          if (!existingUser) {
+            const newUser = {
+              id: authenticatedUser.attributes.sub,
+              username: authenticatedUser.attributes.name || '',
+              email: authenticatedUser.attributes.email || '',
+            };
+
+            const createdUser = await API.graphql(graphqlOperation(createUser, { input: newUser }));
+
+            setUser(createdUser);
+            // Store the user in local storage
+            localStorage.setItem('user', JSON.stringify(createdUser));
+            navigate('/favorites');
           } else {
+            setUser(authenticatedUser);
+            // Store the user in local storage
+            localStorage.setItem('user', JSON.stringify(authenticatedUser));
             navigate('/favorites');
           }
         }
       } catch (error) {
         console.error('Error checking/creating user:', error);
       }
-    };    
+    };
+
     checkUserAndNavigate();
   }, [setUser, navigate]);
 
   return null;
 };
+
 
 
 const App = () => {
@@ -99,7 +95,7 @@ const App = () => {
   const location = useLocation();
   const navigate = useNavigate();
   
-
+  console.log(user, "USER IN APP")
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location]);
@@ -256,8 +252,10 @@ const App = () => {
   const handleSignOut = async () => {
     try {
       await Auth.signOut();
+      console.log("signing out")
       setUser(null);
-      Cookies.remove('authenticatedUser');
+      // Remove user information from local storage
+      localStorage.removeItem('user');
       localStorage.removeItem('previousPage');
       navigate('/');
     } catch (error) {
@@ -267,12 +265,14 @@ const App = () => {
   
 
 
-  useEffect(() => {
-    console.log('Updated favoritePets:', favoritePets);
-  }, [favoritePets]);
+  // useEffect(() => {
+  //   console.log('Updated favoritePets:', favoritePets);
+  // }, [favoritePets]);
 
   return (
     <div>
+      {/* Render the AuthenticatorComponent for user check on every render */}
+      <AuthenticatorComponent setUser={setUser} /> 
       <Header user={user} handleSignOut={handleSignOut} />
       <Routes>
         <Route
