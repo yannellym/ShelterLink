@@ -120,7 +120,7 @@ const PetCard = ({ pet, favorited, handleToggleFavorite }) => {
         {pet.description && pet.description.length > 0 ? (
           <p className="pet-card-description">
             {pet.description && pet.description.length > 100
-              ? `${pet.description.substring(0, 100)}...`
+              ? `${pet.description.substring(0, 90)} ...`
               : `${pet.description}`}
           </p>
         ) : (

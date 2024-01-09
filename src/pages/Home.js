@@ -234,7 +234,7 @@ function Home({ userLocation, userPreferences, handleToggleFavorite, user, favor
             ))}
             {fetchedUserLocation || userLocation ? (
             <button onClick={() => handleViewAllPetsNearYou({ targetPage: 'nearby_pets' })}  className="all-pets-near-card">
-              <img width="64" height="64" src="https://img.icons8.com/sf-black/64/right.png" alt="right" />
+              <img width="50" height="50" src="https://img.icons8.com/ios-filled/50/FFFFFF/arrow.png" alt="arrow"/>
               <p><strong>View all available pets near you.</strong></p>
             </button>
             ) : (

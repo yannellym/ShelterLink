@@ -2,7 +2,10 @@
     max-width: 1000px;
     margin: 0 auto;
   }
-  
+  h2 {
+    font-size: 30px;
+    padding: 4%;
+  }
   .adopted-animals {
     position: relative;
     overflow: hidden;
@@ -27,7 +30,7 @@
   }
 
   .red-text {
-    color:red;
+    color:#ea1328;
   }
 
 
@@ -72,7 +75,7 @@
     position: absolute;
     top: 10px;
     left: 10px;
-    background-color: #ac1362d2; 
+    background-color: #d90c20c2; 
     padding: 5px;
     border-radius: 5px;
     font-weight: bold;

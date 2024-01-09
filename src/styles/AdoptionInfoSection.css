@@ -1,20 +1,20 @@
 /* AdoptionInfoSection.css */
 .adoption-info-section {
   display: flex;
-  padding: 2% 5%;
+  padding: 0% 5%;
   justify-content: space-between;
   margin-top: 30px;
 }
 
 .adoption-info-card {
   flex: 1;
-  background-color: rgb(255, 255, 255);
+  background-color: rgb(255, 255, 255); 
   padding: 40px;
-  border-radius: 5px;
-  box-shadow: 4px 2px 14px rgba(0, 0, 0, 0.262);
+  border-radius: 6px;
+  box-shadow: 4px 2px 14px rgba(0, 0, 0, 0.14);
   text-align: center;
   margin: 10px;
-  color: rgb(0, 0, 0);
+  color: #ff0800;
 }
 
 .adoption-info-card h3 {
@@ -27,18 +27,4 @@
   margin: 0 0 15px;
   font-size: 16px;
   color: #1e1e1e;
-}
-
-.learn-more-link {
-  display: inline-block;
-  padding: 8px 16px;
-  background-color: #ff0800;
-  color: #fff;
-  text-decoration: none;
-  border-radius: 5px;
-  transition: background-color 0.2s;
-}
-
-.learn-more-link:hover {
-  background-color: black;
 }

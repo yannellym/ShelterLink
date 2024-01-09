@@ -10,8 +10,8 @@
 /* pet links section */
 .section-links-div {
   width: 100vw;
-  height: 35vh;
-  background-color: rgb(0, 0, 0);
+  height: 53vh;
+  background-color: #0dbeb2;
 }
 .section-links-div > h3 {
   font-size: 34px;
@@ -22,8 +22,7 @@
 /* adopted-animals-section  */
 .adopted-animals-section {
   width: 100vw;
-  height: 40vh;
-  background-color: rgba(255, 255, 255, 0.109);
+  height: 50vh;
   color: rgb(0, 0, 0);
 }
 
@@ -31,7 +30,7 @@
 .greater-need-for-love-section {
   width: 100vw;
   height: 60vh;
-  background-color: rgba(200, 82, 36, 0.309);
+  background-color: rgba(255, 255, 255, 0.309);
   font-size: 30px; 
   color: rgb(0, 0, 0);
 }
@@ -42,12 +41,13 @@
 /* resources section */
 .resources-section {
   width: 100vw;
-  height: 55vh;
-  background-color: rgb(0, 0, 0);
+  height: 45vh;
+  background-color: #0dbeb2;
 }
 .resources-section > h1 {
   color: white;
   font-size: 30px;
+  padding: 2%;
 }
 
 /* inner divs */
@@ -56,9 +56,16 @@
   margin-left: 10vw;
   width: 80vw;
 }
-.section-links-inner-div{
-  display: flex;
+
+.section-links-inner-div {
+  margin : 2% 13%;
+  display: grid;
+  grid-template-rows: repeat(2, 1fr);
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2.5vw;
+  padding: 1vw;
 }
+
 .background-image {
   position: absolute;
   top: 0;
@@ -141,7 +148,7 @@
 .all-pets-near-card {
   flex-direction: column;
   align-items: center;
-  background-color: #ffffff;
+  background-color: #110204;
   padding: 10px;
   border-radius: 5px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
@@ -155,12 +162,13 @@
 .all-pets-near-card:hover {
   transform: translateY(-5px);
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.15);
+  background-color: #ea1328;
 }
 
 .all-pets-near-card p {
   margin-top: 5px;
   font-size: 14px;
-  color: #ff0000;
+  color: #ffffff;
 }
 .all-pets-near-card img {
   max-width: 100%;

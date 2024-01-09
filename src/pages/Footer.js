@@ -20,7 +20,9 @@ function Footer() {
           <li>Adopting Pets</li>
           <li>Animal Shelters & Rescues</li>
           <li>Other Types of Pets</li>
-          <li><strong>Adopt</strong></li>
+          <button  onClick={() => window.location.href = "https://profiles.petfinder.com/subscription/subscribe/brand/PF?sc=PFOptinFooter201707&_gl=1*dfpi6t*_ga*MjEyMjEyMTk4OC4xNjkzNTE0MTg0*_ga_5H1R91DP2Q*MTY5NzEyODE2Ni4zMi4xLjE2OTcxMjg0MzkuMC4wLjA."}>
+            ADOPT
+          </button>
         </ul>
       </div>
       <div className="footer-section">
@@ -39,12 +41,16 @@ function Footer() {
           <li>Foster Resources</li>
           <li>Foster Group</li>
           <li>FAQs</li>
-          <li><strong>Foster</strong></li>
+          <button  onClick={() => window.location.href = "https://profiles.petfinder.com/subscription/subscribe/brand/PF?sc=PFOptinFooter201707&_gl=1*dfpi6t*_ga*MjEyMjEyMTk4OC4xNjkzNTE0MTg0*_ga_5H1R91DP2Q*MTY5NzEyODE2Ni4zMi4xLjE2OTcxMjg0MzkuMC4wLjA."}>
+            FOSTER
+          </button>
         </ul>
       </div>
       <div className="footer-section">
         <h4>To get the latest on pet adoption and pet care, sign up for the Petfinder newsletter.</h4>
-        <a href="https://profiles.petfinder.com/subscription/subscribe/brand/PF?sc=PFOptinFooter201707&_gl=1*dfpi6t*_ga*MjEyMjEyMTk4OC4xNjkzNTE0MTg0*_ga_5H1R91DP2Q*MTY5NzEyODE2Ni4zMi4xLjE2OTcxMjg0MzkuMC4wLjA." className="sign-up-link">SIGN UP</a>
+        <button className="sign-up-button" onClick={() => window.location.href = "https://profiles.petfinder.com/subscription/subscribe/brand/PF?sc=PFOptinFooter201707&_gl=1*dfpi6t*_ga*MjEyMjEyMTk4OC4xNjkzNTE0MTg0*_ga_5H1R91DP2Q*MTY5NzEyODE2Ni4zMi4xLjE2OTcxMjg0MzkuMC4wLjA."}>
+          SIGN UP
+        </button>
       </div>
     </footer>
   );

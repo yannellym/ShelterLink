@@ -33,16 +33,7 @@
   margin-bottom: 10px;
 }
 
-.sign-up-link {
-  display: inline-block;
-  padding: 10px 20px;
-  background-color: #ff0800;
-  color: #fff;
-  text-decoration: none;
-  border-radius: 5px;
-  transition: background-color 0.2s;
-}
 
-.sign-up-link:hover{
-  background-color: #ff3d3d;
+button:hover{
+  background-color: #ff0019;;
 }
