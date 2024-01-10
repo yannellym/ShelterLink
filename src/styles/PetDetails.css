@@ -1,12 +1,28 @@
-/* Container styling */
+.pet-details-container {
+  display: flex;
+  margin: 40px;
+}
+
 .pet-details {
-  background-color: #fff;
-  padding: 20px;
+  background-color: #ffffff;
+  padding: 40px;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  margin: 20px auto;
-  max-width: 800px;
-  position: relative; 
+  margin: 20px 20px 20px 0; /* Adjust the margin to provide space on the right */
+  max-width: 900px;
+  position: relative;
+  width: 70%;
+}
+
+.side-panel {
+  width: 30%;
+  padding: 30px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  height: 30%;
+  margin: 20vh 0; /* Adjust the margin to center vertically */
+  background-color: #0db9ad;
+  color: white;
 }
 
 /* Name and ID container */
@@ -85,10 +101,6 @@
   margin: 0 auto;
 }
 
-/* Petfinder button */
-.petfinder-button a:hover {
-  text-decoration: underline;
-}
 
 .petfinder-button {
   text-align: center;
@@ -98,7 +110,7 @@
 .petfinder-button a {
   display: inline-block;
   padding: 15px 30px;
-  background-color: #ff5a5f;
+  background-color:  #fb061e;
   color: white;
   font-size: 18px;
   text-decoration: none;
@@ -106,26 +118,41 @@
   transition: background-color 0.3s ease;
 }
 
-.petfinder-button a:hover {
-  background-color: #ff3338;
-}
 
-.petfinder-button a span {
-  transition: transform 0.3s ease;
-}
-
-.petfinder-button a:hover span {
+.petfinder-button :hover {
   transform: scale(1.05);
 }
 
 /* Favorite heart */
-.favorite-heart {
-  position: absolute; 
-  top: 10px;
-  right: 10px;
+.favorite-heart-details-unfavorited,
+.favorite-heart-details-favorited {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgb(242, 241, 241);
   font-size: 24px;
   cursor: pointer;
   border: none;
-  color: #ff0000;
-  z-index: 1;
+  position: absolute;
+  top: 4%;
+  right: 5px;
+  transform: translate(-50%, -50%); /* Center the heart icon */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: rgba(247, 176, 176, 0.485);
+}
+.favorite-heart-details-unfavorited:hover,
+.favorite-heart-details-favorited:hover {
+  background-color: #ffffff; 
+  box-shadow: 0 0 10px 5px rgba(248, 168, 168, 0.861);
+}
+.favorite-heart-details-favorited {
+  color: #ea1328; 
+}
+.shareBtn{
+  position: absolute;
+  bottom: 1%;
+  right: 1%;
+  margin: 10px;
 }

@@ -29,10 +29,6 @@ import { API, graphqlOperation } from 'aws-amplify';
 import { createUser,  createUserPetFavorite, deleteUserPetFavorite,  createPet } from './graphql/mutations.js';
 import { getPet, listUserPetFavorites } from './graphql/queries'; 
 
-import { AuthProvider } from './AuthContext';
-
-import Cookies from 'js-cookie';
-
 
 import awsExports from './aws-exports.js';
 Amplify.configure(awsExports);
@@ -46,7 +42,6 @@ const AuthenticatorComponent = ({ setUser, navigate }) => {
         console.log('Stored User:', storedUser);
         if (storedUser) {
           setUser(storedUser);
-          navigate('/favorites');
         } else {
           // If not authenticated, check and authenticate the user
           const authenticatedUser = await Auth.currentAuthenticatedUser();
@@ -335,9 +330,9 @@ const App = () => {
           path="/auth"
           element={
             <div className="auth-container">
-              <Authenticator>
+              <Authenticator   socialProviders={['facebook', 'google']}>
                 {() => <AuthenticatorComponent setUser={setUser} navigate={navigate} />}
-              </Authenticator>
+              </Authenticator> 
             </div>
           }
         />

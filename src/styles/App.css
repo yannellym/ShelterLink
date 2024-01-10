@@ -24,15 +24,10 @@ body {
   flex-direction: column;
   min-height: 60vh;
   margin: 0 auto;
-  background-color: #036564; /* Auth container background color */
+  background-color: #9ee6e616; /* Auth container background color */
 }
 
-.auth-content {
-  flex: 1;
-  background-color: #031634; /* Auth content background color */
-  color: #e8ddcb; /* Auth content text color */
-}
-/* Button style */
+/* button style */
 button {
   background-color: #ea1328; /* Button color */
   color: #ffffff; /* Button text color */
@@ -41,4 +36,8 @@ button {
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
+}
+
+button:hover {
+  background-color: #fb061e; /* Button color */
 }

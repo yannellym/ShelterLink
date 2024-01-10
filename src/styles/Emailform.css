@@ -1,0 +1,40 @@
+.form-group {
+    margin-bottom: 15px;
+  }
+  
+  .bottom_text {
+    color: white;
+  }
+  .block-label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  
+  .shelter-email {
+    display: block;
+    font-style: italic;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  input, textarea {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+  }
+  
+  textarea {
+    height: 100px;
+    resize: none; /* Disable textarea resizing */
+  }
+  .button-container {
+    text-align: center; /* Center align the button within its container */
+  }
+  .inquiry_btn:disabled {
+    background-color: #dddddd;
+    cursor: not-allowed;
+    color: rgb(124, 124, 124);
+  }
+  
