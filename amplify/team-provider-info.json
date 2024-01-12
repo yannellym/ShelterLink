@@ -23,7 +23,7 @@
         "lambdaapi": {},
         "email": {
           "deploymentBucketName": "amplify-amplifye47021affd174-staging-161834-deployment",
-          "s3Key": "amplify-builds/email-51467134465438617a78-build.zip"
+          "s3Key": "amplify-builds/email-6a352b53494f6c6c3762-build.zip"
         }
       },
       "storage": {
