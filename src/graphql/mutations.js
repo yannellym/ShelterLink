@@ -342,6 +342,7 @@ export const deleteUserPetFavorite = /* GraphQL */ `
         gender
         size
         description
+        imageUrl
         url
         createdAt
         updatedAt

@@ -9,17 +9,14 @@ const EmailForm = ({ petData, onSendEmail }) => {
     const defaultMessage = 
     `Hi, my name is ${storedUser.attributes.name}. I'm interested in adopting ${petData.name} and would love more information about their background, temperament, and the adoption process. Thank you!`;
 
-    const [userEmail, setUserEmail] = useState('');
     const [message, setMessage] = useState(defaultMessage);
-
+    const subject = `Inquiry for ${petData.name} ID: ${petData.id}`
 
     const handleSendEmail = () => {
+        console.log(storedUser.attributes.email, petData.contact.email, subject, message)
         // Call the provided onSendEmail function with user's email and message
-        onSendEmail(userEmail, message);
-
-        // Optionally, you can clear the form fields after sending the email
-        setUserEmail('');
-        
+        onSendEmail(storedUser.attributes.email, petData.contact.email, subject, message);
+    
         // Update the state to indicate that the email has been sent
         setEmailSent(true);
     };

@@ -20,7 +20,11 @@
           "deploymentBucketName": "amplify-amplifye47021affd174-staging-161834-deployment",
           "s3Key": "amplify-builds/petfOrganizations-584a39666a62416a3375-build.zip"
         },
-        "lambdaapi": {}
+        "lambdaapi": {},
+        "email": {
+          "deploymentBucketName": "amplify-amplifye47021affd174-staging-161834-deployment",
+          "s3Key": "amplify-builds/email-51467134465438617a78-build.zip"
+        }
       },
       "storage": {
         "shelterLinkDB": {}

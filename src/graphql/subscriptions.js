@@ -68,6 +68,7 @@ export const onCreatePet = /* GraphQL */ `
       name
       age
       gender
+      status
       size
       breeds {
         primary
@@ -76,7 +77,22 @@ export const onCreatePet = /* GraphQL */ `
         unknown
         __typename
       }
+      attributes {
+        declawed
+        house_trained
+        shots_current
+        spayed_neutered
+        special_needs
+        __typename
+      }
       description
+      photos {
+        full
+        large
+        medium
+        small
+        __typename
+      }
       contact {
         email
         phone
@@ -104,6 +120,7 @@ export const onUpdatePet = /* GraphQL */ `
       name
       age
       gender
+      status
       size
       breeds {
         primary
@@ -112,7 +129,22 @@ export const onUpdatePet = /* GraphQL */ `
         unknown
         __typename
       }
+      attributes {
+        declawed
+        house_trained
+        shots_current
+        spayed_neutered
+        special_needs
+        __typename
+      }
       description
+      photos {
+        full
+        large
+        medium
+        small
+        __typename
+      }
       contact {
         email
         phone
@@ -140,6 +172,7 @@ export const onDeletePet = /* GraphQL */ `
       name
       age
       gender
+      status
       size
       breeds {
         primary
@@ -148,7 +181,22 @@ export const onDeletePet = /* GraphQL */ `
         unknown
         __typename
       }
+      attributes {
+        declawed
+        house_trained
+        shots_current
+        spayed_neutered
+        special_needs
+        __typename
+      }
       description
+      photos {
+        full
+        large
+        medium
+        small
+        __typename
+      }
       contact {
         email
         phone
@@ -191,6 +239,7 @@ export const onCreateUserPetFavorite = /* GraphQL */ `
         name
         age
         gender
+        status
         size
         description
         url
@@ -225,9 +274,9 @@ export const onUpdateUserPetFavorite = /* GraphQL */ `
         name
         age
         gender
+        status
         size
         description
-        imageUrl
         url
         createdAt
         updatedAt
@@ -260,6 +309,7 @@ export const onDeleteUserPetFavorite = /* GraphQL */ `
         name
         age
         gender
+        status
         size
         description
         url

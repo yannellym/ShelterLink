@@ -68,6 +68,7 @@ const PetCard = ({ pet, favorited, handleToggleFavorite }) => {
     fetchFavoriteState();
   }, [pet]);
 
+ 
   useEffect(() => {
     const fetchImage = async () => {
       // if the pet has at least 1 photo, set its image to one of its photos
@@ -88,7 +89,7 @@ const PetCard = ({ pet, favorited, handleToggleFavorite }) => {
     handleToggleFavorite(pet); // Call the parent component function
     setIsFavorited((prevIsFavorited) => !prevIsFavorited); // Update the local state
   };
-
+  console.log(pet, "pet dt received")
   return (
     <div className="pet-card">
       <Link

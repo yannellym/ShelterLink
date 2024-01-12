@@ -100,7 +100,7 @@ const App = () => {
   // if yes, add it to the user's favorite pets
   const handleToggleFavorite = async (pet) => {
     if (user) {
-
+      console.log(user, "user stored")
       try {
         const userId = user.attributes.sub;
         const petId = pet.id;
@@ -330,7 +330,7 @@ const App = () => {
           path="/auth"
           element={
             <div className="auth-container">
-              <Authenticator   socialProviders={['facebook', 'google']}>
+              <Authenticator>
                 {() => <AuthenticatorComponent setUser={setUser} navigate={navigate} />}
               </Authenticator> 
             </div>

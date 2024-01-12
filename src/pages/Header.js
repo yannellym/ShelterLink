@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../styles/Header.css';
 import ShelterLinkLogo from '../images/ShelterLinkw.png';
-import { Auth } from 'aws-amplify';
-
 const Header = ({ user, handleSignOut, userLocation }) => {
   const navigate = useNavigate();
   const [previousPage, setPreviousPage] = useState('');

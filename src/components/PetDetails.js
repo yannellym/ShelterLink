@@ -39,9 +39,32 @@ const PetDetails = ({  handleToggleFavorite }) => {
     setIsFavorited((prevIsFavorited) => !prevIsFavorited); // Update the local state
   };
 
-  const handleSendEmail = (userEmail, message) => {
-    // Here, you can perform the logic to send the email using your preferred method/API
-    console.log(`Sending email to ${petData.contact.email} from ${userEmail} with message: ${message}`);
+  const handleSendEmail = async (from, to, subject, text) => {
+    try {
+      // Make a request to your backend API endpoint
+      const response = await fetch('YOUR_BACKEND_API_ENDPOINT', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          from,
+          to,
+          subject,
+          text,
+        }),
+      });
+  
+      if (response.ok) {
+        console.log('Email sent successfully');
+        // Optionally, you can handle success, e.g., show a confirmation message
+      } else {
+        console.error('Failed to send email');
+        // Optionally, you can handle errors, e.g., show an error message
+      }
+    } catch (error) {
+      console.error('Error sending email:', error);
+    }
   };
 
 
