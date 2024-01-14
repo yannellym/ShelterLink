@@ -11,7 +11,7 @@ import { listUserPetFavorites } from '../graphql/queries';
 
 import EmailForm from '../components/EmailForm'; 
 
-const PetDetails = ({  handleToggleFavorite }) => {
+const PetDetails = ({  handleToggleFavorite, isAuthenticated }) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const handleShareClick = () => {
@@ -38,35 +38,6 @@ const PetDetails = ({  handleToggleFavorite }) => {
     handleToggleFavorite(petData);
     setIsFavorited((prevIsFavorited) => !prevIsFavorited); // Update the local state
   };
-
-  const handleSendEmail = async (from, to, subject, text) => {
-    try {
-      // Make a request to your backend API endpoint
-      const response = await fetch('YOUR_BACKEND_API_ENDPOINT', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          from,
-          to,
-          subject,
-          text,
-        }),
-      });
-  
-      if (response.ok) {
-        console.log('Email sent successfully');
-        // Optionally, you can handle success, e.g., show a confirmation message
-      } else {
-        console.error('Failed to send email');
-        // Optionally, you can handle errors, e.g., show an error message
-      }
-    } catch (error) {
-      console.error('Error sending email:', error);
-    }
-  };
-
 
   const fetchFavoriteState = async () => {
     try {
@@ -167,10 +138,12 @@ const PetDetails = ({  handleToggleFavorite }) => {
         )}
       </div>
       {/* Right side with email form and share button */}
-      <div className="side-panel">
-        {/* Email Shelter form */}
-        <EmailForm petData={petData} onSendEmail={handleSendEmail} />
-      </div>
+      { isAuthenticated && // only show form if the user is authenticated
+        <div className="side-panel">
+          {/* Email Shelter form */}
+          <EmailForm petData={petData} />
+        </div>
+      }
     </div>
   );
 };
