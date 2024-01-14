@@ -12,8 +12,9 @@ const EmailForm = ({ petData }) => {
 
     const sendEmail = async (toEmail, fromEmail, subject, message) => {
         const templateParams = {
-            to_name: toEmail,  // Modify with the actual recipient's name
-            from_name: fromEmail,     // Modify with your name
+            to_name: toEmail,  
+            from_name: fromEmail,     
+            subject: subject,
             message,
         };
 
@@ -22,7 +23,7 @@ const EmailForm = ({ petData }) => {
 
     const handleSendEmail = async () => {
         try {
-            await sendEmail('ab.luis04@gmail.com', storedUser.attributes.email, subject, message);
+            await sendEmail('mercadoyannelly@gmail.com', storedUser.attributes.email, subject, message);
             setEmailSent(true);
         } catch (error) {
             console.error('Error sending email:', error);
