@@ -2,6 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../styles/Header.css';
 import ShelterLinkLogo from '../images/ShelterLinkw.png';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faComments} from '@fortawesome/free-solid-svg-icons';
+
+
 const Header = ({ user, handleSignOut, userLocation }) => {
   const navigate = useNavigate();
   const [previousPage, setPreviousPage] = useState('');
@@ -38,7 +42,9 @@ const Header = ({ user, handleSignOut, userLocation }) => {
           {user && <li><Link to="/profile">Profile</Link></li>}
         </ul>
       </nav>
-       
+      <div className="forum-div">
+        <Link className="forum-heading" to="/forum">Forum <FontAwesomeIcon icon={faComments} /></Link>
+      </div>
       {/* Sign-in button */}
       <div className="user-profile">
         {user? (

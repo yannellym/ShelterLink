@@ -14,11 +14,9 @@ const PetCard = ({ pet, favorited, handleToggleFavorite }) => {
   const [imageSource, setImageSource] = useState(null);
 
   const handleMoreInfoClick = () => {
-    console.log("inside handle")
     // Create the URL for the new window, including the 'petData' and 'favorited' query parameters
     const moreInfoUrl = `${process.env.PUBLIC_URL}/pet-details/${pet.id}?petData=${encodeURIComponent(JSON.stringify(pet))}&favorited=${isFavorited}`;
-    console.log(moreInfoUrl, "URL IN PET CARD")
-    
+
     // Open the new window with the generated URL
     const newWindow = window.open(moreInfoUrl, '_blank');
     // Check if the new window was successfully opened
@@ -85,11 +83,10 @@ const PetCard = ({ pet, favorited, handleToggleFavorite }) => {
   }, [pet]);
   
   const handleToggleFavoriteClick = () => {
-    console.log("clicked heart toggle")
     handleToggleFavorite(pet); // Call the parent component function
     setIsFavorited((prevIsFavorited) => !prevIsFavorited); // Update the local state
   };
-  console.log(pet, "pet dt received")
+
   return (
     <div className="pet-card">
       <Link

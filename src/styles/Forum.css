@@ -1,0 +1,53 @@
+
+/* Forum.css */
+
+.forum-container {
+  display: flex;
+  width: 100%;
+}
+
+.topics-list {
+  width: 250px;
+  background-color: #f0f0f0;
+  padding: 20px;
+}
+
+.scrollable-list {
+  max-height: 700px;
+  overflow-y: auto;
+}
+
+.topics-list h2 {
+  margin-bottom: 10px;
+}
+
+.topics-list div {
+  margin-bottom: 10px;
+  padding: 8px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.indiv-topic:hover {
+  background-color: #ddd;
+}
+
+.thread-container {
+  flex-grow: 1;
+  padding: 20px;
+}
+
+.post {
+  background-color: #f0f0f0;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 8px;
+}
+
+textarea {
+  width: 100%;
+  margin-top: 10px;
+  padding: 8px;
+  border-radius: 4px;
+}

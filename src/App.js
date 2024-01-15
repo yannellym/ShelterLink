@@ -16,6 +16,7 @@ import Faqs from './pages/Faqs.js';
 import PetFoster from './pages/PetFoster.js';
 import NearbyShelters from './pages/NearbyShelters.js';
 import NearbyPets from './pages/NearbyPets.js';
+import Forum from './pages/Forum.js';
 import useUserLocation from './hooks/useUserLocation.js';
 
 import './styles/App.css';
@@ -42,6 +43,7 @@ const AuthenticatorComponent = ({ setUser, navigate }) => {
         console.log('Stored User:', storedUser);
         if (storedUser) {
           setUser(storedUser);
+          navigate('/favorites');
         } else {
           // If not authenticated, check and authenticate the user
           const authenticatedUser = await Auth.currentAuthenticatedUser();
@@ -259,11 +261,6 @@ const App = () => {
   };
   
 
-
-  // useEffect(() => {
-  //   console.log('Updated favoritePets:', favoritePets);
-  // }, [favoritePets]);
-
   return (
     <div>
       {/* Render the AuthenticatorComponent for user check on every render */}
@@ -325,7 +322,29 @@ const App = () => {
             )
           }
         />
-        {user && <Route path="/profile" element={<Profile user={user} />} />}
+        {user && <Route 
+          path="/profile" 
+          element={
+            <Profile user={user} 
+            />
+          } 
+        />}
+        {/* if the user is signed in, allow them to see the favorites. If not, redirect them to sign in */}
+        <Route
+          path="/forum"
+          element={ 
+            // user ? (
+              <Forum
+                user={user}
+              />
+            // ) : (
+            //   <div>
+            //     {showMessage && <h1>Please log in first to view favorites!</h1>}
+            //     <h1>Redirecting to sign in page ... </h1>
+            //   </div>
+            // )
+          }
+        />
         <Route
           path="/auth"
           element={
