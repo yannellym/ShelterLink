@@ -1,5 +1,11 @@
 
 /* Forum.css */
+.centered-image {
+  display: block;
+  margin: 10% auto;
+  width: 40vw;
+  height: 40vh;
+}
 
 .forum-container {
   display: flex;
@@ -32,21 +38,56 @@
 .indiv-topic:hover {
   background-color: #ddd;
 }
+.write-post-div {
+  width: 40vw;
+}
 
 .thread-container {
-  flex-grow: 1;
-  padding: 20px;
+  flex: 2;
+  padding: 10px;
+  border: red solid 3px;
+  overflow-y: auto;
+}
+.post-container {
+  display: flex;
 }
 
 .post {
-  background-color: #f0f0f0;
-  padding: 10px;
-  margin-top: 10px;
-  border-radius: 8px;
+  margin: 10px;
+  border-radius: 8px; 
+  padding: 1% 3%;
+  width: 90%;
+  height: 90%;
+}
+
+.left-image {
+  width: 200px;
+  height: 10vh;
+  margin: 2% 1%;
+  
+}
+.right-image {
+  width: 200px;
+  height: 10vh;
+  margin: 2% 1%;
+}
+
+.even {
+  background-color: #0dbeb230;
+  margin-left: 2%; /* padding to the left for even-indexed posts */
+}
+
+.odd {
+  background-color: #ea13283a;
+  margin-right: 2%; /*padding to the right for odd-indexed posts */
+}
+
+.write-post-div {
+  margin-top: 20px;
 }
 
 textarea {
-  width: 100%;
+  width: calc(100% - 16px); 
   margin-top: 10px;
   padding: 8px;
   border-radius: 4px;
