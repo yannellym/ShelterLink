@@ -111,35 +111,37 @@ const Forum = () => {
       </div>
       <div className="thread-container">
         {selectedTopic ? (
-              <div>
-              <h3>Current topic: {selectedTopic.title}</h3>
-              {selectedTopic.posts && 
-                <p>{selectedTopic.welcomeMessage}</p>
-              }
-              <div className="write-post-div">
-                <h4>Create a post:</h4>
-                <div className="post-input-container">
-                  <input
-                    type="text"
-                    value={newSubject}
-                    onChange={(e) => setNewSubject(e.target.value)}
-                    placeholder="Subject"
-                    className="post-input"
-                  />
-                  <textarea
-                    value={newPost}
-                    onChange={(e) => setNewPost(e.target.value)}
-                    placeholder="Write your post..."
-                    className="post-textarea"
-                  />
-                </div>
-                <div className="post-bottom-container">
-                  <p>Character Count: {charCount}</p>
-                  <button onClick={handlePostSubmit} className="post-button">
-                    Post
-                  </button>
-                </div>
+          <div>
+          <h3>Current Thread: <text> {selectedTopic.title}</text></h3>
+          {selectedTopic.posts && 
+            <p>{selectedTopic.welcomeMessage}</p>
+          }
+          <h4>Create a post:</h4>
+          <div className="write-post-div">
+            <div className="post-input-container">
+              <input
+                type="text"
+                value={newSubject}
+                onChange={(e) => setNewSubject(e.target.value)}
+                placeholder="Subject"
+                className="post-input"
+              />
+              <textarea
+                value={newPost}
+                onChange={(e) => setNewPost(e.target.value)}
+                placeholder="Write your post..."
+                className="post-textarea"
+              />
+              <div className="post-bottom-container">
+                <p>Date: {new Date().toLocaleDateString()}</p>
+                <p>Character Count: {charCount}</p>
+                <button onClick={handlePostSubmit} className="post-button">
+                  Post
+                </button>
               </div>
+            </div>
+          </div>
+          <div className="previous-posts-container">
             <h3>Current posts:</h3>
             {topics.map((topic) => (
               <div key={topic.id}>
@@ -155,10 +157,17 @@ const Forum = () => {
                               <p>
                                 {expandedPosts.includes(index) ? post.content : (
                                   <>
-                                    {post.content.length > 100 ? `${post.content.substring(0, 100)}...` : post.content}
-                                    <span className="read-more" onClick={() => handleReadMore(index)}>
-                                      Read more
-                                    </span>
+                                    {post.content.length > 200 ?  // if post is longer than 200 chars, truncate it and display the "read more" button
+                                      ( 
+                                        <div>`${post.content.substring(0, 200)} ... `  
+                                        <span className="read-more" onClick={() => handleReadMore(index)}>
+                                          Read more
+                                        </span>
+                                        </div> 
+                                      ) 
+                                      : 
+                                      post.content
+                                    }
                                   </>
                                 )}
                               </p>
@@ -174,7 +183,7 @@ const Forum = () => {
                               <p>
                                 {expandedPosts.includes(index) ? post.content : (
                                   <>
-                                    {post.content.length > 200 ? `${post.content.substring(0, 200)}...` : post.content}
+                                    {post.content.length > 200 ? `${post.content.substring(0, 200)} ... ` : post.content}
                                     <span className="read-more" onClick={() => handleReadMore(index)}>
                                       Read more
                                     </span>
@@ -192,6 +201,7 @@ const Forum = () => {
               </div>
             ))}
             </div>
+          </div>
           ) : (
             <div className="welcome-div">
               <h1> Welcome to our community forums! <br/> Please select a topic to join the discussion. </h1>
