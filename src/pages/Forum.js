@@ -12,22 +12,72 @@ const Forum = () => {
 
   const sortedTopics = topicsList.sort((a, b) => a.localeCompare(b));
 
-  const [topics, setTopics] = useState(sortedTopics.map((topic, index) => ({
-    id: index + 1,
-    title: topic,
-    posts: [{
-      id: Date.now(),
-      subject: `Welcome to the ${topic} forum!`,
-      content: 'Feel free to share your thoughts.',
-      user: { id: 1, username: 'JohnDoe' },
-      image :'https://thumbs.dreamstime.com/b/new-burst-5707187.jpg'
-    }]
-  })));
+  const [topics, setTopics] = useState(sortedTopics.map((topic, index) => (
+    {
+      id: index + 1,
+      title: topic,
+      threads: Array.from({ length: 35}, (_, i) => ({
+        id: i + 1,
+        title: `Thread ${i + 1}`,
+        posts: [{
+          id: Date.now(),
+          subject: `Welcome to ${topic} Thread ${i + 1}!`,
+          content: 'Feel free to share your thoughts.',
+          user: { id: 1, username: 'JohnDoe' },
+          image: 'https://thumbs.dreamstime.com/b/new-burst-5707187.jpg'
+        }]
+      })).map(thread => ({ ...thread, posts: [] })) // Ensure that posts is initialized as an array
+    }
+  )));
 
   const [selectedTopic, setSelectedTopic] = useState(null);
   const [newPost, setNewPost] = useState('');
   const [expandedPosts, setExpandedPosts] = useState([]);
   const [charCount, setCharCount] = useState(0);
+  const [selectedThread, setSelectedThread] = useState(null);
+
+  const handleThreadSelection = (thread) => {
+    setSelectedThread(thread);
+  };
+
+  // const handleThreadPostSubmit = async () => {
+  //   if (!selectedThread) {
+  //     alert('Please select a thread before posting.');
+  //     return;
+  //   } 
+  //   // Fetch placeholder image for the selected thread
+  //   const image = await fetchPlaceholderImage(selectedThread.title);
+
+  //   const newPostData = {
+  //     id: Date.now(),
+  //     subject: newSubject,
+  //     content: newPost,
+  //     user: { id: 1, username: 'JohnDoe' },
+  //     image, // Assign the fetched image to the post
+  //   };
+
+  //   setTopics((prevTopics) =>
+  //     prevTopics.map((topic) =>
+  //       topic.title === selectedTopic.title
+  //         ? {
+  //             ...topic,
+  //             threads: topic.threads.map((thread) =>
+  //               thread.title === selectedThread.title
+  //                 ? {
+  //                     ...thread,
+  //                     posts: [newPostData, ...thread.posts], // Prepend new post to existing posts
+  //                   }
+  //                 : thread
+  //             ),
+  //           }
+  //         : topic
+  //     )
+  //   );
+
+  //   setNewSubject('');
+  //   setNewPost('');
+  // };
+
 
   const handleReadMore = (index) => {
     setExpandedPosts((prevExpanded) => [...prevExpanded, index]);
@@ -35,23 +85,24 @@ const Forum = () => {
 
   const handleTopicSelection = (topic) => {
     setSelectedTopic(topic);
+    setSelectedThread(null); // Reset selected thread when a new topic is selected
   };
-
+ 
   const handlePostSubmit = async () => {
-    if (!selectedTopic) {
-      alert('Please select a topic before posting.');
+    if (!selectedThread) {
+      alert('Please select a thread before posting.');
       return;
     }
   
-    // Fetch placeholder image for the selected topic
-    const image = await fetchPlaceholderImage(selectedTopic.title);
+    // Fetch placeholder image for the selected thread
+    const image = await fetchPlaceholderImage(selectedThread.title);
   
     const newPostData = {
       id: Date.now(),
       subject: newSubject,
       content: newPost,
       user: { id: 1, username: 'JohnDoe' },
-      image, // Assign the fetched image to the post
+      image,
     };
   
     setTopics((prevTopics) =>
@@ -59,11 +110,27 @@ const Forum = () => {
         topic.title === selectedTopic.title
           ? {
               ...topic,
-              posts: [newPostData, ...topic.posts], // Prepend new post to existing posts
+              threads: topic.threads.map((thread) =>
+                thread.title === selectedThread.title
+                  ? {
+                      ...thread,
+                      posts: [newPostData, ...thread.posts], // Prepend new post to existing posts
+                    }
+                  : thread
+              ),
             }
           : topic
       )
     );
+  
+    // Set the selected thread to the one with the new post
+    setSelectedThread((prevSelectedThread) => ({
+      ...prevSelectedThread,
+      posts: [newPostData, ...prevSelectedThread.posts],
+    }));
+  
+    // Reset expandedPosts to ensure the new post is visible
+    setExpandedPosts([]);
   
     setNewSubject('');
     setNewPost('');
@@ -103,114 +170,136 @@ const Forum = () => {
         <h2>Topics</h2>
         <div className="scrollable-list">
           {sortedTopics.map((topic) => (
-            <div key={topic} onClick={() => handleTopicSelection({ title: topic })} className="indiv-topic">
+            <div
+              key={topic}
+              onClick={() => handleTopicSelection({ title: topic, threads: topics.find(t => t.title === topic)?.threads })}
+              className="indiv-topic"
+            >
               {topic}
             </div>
           ))}
         </div>
       </div>
-      <div className="thread-container">
-        {selectedTopic ? (
-          <div>
-          <h3>Current Thread: <text> {selectedTopic.title}</text></h3>
-          {selectedTopic.posts && 
-            <p>{selectedTopic.welcomeMessage}</p>
-          }
-          <h4>Create a post:</h4>
-          <div className="write-post-div">
-            <div className="post-input-container">
-              <input
-                type="text"
-                value={newSubject}
-                onChange={(e) => setNewSubject(e.target.value)}
-                placeholder="Subject"
-                className="post-input"
-              />
-              <textarea
-                value={newPost}
-                onChange={(e) => setNewPost(e.target.value)}
-                placeholder="Write your post..."
-                className="post-textarea"
-              />
-              <div className="post-bottom-container">
-                <p>Date: {new Date().toLocaleDateString()}</p>
-                <p>Character Count: {charCount}</p>
-                <button onClick={handlePostSubmit} className="post-button">
-                  Post
-                </button>
-              </div>
-            </div>
-          </div>
-          <div className="previous-posts-container">
-            <h3>Current posts:</h3>
-            {topics.map((topic) => (
-              <div key={topic.id}>
-                {topic.title === selectedTopic.title &&
-                  topic.posts && topic.posts.map((post, index) => (
-                    <div className="post-container" key={post.id}>
-                      {index % 2 === 0 ? ( // If index is even, align image to the left
-                        <>
-                          <img src={post.image} alt={post.subject} className="left-image" />
-                          <div className={`post ${index % 2 === 0 ? 'even' : 'odd'}`}>
-                            <div className="post-content">
-                              <h4>{post.subject.toUpperCase()}</h4>
-                              <p>
-                                {expandedPosts.includes(index) ? post.content : (
-                                  <>
-                                    {post.content.length > 200 ?  // if post is longer than 200 chars, truncate it and display the "read more" button
-                                      ( 
-                                        <div>`${post.content.substring(0, 200)} ... `  
-                                        <span className="read-more" onClick={() => handleReadMore(index)}>
-                                          Read more
-                                        </span>
-                                        </div> 
-                                      ) 
-                                      : 
-                                      post.content
-                                    }
-                                  </>
-                                )}
-                              </p>
-                              <p>Posted by: {post.user.username} on {new Date(post.id).toLocaleDateString()} @ {new Date(post.id).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
-                            </div>
-                          </div>
-                        </>
-                      ) : ( // If index is odd, align image to the right
-                        <>
-                          <div className={`post ${index % 2 === 0 ? 'even' : 'odd'}`}>
-                            <div className="post-content">
-                              <h4>{post.subject.toUpperCase()}</h4>
-                              <p>
-                                {expandedPosts.includes(index) ? post.content : (
-                                  <>
-                                    {post.content.length > 200 ? `${post.content.substring(0, 200)} ... ` : post.content}
-                                    <span className="read-more" onClick={() => handleReadMore(index)}>
-                                      Read more
-                                    </span>
-                                  </>
-                                )}
-                              </p>
-                              <p>Posted by: {post.user.username} on {new Date(post.id).toLocaleDateString()} @ {new Date(post.id).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
-                            </div>
-                          </div>
-                          <img src={post.image} alt={post.subject} className="right-image" />
-                        </>
-                      )}
-                    </div>
-                  ))}
+      {selectedTopic && !selectedThread && (
+        <div className="thread-container">
+          <h3>Selected topic: {selectedTopic.title}</h3>
+          <p>Choose a discussion to participate </p>
+          <div className="threads-list">
+            {selectedTopic.threads && selectedTopic.threads.map((thread) => (
+              <div
+                key={thread.id}
+                onClick={() => handleThreadSelection(thread)}
+                className={`indiv-thread ${selectedThread === thread ? 'selected' : ''}`}
+              >
+                {thread.title}
               </div>
             ))}
+          </div>
+        </div>
+      )}
+      {selectedThread && (
+        <div className="make-post-container">
+          <h3> Topic: {selectedTopic.title}, {selectedThread.title}</h3>
+          <div>
+            <h4>Create a post:</h4>
+            <div className="write-post-div">
+              <div className="post-input-container">
+                <input
+                  type="text"
+                  value={newSubject}
+                  onChange={(e) => setNewSubject(e.target.value)}
+                  placeholder="Subject"
+                  className="post-input"
+                />
+                <textarea
+                  value={newPost}
+                  onChange={(e) => setNewPost(e.target.value)}
+                  placeholder="Write your post..."
+                  className="post-textarea"
+                />
+                <div className="post-bottom-container">
+                  <p>Date: {new Date().toLocaleDateString()}</p>
+                  <p>Character Count: {charCount}</p>
+                  <button onClick={handlePostSubmit} className="post-button">
+                    Post
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div className="previous-posts-container">
+              <h3>Current posts:</h3>
+              {selectedThread.posts &&
+                selectedThread.posts.map((post, index) => (
+                  <div className="post-container" key={post.id}>
+                    {index % 2 === 0 ? (
+                      // If index is even, align image to the left
+                      <>
+                        <img src={post.image} alt={post.subject} className="left-image" />
+                        <div className={`post ${index % 2 === 0 ? 'even' : 'odd'}`}>
+                          <div className="post-content">
+                            <h4>{post.subject.toUpperCase()}</h4>
+                            <p>
+                              {expandedPosts.includes(index) ? post.content : (
+                                <>
+                                  {post.content.length > 200 ? (
+                                    <div>
+                                      {post.content.substring(0, 200)} ...
+                                      <span className="read-more" onClick={() => handleReadMore(index)}>
+                                        Read more
+                                      </span>
+                                    </div>
+                                  ) : (
+                                    post.content
+                                  )}
+                                </>
+                              )}
+                            </p>
+                            <p>
+                              Posted by: {post.user.username} on {new Date(post.id).toLocaleDateString()} @{' '}
+                              {new Date(post.id).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </p>
+                          </div>
+                        </div>
+                      </>
+                    ) : (
+                      // If index is odd, align image to the right
+                      <>
+                        <div className={`post ${index % 2 === 0 ? 'even' : 'odd'}`}>
+                          <div className="post-content">
+                            <h4>{post.subject.toUpperCase()}</h4>
+                            <p>
+                              {expandedPosts.includes(index) ? post.content : (
+                                <>
+                                  {post.content.length > 200 ? `${post.content.substring(0, 200)} ... ` : post.content}
+                                  <span className="read-more" onClick={() => handleReadMore(index)}>
+                                    Read more
+                                  </span>
+                                </>
+                              )}
+                            </p>
+                            <p>
+                              Posted by: {post.user.username} on {new Date(post.id).toLocaleDateString()} @{' '}
+                              {new Date(post.id).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </p>
+                          </div>
+                        </div>
+                        <img src={post.image} alt={post.subject} className="right-image" />
+                      </>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-          ) : (
-            <div className="welcome-div">
-              <h1> Welcome to our community forums! <br/> Please select a topic to join the discussion. </h1>
-              <img src={bd4} alt="bulldog" className="centered-image" />
-            </div>
-          )}
-        </div>
+        )}
+        {!selectedTopic && !selectedThread && (
+          <div className="welcome-div">
+            <h1> Welcome to our community forums! <br /> Please select a topic to join the discussion. </h1>
+            <img src={bd4} alt="bulldog" className="centered-image" />
+          </div>
+        )}
       </div>
     );
-  }
-  
-  export default Forum;
+  };  
+
+export default Forum;

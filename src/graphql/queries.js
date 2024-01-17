@@ -48,12 +48,14 @@ export const getPet = /* GraphQL */ `
       name
       age
       gender
+      status
       size
       breeds {
         primary
         secondary
         mixed
         unknown
+        __typename
       }
       attributes {
         declawed
@@ -61,6 +63,7 @@ export const getPet = /* GraphQL */ `
         shots_current
         spayed_neutered
         special_needs
+        __typename
       }
       description
       photos {
@@ -68,23 +71,21 @@ export const getPet = /* GraphQL */ `
         large
         medium
         small
+        __typename
       }
       contact {
-        address {
-          address1
-          address2
-          city
-          state
-        }
         email
         phone
+        __typename
       }
       url
       favoriteUsers {
         id
         userId
+        petId
         createdAt
         updatedAt
+        __typename
       }
       createdAt
       updatedAt
@@ -92,8 +93,6 @@ export const getPet = /* GraphQL */ `
     }
   }
 `;
-
-
 export const listPets = /* GraphQL */ `
   query ListPets(
     $filter: ModelPetFilterInput
@@ -106,9 +105,9 @@ export const listPets = /* GraphQL */ `
         name
         age
         gender
+        status
         size
         description
-        imageUrl
         url
         createdAt
         updatedAt
@@ -139,9 +138,9 @@ export const getUserPetFavorite = /* GraphQL */ `
         name
         age
         gender
+        status
         size
         description
-        imageUrl
         url
         createdAt
         updatedAt
@@ -168,6 +167,181 @@ export const listUserPetFavorites = /* GraphQL */ `
         userId
         petId
         createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+export const getForum = /* GraphQL */ `
+  query GetForum($id: ID!) {
+    getForum(id: $id) {
+      id
+      title
+      description
+      topics {
+        id
+        title
+        createdAt
+        updatedAt
+        __typename
+      }
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const listForums = /* GraphQL */ `
+  query ListForums(
+    $filter: ModelForumFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listForums(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        title
+        description
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+export const getTopic = /* GraphQL */ `
+  query GetTopic($id: ID!) {
+    getTopic(id: $id) {
+      id
+      title
+      forum {
+        id
+        title
+        description
+        createdAt
+        updatedAt
+        __typename
+      }
+      threads {
+        id
+        createdAt
+        updatedAt
+        __typename
+      }
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const listTopics = /* GraphQL */ `
+  query ListTopics(
+    $filter: ModelTopicFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listTopics(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        title
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+export const getThread = /* GraphQL */ `
+  query GetThread($id: ID!) {
+    getThread(id: $id) {
+      id
+      topic {
+        id
+        title
+        createdAt
+        updatedAt
+        __typename
+      }
+      posts {
+        id
+        subject
+        content
+        createdAt
+        Favorited
+        updatedAt
+        __typename
+      }
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const listThreads = /* GraphQL */ `
+  query ListThreads(
+    $filter: ModelThreadFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listThreads(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+export const getPost = /* GraphQL */ `
+  query GetPost($id: ID!) {
+    getPost(id: $id) {
+      id
+      subject
+      content
+      user {
+        id
+        username
+        email
+        createdAt
+        updatedAt
+        __typename
+      }
+      thread {
+        id
+        createdAt
+        updatedAt
+        __typename
+      }
+      createdAt
+      Favorited
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const listPosts = /* GraphQL */ `
+  query ListPosts(
+    $filter: ModelPostFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listPosts(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        subject
+        content
+        createdAt
+        Favorited
         updatedAt
         __typename
       }

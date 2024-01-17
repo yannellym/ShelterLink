@@ -81,6 +81,7 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 # axios
 # unplash api for profile image and to generate images for animals that dont have one
 # graphQL subscriptions (instead of polling for small changes thus saving $,Low-latency, real-time updates. )
-# NosQL -DynamoDB
+# NosQL -DynamoDB for filtering pets
+# RDS for community forum, elastiCache clister for faster read performance
 
 
