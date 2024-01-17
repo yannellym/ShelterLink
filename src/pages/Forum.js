@@ -16,68 +16,82 @@ const Forum = () => {
     {
       id: index + 1,
       title: topic,
-      threads: Array.from({ length: 35}, (_, i) => ({
-        id: i + 1,
-        title: `Thread ${i + 1}`,
-        posts: [{
-          id: Date.now(),
-          subject: `Welcome to ${topic} Thread ${i + 1}!`,
-          content: 'Feel free to share your thoughts.',
-          user: { id: 1, username: 'JohnDoe' },
-          image: 'https://thumbs.dreamstime.com/b/new-burst-5707187.jpg'
-        }]
-      })).map(thread => ({ ...thread, posts: [] })) // Ensure that posts is initialized as an array
+      threads: Array.from({ length: 35 }, (_, i) => {
+        const timestamp = new Date().toLocaleString()
+        return {
+          id: i + 1,
+          title: `Thread ${i + 1}`,
+          timestamp,
+          posts: [{
+            id: Date.now(),
+            subject: `Welcome to ${topic} Thread ${i + 1}!`,
+            content: 'Feel free to share your thoughts.',
+            user: { id: 1, username: 'JohnDoe' },
+            image: 'https://thumbs.dreamstime.com/b/new-burst-5707187.jpg'
+          }]
+        };
+      }).map(thread => ({ ...thread, posts: [] })) // Ensure that posts is initialized as an array
     }
   )));
+  
 
   const [selectedTopic, setSelectedTopic] = useState(null);
   const [newPost, setNewPost] = useState('');
   const [expandedPosts, setExpandedPosts] = useState([]);
   const [charCount, setCharCount] = useState(0);
   const [selectedThread, setSelectedThread] = useState(null);
+  const [showNewThreadModal, setShowNewThreadModal] = useState(false);
+  const [creatingNewThread, setCreatingNewThread] = useState(false);
 
   const handleThreadSelection = (thread) => {
     setSelectedThread(thread);
   };
 
-  // const handleThreadPostSubmit = async () => {
-  //   if (!selectedThread) {
-  //     alert('Please select a thread before posting.');
-  //     return;
-  //   } 
-  //   // Fetch placeholder image for the selected thread
-  //   const image = await fetchPlaceholderImage(selectedThread.title);
-
-  //   const newPostData = {
-  //     id: Date.now(),
-  //     subject: newSubject,
-  //     content: newPost,
-  //     user: { id: 1, username: 'JohnDoe' },
-  //     image, // Assign the fetched image to the post
-  //   };
-
-  //   setTopics((prevTopics) =>
-  //     prevTopics.map((topic) =>
-  //       topic.title === selectedTopic.title
-  //         ? {
-  //             ...topic,
-  //             threads: topic.threads.map((thread) =>
-  //               thread.title === selectedThread.title
-  //                 ? {
-  //                     ...thread,
-  //                     posts: [newPostData, ...thread.posts], // Prepend new post to existing posts
-  //                   }
-  //                 : thread
-  //             ),
-  //           }
-  //         : topic
-  //     )
-  //   );
-
-  //   setNewSubject('');
-  //   setNewPost('');
-  // };
-
+  const handleNewThread = () => {
+    setShowNewThreadModal(true);
+  };
+  
+  const handleCloseNewThreadModal = () => {
+    setShowNewThreadModal(false);
+  };
+  
+  const handleNewThreadSubmit = () => {
+    // Validate if the newSubject is not empty
+    if (!newSubject.trim()) {
+      alert('Please enter a valid thread title.');
+      return;
+    }
+  
+    // Create a new thread with a creation timestamp
+    const newThread = {
+      id: Date.now(),
+      title: newSubject,
+      timestamp: new Date().toLocaleString(), // Add timestamp
+      posts: [],
+    };
+  
+    // Update the topics state with the new thread
+    setTopics((prevTopics) =>
+      prevTopics.map((topic) =>
+        topic.title === selectedTopic.title
+          ? {
+              ...topic,
+              threads: [newThread, ...topic.threads], // Insert new thread at the beginning
+            }
+          : topic
+      )
+    );
+  
+    // Close the modal
+    setShowNewThreadModal(false);
+  
+    // Set the selected thread to the newly created one
+    setSelectedThread(newThread);
+  
+    // Reset states
+    setNewSubject('');
+  };
+  
 
   const handleReadMore = (index) => {
     setExpandedPosts((prevExpanded) => [...prevExpanded, index]);
@@ -182,8 +196,16 @@ const Forum = () => {
       </div>
       {selectedTopic && !selectedThread && (
         <div className="thread-container">
-          <h3>Selected topic: {selectedTopic.title}</h3>
-          <p>Choose a discussion to participate </p>
+          <div className="thread-header">
+            <div>
+              <h3>Selected topic: {selectedTopic.title}</h3>
+              <p>Choose a discussion to participate</p>
+            </div>
+            {/* Button to create a new thread */}
+            <button onClick={handleNewThread} className="new-thread-button">
+              Create New Thread
+            </button>
+          </div>
           <div className="threads-list">
             {selectedTopic.threads && selectedTopic.threads.map((thread) => (
               <div
@@ -192,8 +214,38 @@ const Forum = () => {
                 className={`indiv-thread ${selectedThread === thread ? 'selected' : ''}`}
               >
                 {thread.title}
+                <p>Created on: {thread.timestamp}</p>
               </div>
             ))}
+          </div>
+        </div>
+      )}
+
+      {/* New Thread Modal */}
+      {showNewThreadModal && (
+        <div className="modal">
+          <div className="new-thread-container">
+            <h3>Create a New Thread</h3>
+            <input
+              type="text"
+              value={newSubject}
+              onChange={(e) => {
+                const inputText = e.target.value;
+                if (inputText.length <= 100) {
+                  setNewSubject(inputText);
+                }
+              }}
+              maxLength={100} 
+              placeholder="Thread Title"
+              className="post-input"
+            />
+            <p>Character Count: {newSubject.length} / 100</p>
+            <button onClick={handleNewThreadSubmit} className="post-thread-button">
+              Create Thread
+            </button>
+            <button onClick={handleCloseNewThreadModal} className="close-button">
+              Close
+            </button>
           </div>
         </div>
       )}
