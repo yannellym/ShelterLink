@@ -3,7 +3,7 @@ import '../styles/Forum.css';
 import bd4 from '../images/bd4.jpeg';
 import coming_soon from '../images/coming_soon.png';
 
-const Forum = () => {
+const Forum = ({user}) => {
   const [newSubject, setNewSubject] = useState('');
   const topicsList = [
     'Adopt', 'Birds', 'Cats', 'Dogs', 'Foster', 'Help', 'Horses', 'Pet Sitter Needed',
@@ -56,6 +56,11 @@ const Forum = () => {
   };
   
   const handleNewThreadSubmit = () => {
+    if (!user) {
+      alert('Please sign in to create a new thread.');
+      return;
+    }
+
     // Validate if the newSubject is not empty
     if (!newSubject.trim()) {
       alert('Please enter a valid thread title.');
@@ -103,6 +108,11 @@ const Forum = () => {
   };
  
   const handlePostSubmit = async () => {
+    if (!user) {
+      alert('Please sign in to create a new post.');
+      return;
+    }
+
     if (!selectedThread) {
       alert('Please select a thread before posting.');
       return;
@@ -202,8 +212,12 @@ const Forum = () => {
               <p>Choose a discussion to participate</p>
             </div>
             {/* Button to create a new thread */}
-            <button onClick={handleNewThread} className="new-thread-button">
-              Create New Thread
+            <button 
+              onClick={handleNewThread} 
+              className={`new-thread-button ${!user ? 'disabled' : ''}`} 
+              disabled={!user} 
+              >
+              {user ? 'Create New Thread' : 'Sign in to create a thread'} 
             </button>
           </div>
           <div className="threads-list">
@@ -278,8 +292,12 @@ const Forum = () => {
                 <div className="post-bottom-container">
                   <p>Date: {new Date().toLocaleDateString()}</p>
                   <p>Character Count: {newPost.length} / 1000</p>
-                  <button onClick={handlePostSubmit} className="post-button">
-                    Post
+                  <button 
+                    onClick={handlePostSubmit} 
+                    className={`post-button ${!user ? 'disabled' : ''}`} 
+                    disabled={!user} 
+                    >
+                    {user ? 'Post' : 'Sign in to post'} 
                   </button>
                 </div>
               </div>
