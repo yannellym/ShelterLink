@@ -253,7 +253,7 @@ const Forum = () => {
         <div className="make-post-container">
           <h3> Topic: {selectedTopic.title}, {selectedThread.title}</h3>
           <div>
-            <h4>Create a post:</h4>
+          <h4>Create a post:</h4>
             <div className="write-post-div">
               <div className="post-input-container">
                 <input
@@ -265,13 +265,19 @@ const Forum = () => {
                 />
                 <textarea
                   value={newPost}
-                  onChange={(e) => setNewPost(e.target.value)}
+                  onChange={(e) => {
+                    const inputText = e.target.value;
+                    if (inputText.length <= 1000) {
+                      setNewPost(inputText);
+                    }
+                  }}
                   placeholder="Write your post..."
                   className="post-textarea"
+                  maxLength={1000} // Set maximum length to 1000 characters
                 />
                 <div className="post-bottom-container">
                   <p>Date: {new Date().toLocaleDateString()}</p>
-                  <p>Character Count: {charCount}</p>
+                  <p>Character Count: {newPost.length} / 1000</p>
                   <button onClick={handlePostSubmit} className="post-button">
                     Post
                   </button>
