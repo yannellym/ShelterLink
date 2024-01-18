@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import '../styles/Forum.css';
 import bd4 from '../images/bd4.jpeg';
 import coming_soon from '../images/coming_soon.png';
+import Messages from '../components/Messages.js';
+import Post from '../components/Post.js';
+import PostModal from '../components/PostModal.js';
 
 const Forum = ({user}) => {
   const [newSubject, setNewSubject] = useState('');
@@ -11,115 +14,104 @@ const Forum = ({user}) => {
   ];
 
   const sortedTopics = topicsList.sort((a, b) => a.localeCompare(b));
-
-  const [topics, setTopics] = useState(sortedTopics.map((topic, index) => (
-    {
-      id: index + 1,
-      title: topic,
-      threads: Array.from({ length: 35 }, (_, i) => {
-        const timestamp = new Date().toLocaleString()
-        return {
-          id: i + 1,
-          title: `Thread ${i + 1}`,
-          timestamp,
-          posts: [{
-            id: Date.now(),
-            subject: `Welcome to ${topic} Thread ${i + 1}!`,
-            content: 'Feel free to share your thoughts.',
-            user: { id: 1, username: 'JohnDoe' },
-            image: 'https://thumbs.dreamstime.com/b/new-burst-5707187.jpg'
-          }]
-        };
-      }).map(thread => ({ ...thread, posts: [] })) // Ensure that posts is initialized as an array
-    }
-  )));
-  
-
-  const [selectedTopic, setSelectedTopic] = useState(null);
+  const [selectedTopic, setSelectedTopic] = useState({});
   const [newPost, setNewPost] = useState('');
   const [expandedPosts, setExpandedPosts] = useState([]);
   const [charCount, setCharCount] = useState(0);
   const [selectedThread, setSelectedThread] = useState(null);
-  const [showNewThreadModal, setShowNewThreadModal] = useState(false);
-  const [creatingNewThread, setCreatingNewThread] = useState(false);
+  const [selectedPosts, setSelectedPosts] = useState([]);
+  // const [selectedPost, setSelectedPost] = useState(null);
+  const [showPostModal, setShowPostModal] = useState(false);
 
-  const handleThreadSelection = (thread) => {
-    setSelectedThread(thread);
-  };
+  const [topics, setTopics] = useState(
+    sortedTopics.map((topic, index) => ({
+      id: index + 1,
+      title: topic,
+      posts: Array.from({ length: 6 }, (_, i) => ({
+        id: Date.now() + i,
+        subject: `Default Post ${i + 1} in ${topic}`,
+        content: 'This is the default content for the post.This is the default content for the post.This is the default content for the post.This is the default content for the post.This is the default content for the post.This is the default content for the post.This is the default content for the post.This is the default content for the post.This is the default content for the post.This is the default content for the post.This is the default content for the post.This is the default content for the post.This is the default content for the post.This is the default content for the post.This is the default content for the post.This is the default content for the post.This is the default content for the post.This is the default content for the post.This is the default content for the post.ThThis is the default content for the post.This is the default content for the post.ThThis is the default content for the post.This is the default content for the post.ThThis is the default content for the post.This is the default content for the post.ThThis is the default content for the post.This is the default content for the post.ThThis is the default content for the post.This is the default content for the post.ThThis is the default content for the post.This is the default content for the post.ThThis is the default content for the post.This is the default content for the post.ThThis is the default content for the post.This is the default content for the post.ThThis is the default content for the post.This is the default content for the post.Th',
+        user: { id: 1, username: 'Admin' },
+        image: 'https://thumbs.dreamstime.com/b/new-burst-5707187.jpg',
+        replies: [], // Initialize replies as an empty array
+      })),
+    }))
+  );
 
-  const handleNewThread = () => {
-    setShowNewThreadModal(true);
-  };
+  // const handleReplySubmit = (post) => {
+  //   // Check if the reply content is not empty
+  //   if (!newReply.trim()) {
+  //     alert('Please enter a valid reply.');
+  //     return;
+  //   }
   
-  const handleCloseNewThreadModal = () => {
-    setShowNewThreadModal(false);
-  };
+  //   // Create a new reply with a creation timestamp
+  //   const replyData = {
+  //     id: Date.now(),
+  //     content: newReply,
+  //     user: { id: 1, username: 'JohnDoe' },
+  //   };
   
-  const handleNewThreadSubmit = () => {
-    if (!user) {
-      alert('Please sign in to create a new thread.');
-      return;
-    }
-
-    // Validate if the newSubject is not empty
-    if (!newSubject.trim()) {
-      alert('Please enter a valid thread title.');
-      return;
-    }
+  //   // Update the selected topic's posts with the new reply
+  //   setTopics((prevTopics) =>
+  //     prevTopics.map((topic) =>
+  //       topic.title === selectedTopic.title
+  //         ? {
+  //             ...topic,
+  //             posts: topic.posts.map((p) =>
+  //               p.id === post.id
+  //                 ? {
+  //                     ...p,
+  //                     replies: [replyData, ...p.replies], // Insert new reply at the beginning
+  //                   }
+  //                 : p
+  //             ),
+  //           }
+  //         : topic
+  //     )
+  //   );
   
-    // Create a new thread with a creation timestamp
-    const newThread = {
-      id: Date.now(),
-      title: newSubject,
-      timestamp: new Date().toLocaleString(), // Add timestamp
-      posts: [],
-    };
+  //   // Reset states
+  //   setNewReply('');
+  // };
   
-    // Update the topics state with the new thread
-    setTopics((prevTopics) =>
-      prevTopics.map((topic) =>
-        topic.title === selectedTopic.title
-          ? {
-              ...topic,
-              threads: [newThread, ...topic.threads], // Insert new thread at the beginning
-            }
-          : topic
-      )
-    );
-  
-    // Close the modal
-    setShowNewThreadModal(false);
-  
-    // Set the selected thread to the newly created one
-    setSelectedThread(newThread);
-  
-    // Reset states
-    setNewSubject('');
-  };
+  //
   
 
-  const handleReadMore = (index) => {
-    setExpandedPosts((prevExpanded) => [...prevExpanded, index]);
-  };
-
+  // HANDLE TOPIC SELECTION
   const handleTopicSelection = (topic) => {
     setSelectedTopic(topic);
+  
+    // Assuming each topic has a 'posts' property
+    const selectedPosts = topics.find((t) => t.title === topic.title)?.posts || [];
+    setSelectedPosts(selectedPosts);
     setSelectedThread(null); // Reset selected thread when a new topic is selected
   };
- 
+
+  // HANDLE NEW POSTS -> MODAL
+
+  const handleNewPostClick = () => {
+    setShowPostModal(true);
+  };
+
+  const handlePostModalClose = () => {
+    setShowPostModal(false);
+  };
+
+  // HANDLE SUBMISSION OF POSTS
   const handlePostSubmit = async () => {
     if (!user) {
       alert('Please sign in to create a new post.');
       return;
     }
-
-    if (!selectedThread) {
-      alert('Please select a thread before posting.');
+  
+    if (!selectedTopic) {
+      alert('Please select a topic before posting.');
       return;
     }
   
-    // Fetch placeholder image for the selected thread
-    const image = await fetchPlaceholderImage(selectedThread.title);
+    // Fetch placeholder image for the selected topic
+    const image = await fetchPlaceholderImage(selectedTopic.title);
   
     const newPostData = {
       id: Date.now(),
@@ -127,6 +119,7 @@ const Forum = ({user}) => {
       content: newPost,
       user: { id: 1, username: 'JohnDoe' },
       image,
+      replies: [], 
     };
   
     setTopics((prevTopics) =>
@@ -134,24 +127,11 @@ const Forum = ({user}) => {
         topic.title === selectedTopic.title
           ? {
               ...topic,
-              threads: topic.threads.map((thread) =>
-                thread.title === selectedThread.title
-                  ? {
-                      ...thread,
-                      posts: [newPostData, ...thread.posts], // Prepend new post to existing posts
-                    }
-                  : thread
-              ),
+              posts: [newPostData, ...topic.posts], // Prepend new post to existing posts
             }
           : topic
       )
     );
-  
-    // Set the selected thread to the one with the new post
-    setSelectedThread((prevSelectedThread) => ({
-      ...prevSelectedThread,
-      posts: [newPostData, ...prevSelectedThread.posts],
-    }));
   
     // Reset expandedPosts to ensure the new post is visible
     setExpandedPosts([]);
@@ -160,7 +140,7 @@ const Forum = ({user}) => {
     setNewPost('');
   };
   
-
+  // UPDATE OF COMPONENT
   useEffect(() => {
     // Set welcome message when the component starts
     setSelectedTopic(null);
@@ -170,6 +150,7 @@ const Forum = ({user}) => {
     setCharCount(newPost.length);
   }, [newPost]);
 
+  
   // FUNCTION to fetch a random image of the type of animal and the breed in case the pet doesn't
   // have a photo. In case this fails, use our coming_soon photo.
   const fetchPlaceholderImage = async () => {
@@ -196,186 +177,180 @@ const Forum = ({user}) => {
           {sortedTopics.map((topic) => (
             <div
               key={topic}
-              onClick={() => handleTopicSelection({ title: topic, threads: topics.find(t => t.title === topic)?.threads })}
+              onClick={() => handleTopicSelection({ title: topic, posts: topics.find(t => t.title === topic)?.posts })}
               className="indiv-topic"
             >
               {topic}
             </div>
           ))}
         </div>
-      </div>
-      {selectedTopic && !selectedThread && (
-        <div className="thread-container">
-          <div className="thread-header">
-            <div>
-              <h3>Selected topic: {selectedTopic.title}</h3>
-              <p>Choose a discussion to participate</p>
-            </div>
-            {/* Button to create a new thread */}
-            <button 
-              onClick={handleNewThread} 
-              className={`new-thread-button ${!user ? 'disabled' : ''}`} 
-              disabled={!user} 
-              >
-              {user ? 'Create New Thread' : 'Sign in to create a thread'} 
-            </button>
-          </div>
-          <div className="threads-list">
-            {selectedTopic.threads && selectedTopic.threads.map((thread) => (
-              <div
-                key={thread.id}
-                onClick={() => handleThreadSelection(thread)}
-                className={`indiv-thread ${selectedThread === thread ? 'selected' : ''}`}
-              >
-                {thread.title}
-                <p>Created on: {thread.timestamp}</p>
-              </div>
-            ))}
-          </div>
         </div>
-      )}
-
-      {/* New Thread Modal */}
-      {showNewThreadModal && (
-        <div className="modal">
-          <div className="new-thread-container">
-            <h3>Create a New Thread</h3>
-            <input
-              type="text"
-              value={newSubject}
-              onChange={(e) => {
-                const inputText = e.target.value;
-                if (inputText.length <= 100) {
-                  setNewSubject(inputText);
-                }
-              }}
-              maxLength={100} 
-              placeholder="Thread Title"
-              className="post-input"
-            />
-            <p>Character Count: {newSubject.length} / 100</p>
-            <button onClick={handleNewThreadSubmit} className="post-thread-button">
-              Create Thread
-            </button>
-            <button onClick={handleCloseNewThreadModal} className="close-button">
-              Close
-            </button>
-          </div>
+        {selectedTopic && selectedTopic.posts && (
+        <div className="topic-posts-container">
+          <button onClick={handleNewPostClick} className="new-post-btn">Make a new post</button>
+          <Messages posts={selectedTopic.posts} />
         </div>
-      )}
-      {selectedThread && (
-        <div className="make-post-container">
-          <h3> Topic: {selectedTopic.title}, {selectedThread.title}</h3>
-          <div>
-          <h4>Create a post:</h4>
-            <div className="write-post-div">
-              <div className="post-input-container">
-                <input
-                  type="text"
-                  value={newSubject}
-                  onChange={(e) => setNewSubject(e.target.value)}
-                  placeholder="Subject"
-                  className="post-input"
-                />
-                <textarea
-                  value={newPost}
-                  onChange={(e) => {
-                    const inputText = e.target.value;
-                    if (inputText.length <= 1000) {
-                      setNewPost(inputText);
-                    }
-                  }}
-                  placeholder="Write your post..."
-                  className="post-textarea"
-                  maxLength={1000} // Set maximum length to 1000 characters
-                />
-                <div className="post-bottom-container">
-                  <p>Date: {new Date().toLocaleDateString()}</p>
-                  <p>Character Count: {newPost.length} / 1000</p>
-                  <button 
-                    onClick={handlePostSubmit} 
-                    className={`post-button ${!user ? 'disabled' : ''}`} 
-                    disabled={!user} 
-                    >
-                    {user ? 'Post' : 'Sign in to post'} 
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div className="previous-posts-container">
-              <h3>Current posts:</h3>
-              {selectedThread.posts &&
-                selectedThread.posts.map((post, index) => (
-                  <div className="post-container" key={post.id}>
-                    {index % 2 === 0 ? (
-                      // If index is even, align image to the left
-                      <>
-                        <img src={post.image} alt={post.subject} className="left-image" />
-                        <div className={`post ${index % 2 === 0 ? 'even' : 'odd'}`}>
-                          <div className="post-content">
-                            <h4>{post.subject.toUpperCase()}</h4>
-                            <p>
-                              {expandedPosts.includes(index) ? post.content : (
-                                <>
-                                  {post.content.length > 200 ? (
-                                    <div>
-                                      {post.content.substring(0, 200)} ...
-                                      <span className="read-more" onClick={() => handleReadMore(index)}>
-                                        Read more
-                                      </span>
-                                    </div>
-                                  ) : (
-                                    post.content
-                                  )}
-                                </>
-                              )}
-                            </p>
-                            <p>
-                              Posted by: {post.user.username} on {new Date(post.id).toLocaleDateString()} @{' '}
-                              {new Date(post.id).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                            </p>
-                          </div>
-                        </div>
-                      </>
-                    ) : (
-                      // If index is odd, align image to the right
-                      <>
-                        <div className={`post ${index % 2 === 0 ? 'even' : 'odd'}`}>
-                          <div className="post-content">
-                            <h4>{post.subject.toUpperCase()}</h4>
-                            <p>
-                              {expandedPosts.includes(index) ? post.content : (
-                                <>
-                                  {post.content.length > 200 ? `${post.content.substring(0, 200)} ... ` : post.content}
-                                  <span className="read-more" onClick={() => handleReadMore(index)}>
-                                    Read more
-                                  </span>
-                                </>
-                              )}
-                            </p>
-                            <p>
-                              Posted by: {post.user.username} on {new Date(post.id).toLocaleDateString()} @{' '}
-                              {new Date(post.id).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                            </p>
-                          </div>
-                        </div>
-                        <img src={post.image} alt={post.subject} className="right-image" />
-                      </>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
         )}
-        {!selectedTopic && !selectedThread && (
+        {/* New Post Modal */}
+        {showPostModal && (
+          <PostModal
+          selectedTopic={selectedTopic}
+          user={user}
+          onPostSubmit={handlePostSubmit}
+          onClose={handlePostModalClose}
+          show={showPostModal}
+         />)
+        }
+        {!selectedTopic && (
           <div className="welcome-div">
-            <h1> Welcome to our community forums! <br /> Please select a topic to join the discussion. </h1>
+            <h1>Welcome to our community forums! <br /> Please select a topic to join the discussion.</h1>
             <img src={bd4} alt="bulldog" className="centered-image" />
           </div>
         )}
       </div>
     );
-  };  
-
+  };
 export default Forum;
+
+  //  New Thread Modal
+  //     {showNewThreadModal && (
+  //       <div className="modal">
+  //         <div className="new-thread-container">
+  //           <h3>Create a New Thread</h3>
+  //           <input
+  //             type="text"
+  //             value={newSubject}
+  //             onChange={(e) => {
+  //               const inputText = e.target.value;
+  //               if (inputText.length <= 100) {
+  //                 setNewSubject(inputText);
+  //               }
+  //             }}
+  //             maxLength={100} 
+  //             placeholder="Thread Title"
+  //             className="post-input"
+  //           />
+  //           <p>Character Count: {newSubject.length} / 100</p>
+  //           <button onClick={handleNewThreadSubmit} className="post-thread-button">
+  //             Create Thread
+  //           </button>
+  //           <button onClick={handleCloseNewThreadModal} className="close-button">
+  //             Close
+  //           </button>
+  //         </div>
+  //       </div>
+  //     )}
+  //     {selectedThread && (
+  //       <div className="make-post-container">
+  //         <h3> Topic: {selectedTopic.title}, {selectedThread.title}</h3>
+  //         <div>
+  //         <h4>Create a post:</h4>
+  //           <div className="write-post-div">
+  //             <div className="post-input-container">
+  //               <input
+  //                 type="text"
+  //                 value={newSubject}
+  //                 onChange={(e) => setNewSubject(e.target.value)}
+  //                 placeholder="Subject"
+  //                 className="post-input"
+  //               />
+  //               <textarea
+  //                 value={newPost}
+  //                 onChange={(e) => {
+  //                   const inputText = e.target.value;
+  //                   if (inputText.length <= 1000) {
+  //                     setNewPost(inputText);
+  //                   }
+  //                 }}
+  //                 placeholder="Write your post..."
+  //                 className="post-textarea"
+  //                 maxLength={1000} // Set maximum length to 1000 characters
+  //               />
+  //               <div className="post-bottom-container">
+  //                 <p>Date: {new Date().toLocaleDateString()}</p>
+  //                 <p>Character Count: {newPost.length} / 1000</p>
+  //                 <button 
+  //                   onClick={handlePostSubmit} 
+  //                   className={`post-button ${!user ? 'disabled' : ''}`} 
+  //                   disabled={!user} 
+  //                   >
+  //                   {user ? 'Post' : 'Sign in to post'} 
+  //                 </button>
+  //               </div>
+  //             </div>
+  //           </div>
+  //           <div className="previous-posts-container">
+  //             <h3>Current posts:</h3>
+  //             {selectedThread.posts &&
+  //               selectedThread.posts.map((post, index) => (
+  //                 <div className="post-container" key={post.id}>
+  //                   {index % 2 === 0 ? (
+  //                     // If index is even, align image to the left
+  //                     <>
+  //                       <img src={post.image} alt={post.subject} className="left-image" />
+  //                       <div className={`post ${index % 2 === 0 ? 'even' : 'odd'}`}>
+  //                         <div className="post-content">
+  //                           <h4>{post.subject.toUpperCase()}</h4>
+  //                           <p>
+  //                             {expandedPosts.includes(index) ? post.content : (
+  //                               <>
+  //                                 {post.content.length > 200 ? (
+  //                                   <div>
+  //                                     {post.content.substring(0, 200)} ...
+  //                                     <span className="read-more" onClick={() => handleReadMore(index)}>
+  //                                       Read more
+  //                                     </span>
+  //                                   </div>
+  //                                 ) : (
+  //                                   post.content
+  //                                 )}
+  //                               </>
+  //                             )}
+  //                           </p>
+  //                           <p>
+  //                             Posted by: {post.user.username} on {new Date(post.id).toLocaleDateString()} @{' '}
+  //                             {new Date(post.id).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+  //                           </p>
+  //                         </div>
+  //                       </div>
+  //                     </>
+  //                   ) : (
+  //                     // If index is odd, align image to the right
+  //                     <>
+  //                       <div className={`post ${index % 2 === 0 ? 'even' : 'odd'}`}>
+  //                         <div className="post-content">
+  //                           <h4>{post.subject.toUpperCase()}</h4>
+  //                           <p>
+  //                             {expandedPosts.includes(index) ? post.content : (
+  //                               <>
+  //                                 {post.content.length > 200 ? `${post.content.substring(0, 200)} ... ` : post.content}
+  //                                 <span className="read-more" onClick={() => handleReadMore(index)}>
+  //                                   Read more
+  //                                 </span>
+  //                               </>
+  //                             )}
+  //                           </p>
+  //                           <p>
+  //                             Posted by: {post.user.username} on {new Date(post.id).toLocaleDateString()} @{' '}
+  //                             {new Date(post.id).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+  //                           </p>
+  //                         </div>
+  //                       </div>
+  //                       <img src={post.image} alt={post.subject} className="right-image" />
+  //                     </>
+  //                   )}
+  //                 </div>
+  //               ))}
+  //             </div>
+  //           </div>
+  //         </div>
+  //       )}
+  //       {!selectedTopic && !selectedThread && (
+  //         <div className="welcome-div">
+  //           <h1> Welcome to our community forums! <br /> Please select a topic to join the discussion. </h1>
+  //           <img src={bd4} alt="bulldog" className="centered-image" />
+  //         </div>
+  //       )}*/}
+  //     </div>
+  //   ); 
+  // };  

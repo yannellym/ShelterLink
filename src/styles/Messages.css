@@ -1,0 +1,116 @@
+.previous-posts-container {
+  max-width: 80vw;
+  max-height: 65vh;
+  margin-top: 4%;
+  overflow-y: auto;
+  padding-left: 2%;
+}
+.previous-posts-container h3{
+  margin-top: 0;
+}
+
+/* POSTS */
+.post-container {
+  display: flex;
+  min-width: 75vw;
+  max-height: 30vh;
+  /* border: 4px solid #f14110; */
+}
+
+/* INSIDE POST  */
+
+.post-container {
+  display: flex;
+  min-width: 75vw;
+  /* border: 4px solid #f14110; */
+  overflow: hidden;
+}
+
+.post {
+  margin: 10px;
+  border-radius: 8px;
+  width: 95%;
+  display: flex;
+  flex-direction: column; /* Change to column */
+  align-items: center;
+  /* border: 4px solid #1044f1; */
+  overflow: hidden;
+  transition: max-height 0.3s ease; /* Add transition for smooth height animation */
+}
+
+.post-content {
+  flex: 1;
+  width: 95%;
+  position: relative;
+  /* border: 4px rgb(238, 0, 255) solid; */
+  height:10px;
+  transition: 200px 0.3s ease; /* Add transition for smooth height animation */
+}
+
+.post-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.post-text.expanded {
+  white-space: normal;
+  /* border: 4px rgb(0, 255, 157) solid; */
+  max-height: 60%;
+  width: 95%;
+  overflow-y: auto;
+}
+
+
+.post-content p {
+  margin-bottom: 10px; /* Adjust spacing between paragraphs */
+}
+
+.read-more {
+  color: red;
+  cursor: pointer;
+  /* border: 4px rgb(238, 0, 255) solid; */
+  margin-left: 3%;
+}
+
+.post-content h4 {
+  padding-left: 3%;
+}
+
+.reply-button {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin-bottom: 10px;
+  margin-right: 10px;
+}
+
+ /* IMAGES IN POSTS */
+.left-image {
+  width: 150px;
+  height: 10vh;
+  margin: 2% 1%;
+  
+}
+.right-image {
+  width: 150px;
+  height: 10vh;
+  margin: 2% 1%;
+}
+
+
+.post-button.disabled {
+  /* Style for the disabled state */
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.even {
+  background-color: #0dbeb230;
+  margin-left: 2%; /* padding to the left for even-indexed posts */
+}
+
+.odd {
+  background-color: #ea13283a;
+  margin-right: 2%; /*padding to the right for odd-indexed posts */
+}

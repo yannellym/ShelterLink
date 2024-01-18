@@ -12,6 +12,7 @@
   width: 100%;
 }
 
+/* TOPICS */
 .topics-list {
   width: 250px;
   background-color: #f0f0f0;
@@ -39,10 +40,24 @@
   background-color: #ddd;
 }
 
+/* TOPICS'S POSTS SCREEN */
+.topic-posts-container {
+  height: 70vh;
+  min-width: 75vw;
+  /* border: 4px solid #10f16a; */
+  position: relative;
+}
+.new-post-btn {
+  margin: 2%;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
 .post-input{
   max-width: 40%;
   margin: 2%;
-  border: 1px solid #ccc;
+  border: 10px solid #cccccc;
   border-radius: 4px;
   box-sizing: border-box;
 }
@@ -102,7 +117,7 @@
 
 .indiv-thread:hover {
   background-color: #ffd4d4; 
-}
+} 
 
 .write-post-div {
   width: 50vw;
@@ -124,55 +139,6 @@
   border: rgb(68, 0, 255) solid 4px;
   width: 95%;
   margin: 2%;
-}
-
-.post-container {
-  display: flex;
-  min-width: 75vw;
-}
-.previous-posts-container {
-  height: 50vh;
-  margin-top: 2%;
-  overflow-y: auto;
-  padding-left: 2%;
-}
-.post {
-  margin: 10px;
-  border-radius: 8px; 
-  padding: 1% 3%;
-  width: 90%;
-  height: 90%;
-}
-.post-button.disabled {
-  /* Style for the disabled state */
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
-.left-image {
-  width: 200px;
-  height: 10vh;
-  margin: 2% 1%;
-  
-}
-.right-image {
-  width: 200px;
-  height: 10vh;
-  margin: 2% 1%;
-}
-
-.even {
-  background-color: #0dbeb230;
-  margin-left: 2%; /* padding to the left for even-indexed posts */
-}
-
-.odd {
-  background-color: #ea13283a;
-  margin-right: 2%; /*padding to the right for odd-indexed posts */
-}
-.read-more {
-  color: #fb061e;
-  font-weight: bold;
 }
 
 .write-post-div {
