@@ -94,6 +94,12 @@ export const onCreatePet = /* GraphQL */ `
         __typename
       }
       contact {
+        address {
+          address1
+          address2
+          city
+          state
+        }
         email
         phone
         __typename
@@ -146,6 +152,12 @@ export const onUpdatePet = /* GraphQL */ `
         __typename
       }
       contact {
+        address {
+          address1
+          address2
+          city
+          state
+        }
         email
         phone
         __typename
@@ -198,6 +210,12 @@ export const onDeletePet = /* GraphQL */ `
         __typename
       }
       contact {
+        address {
+          address1
+          address2
+          city
+          state
+        }
         email
         phone
         __typename

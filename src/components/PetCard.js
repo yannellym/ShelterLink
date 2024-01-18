@@ -9,7 +9,7 @@ import { faHeart} from '@fortawesome/free-solid-svg-icons';
 import { API, graphqlOperation } from 'aws-amplify';
 import { listUserPetFavorites } from '../graphql/queries';
 
-const PetCard = ({ pet, favorited, handleToggleFavorite }) => {
+const PetCard = ({ pet, handleToggleFavorite }) => {
   const [isFavorited, setIsFavorited] = useState(false);
   const [imageSource, setImageSource] = useState(null);
 

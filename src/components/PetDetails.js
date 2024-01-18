@@ -58,7 +58,6 @@ const PetDetails = ({  handleToggleFavorite, isAuthenticated }) => {
   fetchFavoriteState();
 
 
-
   return (
     <div className="pet-details-container">
       {/* Left side with pet details */}
