@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/Messages.css';
 
-const Messages = ({ posts }) => {
+const Messages = ({ posts, hideReplyButton,  onReplySubmit }) => {
   const [expandedPosts, setExpandedPosts] = useState([]);
 
   const handleReadMore = (index) => {
@@ -14,10 +14,21 @@ const Messages = ({ posts }) => {
       }
     });
   };
+  const handleReplySubmit = (postId, newReplyData) => {
+    // Pass the postId and new reply data to the parent component
+    onReplySubmit(postId, newReplyData);
+  };
+  const handleReplyClick = ({post}) => {
+     // Store post information in localStorage
+     localStorage.setItem('replyPost', JSON.stringify(post));
+     localStorage.setItem('handleReplySubmit', handleReplySubmit.toString());
+ 
+     // Navigate to the Replies component
+     window.location.href = `/replies/${post.id}`;
+  };
 
   return (
     <div className="previous-posts-container">
-      <h3>Current posts:</h3>
       {posts.map((post, index) => (
         <div className={`post-container ${expandedPosts.includes(index) ? 'expanded-message' : ''}`} key={post.id}>
           {index % 2 === 0 ? (
@@ -39,9 +50,11 @@ const Messages = ({ posts }) => {
                     Posted by: {post.user.username} on {new Date(post.id).toLocaleDateString()} @{' '}
                     {new Date(post.id).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </p>
-                  <Link to={`/replies/${post.id}`}>
-                    <button className="reply-button">Reply</button>
-                  </Link>
+                  {!hideReplyButton && (
+                    <Link to={`/replies/${post.id}`}>
+                      <button className="reply-button" onClick={() => handleReplyClick({ post, handleReplySubmit })}>Reply</button>
+                    </Link>
+                  )}
                 </div>
               </div>
             </>
@@ -63,9 +76,11 @@ const Messages = ({ posts }) => {
                     Posted by: {post.user.username} on {new Date(post.id).toLocaleDateString()} @{' '}
                     {new Date(post.id).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </p>
-                  <Link to={`/replies/${post.id}`}>
-                    <button className="reply-button">Reply</button>
-                  </Link>
+                  {!hideReplyButton && (
+                    <Link to={`/replies/${post.id}`}>
+                      <button className="reply-button" onClick={() => handleReplyClick({ post: post, handleReplySubmit })}>Reply</button>
+                    </Link>
+                  )}
                 </div>
               </div>
               <img src={post.image} alt={post.subject} className="right-image" />

@@ -18,6 +18,7 @@ import NearbyShelters from './pages/NearbyShelters.js';
 import NearbyPets from './pages/NearbyPets.js';
 import Forum from './pages/Forum.js';
 import useUserLocation from './hooks/useUserLocation.js';
+import Replies from './pages/Replies.js';
 
 import './styles/App.css';
 
@@ -345,6 +346,13 @@ const App = () => {
             // )
           }
         />
+        <Route 
+          path="/replies/:postId" 
+          element={ 
+            <Replies 
+              user={user}
+            />} 
+          /> 
         <Route
           path="/auth"
           element={
