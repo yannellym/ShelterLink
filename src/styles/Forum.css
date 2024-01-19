@@ -54,6 +54,12 @@
   right: 0;
 }
 
+.new-post-btn.disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+} 
+
+
 .post-input{
   max-width: 40%;
   margin: 2%;
@@ -179,7 +185,7 @@
   z-index: 1000;
 }
 
-.new-thread-container {
+/* .new-thread-container {
   background-color: #fff;
   padding: 20px;
   border-radius: 8px;
@@ -187,12 +193,11 @@
 }
 
 .new-thread-button.disabled {
-  /* Style for the disabled state */
   background-color: #ccc;
   cursor: not-allowed;
-}
+} */
 
-/* Add any other styling you need for the modal content */
+/*  modal content */
 .post-input {
   min-width: 90%;
   margin-bottom: 10px;

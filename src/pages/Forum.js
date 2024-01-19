@@ -16,9 +16,7 @@ const Forum = ({user}) => {
   const [newPost, setNewPost] = useState('');
   const [expandedPosts, setExpandedPosts] = useState([]);
   const [charCount, setCharCount] = useState(0);
-  const [selectedThread, setSelectedThread] = useState(null);
   const [selectedPosts, setSelectedPosts] = useState([]);
-  // const [selectedPost, setSelectedPost] = useState(null);
   const [showPostModal, setShowPostModal] = useState(false);
 
   const [topics, setTopics] = useState(
@@ -30,8 +28,9 @@ const Forum = ({user}) => {
         subject: `Default Post ${i + 1} in ${topic}`,
         content: 'This is the default content for the post.This is the default content for the post.This is the default content for the post.This is the default content for the post.This is the default content for the post.This is the default content for the post.This is the default content for the post.This is the default content for the post.This is the default content for the post.This is the default content for the post.This is the default content for the post.This is the default content for the post.This is the default content for the post.This is the default content for the post.This is the default content for the post.This is the default content for the post.This is the default content for the post.This is the default content for the post.This is the default content for the post.ThThis is the default content for the post.This is the default content for the post.ThThis is the default content for the post.This is the default content for the post.ThThis is the default content for the post.This is the default content for the post.ThThis is the default content for the post.This is the default content for the post.ThThis is the default content for the post.This is the default content for the post.ThThis is the default content for the post.This is the default content for the post.ThThis is the default content for the post.This is the default content for the post.ThThis is the default content for the post.This is the default content for the post.ThThis is the default content for the post.This is the default content for the post.Th',
         user: { id: 1, username: 'Admin' },
-        image: 'https://thumbs.dreamstime.com/b/new-burst-5707187.jpg',
-        replies: [], // Initialize replies as an empty array
+        image: 'https://clydevet.com.au/wp-content/uploads/2021/08/doggrin_SQR_blank.jpg',
+        replies: [],
+        likes: 0
       })),
     }))
   );
@@ -39,13 +38,12 @@ const Forum = ({user}) => {
 
   // HANDLE TOPIC SELECTION
   const handleTopicSelection = (topic) => {
-    setSelectedTopic(topic);
-  
-    // Assuming each topic has a 'posts' property
+    const tIndex = sortedTopics.indexOf(topic.title);
+    setSelectedTopic({ ...topic, tIndex });
     const selectedPosts = topics.find((t) => t.title === topic.title)?.posts || [];
     setSelectedPosts(selectedPosts);
-    setSelectedThread(null); // Reset selected thread when a new topic is selected
   };
+  
 
   // HANDLE NEW POSTS -> MODAL
 
@@ -85,16 +83,56 @@ const Forum = ({user}) => {
     setNewPost('');
   };
 
-  
-  // UPDATE OF COMPONENT
-  useEffect(() => {
-    // Set welcome message when the component starts
-    setSelectedTopic(null);
-  }, []);
+ // HANDLE LIKES
+const handleLike = (tIndex, postIndex) => {
+  console.log('inside handle like');
 
-  useEffect(() => {
-    setCharCount(newPost.length);
-  }, [newPost]);
+  if (!user) {
+    alert('Please sign in to like a post.');
+    return;
+  }
+
+  setTopics((prevTopics) => {
+    const updatedTopics = [...prevTopics];
+
+    const updatedPosts = updatedTopics[tIndex].posts.map((post, pIndex) => {
+      if (pIndex === postIndex) {
+        console.log('toggling');
+        const updatedLikes = post.likes + 1;
+        console.log('updatedLikes', updatedLikes);
+
+        // Update the likes directly in the copied state
+        return {
+          ...post,
+          likes: updatedLikes,
+        };
+      }
+      return post;
+    });
+
+    // Update the copied state with the modified posts
+    updatedTopics[tIndex] = {
+      ...updatedTopics[tIndex],
+      posts: updatedPosts,
+    };
+
+    // Set the selectedPosts state to trigger an immediate UI update
+    setSelectedPosts(updatedPosts);
+
+    return updatedTopics;
+  });
+};
+
+
+    // UPDATE OF COMPONENT
+    useEffect(() => {
+      // Set welcome message when the component starts
+      setSelectedTopic(null);
+    }, []);
+
+    useEffect(() => {
+      setCharCount(newPost.length);
+    }, [newPost]);
 
   
  
@@ -104,7 +142,7 @@ const Forum = ({user}) => {
       <div className="topics-list">
         <h2>Topics</h2>
         <div className="scrollable-list">
-          {sortedTopics.map((topic) => (
+          {sortedTopics.map((topic, index) => (
             <div
               key={topic}
               onClick={() => handleTopicSelection({ title: topic, posts: topics.find(t => t.title === topic)?.posts })}
@@ -117,13 +155,23 @@ const Forum = ({user}) => {
         </div>
         {selectedTopic && selectedTopic.posts && (
         <div className="topic-posts-container">
-          <button onClick={handleNewPostClick} className="new-post-btn">Make a new post</button>
+          <button 
+            onClick={handleNewPostClick} 
+            className={`new-post-btn ${!user ? 'disabled' : ''}`}>
+            {user ? 'Make a new post' : 'Sign in to post'}
+          </button>
           <h3>Current posts:</h3>
-          <Messages posts={selectedTopic.posts} />
+          <Messages 
+            posts={selectedTopic.posts} 
+            hideReplyButton={false}
+            hideIcons={false}
+            topicIndex={selectedTopic && selectedTopic.tIndex} 
+            handleLike={(topicIndex, postIndex) => handleLike(topicIndex, postIndex)}
+          />
         </div>
         )}
         {/* New Post Modal */}
-        {showPostModal && (
+        {user && showPostModal && (
           <PostModal
             selectedTopic={selectedTopic}
             user={user}

@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/Messages.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCommentDots, faHeart} from '@fortawesome/free-solid-svg-icons';
 
-const Messages = ({ posts, hideReplyButton,  onReplySubmit }) => {
+const Messages = ({ posts, hideReplyButton, hideIcons,  onReplySubmit, topicIndex, handleLike }) => {
   const [expandedPosts, setExpandedPosts] = useState([]);
-
+  const [isFavorited, setIsFavorited] = useState(Array(posts.length).fill(false));
   const handleReadMore = (index) => {
     setExpandedPosts((prevExpandedPosts) => {
       if (prevExpandedPosts.includes(index)) {
@@ -27,6 +29,15 @@ const Messages = ({ posts, hideReplyButton,  onReplySubmit }) => {
      window.location.href = `/replies/${post.id}`;
   };
 
+  const handleLikeClick = (postIndex) => {
+    
+    console.log('Liked Post:', posts[postIndex]);
+    console.log(topicIndex, postIndex, "indices");
+    // Call the handleLike function passed from the parent component
+    handleLike(topicIndex, postIndex);
+  };
+  
+
   return (
     <div className="previous-posts-container">
       {posts.map((post, index) => (
@@ -46,10 +57,30 @@ const Messages = ({ posts, hideReplyButton,  onReplySubmit }) => {
                       {expandedPosts.includes(index) ? 'Read less' : 'Read more'}
                     </span>
                   )}
-                  <p>
-                    Posted by: {post.user.username} on {new Date(post.id).toLocaleDateString()} @{' '}
-                    {new Date(post.id).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                  </p>
+                  <div className="post-details">
+                    <p>Posted by: {post.user.username} on {new Date(post.id).toLocaleDateString()} @{' '}
+                      {new Date(post.id).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} 
+                    </p>
+                    {!hideIcons && (
+                      <p className='post-details-icon-p'>
+                        <Link 
+                        to={`/replies/${post.id}`} 
+                        style={{ textDecoration: 'none', color: 'inherit' }}
+                        >
+                          {post.replies.length} <FontAwesomeIcon 
+                            icon={faCommentDots}
+                            className='reply-count-icon'
+                          />
+                        </Link>
+                        {post.likes} 
+                        <FontAwesomeIcon
+                          icon={faHeart}
+                          onClick={() => handleLikeClick(index)}
+                          className={`like-heart-${index ? 'favorited' : 'unfavorited'}`}
+                        />
+                      </p>
+                    )}
+                  </div>
                   {!hideReplyButton && (
                     <Link to={`/replies/${post.id}`}>
                       <button className="reply-button" onClick={() => handleReplyClick({ post, handleReplySubmit })}>Reply</button>
@@ -72,10 +103,30 @@ const Messages = ({ posts, hideReplyButton,  onReplySubmit }) => {
                       {expandedPosts.includes(index) ? 'Read less' : 'Read more'}
                     </span>
                   )}
-                  <p>
-                    Posted by: {post.user.username} on {new Date(post.id).toLocaleDateString()} @{' '}
-                    {new Date(post.id).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                  </p>
+                  <div className="post-details">
+                    <p>Posted by: {post.user.username} on {new Date(post.id).toLocaleDateString()} @{' '}
+                      {new Date(post.id).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} 
+                    </p>
+                    {!hideIcons && (
+                      <p className='post-details-icon-p'>
+                        <Link 
+                        to={`/replies/${post.id}`} 
+                        style={{ textDecoration: 'none', color: 'inherit' }}
+                        >
+                          {post.replies.length} <FontAwesomeIcon 
+                            icon={faCommentDots}
+                            className='reply-count-icon'
+                          />
+                        </Link>
+                        {post.likes} 
+                        <FontAwesomeIcon
+                          icon={faHeart}
+                          onClick={() => handleLikeClick(index)}
+                          className={`like-heart-${index ? 'favorited' : 'unfavorited'}`}
+                        />
+                      </p>
+                    )}
+                  </div>
                   {!hideReplyButton && (
                     <Link to={`/replies/${post.id}`}>
                       <button className="reply-button" onClick={() => handleReplyClick({ post: post, handleReplySubmit })}>Reply</button>

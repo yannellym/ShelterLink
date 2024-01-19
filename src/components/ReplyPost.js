@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import '../styles/Post.css';
+import '../styles/ReplyPost.css';
 import coming_soon from '../images/coming_soon.png';
 
-const Post = ({ user, onReplySubmit }) => {
+const ReplyPost = ({ user, onReplySubmit }) => {
   const [replyContent, setReplyContent] = useState('');
 
   const handleReplySubmit = async () => {
@@ -56,10 +56,15 @@ const Post = ({ user, onReplySubmit }) => {
         value={replyContent}
         onChange={(e) => setReplyContent(e.target.value)}
       ></textarea>
-      <button onClick={handleReplySubmit}>Submit Reply</button>
+      <button 
+        onClick={handleReplySubmit}
+        className={`post-button ${!user ? 'disabled' : ''}`}
+        >
+          {user ? 'Submit Reply' : 'Sign in to reply'}
+      </button>
     </div>
   );
 };
 
 
-export default Post;
+export default ReplyPost;

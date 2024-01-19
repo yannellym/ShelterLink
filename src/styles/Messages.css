@@ -76,6 +76,21 @@
 .post-content h4 {
   padding-left: 3%;
 }
+.post-details {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center; /* Align items vertically in the center */
+  width: 55%;
+}
+.post-details-icon-p {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center; /* Align items vertically in the center */
+  width: 15%;
+  text-decoration: none;
+}
 
 .reply-button {
   position: absolute;
@@ -85,6 +100,28 @@
   margin-right: 10px;
 }
 
+.like-heart-unfavorited, .like-heart-favorited{
+  cursor: pointer;
+  border: none;
+  color: rgb(169, 161, 161);
+
+}
+
+.like-heart-favorited {
+  color: #ea1328; 
+}
+
+.link-without-underline {
+  text-decoration: none;
+  color: inherit; /* Ensures that the link color remains the same as its parent color */
+}
+
+.link-without-underline:hover {
+  text-decoration: none;
+}
+.reply-count-icon {
+  color: rgb(0, 0, 0);
+}
  /* IMAGES IN POSTS */
 .left-image {
   width: 150px;

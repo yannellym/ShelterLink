@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../styles/ShareModal.css';
+import '../styles/PostModal.css';
 import coming_soon from '../images/coming_soon.png';
 
 const PostModal = ({ selectedTopic, user, onPostSubmit, onClose }) => {
