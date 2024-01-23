@@ -410,9 +410,14 @@ export const onCreateTopic = /* GraphQL */ `
         updatedAt
         __typename
       }
-      threads {
+      posts {
         id
+        subject
+        content
         createdAt
+        Favorited
+        likes
+        likedBy
         updatedAt
         __typename
       }
@@ -435,9 +440,14 @@ export const onUpdateTopic = /* GraphQL */ `
         updatedAt
         __typename
       }
-      threads {
+      posts {
         id
+        subject
+        content
         createdAt
+        Favorited
+        likes
+        likedBy
         updatedAt
         __typename
       }
@@ -460,87 +470,14 @@ export const onDeleteTopic = /* GraphQL */ `
         updatedAt
         __typename
       }
-      threads {
-        id
-        createdAt
-        updatedAt
-        __typename
-      }
-      createdAt
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const onCreateThread = /* GraphQL */ `
-  subscription OnCreateThread($filter: ModelSubscriptionThreadFilterInput) {
-    onCreateThread(filter: $filter) {
-      id
-      topic {
-        id
-        title
-        createdAt
-        updatedAt
-        __typename
-      }
       posts {
         id
         subject
         content
         createdAt
         Favorited
-        updatedAt
-        __typename
-      }
-      createdAt
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const onUpdateThread = /* GraphQL */ `
-  subscription OnUpdateThread($filter: ModelSubscriptionThreadFilterInput) {
-    onUpdateThread(filter: $filter) {
-      id
-      topic {
-        id
-        title
-        createdAt
-        updatedAt
-        __typename
-      }
-      posts {
-        id
-        subject
-        content
-        createdAt
-        Favorited
-        updatedAt
-        __typename
-      }
-      createdAt
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const onDeleteThread = /* GraphQL */ `
-  subscription OnDeleteThread($filter: ModelSubscriptionThreadFilterInput) {
-    onDeleteThread(filter: $filter) {
-      id
-      topic {
-        id
-        title
-        createdAt
-        updatedAt
-        __typename
-      }
-      posts {
-        id
-        subject
-        content
-        createdAt
-        Favorited
+        likes
+        likedBy
         updatedAt
         __typename
       }
@@ -564,14 +501,26 @@ export const onCreatePost = /* GraphQL */ `
         updatedAt
         __typename
       }
-      thread {
+      topic {
         id
+        title
         createdAt
         updatedAt
         __typename
       }
       createdAt
       Favorited
+      likes
+      likedBy
+      replies {
+        id
+        subject
+        content
+        image
+        createdAt
+        updatedAt
+        __typename
+      }
       updatedAt
       __typename
     }
@@ -591,14 +540,26 @@ export const onUpdatePost = /* GraphQL */ `
         updatedAt
         __typename
       }
-      thread {
+      topic {
         id
+        title
         createdAt
         updatedAt
         __typename
       }
       createdAt
       Favorited
+      likes
+      likedBy
+      replies {
+        id
+        subject
+        content
+        image
+        createdAt
+        updatedAt
+        __typename
+      }
       updatedAt
       __typename
     }
@@ -618,14 +579,89 @@ export const onDeletePost = /* GraphQL */ `
         updatedAt
         __typename
       }
-      thread {
+      topic {
         id
+        title
         createdAt
         updatedAt
         __typename
       }
       createdAt
       Favorited
+      likes
+      likedBy
+      replies {
+        id
+        subject
+        content
+        image
+        createdAt
+        updatedAt
+        __typename
+      }
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onCreateReply = /* GraphQL */ `
+  subscription OnCreateReply($filter: ModelSubscriptionReplyFilterInput) {
+    onCreateReply(filter: $filter) {
+      id
+      subject
+      content
+      user {
+        id
+        username
+        email
+        createdAt
+        updatedAt
+        __typename
+      }
+      image
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onUpdateReply = /* GraphQL */ `
+  subscription OnUpdateReply($filter: ModelSubscriptionReplyFilterInput) {
+    onUpdateReply(filter: $filter) {
+      id
+      subject
+      content
+      user {
+        id
+        username
+        email
+        createdAt
+        updatedAt
+        __typename
+      }
+      image
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onDeleteReply = /* GraphQL */ `
+  subscription OnDeleteReply($filter: ModelSubscriptionReplyFilterInput) {
+    onDeleteReply(filter: $filter) {
+      id
+      subject
+      content
+      user {
+        id
+        username
+        email
+        createdAt
+        updatedAt
+        __typename
+      }
+      image
+      createdAt
       updatedAt
       __typename
     }

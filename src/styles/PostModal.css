@@ -21,7 +21,7 @@
   max-width: 500px;
   max-height: 80%; 
   overflow: auto; 
-  border: blue 4px solid;
+  border: rgba(73, 73, 114, 0.314) 4px solid;
   display: flex;
   flex-direction: column; 
 }
@@ -79,4 +79,8 @@
 .post-button {
   max-width: 130px; 
   max-height: 80%; 
+}
+
+.post-close-btn:hover {
+  background-color: transparent;
 }

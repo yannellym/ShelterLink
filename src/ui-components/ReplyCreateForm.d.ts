@@ -5,7 +5,7 @@
  **************************************************************************/
 
 import * as React from "react";
-import { GridProps, SwitchFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
 export declare type EscapeHatchProps = {
     [elementHierarchy: string]: Record<string, unknown>;
 } | null;
@@ -21,40 +21,31 @@ export declare type ValidationResponse = {
     errorMessage?: string;
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
-export declare type PostCreateFormInputValues = {
+export declare type ReplyCreateFormInputValues = {
     subject?: string;
     content?: string;
-    createdAt?: string;
-    Favorited?: boolean;
-    likes?: number;
-    likedBy?: string[];
+    image?: string;
 };
-export declare type PostCreateFormValidationValues = {
+export declare type ReplyCreateFormValidationValues = {
     subject?: ValidationFunction<string>;
     content?: ValidationFunction<string>;
-    createdAt?: ValidationFunction<string>;
-    Favorited?: ValidationFunction<boolean>;
-    likes?: ValidationFunction<number>;
-    likedBy?: ValidationFunction<string>;
+    image?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
-export declare type PostCreateFormOverridesProps = {
-    PostCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
+export declare type ReplyCreateFormOverridesProps = {
+    ReplyCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
     subject?: PrimitiveOverrideProps<TextFieldProps>;
     content?: PrimitiveOverrideProps<TextFieldProps>;
-    createdAt?: PrimitiveOverrideProps<TextFieldProps>;
-    Favorited?: PrimitiveOverrideProps<SwitchFieldProps>;
-    likes?: PrimitiveOverrideProps<TextFieldProps>;
-    likedBy?: PrimitiveOverrideProps<TextFieldProps>;
+    image?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
-export declare type PostCreateFormProps = React.PropsWithChildren<{
-    overrides?: PostCreateFormOverridesProps | undefined | null;
+export declare type ReplyCreateFormProps = React.PropsWithChildren<{
+    overrides?: ReplyCreateFormOverridesProps | undefined | null;
 } & {
     clearOnSuccess?: boolean;
-    onSubmit?: (fields: PostCreateFormInputValues) => PostCreateFormInputValues;
-    onSuccess?: (fields: PostCreateFormInputValues) => void;
-    onError?: (fields: PostCreateFormInputValues, errorMessage: string) => void;
-    onChange?: (fields: PostCreateFormInputValues) => PostCreateFormInputValues;
-    onValidate?: PostCreateFormValidationValues;
+    onSubmit?: (fields: ReplyCreateFormInputValues) => ReplyCreateFormInputValues;
+    onSuccess?: (fields: ReplyCreateFormInputValues) => void;
+    onError?: (fields: ReplyCreateFormInputValues, errorMessage: string) => void;
+    onChange?: (fields: ReplyCreateFormInputValues) => ReplyCreateFormInputValues;
+    onValidate?: ReplyCreateFormValidationValues;
 } & React.CSSProperties>;
-export default function PostCreateForm(props: PostCreateFormProps): React.ReactElement;
+export default function ReplyCreateForm(props: ReplyCreateFormProps): React.ReactElement;

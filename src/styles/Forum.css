@@ -196,13 +196,6 @@
   margin-top: 20px;
 }
 
-/* textarea {
-  width: calc(100% - 16px); 
-  margin-top: 10px;
-  padding: 8px;
-  border-radius: 4px;
-} */
-
 .post-bottom-container {
   display: flex;
   width: 95%;
@@ -229,18 +222,6 @@
   align-items: center;
   z-index: 1000;
 }
-
-/* .new-thread-container {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-}
-
-.new-thread-button.disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-} */
 
 /*  modal content */
 .post-input {

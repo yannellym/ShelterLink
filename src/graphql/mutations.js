@@ -445,9 +445,14 @@ export const createTopic = /* GraphQL */ `
         updatedAt
         __typename
       }
-      threads {
+      posts {
         id
+        subject
+        content
         createdAt
+        Favorited
+        likes
+        likedBy
         updatedAt
         __typename
       }
@@ -473,9 +478,14 @@ export const updateTopic = /* GraphQL */ `
         updatedAt
         __typename
       }
-      threads {
+      posts {
         id
+        subject
+        content
         createdAt
+        Favorited
+        likes
+        likedBy
         updatedAt
         __typename
       }
@@ -501,96 +511,14 @@ export const deleteTopic = /* GraphQL */ `
         updatedAt
         __typename
       }
-      threads {
-        id
-        createdAt
-        updatedAt
-        __typename
-      }
-      createdAt
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const createThread = /* GraphQL */ `
-  mutation CreateThread(
-    $input: CreateThreadInput!
-    $condition: ModelThreadConditionInput
-  ) {
-    createThread(input: $input, condition: $condition) {
-      id
-      topic {
-        id
-        title
-        createdAt
-        updatedAt
-        __typename
-      }
       posts {
         id
         subject
         content
         createdAt
         Favorited
-        updatedAt
-        __typename
-      }
-      createdAt
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const updateThread = /* GraphQL */ `
-  mutation UpdateThread(
-    $input: UpdateThreadInput!
-    $condition: ModelThreadConditionInput
-  ) {
-    updateThread(input: $input, condition: $condition) {
-      id
-      topic {
-        id
-        title
-        createdAt
-        updatedAt
-        __typename
-      }
-      posts {
-        id
-        subject
-        content
-        createdAt
-        Favorited
-        updatedAt
-        __typename
-      }
-      createdAt
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const deleteThread = /* GraphQL */ `
-  mutation DeleteThread(
-    $input: DeleteThreadInput!
-    $condition: ModelThreadConditionInput
-  ) {
-    deleteThread(input: $input, condition: $condition) {
-      id
-      topic {
-        id
-        title
-        createdAt
-        updatedAt
-        __typename
-      }
-      posts {
-        id
-        subject
-        content
-        createdAt
-        Favorited
+        likes
+        likedBy
         updatedAt
         __typename
       }
@@ -617,14 +545,26 @@ export const createPost = /* GraphQL */ `
         updatedAt
         __typename
       }
-      thread {
+      topic {
         id
+        title
         createdAt
         updatedAt
         __typename
       }
       createdAt
       Favorited
+      likes
+      likedBy
+      replies {
+        id
+        subject
+        content
+        image
+        createdAt
+        updatedAt
+        __typename
+      }
       updatedAt
       __typename
     }
@@ -647,14 +587,26 @@ export const updatePost = /* GraphQL */ `
         updatedAt
         __typename
       }
-      thread {
+      topic {
         id
+        title
         createdAt
         updatedAt
         __typename
       }
       createdAt
       Favorited
+      likes
+      likedBy
+      replies {
+        id
+        subject
+        content
+        image
+        createdAt
+        updatedAt
+        __typename
+      }
       updatedAt
       __typename
     }
@@ -677,14 +629,98 @@ export const deletePost = /* GraphQL */ `
         updatedAt
         __typename
       }
-      thread {
+      topic {
         id
+        title
         createdAt
         updatedAt
         __typename
       }
       createdAt
       Favorited
+      likes
+      likedBy
+      replies {
+        id
+        subject
+        content
+        image
+        createdAt
+        updatedAt
+        __typename
+      }
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const createReply = /* GraphQL */ `
+  mutation CreateReply(
+    $input: CreateReplyInput!
+    $condition: ModelReplyConditionInput
+  ) {
+    createReply(input: $input, condition: $condition) {
+      id
+      subject
+      content
+      user {
+        id
+        username
+        email
+        createdAt
+        updatedAt
+        __typename
+      }
+      image
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const updateReply = /* GraphQL */ `
+  mutation UpdateReply(
+    $input: UpdateReplyInput!
+    $condition: ModelReplyConditionInput
+  ) {
+    updateReply(input: $input, condition: $condition) {
+      id
+      subject
+      content
+      user {
+        id
+        username
+        email
+        createdAt
+        updatedAt
+        __typename
+      }
+      image
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const deleteReply = /* GraphQL */ `
+  mutation DeleteReply(
+    $input: DeleteReplyInput!
+    $condition: ModelReplyConditionInput
+  ) {
+    deleteReply(input: $input, condition: $condition) {
+      id
+      subject
+      content
+      user {
+        id
+        username
+        email
+        createdAt
+        updatedAt
+        __typename
+      }
+      image
+      createdAt
       updatedAt
       __typename
     }

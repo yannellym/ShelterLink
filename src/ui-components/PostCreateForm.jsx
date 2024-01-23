@@ -7,15 +7,176 @@
 /* eslint-disable */
 import * as React from "react";
 import {
+  Badge,
   Button,
+  Divider,
   Flex,
   Grid,
+  Icon,
+  ScrollView,
   SwitchField,
+  Text,
   TextField,
+  useTheme,
 } from "@aws-amplify/ui-react";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
 import { API } from "aws-amplify";
 import { createPost } from "../graphql/mutations";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+  defaultFieldValue,
+  lengthLimit,
+  getBadgeText,
+  runValidationTasks,
+  errorMessage,
+}) {
+  const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    const { hasError } = runValidationTasks();
+    if (
+      currentFieldValue !== undefined &&
+      currentFieldValue !== null &&
+      currentFieldValue !== "" &&
+      !hasError
+    ) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  const arraySection = (
+    <React.Fragment>
+      {!!items?.length && (
+        <ScrollView height="inherit" width="inherit" maxHeight={"7rem"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: "pointer",
+                  alignItems: "center",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? "#B8CEF9" : "",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                }}
+              >
+                {getBadgeText ? getBadgeText(value) : value.toString()}
+                <Icon
+                  style={{
+                    cursor: "pointer",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: "M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z",
+                      stroke: "black",
+                    },
+                  ]}
+                  ariaLabel="button"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation="horizontal" marginTop={5} />
+    </React.Fragment>
+  );
+  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
+  }
+  return (
+    <React.Fragment>
+      {labelElement}
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
+        </>
+      ) : (
+        <Flex justifyContent="flex-end">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children="Cancel"
+              type="button"
+              size="small"
+              onClick={() => {
+                setFieldValue(defaultFieldValue);
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button size="small" variation="link" onClick={addItem}>
+            {selectedBadgeIndex !== undefined ? "Save" : "Add"}
+          </Button>
+        </Flex>
+      )}
+      {arraySection}
+    </React.Fragment>
+  );
+}
 export default function PostCreateForm(props) {
   const {
     clearOnSuccess = true,
@@ -32,24 +193,35 @@ export default function PostCreateForm(props) {
     content: "",
     createdAt: "",
     Favorited: false,
+    likes: "",
+    likedBy: [],
   };
   const [subject, setSubject] = React.useState(initialValues.subject);
   const [content, setContent] = React.useState(initialValues.content);
   const [createdAt, setCreatedAt] = React.useState(initialValues.createdAt);
   const [Favorited, setFavorited] = React.useState(initialValues.Favorited);
+  const [likes, setLikes] = React.useState(initialValues.likes);
+  const [likedBy, setLikedBy] = React.useState(initialValues.likedBy);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setSubject(initialValues.subject);
     setContent(initialValues.content);
     setCreatedAt(initialValues.createdAt);
     setFavorited(initialValues.Favorited);
+    setLikes(initialValues.likes);
+    setLikedBy(initialValues.likedBy);
+    setCurrentLikedByValue("");
     setErrors({});
   };
+  const [currentLikedByValue, setCurrentLikedByValue] = React.useState("");
+  const likedByRef = React.createRef();
   const validations = {
     subject: [{ type: "Required" }],
     content: [{ type: "Required" }],
     createdAt: [{ type: "Required" }],
     Favorited: [],
+    likes: [],
+    likedBy: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -98,6 +270,8 @@ export default function PostCreateForm(props) {
           content,
           createdAt,
           Favorited,
+          likes,
+          likedBy,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -164,6 +338,8 @@ export default function PostCreateForm(props) {
               content,
               createdAt,
               Favorited,
+              likes,
+              likedBy,
             };
             const result = onChange(modelFields);
             value = result?.subject ?? value;
@@ -191,6 +367,8 @@ export default function PostCreateForm(props) {
               content: value,
               createdAt,
               Favorited,
+              likes,
+              likedBy,
             };
             const result = onChange(modelFields);
             value = result?.content ?? value;
@@ -220,6 +398,8 @@ export default function PostCreateForm(props) {
               content,
               createdAt: value,
               Favorited,
+              likes,
+              likedBy,
             };
             const result = onChange(modelFields);
             value = result?.createdAt ?? value;
@@ -247,6 +427,8 @@ export default function PostCreateForm(props) {
               content,
               createdAt,
               Favorited: value,
+              likes,
+              likedBy,
             };
             const result = onChange(modelFields);
             value = result?.Favorited ?? value;
@@ -261,6 +443,89 @@ export default function PostCreateForm(props) {
         hasError={errors.Favorited?.hasError}
         {...getOverrideProps(overrides, "Favorited")}
       ></SwitchField>
+      <TextField
+        label="Likes"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={likes}
+        onChange={(e) => {
+          let value = isNaN(parseInt(e.target.value))
+            ? e.target.value
+            : parseInt(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              subject,
+              content,
+              createdAt,
+              Favorited,
+              likes: value,
+              likedBy,
+            };
+            const result = onChange(modelFields);
+            value = result?.likes ?? value;
+          }
+          if (errors.likes?.hasError) {
+            runValidationTasks("likes", value);
+          }
+          setLikes(value);
+        }}
+        onBlur={() => runValidationTasks("likes", likes)}
+        errorMessage={errors.likes?.errorMessage}
+        hasError={errors.likes?.hasError}
+        {...getOverrideProps(overrides, "likes")}
+      ></TextField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              subject,
+              content,
+              createdAt,
+              Favorited,
+              likes,
+              likedBy: values,
+            };
+            const result = onChange(modelFields);
+            values = result?.likedBy ?? values;
+          }
+          setLikedBy(values);
+          setCurrentLikedByValue("");
+        }}
+        currentFieldValue={currentLikedByValue}
+        label={"Liked by"}
+        items={likedBy}
+        hasError={errors?.likedBy?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks("likedBy", currentLikedByValue)
+        }
+        errorMessage={errors?.likedBy?.errorMessage}
+        setFieldValue={setCurrentLikedByValue}
+        inputFieldRef={likedByRef}
+        defaultFieldValue={""}
+      >
+        <TextField
+          label="Liked by"
+          isRequired={false}
+          isReadOnly={false}
+          value={currentLikedByValue}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.likedBy?.hasError) {
+              runValidationTasks("likedBy", value);
+            }
+            setCurrentLikedByValue(value);
+          }}
+          onBlur={() => runValidationTasks("likedBy", currentLikedByValue)}
+          errorMessage={errors.likedBy?.errorMessage}
+          hasError={errors.likedBy?.hasError}
+          ref={likedByRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, "likedBy")}
+        ></TextField>
+      </ArrayField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}
