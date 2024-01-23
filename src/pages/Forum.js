@@ -201,16 +201,16 @@ const handleNewTopicSubmit = (title) => {
       <div className="topics-list">
         {/* New Topic Button Icon */}
         {user && (
-            <div className="new-topic-button">
-              <FontAwesomeIcon
-                icon={faPlusCircle}
-                className="new-topic-icon"
-                onClick={() => {
-                  setShowNewTopicModal(true);
-                }}
-              />
-            </div>
-          )}
+          <div className="new-topic-button">
+            <FontAwesomeIcon
+              icon={faPlusCircle}
+              className="new-topic-icon"
+              onClick={() => {
+                setShowNewTopicModal(true);
+              }}
+            />
+          </div>
+        )}
         <h2>Topics</h2>
         <div className="scrollable-list">
           {sortedTopics.map((topic, index) => (
@@ -238,24 +238,33 @@ const handleNewTopicSubmit = (title) => {
           )}
         </div>
       </div>
-      {selectedTopic && selectedTopic.posts && (
+      {selectedTopic && (
         <div className="topic-posts-container">
           {user && (
             <FontAwesomeIcon
               icon={faPenToSquare}
               onClick={handleNewPostClick} 
               className={`new-post-btn ${!user ? 'disabled' : ''}`}
-              >
-                Make a new post
-            </FontAwesomeIcon>)}
-          <h3>Current posts:</h3>
-          <Messages
-            posts={selectedTopic.posts}
-            hideReplyButton={false}
-            hideIcons={false}
-            topicIndex={selectedTopic && selectedTopic.tIndex}
-            handleLike={(topicIndex, postIndex) => handleLike(topicIndex, postIndex)}
-          />
+            >
+              Make a new post
+            </FontAwesomeIcon>
+          )}
+          {selectedTopic.posts && selectedTopic.posts.length > 0 ? (
+            <>
+              <h3>Current posts:</h3>
+              <Messages
+                posts={selectedTopic.posts}
+                hideReplyButton={false}
+                hideIcons={false}
+                topicIndex={selectedTopic.tIndex}
+                handleLike={(topicIndex, postIndex) => handleLike(topicIndex, postIndex)}
+              />
+            </>
+          ) : (
+            <div className="no-posts-message">
+              <p>No posts yet. Be the first one to make a post!</p>
+            </div>
+          )}
         </div>
       )}
       {/* New Post Modal */}
@@ -276,6 +285,5 @@ const handleNewTopicSubmit = (title) => {
       )}
     </div>
   );
-};
-
+};  
 export default Forum;

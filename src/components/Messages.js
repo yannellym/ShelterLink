@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCommentDots, faHeart} from '@fortawesome/free-solid-svg-icons';
 
 const Messages = ({ posts, hideReplyButton, hideIcons,  onReplySubmit, topicIndex, handleLike }) => {
+
   const [expandedPosts, setExpandedPosts] = useState([]);
   const [isFavorited, setIsFavorited] = useState(Array(posts.length).fill(false));
   const handleReadMore = (index) => {

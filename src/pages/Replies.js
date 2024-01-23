@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import Messages from '../components/Messages.js'; 
 import ReplyPost from '../components/ReplyPost.js';
 
@@ -9,6 +9,7 @@ import { faCommentDots, faHeart} from '@fortawesome/free-solid-svg-icons';
 import '../styles/Replies.css';
 
 const Replies = ({ match, user }) => {
+    const navigate = useNavigate();
     const { postId } = useParams();
     const [replies, setReplies] = useState([]);
     const fetchRepliesRef = useRef(false);
@@ -97,6 +98,7 @@ const Replies = ({ match, user }) => {
 
     return (
         <div className="reply-container">
+            <button onClick={() => navigate(-2)}>Back</button>
             <h3>Original Post ID: {post ? post.id : 'Undefined'}</h3>
             <div className={`post-container ${expandedPosts.includes(post.index) ? 'expanded-message' : ''}`} key={post.id}>
                 {
