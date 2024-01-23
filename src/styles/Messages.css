@@ -1,12 +1,22 @@
 .previous-posts-container {
-  max-width: 80vw;
-  max-height: 65vh;
-  margin-top: 4%;
+  max-width: 100vw;
+  max-height: 95%;
+  margin-top: 1%;
   overflow-y: auto;
   padding-left: 2%;
+  /* border: red solid 5px; */
 }
 .previous-posts-container h3{
   margin-top: 0;
+}
+
+.new-topic-icon {
+  color: #3f7ecc;
+  transition: width 0.3s ease; /* smooth transition effect */
+}
+
+.new-topic-icon:hover {
+  transform: scale(1.5); 
 }
 
 /* POSTS */

@@ -62,9 +62,9 @@ const PostModal = ({ selectedTopic, user, onPostSubmit, onClose }) => {
     <div className="share-modal-overlay">
       <div className="share-modal-content">
         <div className="modal-header">
+          <h1>Create a Post</h1>
           <button onClick={onClose}>&times;</button>
         </div>
-        <h1>Create a Post</h1>
         <div className="modal-body">
           <div className="post-input-container">
             <input

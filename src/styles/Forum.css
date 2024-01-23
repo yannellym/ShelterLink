@@ -7,13 +7,14 @@
   height: 40vh;
 }
 
-.forum-container {
+.forum-container {  
   display: flex;
   width: 100%;
 }
 
 /* TOPICS */
 .topics-list {
+  position: relative;
   width: 250px;
   background-color: #f0f0f0;
   padding: 20px;
@@ -25,7 +26,7 @@
 }
 
 .topics-list h2 {
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 
 .topics-list div {
@@ -35,30 +36,74 @@
   border-radius: 4px;
   transition: background-color 0.3s;
 }
+.indiv-topic {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px; 
+}
 
 .indiv-topic:hover {
   background-color: #ddd;
 }
 
+.new-topic-icon {
+  color: #3f7ecc;
+  transition: width 0.3s ease; /* smooth transition effect */
+}
+
+.new-topic-icon:hover, .new-post-btn:hover {
+  transform: scale(1.5); 
+}
+.new-topic-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 4%;
+}
+
+.indiv-topic:nth-child(odd) {
+  background-color: #ff898923;
+}
+
+.post-count {
+  margin-left: auto; 
+  font-size: 14px; 
+  color: #888; 
+}
+
+.messages-icon {
+  margin-left: 5px; 
+  color: #3f7ecc;
+}
+
 /* TOPICS'S POSTS SCREEN */
 .topic-posts-container {
-  height: 70vh;
-  min-width: 75vw;
+  height: 100vh;
+  min-width: 80vw;
   /* border: 4px solid #10f16a; */
   position: relative;
 }
+
+.topic-posts-container h3 {
+  padding-left: 3%;
+}
+
 .new-post-btn {
   margin: 2%;
   position: absolute;
   top: 0;
   right: 0;
+  color: red;
+  font-size: 25px;
+  /* border: red solid 5px; */
+  transition: width 0.3s ease; /* smooth transition effect */
 }
 
 .new-post-btn.disabled {
   background-color: #ccc;
   cursor: not-allowed;
 } 
-
 
 .post-input{
   max-width: 40%;
