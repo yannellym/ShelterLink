@@ -371,15 +371,8 @@ export const onCreatePost = /* GraphQL */ `
       Favorited
       likes
       likedBy
-      replies {
-        id
-        subject
-        content
-        image
-        createdAt
-        updatedAt
-        __typename
-      }
+      replies
+      image
       updatedAt
       __typename
     }
@@ -398,15 +391,8 @@ export const onUpdatePost = /* GraphQL */ `
       Favorited
       likes
       likedBy
-      replies {
-        id
-        subject
-        content
-        image
-        createdAt
-        updatedAt
-        __typename
-      }
+      replies
+      image
       updatedAt
       __typename
     }
@@ -425,15 +411,8 @@ export const onDeletePost = /* GraphQL */ `
       Favorited
       likes
       likedBy
-      replies {
-        id
-        subject
-        content
-        image
-        createdAt
-        updatedAt
-        __typename
-      }
+      replies
+      image
       updatedAt
       __typename
     }

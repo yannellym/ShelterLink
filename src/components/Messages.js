@@ -1,13 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/Messages.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCommentDots, faHeart} from '@fortawesome/free-solid-svg-icons';
 
-const Messages = ({ posts, hideReplyButton, hideIcons,  onReplySubmit, topicIndex, handleLike }) => {
+import { API, graphqlOperation } from 'aws-amplify';
+import { listPostsById } from '../graphql/queries.js';
+
+const Messages = ({ postsIds, hideReplyButton, hideIcons,  onReplySubmit, topicIndex, handleLike }) => {
+
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        if (postsIds && postsIds.length > 0) {
+          // Fetch a single post from the database using the modified listPostsById query
+          const result = await API.graphql(graphqlOperation(listPostsById, { id: postsIds[0] }));
+          console.log(result.data.getPost, "check");
+          const fetchedPost = result.data.getPost;
+          setPosts([fetchedPost]);
+        }
+      } catch (error) {
+        console.error('Error fetching posts:', error);
+      }
+    };
+
+    fetchPosts();
+  }, [postsIds]); // Re-run the effect when postIds change
 
   const [expandedPosts, setExpandedPosts] = useState([]);
   const [isFavorited, setIsFavorited] = useState(Array(posts.length).fill(false));
+  
   const handleReadMore = (index) => {
     setExpandedPosts((prevExpandedPosts) => {
       if (prevExpandedPosts.includes(index)) {
@@ -37,7 +61,7 @@ const Messages = ({ posts, hideReplyButton, hideIcons,  onReplySubmit, topicInde
     // Call the handleLike function passed from the parent component
     handleLike(topicIndex, postIndex);
   };
-  
+ 
 
   return (
     <div className="previous-posts-container">
@@ -47,6 +71,7 @@ const Messages = ({ posts, hideReplyButton, hideIcons,  onReplySubmit, topicInde
             // If index is even, align image to the left
             <>
               <img src={post.image} alt={post.subject} className="left-image" />
+
               <div className={`post ${index % 2 === 0 ? 'even' : 'odd'} ${expandedPosts.includes(index) ? 'expanded' : ''}`}>
                 <div className="post-content">
                   <h4>{post.subject.toUpperCase()}</h4>
@@ -59,8 +84,9 @@ const Messages = ({ posts, hideReplyButton, hideIcons,  onReplySubmit, topicInde
                     </span>
                   )}
                   <div className="post-details">
-                    <p>Posted by: {post.user.username} on {new Date(post.id).toLocaleDateString()} @{' '}
-                      {new Date(post.id).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} 
+                    <p>
+                      Posted on {new Date(post.createdAt).toLocaleDateString()} @{' '}
+                      {new Date(post.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </p>
                     {!hideIcons && (
                       <p className='post-details-icon-p'>
@@ -68,7 +94,7 @@ const Messages = ({ posts, hideReplyButton, hideIcons,  onReplySubmit, topicInde
                         to={`/replies/${post.id}`} 
                         style={{ textDecoration: 'none', color: 'inherit' }}
                         >
-                          {post.replies.length} <FontAwesomeIcon 
+                          {post.replies?.length || 0} <FontAwesomeIcon 
                             icon={faCommentDots}
                             className='reply-count-icon'
                           />
@@ -105,8 +131,9 @@ const Messages = ({ posts, hideReplyButton, hideIcons,  onReplySubmit, topicInde
                     </span>
                   )}
                   <div className="post-details">
-                    <p>Posted by: {post.user.username} on {new Date(post.id).toLocaleDateString()} @{' '}
-                      {new Date(post.id).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} 
+                    <p>
+                      Posted on {new Date(post.createdAt).toLocaleDateString()} @{' '}
+                      {new Date(post.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </p>
                     {!hideIcons && (
                       <p className='post-details-icon-p'>
@@ -114,12 +141,13 @@ const Messages = ({ posts, hideReplyButton, hideIcons,  onReplySubmit, topicInde
                         to={`/replies/${post.id}`} 
                         style={{ textDecoration: 'none', color: 'inherit' }}
                         >
-                          {post.replies.length} <FontAwesomeIcon 
+                          {post.replies?.length ||0} <FontAwesomeIcon 
                             icon={faCommentDots}
                             className='reply-count-icon'
                           />
                         </Link>
                         {post.likes} 
+                        <p>{post.image}</p>
                         <FontAwesomeIcon
                           icon={faHeart}
                           onClick={() => handleLikeClick(index)}
@@ -136,6 +164,7 @@ const Messages = ({ posts, hideReplyButton, hideIcons,  onReplySubmit, topicInde
                 </div>
               </div>
               <img src={post.image} alt={post.subject} className="right-image" />
+
             </>
           )}
         </div>

@@ -200,6 +200,8 @@ export default function PostUpdateForm(props) {
     Favorited: false,
     likes: "",
     likedBy: [],
+    replies: [],
+    image: "",
   };
   const [subject, setSubject] = React.useState(initialValues.subject);
   const [content, setContent] = React.useState(initialValues.content);
@@ -210,6 +212,8 @@ export default function PostUpdateForm(props) {
   const [Favorited, setFavorited] = React.useState(initialValues.Favorited);
   const [likes, setLikes] = React.useState(initialValues.likes);
   const [likedBy, setLikedBy] = React.useState(initialValues.likedBy);
+  const [replies, setReplies] = React.useState(initialValues.replies);
+  const [image, setImage] = React.useState(initialValues.image);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = postRecord
@@ -225,6 +229,9 @@ export default function PostUpdateForm(props) {
     setLikes(cleanValues.likes);
     setLikedBy(cleanValues.likedBy ?? []);
     setCurrentLikedByValue("");
+    setReplies(cleanValues.replies ?? []);
+    setCurrentRepliesValue("");
+    setImage(cleanValues.image);
     setErrors({});
   };
   const [postRecord, setPostRecord] = React.useState(postModelProp);
@@ -245,6 +252,8 @@ export default function PostUpdateForm(props) {
   React.useEffect(resetStateValues, [postRecord]);
   const [currentLikedByValue, setCurrentLikedByValue] = React.useState("");
   const likedByRef = React.createRef();
+  const [currentRepliesValue, setCurrentRepliesValue] = React.useState("");
+  const repliesRef = React.createRef();
   const validations = {
     subject: [{ type: "Required" }],
     content: [{ type: "Required" }],
@@ -255,6 +264,8 @@ export default function PostUpdateForm(props) {
     Favorited: [],
     likes: [],
     likedBy: [],
+    replies: [],
+    image: [{ type: "Required" }],
   };
   const runValidationTasks = async (
     fieldName,
@@ -308,6 +319,8 @@ export default function PostUpdateForm(props) {
           Favorited: Favorited ?? null,
           likes: likes ?? null,
           likedBy: likedBy ?? null,
+          replies: replies ?? null,
+          image,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -377,6 +390,8 @@ export default function PostUpdateForm(props) {
               Favorited,
               likes,
               likedBy,
+              replies,
+              image,
             };
             const result = onChange(modelFields);
             value = result?.subject ?? value;
@@ -409,6 +424,8 @@ export default function PostUpdateForm(props) {
               Favorited,
               likes,
               likedBy,
+              replies,
+              image,
             };
             const result = onChange(modelFields);
             value = result?.content ?? value;
@@ -441,6 +458,8 @@ export default function PostUpdateForm(props) {
               Favorited,
               likes,
               likedBy,
+              replies,
+              image,
             };
             const result = onChange(modelFields);
             value = result?.user ?? value;
@@ -473,6 +492,8 @@ export default function PostUpdateForm(props) {
               Favorited,
               likes,
               likedBy,
+              replies,
+              image,
             };
             const result = onChange(modelFields);
             value = result?.username ?? value;
@@ -505,6 +526,8 @@ export default function PostUpdateForm(props) {
               Favorited,
               likes,
               likedBy,
+              replies,
+              image,
             };
             const result = onChange(modelFields);
             value = result?.topicID ?? value;
@@ -539,6 +562,8 @@ export default function PostUpdateForm(props) {
               Favorited,
               likes,
               likedBy,
+              replies,
+              image,
             };
             const result = onChange(modelFields);
             value = result?.createdAt ?? value;
@@ -571,6 +596,8 @@ export default function PostUpdateForm(props) {
               Favorited: value,
               likes,
               likedBy,
+              replies,
+              image,
             };
             const result = onChange(modelFields);
             value = result?.Favorited ?? value;
@@ -607,6 +634,8 @@ export default function PostUpdateForm(props) {
               Favorited,
               likes: value,
               likedBy,
+              replies,
+              image,
             };
             const result = onChange(modelFields);
             value = result?.likes ?? value;
@@ -635,6 +664,8 @@ export default function PostUpdateForm(props) {
               Favorited,
               likes,
               likedBy: values,
+              replies,
+              image,
             };
             const result = onChange(modelFields);
             values = result?.likedBy ?? values;
@@ -674,6 +705,95 @@ export default function PostUpdateForm(props) {
           {...getOverrideProps(overrides, "likedBy")}
         ></TextField>
       </ArrayField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              subject,
+              content,
+              user,
+              username,
+              topicID,
+              createdAt,
+              Favorited,
+              likes,
+              likedBy,
+              replies: values,
+              image,
+            };
+            const result = onChange(modelFields);
+            values = result?.replies ?? values;
+          }
+          setReplies(values);
+          setCurrentRepliesValue("");
+        }}
+        currentFieldValue={currentRepliesValue}
+        label={"Replies"}
+        items={replies}
+        hasError={errors?.replies?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks("replies", currentRepliesValue)
+        }
+        errorMessage={errors?.replies?.errorMessage}
+        setFieldValue={setCurrentRepliesValue}
+        inputFieldRef={repliesRef}
+        defaultFieldValue={""}
+      >
+        <TextField
+          label="Replies"
+          isRequired={false}
+          isReadOnly={false}
+          value={currentRepliesValue}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.replies?.hasError) {
+              runValidationTasks("replies", value);
+            }
+            setCurrentRepliesValue(value);
+          }}
+          onBlur={() => runValidationTasks("replies", currentRepliesValue)}
+          errorMessage={errors.replies?.errorMessage}
+          hasError={errors.replies?.hasError}
+          ref={repliesRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, "replies")}
+        ></TextField>
+      </ArrayField>
+      <TextField
+        label="Image"
+        isRequired={true}
+        isReadOnly={false}
+        value={image}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              subject,
+              content,
+              user,
+              username,
+              topicID,
+              createdAt,
+              Favorited,
+              likes,
+              likedBy,
+              replies,
+              image: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.image ?? value;
+          }
+          if (errors.image?.hasError) {
+            runValidationTasks("image", value);
+          }
+          setImage(value);
+        }}
+        onBlur={() => runValidationTasks("image", image)}
+        errorMessage={errors.image?.errorMessage}
+        hasError={errors.image?.hasError}
+        {...getOverrideProps(overrides, "image")}
+      ></TextField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}

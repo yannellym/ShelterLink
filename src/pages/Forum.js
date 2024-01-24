@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/Forum.css';
 import bd4 from '../images/bd4.jpeg';
+import default_pic from '../images/dandc.jpeg';
 import Messages from '../components/Messages.js';
 import PostModal from '../components/PostModal.js';
 import NewTopicModal from '../components/NewTopicModal'; 
@@ -14,58 +15,41 @@ import { faCommentDots, faPlusCircle, faPenToSquare } from '@fortawesome/free-so
 
 const Forum = ({ user }) => {
 
-  // const [topics, setTopics] = useState([]);
+  const [topics, setTopics] = useState([]);
 
   const [newSubject, setNewSubject] = useState('');
-  const [newTopicTitle, setNewTopicTitle] = useState('');
-  const topicsList = [
-    'Adopt', 'Birds', 'Cats', 'Dogs', 'Foster', 'Help', 'Horses', 'Pet Sitter Needed',
-    'Rants', 'Shelters', 'Success Stories', 'Toys', 'Training', 'Updates', 'Volunteer'
-  ];
 
   const [selectedTopic, setSelectedTopic] = useState({});
-  const [sortedTopics, setSortedTopics] = useState([...topicsList]);
   const [newPost, setNewPost] = useState('');
-  const [expandedPosts, setExpandedPosts] = useState([]);
-  const [charCount, setCharCount] = useState(0);
   const [selectedPosts, setSelectedPosts] = useState([]);
 
   const [showPostModal, setShowPostModal] = useState(false);
   const [showNewTopicModal, setShowNewTopicModal] = useState(false);
 
-  const [topics, setTopics] = useState(
-    sortedTopics.map((topic, index) => ({
-      id: index + 1,
-      title: topic,
-      posts: Array.from({ length: 6 }, (_, i) => ({
-        id: Date.now() + i,
-        subject: `Default Post ${i + 1} in ${topic}`,
-        content: 'This is the default content for the post...',
-        user: { id: 1, username: 'Admin' },
-        image: 'https://clydevet.com.au/wp-content/uploads/2021/08/doggrin_SQR_blank.jpg',
-        replies: [],
-        likes: 0
-      })),
-    }))
-  );
+  // Function to fetch topics
+  const fetchTopics = async () => {
+    try {
+      const result = await API.graphql(graphqlOperation(listTopics));
+      const fetchedTopics = result.data.listTopics.items;
+      console.log(fetchedTopics, "topics fetched")
+      setTopics(fetchedTopics);
+    } catch (error) {
+      console.error('Error fetching topics:', error);
+    }
+  };
   
   // HANDLE TOPIC SELECTION
-  const handleTopicSelection = (topic) => {
-    const tIndex = topics.indexOf(topic.title);
-    setSelectedTopic({ ...topic, tIndex });
-    const selectedPosts = topics.find((t) => t.title === topic.title)?.posts || [];
+  const handleTopicSelection = (selectedTopic) => {
+    // Find the index of the selected topic in the topics array
+    const tIndex = topics.findIndex((t) => t.title === selectedTopic.title);
+    
+    // Set the selectedTopic state with additional 'tIndex' property
+    setSelectedTopic({ ...selectedTopic, tIndex });
+
+    // Set the selectedPosts state with the posts of the selected topic
+    const selectedPosts = selectedTopic.posts || [];
     setSelectedPosts(selectedPosts);
   };
-
-  // HANDLE NEW POSTS -> MODAL
-  const handleNewPostClick = () => {
-    setShowPostModal(true);
-  };
-
-  const handlePostModalClose = () => {
-    setShowPostModal(false);
-  };
-
   
   // Function to create a new topic
   const createNewTopic = async (title) => {
@@ -84,7 +68,8 @@ const Forum = ({ user }) => {
 
       // Call the function to add a default post for the new topic
       await addDefaultPostToTopic(newTopic);
-
+      // Close the modal after submitting the new topic
+      setShowNewTopicModal(false)
       // Add logic to handle the created topic as needed
     } catch (error) {
       console.error('Error creating new topic:', error);
@@ -95,15 +80,19 @@ const Forum = ({ user }) => {
   // Function to add a default post for a given topic
   const addDefaultPostToTopic = async (topic) => {
     try {
+      // Fetch placeholder image for the created post
+      const image_url = await fetchPlaceholderImage(topic.title);
+
       const postInput = {
         input: {
           subject: 'Welcome to the Forum!',
-          content: "Hello forum members! 👋 Welcome to our community. We're excited to have you here. Feel free to make posts, share your thoughts, like posts that resonate with you, and engage with other members by replying to their posts. Let's create a vibrant and supportive community together!",
+          content: `Hello forum members! 👋 Welcome to our ${topic.title} community. We're excited to have you here. Feel free to make posts, share your thoughts, like posts that resonate with you, and engage with other members by replying to their posts. Let's create a vibrant and supportive community together!`,
           user: user.attributes.sub,
           username: user.attributes.name,
           topicID: topic.id,
           Favorited: false,
           likes: 0,
+          image: image_url,
         },
       };
 
@@ -122,55 +111,56 @@ const Forum = ({ user }) => {
         },
       });
       console.log('Result of updating topic:', resultOfTopicUpdate);
+      
+    // Fetch the updated topic data
+    const updatedTopicResult = await API.graphql({
+      query: listTopics,
+      variables: {},
+    });
+    const updatedTopics = updatedTopicResult.data.listTopics.items;
+
+    // Update the state with the new topics data
+    setTopics(updatedTopics);
+
     } catch (error) {
       console.error('Error creating new post:', error);
     }
   };
-    // if (!user) {
-    //   alert('Please sign in to create a new topic.');
-    //   return;
-    // }
 
-    // // Add the new topic to the topics list
-    // const newTopic = {
-    //   id: Date.now(),
-    //   title: title,
-    //   posts: [], // New topic starts with an empty array of posts
-    // };
+  useEffect(() => {
+    console.log("fetching topics....")
+    fetchTopics();
+  }, []); // runs once when the component mounts
 
-    // console.log(newTopic, "new topic");
+  // HANDLE NEW POSTS -> MODAL
+  const handleNewPostClick = () => {
+    setShowPostModal(true);
+  };
 
-    // if (!newTopic.title) {
-    //   alert('Please enter a title for the new topic.');
-    //   return;
-    // }
-
-    // console.log('New Topic Title:', newTopicTitle);
-    // console.log('Current Sorted Topics:', sortedTopics);
-
-    // // Update the sortedTopics array to reflect the new topic
-    // setSortedTopics((prevSortedTopics) => [...prevSortedTopics, title]);
-
-    // console.log('Updated Sorted Topics:', sortedTopics);
-
-    // setTopics((prevTopics) => [...prevTopics, newTopic]);
-
-    // // Sort the topics array based on the order in sortedTopics
-    // setTopics((prevTopics) =>
-    //   prevTopics.sort((a, b) => sortedTopics.indexOf(a.title) - sortedTopics.indexOf(b.title))
-    // );
-
-    // console.log('Topics after adding new topic:', topics);
-
-    // // Reset input field
-    // setNewTopicTitle('');
-    // setShowNewTopicModal(false);
-
-    // console.log('New topic added');
-
-
-
+  const handlePostModalClose = () => {
+    setShowPostModal(false);
+  };
   
+  // FUNCTION to fetch a random image for the post. In case this fails, use our default photo.
+  const fetchPlaceholderImage = async () => {
+    try {
+      const response = await fetch(`https://api.unsplash.com/photos/random?query=animal&client_id=CQnaHevzLsFIwELZJhaYpxdy5vmXqmYivIAZWlWMmd0`);
+      
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data.urls.small, "image url");
+        return data.urls.small; 
+      }
+      
+      // Return the placeholder image if the request fails
+      return default_pic;
+    } catch (error) {
+      console.error('Error fetching placeholder image:', error);
+      // Return the placeholder image in case of an error
+      return default_pic;
+    }
+  };
+
   // HANDLE SUBMISSION OF POSTS
   const handlePostSubmit = async (newPostData) => {
     if (!user) {
@@ -191,9 +181,6 @@ const Forum = ({ user }) => {
         topic.title === selectedTopic.title ? selectedTopic : topic
       )
     );
-
-    // Reset expandedPosts to ensure the new post is visible
-    setExpandedPosts([]);
 
     setNewSubject('');
     setNewPost('');
@@ -239,45 +226,11 @@ const Forum = ({ user }) => {
     });
   };
 
-  const openNewTopicModal = () => {
-    setShowNewTopicModal(true);
-  };
-  
-  const closeNewTopicModal = () => {
-    setShowNewTopicModal(false);
-  };
-
-  
   // UPDATE OF COMPONENT
   useEffect(() => {
     // Set welcome message when the component starts
     setSelectedTopic(null);
   }, []);
-
-  useEffect(() => {
-    setCharCount(newPost.length);
-  }, [newPost]);
-
-  useEffect(() => {
-    // This effect will be triggered whenever the topics state changes
-    console.log('Topics updated:', topics);
-  }, [topics]);
-
-  useEffect(() => {
-    // Function to fetch topics
-    const fetchTopics = async () => {
-      try {
-        const result = await API.graphql(graphqlOperation(listTopics));
-        const fetchedTopics = result.data.listTopics.items;
-        console.log(fetchedTopics, "topics fetched")
-        setTopics(fetchedTopics);
-      } catch (error) {
-        console.error('Error fetching topics:', error);
-      }
-    };
-
-    fetchTopics();
-  }, []); // runs once when the component mounts
 
 
   return (
@@ -297,15 +250,15 @@ const Forum = ({ user }) => {
         )}
         <h2>Topics</h2>
         <div className="scrollable-list">
-          {sortedTopics.map((topic, index) => (
+          {topics && topics.map((topic) => (
             <div
-              key={topic}
-              onClick={() => handleTopicSelection({ title: topic, posts: topics.find(t => t.title === topic)?.posts })}
+              key={topic.id}
+              onClick={() => handleTopicSelection({ title: topic.title, posts: topic.posts })}
               className="indiv-topic"
             >
-              <span>{topic}</span>
+              <span>{topic.title}</span>
               <span className="post-count">
-                {sortedTopics.find(t => t.title === topic)?.posts.length}
+                {topic.posts.length}
                 <FontAwesomeIcon
                   icon={faCommentDots}
                   className='messages-icon'
@@ -333,11 +286,11 @@ const Forum = ({ user }) => {
               Make a new post
             </FontAwesomeIcon>
           )}
-          {selectedTopic.posts && selectedTopic.posts.length > 0 ? (
+          {selectedPosts && selectedPosts.length > 0 ? (
             <>
               <h3>Current posts:</h3>
               <Messages
-                posts={selectedTopic.posts}
+                postsIds={selectedPosts}
                 hideReplyButton={false}
                 hideIcons={false}
                 topicIndex={selectedTopic.tIndex}

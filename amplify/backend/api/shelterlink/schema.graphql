@@ -89,7 +89,8 @@ type Post @model {
   Favorited: Boolean
   likes: Int  
   likedBy: [ID] 
-  replies: [Reply]  
+  replies: [ID]  
+  image: String!
 }
 
 type Reply @model {

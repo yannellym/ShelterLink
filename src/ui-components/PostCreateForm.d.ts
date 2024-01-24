@@ -31,6 +31,8 @@ export declare type PostCreateFormInputValues = {
     Favorited?: boolean;
     likes?: number;
     likedBy?: string[];
+    replies?: string[];
+    image?: string;
 };
 export declare type PostCreateFormValidationValues = {
     subject?: ValidationFunction<string>;
@@ -42,6 +44,8 @@ export declare type PostCreateFormValidationValues = {
     Favorited?: ValidationFunction<boolean>;
     likes?: ValidationFunction<number>;
     likedBy?: ValidationFunction<string>;
+    replies?: ValidationFunction<string>;
+    image?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type PostCreateFormOverridesProps = {
@@ -55,6 +59,8 @@ export declare type PostCreateFormOverridesProps = {
     Favorited?: PrimitiveOverrideProps<SwitchFieldProps>;
     likes?: PrimitiveOverrideProps<TextFieldProps>;
     likedBy?: PrimitiveOverrideProps<TextFieldProps>;
+    replies?: PrimitiveOverrideProps<TextFieldProps>;
+    image?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type PostCreateFormProps = React.PropsWithChildren<{
     overrides?: PostCreateFormOverridesProps | undefined | null;

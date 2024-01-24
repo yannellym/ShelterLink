@@ -7,7 +7,6 @@ const NewTopicModal = ({ onClose, onSubmit }) => {
   const [newTopicTitle, setNewTopicTitle] = useState('');
 
   const handleSubmit = () => {
-    console.log(newTopicTitle, "newtpictitle")
     onSubmit(newTopicTitle);
     setNewTopicTitle('');
   };

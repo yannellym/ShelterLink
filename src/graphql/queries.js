@@ -220,15 +220,8 @@ export const getPost = /* GraphQL */ `
       Favorited
       likes
       likedBy
-      replies {
-        id
-        subject
-        content
-        image
-        createdAt
-        updatedAt
-        __typename
-      }
+      replies
+      image
       updatedAt
       __typename
     }
@@ -252,10 +245,33 @@ export const listPosts = /* GraphQL */ `
         Favorited
         likes
         likedBy
+        replies
+        image
         updatedAt
         __typename
       }
       nextToken
+      __typename
+    }
+  }
+`;
+
+export const listPostsById = /* GraphQL */ `
+  query ListPostsById($id: ID!) {
+    getPost(id: $id) {
+      id
+      subject
+      content
+      user
+      username
+      topicID
+      createdAt
+      Favorited
+      likes
+      likedBy
+      replies
+      image
+      updatedAt
       __typename
     }
   }
