@@ -24,6 +24,9 @@ export declare type ValidationFunction<T> = (value: T, validationResponse: Valid
 export declare type PostCreateFormInputValues = {
     subject?: string;
     content?: string;
+    user?: string;
+    username?: string;
+    topicID?: string;
     createdAt?: string;
     Favorited?: boolean;
     likes?: number;
@@ -32,6 +35,9 @@ export declare type PostCreateFormInputValues = {
 export declare type PostCreateFormValidationValues = {
     subject?: ValidationFunction<string>;
     content?: ValidationFunction<string>;
+    user?: ValidationFunction<string>;
+    username?: ValidationFunction<string>;
+    topicID?: ValidationFunction<string>;
     createdAt?: ValidationFunction<string>;
     Favorited?: ValidationFunction<boolean>;
     likes?: ValidationFunction<number>;
@@ -42,6 +48,9 @@ export declare type PostCreateFormOverridesProps = {
     PostCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
     subject?: PrimitiveOverrideProps<TextFieldProps>;
     content?: PrimitiveOverrideProps<TextFieldProps>;
+    user?: PrimitiveOverrideProps<TextFieldProps>;
+    username?: PrimitiveOverrideProps<TextFieldProps>;
+    topicID?: PrimitiveOverrideProps<TextFieldProps>;
     createdAt?: PrimitiveOverrideProps<TextFieldProps>;
     Favorited?: PrimitiveOverrideProps<SwitchFieldProps>;
     likes?: PrimitiveOverrideProps<TextFieldProps>;

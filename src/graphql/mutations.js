@@ -106,12 +106,6 @@ export const createPet = /* GraphQL */ `
         __typename
       }
       contact {
-        address {
-          address1
-          address2
-          city
-          state
-        }
         email
         phone
         __typename
@@ -167,13 +161,6 @@ export const updatePet = /* GraphQL */ `
         __typename
       }
       contact {
-        address {
-          address1
-          address2
-          city
-          postcode
-          state
-        }
         email
         phone
         __typename
@@ -229,13 +216,6 @@ export const deletePet = /* GraphQL */ `
         __typename
       }
       contact {
-        address {
-          address1
-          address2
-          city
-          postcode
-          state
-        }
         email
         phone
         __typename
@@ -363,72 +343,6 @@ export const deleteUserPetFavorite = /* GraphQL */ `
     }
   }
 `;
-export const createForum = /* GraphQL */ `
-  mutation CreateForum(
-    $input: CreateForumInput!
-    $condition: ModelForumConditionInput
-  ) {
-    createForum(input: $input, condition: $condition) {
-      id
-      title
-      description
-      topics {
-        id
-        title
-        createdAt
-        updatedAt
-        __typename
-      }
-      createdAt
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const updateForum = /* GraphQL */ `
-  mutation UpdateForum(
-    $input: UpdateForumInput!
-    $condition: ModelForumConditionInput
-  ) {
-    updateForum(input: $input, condition: $condition) {
-      id
-      title
-      description
-      topics {
-        id
-        title
-        createdAt
-        updatedAt
-        __typename
-      }
-      createdAt
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const deleteForum = /* GraphQL */ `
-  mutation DeleteForum(
-    $input: DeleteForumInput!
-    $condition: ModelForumConditionInput
-  ) {
-    deleteForum(input: $input, condition: $condition) {
-      id
-      title
-      description
-      topics {
-        id
-        title
-        createdAt
-        updatedAt
-        __typename
-      }
-      createdAt
-      updatedAt
-      __typename
-    }
-  }
-`;
 export const createTopic = /* GraphQL */ `
   mutation CreateTopic(
     $input: CreateTopicInput!
@@ -437,18 +351,13 @@ export const createTopic = /* GraphQL */ `
     createTopic(input: $input, condition: $condition) {
       id
       title
-      forum {
-        id
-        title
-        description
-        createdAt
-        updatedAt
-        __typename
-      }
       posts {
         id
         subject
         content
+        user
+        username
+        topicID
         createdAt
         Favorited
         likes
@@ -470,18 +379,13 @@ export const updateTopic = /* GraphQL */ `
     updateTopic(input: $input, condition: $condition) {
       id
       title
-      forum {
-        id
-        title
-        description
-        createdAt
-        updatedAt
-        __typename
-      }
       posts {
         id
         subject
         content
+        user
+        username
+        topicID
         createdAt
         Favorited
         likes
@@ -503,18 +407,13 @@ export const deleteTopic = /* GraphQL */ `
     deleteTopic(input: $input, condition: $condition) {
       id
       title
-      forum {
-        id
-        title
-        description
-        createdAt
-        updatedAt
-        __typename
-      }
       posts {
         id
         subject
         content
+        user
+        username
+        topicID
         createdAt
         Favorited
         likes
@@ -537,21 +436,9 @@ export const createPost = /* GraphQL */ `
       id
       subject
       content
-      user {
-        id
-        username
-        email
-        createdAt
-        updatedAt
-        __typename
-      }
-      topic {
-        id
-        title
-        createdAt
-        updatedAt
-        __typename
-      }
+      user
+      username
+      topicID
       createdAt
       Favorited
       likes
@@ -579,21 +466,9 @@ export const updatePost = /* GraphQL */ `
       id
       subject
       content
-      user {
-        id
-        username
-        email
-        createdAt
-        updatedAt
-        __typename
-      }
-      topic {
-        id
-        title
-        createdAt
-        updatedAt
-        __typename
-      }
+      user
+      username
+      topicID
       createdAt
       Favorited
       likes
@@ -621,21 +496,9 @@ export const deletePost = /* GraphQL */ `
       id
       subject
       content
-      user {
-        id
-        username
-        email
-        createdAt
-        updatedAt
-        __typename
-      }
-      topic {
-        id
-        title
-        createdAt
-        updatedAt
-        __typename
-      }
+      user
+      username
+      topicID
       createdAt
       Favorited
       likes

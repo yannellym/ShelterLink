@@ -5,6 +5,8 @@ import Messages from '../components/Messages.js';
 import PostModal from '../components/PostModal.js';
 import NewTopicModal from '../components/NewTopicModal'; 
 
+import { API, graphqlOperation } from 'aws-amplify';
+import { createTopic, createPost } from '../graphql/mutations.js';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCommentDots, faPlusCircle, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
@@ -42,7 +44,7 @@ const Forum = ({ user }) => {
       })),
     }))
   );
-
+  
   // HANDLE TOPIC SELECTION
   const handleTopicSelection = (topic) => {
     const tIndex = sortedTopics.indexOf(topic.title);
@@ -60,50 +62,97 @@ const Forum = ({ user }) => {
     setShowPostModal(false);
   };
 
-  // HANDLE NEW TOPIC
-const handleNewTopicSubmit = (title) => {
-  if (!user) {
-    alert('Please sign in to create a new topic.');
-    return;
-  }
+  
+  // Function to create a new topic
+  const createNewTopic = async (title) => {
+    try {
+      const newTopicInput = {
+        input: {
+          title: title,
+        },
+      };
 
-  // Add the new topic to the topics list
-  const newTopic = {
-    id: Date.now(),
-    title: title,
-    posts: [], // New topic starts with an empty array of posts
+      const result = await API.graphql(graphqlOperation(createTopic, newTopicInput));
+      const newTopic = result.data.createTopic;
+
+      console.log('New Topic:', newTopic);
+
+      // Call the function to add a default post for the new topic
+      await addDefaultPostToTopic(newTopic.id);
+
+      // Add logic to handle the created topic as needed
+    } catch (error) {
+      console.error('Error creating new topic:', error);
+      console.log('Error details:', error.errors);
+    }
   };
 
-  console.log(newTopic, "new topic");
+  // Function to add a default post for a given topic
+  const addDefaultPostToTopic = async (topicId) => {
+    try {
+      const postInput = {
+        input: {
+          subject: 'Welcome to the Forum!',
+          content: "Hello forum members! 👋 Welcome to our community. We're excited to have you here. Feel free to make posts, share your thoughts, like posts that resonate with you, and engage with other members by replying to their posts. Let's create a vibrant and supportive community together!",
+          user: user.attributes.sub,
+          username: user.attributes.name,
+          topicID: topicId,
+          Favorited: false,
+          likes: 0,
+        },
+      };
+      
+      const result = await API.graphql(graphqlOperation(createPost, postInput));
+      console.log('Result:', result);
+    } catch (error) {
+      console.error('Error creating new post:', error);
+    }
+  };
+    // if (!user) {
+    //   alert('Please sign in to create a new topic.');
+    //   return;
+    // }
 
-  if (!newTopic.title) {
-    alert('Please enter a title for the new topic.');
-    return;
-  }
+    // // Add the new topic to the topics list
+    // const newTopic = {
+    //   id: Date.now(),
+    //   title: title,
+    //   posts: [], // New topic starts with an empty array of posts
+    // };
 
-  console.log('New Topic Title:', newTopicTitle);
-  console.log('Current Sorted Topics:', sortedTopics);
+    // console.log(newTopic, "new topic");
 
-  // Update the sortedTopics array to reflect the new topic
-  setSortedTopics((prevSortedTopics) => [...prevSortedTopics, title]);
+    // if (!newTopic.title) {
+    //   alert('Please enter a title for the new topic.');
+    //   return;
+    // }
 
-  console.log('Updated Sorted Topics:', sortedTopics);
+    // console.log('New Topic Title:', newTopicTitle);
+    // console.log('Current Sorted Topics:', sortedTopics);
 
-  setTopics((prevTopics) => [...prevTopics, newTopic]);
+    // // Update the sortedTopics array to reflect the new topic
+    // setSortedTopics((prevSortedTopics) => [...prevSortedTopics, title]);
 
-  // Sort the topics array based on the order in sortedTopics
-  setTopics((prevTopics) =>
-    prevTopics.sort((a, b) => sortedTopics.indexOf(a.title) - sortedTopics.indexOf(b.title))
-  );
+    // console.log('Updated Sorted Topics:', sortedTopics);
 
-  console.log('Topics after adding new topic:', topics);
+    // setTopics((prevTopics) => [...prevTopics, newTopic]);
 
-  // Reset input field
-  setNewTopicTitle('');
-  setShowNewTopicModal(false);
+    // // Sort the topics array based on the order in sortedTopics
+    // setTopics((prevTopics) =>
+    //   prevTopics.sort((a, b) => sortedTopics.indexOf(a.title) - sortedTopics.indexOf(b.title))
+    // );
 
-  console.log('New topic added');
-};
+    // console.log('Topics after adding new topic:', topics);
+
+    // // Reset input field
+    // setNewTopicTitle('');
+    // setShowNewTopicModal(false);
+
+    // console.log('New topic added');
+
+
+
+  
   // HANDLE SUBMISSION OF POSTS
   const handlePostSubmit = async (newPostData) => {
     if (!user) {
@@ -233,7 +282,7 @@ const handleNewTopicSubmit = (title) => {
           {user && showNewTopicModal && (
             <NewTopicModal
               onClose={() => setShowNewTopicModal(false)}
-              onSubmit={(title) => handleNewTopicSubmit(title)}
+              onSubmit={(title) => createNewTopic(title)}
             />
           )}
         </div>

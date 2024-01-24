@@ -25,19 +25,14 @@ export default function ForumUpdateForm(props) {
   } = props;
   const initialValues = {
     title: "",
-    description: "",
   };
   const [title, setTitle] = React.useState(initialValues.title);
-  const [description, setDescription] = React.useState(
-    initialValues.description
-  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = forumRecord
       ? { ...initialValues, ...forumRecord }
       : initialValues;
     setTitle(cleanValues.title);
-    setDescription(cleanValues.description);
     setErrors({});
   };
   const [forumRecord, setForumRecord] = React.useState(forumModelProp);
@@ -58,7 +53,6 @@ export default function ForumUpdateForm(props) {
   React.useEffect(resetStateValues, [forumRecord]);
   const validations = {
     title: [{ type: "Required" }],
-    description: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -87,7 +81,6 @@ export default function ForumUpdateForm(props) {
         event.preventDefault();
         let modelFields = {
           title,
-          description: description ?? null,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -149,7 +142,6 @@ export default function ForumUpdateForm(props) {
           if (onChange) {
             const modelFields = {
               title: value,
-              description,
             };
             const result = onChange(modelFields);
             value = result?.title ?? value;
@@ -163,31 +155,6 @@ export default function ForumUpdateForm(props) {
         errorMessage={errors.title?.errorMessage}
         hasError={errors.title?.hasError}
         {...getOverrideProps(overrides, "title")}
-      ></TextField>
-      <TextField
-        label="Description"
-        isRequired={false}
-        isReadOnly={false}
-        value={description}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              title,
-              description: value,
-            };
-            const result = onChange(modelFields);
-            value = result?.description ?? value;
-          }
-          if (errors.description?.hasError) {
-            runValidationTasks("description", value);
-          }
-          setDescription(value);
-        }}
-        onBlur={() => runValidationTasks("description", description)}
-        errorMessage={errors.description?.errorMessage}
-        hasError={errors.description?.hasError}
-        {...getOverrideProps(overrides, "description")}
       ></TextField>
       <Flex
         justifyContent="space-between"

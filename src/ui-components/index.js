@@ -4,8 +4,6 @@
  * Any changes to this file will be overwritten when running amplify pull. *
  **************************************************************************/
 
-export { default as ForumCreateForm } from "./ForumCreateForm";
-export { default as ForumUpdateForm } from "./ForumUpdateForm";
 export { default as PetCreateForm } from "./PetCreateForm";
 export { default as PetUpdateForm } from "./PetUpdateForm";
 export { default as PostCreateForm } from "./PostCreateForm";

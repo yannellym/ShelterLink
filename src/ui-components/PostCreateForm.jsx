@@ -191,6 +191,9 @@ export default function PostCreateForm(props) {
   const initialValues = {
     subject: "",
     content: "",
+    user: "",
+    username: "",
+    topicID: "",
     createdAt: "",
     Favorited: false,
     likes: "",
@@ -198,6 +201,9 @@ export default function PostCreateForm(props) {
   };
   const [subject, setSubject] = React.useState(initialValues.subject);
   const [content, setContent] = React.useState(initialValues.content);
+  const [user, setUser] = React.useState(initialValues.user);
+  const [username, setUsername] = React.useState(initialValues.username);
+  const [topicID, setTopicID] = React.useState(initialValues.topicID);
   const [createdAt, setCreatedAt] = React.useState(initialValues.createdAt);
   const [Favorited, setFavorited] = React.useState(initialValues.Favorited);
   const [likes, setLikes] = React.useState(initialValues.likes);
@@ -206,6 +212,9 @@ export default function PostCreateForm(props) {
   const resetStateValues = () => {
     setSubject(initialValues.subject);
     setContent(initialValues.content);
+    setUser(initialValues.user);
+    setUsername(initialValues.username);
+    setTopicID(initialValues.topicID);
     setCreatedAt(initialValues.createdAt);
     setFavorited(initialValues.Favorited);
     setLikes(initialValues.likes);
@@ -218,6 +227,9 @@ export default function PostCreateForm(props) {
   const validations = {
     subject: [{ type: "Required" }],
     content: [{ type: "Required" }],
+    user: [{ type: "Required" }],
+    username: [{ type: "Required" }],
+    topicID: [{ type: "Required" }],
     createdAt: [{ type: "Required" }],
     Favorited: [],
     likes: [],
@@ -268,6 +280,9 @@ export default function PostCreateForm(props) {
         let modelFields = {
           subject,
           content,
+          user,
+          username,
+          topicID,
           createdAt,
           Favorited,
           likes,
@@ -336,6 +351,9 @@ export default function PostCreateForm(props) {
             const modelFields = {
               subject: value,
               content,
+              user,
+              username,
+              topicID,
               createdAt,
               Favorited,
               likes,
@@ -365,6 +383,9 @@ export default function PostCreateForm(props) {
             const modelFields = {
               subject,
               content: value,
+              user,
+              username,
+              topicID,
               createdAt,
               Favorited,
               likes,
@@ -384,6 +405,102 @@ export default function PostCreateForm(props) {
         {...getOverrideProps(overrides, "content")}
       ></TextField>
       <TextField
+        label="User"
+        isRequired={true}
+        isReadOnly={false}
+        value={user}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              subject,
+              content,
+              user: value,
+              username,
+              topicID,
+              createdAt,
+              Favorited,
+              likes,
+              likedBy,
+            };
+            const result = onChange(modelFields);
+            value = result?.user ?? value;
+          }
+          if (errors.user?.hasError) {
+            runValidationTasks("user", value);
+          }
+          setUser(value);
+        }}
+        onBlur={() => runValidationTasks("user", user)}
+        errorMessage={errors.user?.errorMessage}
+        hasError={errors.user?.hasError}
+        {...getOverrideProps(overrides, "user")}
+      ></TextField>
+      <TextField
+        label="Username"
+        isRequired={true}
+        isReadOnly={false}
+        value={username}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              subject,
+              content,
+              user,
+              username: value,
+              topicID,
+              createdAt,
+              Favorited,
+              likes,
+              likedBy,
+            };
+            const result = onChange(modelFields);
+            value = result?.username ?? value;
+          }
+          if (errors.username?.hasError) {
+            runValidationTasks("username", value);
+          }
+          setUsername(value);
+        }}
+        onBlur={() => runValidationTasks("username", username)}
+        errorMessage={errors.username?.errorMessage}
+        hasError={errors.username?.hasError}
+        {...getOverrideProps(overrides, "username")}
+      ></TextField>
+      <TextField
+        label="Topic id"
+        isRequired={true}
+        isReadOnly={false}
+        value={topicID}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              subject,
+              content,
+              user,
+              username,
+              topicID: value,
+              createdAt,
+              Favorited,
+              likes,
+              likedBy,
+            };
+            const result = onChange(modelFields);
+            value = result?.topicID ?? value;
+          }
+          if (errors.topicID?.hasError) {
+            runValidationTasks("topicID", value);
+          }
+          setTopicID(value);
+        }}
+        onBlur={() => runValidationTasks("topicID", topicID)}
+        errorMessage={errors.topicID?.errorMessage}
+        hasError={errors.topicID?.hasError}
+        {...getOverrideProps(overrides, "topicID")}
+      ></TextField>
+      <TextField
         label="Created at"
         isRequired={true}
         isReadOnly={false}
@@ -396,6 +513,9 @@ export default function PostCreateForm(props) {
             const modelFields = {
               subject,
               content,
+              user,
+              username,
+              topicID,
               createdAt: value,
               Favorited,
               likes,
@@ -425,6 +545,9 @@ export default function PostCreateForm(props) {
             const modelFields = {
               subject,
               content,
+              user,
+              username,
+              topicID,
               createdAt,
               Favorited: value,
               likes,
@@ -458,6 +581,9 @@ export default function PostCreateForm(props) {
             const modelFields = {
               subject,
               content,
+              user,
+              username,
+              topicID,
               createdAt,
               Favorited,
               likes: value,
@@ -483,6 +609,9 @@ export default function PostCreateForm(props) {
             const modelFields = {
               subject,
               content,
+              user,
+              username,
+              topicID,
               createdAt,
               Favorited,
               likes,

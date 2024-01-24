@@ -74,12 +74,6 @@ export const getPet = /* GraphQL */ `
         __typename
       }
       contact {
-        address {
-          address1
-          address2
-          city
-          state
-        }
         email
         phone
         __typename
@@ -181,62 +175,18 @@ export const listUserPetFavorites = /* GraphQL */ `
     }
   }
 `;
-export const getForum = /* GraphQL */ `
-  query GetForum($id: ID!) {
-    getForum(id: $id) {
-      id
-      title
-      description
-      topics {
-        id
-        title
-        createdAt
-        updatedAt
-        __typename
-      }
-      createdAt
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const listForums = /* GraphQL */ `
-  query ListForums(
-    $filter: ModelForumFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listForums(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        title
-        description
-        createdAt
-        updatedAt
-        __typename
-      }
-      nextToken
-      __typename
-    }
-  }
-`;
 export const getTopic = /* GraphQL */ `
   query GetTopic($id: ID!) {
     getTopic(id: $id) {
       id
       title
-      forum {
-        id
-        title
-        description
-        createdAt
-        updatedAt
-        __typename
-      }
       posts {
         id
         subject
         content
+        user
+        username
+        topicID
         createdAt
         Favorited
         likes
@@ -275,21 +225,9 @@ export const getPost = /* GraphQL */ `
       id
       subject
       content
-      user {
-        id
-        username
-        email
-        createdAt
-        updatedAt
-        __typename
-      }
-      topic {
-        id
-        title
-        createdAt
-        updatedAt
-        __typename
-      }
+      user
+      username
+      topicID
       createdAt
       Favorited
       likes
@@ -319,6 +257,9 @@ export const listPosts = /* GraphQL */ `
         id
         subject
         content
+        user
+        username
+        topicID
         createdAt
         Favorited
         likes

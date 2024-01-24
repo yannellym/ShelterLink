@@ -72,18 +72,9 @@ type Address {
   state: String
 }
 
-
-type Forum @model {
-  id: ID!
-  title: String!
-  description: String
-  topics: [Topic]
-}
-
 type Topic @model {
   id: ID!
   title: String!
-  forum: Forum
   posts: [Post]
 }
 
@@ -91,8 +82,9 @@ type Post @model {
   id: ID!
   subject: String!
   content: String!
-  user: User!
-  topic: Topic
+  user: ID!
+  username: String!
+  topicID: ID!
   createdAt: AWSDateTime!
   Favorited: Boolean
   likes: Int  

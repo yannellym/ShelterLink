@@ -94,12 +94,6 @@ export const onCreatePet = /* GraphQL */ `
         __typename
       }
       contact {
-        address {
-          address1
-          address2
-          city
-          state
-        }
         email
         phone
         __typename
@@ -152,12 +146,6 @@ export const onUpdatePet = /* GraphQL */ `
         __typename
       }
       contact {
-        address {
-          address1
-          address2
-          city
-          state
-        }
         email
         phone
         __typename
@@ -210,12 +198,6 @@ export const onDeletePet = /* GraphQL */ `
         __typename
       }
       contact {
-        address {
-          address1
-          address2
-          city
-          state
-        }
         email
         phone
         __typename
@@ -340,80 +322,18 @@ export const onDeleteUserPetFavorite = /* GraphQL */ `
     }
   }
 `;
-export const onCreateForum = /* GraphQL */ `
-  subscription OnCreateForum($filter: ModelSubscriptionForumFilterInput) {
-    onCreateForum(filter: $filter) {
-      id
-      title
-      description
-      topics {
-        id
-        title
-        createdAt
-        updatedAt
-        __typename
-      }
-      createdAt
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const onUpdateForum = /* GraphQL */ `
-  subscription OnUpdateForum($filter: ModelSubscriptionForumFilterInput) {
-    onUpdateForum(filter: $filter) {
-      id
-      title
-      description
-      topics {
-        id
-        title
-        createdAt
-        updatedAt
-        __typename
-      }
-      createdAt
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const onDeleteForum = /* GraphQL */ `
-  subscription OnDeleteForum($filter: ModelSubscriptionForumFilterInput) {
-    onDeleteForum(filter: $filter) {
-      id
-      title
-      description
-      topics {
-        id
-        title
-        createdAt
-        updatedAt
-        __typename
-      }
-      createdAt
-      updatedAt
-      __typename
-    }
-  }
-`;
 export const onCreateTopic = /* GraphQL */ `
   subscription OnCreateTopic($filter: ModelSubscriptionTopicFilterInput) {
     onCreateTopic(filter: $filter) {
       id
       title
-      forum {
-        id
-        title
-        description
-        createdAt
-        updatedAt
-        __typename
-      }
       posts {
         id
         subject
         content
+        user
+        username
+        topicID
         createdAt
         Favorited
         likes
@@ -432,18 +352,13 @@ export const onUpdateTopic = /* GraphQL */ `
     onUpdateTopic(filter: $filter) {
       id
       title
-      forum {
-        id
-        title
-        description
-        createdAt
-        updatedAt
-        __typename
-      }
       posts {
         id
         subject
         content
+        user
+        username
+        topicID
         createdAt
         Favorited
         likes
@@ -462,18 +377,13 @@ export const onDeleteTopic = /* GraphQL */ `
     onDeleteTopic(filter: $filter) {
       id
       title
-      forum {
-        id
-        title
-        description
-        createdAt
-        updatedAt
-        __typename
-      }
       posts {
         id
         subject
         content
+        user
+        username
+        topicID
         createdAt
         Favorited
         likes
@@ -493,21 +403,9 @@ export const onCreatePost = /* GraphQL */ `
       id
       subject
       content
-      user {
-        id
-        username
-        email
-        createdAt
-        updatedAt
-        __typename
-      }
-      topic {
-        id
-        title
-        createdAt
-        updatedAt
-        __typename
-      }
+      user
+      username
+      topicID
       createdAt
       Favorited
       likes
@@ -532,21 +430,9 @@ export const onUpdatePost = /* GraphQL */ `
       id
       subject
       content
-      user {
-        id
-        username
-        email
-        createdAt
-        updatedAt
-        __typename
-      }
-      topic {
-        id
-        title
-        createdAt
-        updatedAt
-        __typename
-      }
+      user
+      username
+      topicID
       createdAt
       Favorited
       likes
@@ -571,21 +457,9 @@ export const onDeletePost = /* GraphQL */ `
       id
       subject
       content
-      user {
-        id
-        username
-        email
-        createdAt
-        updatedAt
-        __typename
-      }
-      topic {
-        id
-        title
-        createdAt
-        updatedAt
-        __typename
-      }
+      user
+      username
+      topicID
       createdAt
       Favorited
       likes
