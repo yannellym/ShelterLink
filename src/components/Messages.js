@@ -85,7 +85,7 @@ const Messages = ({ postsIds, hideReplyButton, hideIcons,  onReplySubmit, topicI
                   )}
                   <div className="post-details">
                     <p>
-                      Posted on {new Date(post.createdAt).toLocaleDateString()} @{' '}
+                      Posted by {post.username} on {new Date(post.createdAt).toLocaleDateString()} @{' '}
                       {new Date(post.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </p>
                     {!hideIcons && (
@@ -132,8 +132,9 @@ const Messages = ({ postsIds, hideReplyButton, hideIcons,  onReplySubmit, topicI
                   )}
                   <div className="post-details">
                     <p>
-                      Posted on {new Date(post.createdAt).toLocaleDateString()} @{' '}
+                      Posted by {post.username} on {new Date(post.createdAt).toLocaleDateString()} @{' '}
                       {new Date(post.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      by {post.username}
                     </p>
                     {!hideIcons && (
                       <p className='post-details-icon-p'>

@@ -91,7 +91,8 @@
   flex-direction: row;
   justify-content: space-around;
   align-items: center; /* Align items vertically in the center */
-  width: 55%;
+  width: 65%;
+  /* border: 4px rgb(238, 0, 255) solid; */
 }
 .post-details-icon-p {
   display: flex;
