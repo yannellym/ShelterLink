@@ -327,20 +327,7 @@ export const onCreateTopic = /* GraphQL */ `
     onCreateTopic(filter: $filter) {
       id
       title
-      posts {
-        id
-        subject
-        content
-        user
-        username
-        topicID
-        createdAt
-        Favorited
-        likes
-        likedBy
-        updatedAt
-        __typename
-      }
+      posts
       createdAt
       updatedAt
       __typename
@@ -352,20 +339,7 @@ export const onUpdateTopic = /* GraphQL */ `
     onUpdateTopic(filter: $filter) {
       id
       title
-      posts {
-        id
-        subject
-        content
-        user
-        username
-        topicID
-        createdAt
-        Favorited
-        likes
-        likedBy
-        updatedAt
-        __typename
-      }
+      posts
       createdAt
       updatedAt
       __typename
@@ -377,20 +351,7 @@ export const onDeleteTopic = /* GraphQL */ `
     onDeleteTopic(filter: $filter) {
       id
       title
-      posts {
-        id
-        subject
-        content
-        user
-        username
-        topicID
-        createdAt
-        Favorited
-        likes
-        likedBy
-        updatedAt
-        __typename
-      }
+      posts
       createdAt
       updatedAt
       __typename

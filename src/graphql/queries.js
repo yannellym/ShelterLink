@@ -180,20 +180,7 @@ export const getTopic = /* GraphQL */ `
     getTopic(id: $id) {
       id
       title
-      posts {
-        id
-        subject
-        content
-        user
-        username
-        topicID
-        createdAt
-        Favorited
-        likes
-        likedBy
-        updatedAt
-        __typename
-      }
+      posts
       createdAt
       updatedAt
       __typename
@@ -210,6 +197,7 @@ export const listTopics = /* GraphQL */ `
       items {
         id
         title
+        posts
         createdAt
         updatedAt
         __typename

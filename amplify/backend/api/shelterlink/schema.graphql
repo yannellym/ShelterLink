@@ -75,7 +75,7 @@ type Address {
 type Topic @model {
   id: ID!
   title: String!
-  posts: [Post]
+  posts: [ID]
 }
 
 type Post @model {

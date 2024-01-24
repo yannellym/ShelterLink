@@ -6,12 +6,16 @@ import PostModal from '../components/PostModal.js';
 import NewTopicModal from '../components/NewTopicModal'; 
 
 import { API, graphqlOperation } from 'aws-amplify';
-import { createTopic, createPost } from '../graphql/mutations.js';
+import { createTopic, createPost, updateTopic } from '../graphql/mutations.js';
+import { listTopics } from '../graphql/queries.js';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCommentDots, faPlusCircle, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 
 const Forum = ({ user }) => {
+
+  // const [topics, setTopics] = useState([]);
+
   const [newSubject, setNewSubject] = useState('');
   const [newTopicTitle, setNewTopicTitle] = useState('');
   const topicsList = [
@@ -47,7 +51,7 @@ const Forum = ({ user }) => {
   
   // HANDLE TOPIC SELECTION
   const handleTopicSelection = (topic) => {
-    const tIndex = sortedTopics.indexOf(topic.title);
+    const tIndex = topics.indexOf(topic.title);
     setSelectedTopic({ ...topic, tIndex });
     const selectedPosts = topics.find((t) => t.title === topic.title)?.posts || [];
     setSelectedPosts(selectedPosts);
@@ -69,6 +73,7 @@ const Forum = ({ user }) => {
       const newTopicInput = {
         input: {
           title: title,
+          posts : [],
         },
       };
 
@@ -78,7 +83,7 @@ const Forum = ({ user }) => {
       console.log('New Topic:', newTopic);
 
       // Call the function to add a default post for the new topic
-      await addDefaultPostToTopic(newTopic.id);
+      await addDefaultPostToTopic(newTopic);
 
       // Add logic to handle the created topic as needed
     } catch (error) {
@@ -88,7 +93,7 @@ const Forum = ({ user }) => {
   };
 
   // Function to add a default post for a given topic
-  const addDefaultPostToTopic = async (topicId) => {
+  const addDefaultPostToTopic = async (topic) => {
     try {
       const postInput = {
         input: {
@@ -96,14 +101,27 @@ const Forum = ({ user }) => {
           content: "Hello forum members! 👋 Welcome to our community. We're excited to have you here. Feel free to make posts, share your thoughts, like posts that resonate with you, and engage with other members by replying to their posts. Let's create a vibrant and supportive community together!",
           user: user.attributes.sub,
           username: user.attributes.name,
-          topicID: topicId,
+          topicID: topic.id,
           Favorited: false,
           likes: 0,
         },
       };
-      
+
       const result = await API.graphql(graphqlOperation(createPost, postInput));
       console.log('Result:', result);
+
+      // Update the topic to include the new post
+      const resultOfTopicUpdate = await API.graphql({
+        query: updateTopic,
+        variables: {
+          input: {
+            id: topic.id,
+            title: topic.title,
+            posts: [result.data.createPost.id],
+          },
+        },
+      });
+      console.log('Result of updating topic:', resultOfTopicUpdate);
     } catch (error) {
       console.error('Error creating new post:', error);
     }
@@ -245,6 +263,23 @@ const Forum = ({ user }) => {
     console.log('Topics updated:', topics);
   }, [topics]);
 
+  useEffect(() => {
+    // Function to fetch topics
+    const fetchTopics = async () => {
+      try {
+        const result = await API.graphql(graphqlOperation(listTopics));
+        const fetchedTopics = result.data.listTopics.items;
+        console.log(fetchedTopics, "topics fetched")
+        setTopics(fetchedTopics);
+      } catch (error) {
+        console.error('Error fetching topics:', error);
+      }
+    };
+
+    fetchTopics();
+  }, []); // runs once when the component mounts
+
+
   return (
     <div className="forum-container">
       <div className="topics-list">
@@ -270,7 +305,7 @@ const Forum = ({ user }) => {
             >
               <span>{topic}</span>
               <span className="post-count">
-                {topics.find(t => t.title === topic)?.posts.length}
+                {sortedTopics.find(t => t.title === topic)?.posts.length}
                 <FontAwesomeIcon
                   icon={faCommentDots}
                   className='messages-icon'

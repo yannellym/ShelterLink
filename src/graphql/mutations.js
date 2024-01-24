@@ -351,20 +351,7 @@ export const createTopic = /* GraphQL */ `
     createTopic(input: $input, condition: $condition) {
       id
       title
-      posts {
-        id
-        subject
-        content
-        user
-        username
-        topicID
-        createdAt
-        Favorited
-        likes
-        likedBy
-        updatedAt
-        __typename
-      }
+      posts
       createdAt
       updatedAt
       __typename
@@ -379,20 +366,7 @@ export const updateTopic = /* GraphQL */ `
     updateTopic(input: $input, condition: $condition) {
       id
       title
-      posts {
-        id
-        subject
-        content
-        user
-        username
-        topicID
-        createdAt
-        Favorited
-        likes
-        likedBy
-        updatedAt
-        __typename
-      }
+      posts
       createdAt
       updatedAt
       __typename
@@ -407,20 +381,7 @@ export const deleteTopic = /* GraphQL */ `
     deleteTopic(input: $input, condition: $condition) {
       id
       title
-      posts {
-        id
-        subject
-        content
-        user
-        username
-        topicID
-        createdAt
-        Favorited
-        likes
-        likedBy
-        updatedAt
-        __typename
-      }
+      posts
       createdAt
       updatedAt
       __typename
