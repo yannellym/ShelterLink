@@ -5,21 +5,25 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCommentDots, faHeart} from '@fortawesome/free-solid-svg-icons';
 
 import { API, graphqlOperation } from 'aws-amplify';
-import { listPostsById } from '../graphql/queries.js';
+import { listPostsByTopic} from '../graphql/queries.js';
 
-const Messages = ({ postsIds, hideReplyButton, hideIcons,  onReplySubmit, topicIndex, handleLike }) => {
+const Messages = ({ topic ,hideReplyButton, hideIcons,  onReplySubmit, topicIndex, handleLike }) => {
 
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState([])
+  console.log(posts, "post original")
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        if (postsIds && postsIds.length > 0) {
-          // Fetch a single post from the database using the modified listPostsById query
-          const result = await API.graphql(graphqlOperation(listPostsById, { id: postsIds[0] }));
-          console.log(result.data.getPost, "check");
-          const fetchedPost = result.data.getPost;
-          setPosts([fetchedPost]);
+        if (topic) {
+          // Fetch posts from the database 
+          const result = await API.graphql(
+            graphqlOperation(listPostsByTopic,{ topicID: topic.id, limit: 10 })
+          );
+
+          const fetchedPosts = result.data.listPosts.items;
+          console.log(fetchedPosts.reverse(), "newpostsin messages")
+          setPosts(fetchedPosts);
         }
       } catch (error) {
         console.error('Error fetching posts:', error);
@@ -27,7 +31,8 @@ const Messages = ({ postsIds, hideReplyButton, hideIcons,  onReplySubmit, topicI
     };
 
     fetchPosts();
-  }, [postsIds]); // Re-run the effect when postIds change
+  }, [topic]); // Re-run the effect when postsReceived change
+
 
   const [expandedPosts, setExpandedPosts] = useState([]);
   const [isFavorited, setIsFavorited] = useState(Array(posts.length).fill(false));
@@ -148,7 +153,6 @@ const Messages = ({ postsIds, hideReplyButton, hideIcons,  onReplySubmit, topicI
                           />
                         </Link>
                         {post.likes} 
-                        <p>{post.image}</p>
                         <FontAwesomeIcon
                           icon={faHeart}
                           onClick={() => handleLikeClick(index)}
@@ -165,7 +169,6 @@ const Messages = ({ postsIds, hideReplyButton, hideIcons,  onReplySubmit, topicI
                 </div>
               </div>
               <img src={post.image} alt={post.subject} className="right-image" />
-
             </>
           )}
         </div>

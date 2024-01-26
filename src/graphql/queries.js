@@ -255,6 +255,35 @@ export const listPosts = /* GraphQL */ `
     }
   }
 `;
+export const listPostsByTopic = /* GraphQL */ `
+  query ListPostsByTopic(
+    $topicID: ID!
+    $limit: Int
+    $nextToken: String
+  ) {
+    listPosts(filter: { topicID: { eq: $topicID } }, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        subject
+        content
+        user
+        username
+        topicID
+        createdAt
+        Favorited
+        likes
+        likedBy
+        replies
+        image
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+
 
 export const listPostsById = /* GraphQL */ `
   query ListPostsById($id: ID!) {
@@ -276,6 +305,8 @@ export const listPostsById = /* GraphQL */ `
     }
   }
 `;
+
+
 export const getReply = /* GraphQL */ `
   query GetReply($id: ID!) {
     getReply(id: $id) {

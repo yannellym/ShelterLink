@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import '../styles/PostModal.css';
-import coming_soon from '../images/coming_soon.png';
 
 const PostModal = ({ selectedTopic, user, onPostSubmit, onClose }) => {
   const [newSubject, setNewSubject] = useState('');
   const [newPost, setNewPost] = useState('');
 
+  // console.log(selectedTopic, user, "USRER AND SELECTED TOPIC")
 
   const handlePostSubmit = async () => {
     // Validate and submit the post
@@ -18,43 +18,30 @@ const PostModal = ({ selectedTopic, user, onPostSubmit, onClose }) => {
       alert('Please select a topic before posting.');
       return;
     }
-    // Fetch placeholder image for the selected topic
-    const image = await fetchPlaceholderImage(selectedTopic.title);
 
     const newPostData = {
-      id: Date.now(),
       subject: newSubject,
       content: newPost,
-      user: { id: user.id, username: user.attributes.name },
-      image,
+      user: user.attributes.sub, 
+      username: user.attributes.name,
+      topicID: selectedTopic.id,
+      favorited: false,
+      likes: 0,
+      likedBy: [],
       replies: [],
+      topicTitle: selectedTopic.title,
     };
 
-    // Pass the new post data to the parent component
-    console.log(newPostData, "sending data");
+    // // Pass the new post data to the parent component
+    // console.log(newPostData, "sending data");
     onPostSubmit(newPostData);
 
     // Clear input fields after submitting
     setNewSubject('');
     setNewPost('');
-  };
 
-   // FUNCTION to fetch a random image of the type of animal and the breed in case the pet doesn't
-  // have a photo. In case this fails, use our coming_soon photo.
-  const fetchPlaceholderImage = async () => {
-    try {
-      const response = await fetch(`https://source.unsplash.com/200x200/?${newSubject}`);
-      if (response.ok) {
-        console.log(response.url, "url")
-        return response.url;
-      }
-      // Return the placeholder image if the request fails
-      return coming_soon;
-    } catch (error) {
-      console.error('Error fetching placeholder image:', error);
-      // Return the placeholder image in case of an error
-      return {coming_soon};
-    }
+    // Close the modal
+    onClose();
   };
 
 

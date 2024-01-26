@@ -31,8 +31,11 @@ const Forum = ({ user }) => {
     try {
       const result = await API.graphql(graphqlOperation(listTopics));
       const fetchedTopics = result.data.listTopics.items;
-      console.log(fetchedTopics, "topics fetched")
-      setTopics(fetchedTopics);
+
+      // Sort the topics alphabetically based on the title
+      const sortedTopics = fetchedTopics.sort((a, b) => a.title.localeCompare(b.title));
+
+      setTopics(sortedTopics);
     } catch (error) {
       console.error('Error fetching topics:', error);
     }
@@ -44,7 +47,7 @@ const Forum = ({ user }) => {
     const tIndex = topics.findIndex((t) => t.title === selectedTopic.title);
     
     // Set the selectedTopic state with additional 'tIndex' property
-    setSelectedTopic({ ...selectedTopic, tIndex });
+    setSelectedTopic({ ...selectedTopic, tIndex, id: topics[tIndex].id });
 
     // Set the selectedPosts state with the posts of the selected topic
     const selectedPosts = selectedTopic.posts || [];
@@ -64,13 +67,13 @@ const Forum = ({ user }) => {
       const result = await API.graphql(graphqlOperation(createTopic, newTopicInput));
       const newTopic = result.data.createTopic;
 
-      console.log('New Topic:', newTopic);
-
       // Call the function to add a default post for the new topic
       await addDefaultPostToTopic(newTopic);
       // Close the modal after submitting the new topic
       setShowNewTopicModal(false)
-      // Add logic to handle the created topic as needed
+
+      // Update the selectedTopic state to the newly created topic
+      setSelectedTopic(newTopic);
     } catch (error) {
       console.error('Error creating new topic:', error);
       console.log('Error details:', error.errors);
@@ -81,7 +84,7 @@ const Forum = ({ user }) => {
   const addDefaultPostToTopic = async (topic) => {
     try {
       // Fetch placeholder image for the created post
-      const image_url = await fetchPlaceholderImage(topic.title);
+      const image_url = await fetchPlaceholderImage();
 
       const postInput = {
         input: {
@@ -112,54 +115,24 @@ const Forum = ({ user }) => {
       });
       console.log('Result of updating topic:', resultOfTopicUpdate);
       
-    // Fetch the updated topic data
-    const updatedTopicResult = await API.graphql({
-      query: listTopics,
-      variables: {},
-    });
-    const updatedTopics = updatedTopicResult.data.listTopics.items;
+      // Fetch the updated topic data
+      const updatedTopicResult = await API.graphql({
+        query: listTopics,
+        variables: {},
+      });
+      const updatedTopics = updatedTopicResult.data.listTopics.items;
 
-    // Update the state with the new topics data
-    setTopics(updatedTopics);
+      // Sort the updated topics alphabetically based on the title
+      const sortedTopics = updatedTopics.sort((a, b) => a.title.localeCompare(b.title));
+
+      // Update the state with the sorted topics data
+      setTopics(sortedTopics);
 
     } catch (error) {
       console.error('Error creating new post:', error);
     }
   };
 
-  useEffect(() => {
-    console.log("fetching topics....")
-    fetchTopics();
-  }, []); // runs once when the component mounts
-
-  // HANDLE NEW POSTS -> MODAL
-  const handleNewPostClick = () => {
-    setShowPostModal(true);
-  };
-
-  const handlePostModalClose = () => {
-    setShowPostModal(false);
-  };
-  
-  // FUNCTION to fetch a random image for the post. In case this fails, use our default photo.
-  const fetchPlaceholderImage = async () => {
-    try {
-      const response = await fetch(`https://api.unsplash.com/photos/random?query=animal&client_id=CQnaHevzLsFIwELZJhaYpxdy5vmXqmYivIAZWlWMmd0`);
-      
-      if (response.ok) {
-        const data = await response.json();
-        console.log(data.urls.small, "image url");
-        return data.urls.small; 
-      }
-      
-      // Return the placeholder image if the request fails
-      return default_pic;
-    } catch (error) {
-      console.error('Error fetching placeholder image:', error);
-      // Return the placeholder image in case of an error
-      return default_pic;
-    }
-  };
 
   // HANDLE SUBMISSION OF POSTS
   const handlePostSubmit = async (newPostData) => {
@@ -168,22 +141,93 @@ const Forum = ({ user }) => {
       return;
     }
 
-    if (!selectedTopic) {
-      alert('Please select a topic before posting.');
-      return;
+    // Fetch placeholder image for the created post
+    const image_url = await fetchPlaceholderImage();
+
+    // Convert the new post data structure to match the existing structure
+    const adaptedNewPostData = {
+      input: {
+        subject: newPostData.subject,
+        content: newPostData.content,
+        user: newPostData.user,
+        username: newPostData.username,
+        topicID: newPostData.topicID,
+        Favorited: newPostData.favorited,
+        likes: newPostData.likes,
+        likedBy: newPostData.likedBy,
+        replies: newPostData.replies,
+        image: image_url,
+      },
+    };
+
+    try {
+      const result = await API.graphql(graphqlOperation(createPost, adaptedNewPostData));
+      console.log('Result:', result);
+
+     
+      // post IDs from the topic
+      const existingPostIds = selectedTopic.posts || [];
+
+      // Update the existing topic's posts array by adding the new post's ID
+      const updatedPostIds = [...existingPostIds, result.data.createPost.id];
+
+      // Update the topic with the modified post array
+      const resultOfTopicUpdate = await API.graphql({
+        query: updateTopic,
+        variables: {
+          input: {
+            id: newPostData.topicID,
+            posts: updatedPostIds,
+          },
+        },
+      });
+        console.log('Result of updating topic:', resultOfTopicUpdate);
+
+        // Fetch the updated topic data
+        const updatedTopicResult = await API.graphql({
+          query: listTopics,
+          variables: {},
+        });
+        const updatedTopics = updatedTopicResult.data.listTopics.items;
+
+        // Sort the updated topics alphabetically based on the title
+        const sortedTopics = updatedTopics.sort((a, b) => a.title.localeCompare(b.title));
+
+
+        // Update the state with the sorted topics data
+        setTopics(sortedTopics);
+
+            
+        // Update the selected topic with the new post
+        setSelectedTopic((prevTopic) => ({
+          ...prevTopic,
+          posts: [result.data.createPost, ...(prevTopic.posts || [])], // Place the new post at the beginning
+        }));
+              
+        setNewSubject('');
+        setNewPost('');
+      } catch (error) {
+        console.error('Error creating new post:', error);
+      }
+    };
+
+
+  // FUNCTION to fetch a random image for the post. In case this fails, use our default photo.
+  const fetchPlaceholderImage = async () => {
+    try {
+      const response = await fetch(`https://api.unsplash.com/photos/random?query=animal&client_id=CQnaHevzLsFIwELZJhaYpxdy5vmXqmYivIAZWlWMmd0`);
+      
+      if (response.ok) {
+        const data = await response.json();
+        return data.urls.small; 
+      }
+      // Return the placeholder image if the request fails
+      return default_pic;
+    } catch (error) {
+      console.error('Error fetching placeholder image:', error);
+      // Return the placeholder image in case of an error
+      return default_pic;
     }
-
-    // Add the new post data to the selected topic's posts
-    selectedTopic.posts = [newPostData, ...selectedTopic.posts];
-
-    setTopics((prevTopics) =>
-      prevTopics.map((topic) =>
-        topic.title === selectedTopic.title ? selectedTopic : topic
-      )
-    );
-
-    setNewSubject('');
-    setNewPost('');
   };
 
   // HANDLE LIKES
@@ -226,13 +270,26 @@ const Forum = ({ user }) => {
     });
   };
 
+  // HANDLE NEW POSTS -> MODAL
+  const handleNewPostClick = () => {
+    setShowPostModal(true);
+  };
+
+  const handlePostModalClose = () => {
+    setShowPostModal(false);
+  };
+
   // UPDATE OF COMPONENT
   useEffect(() => {
     // Set welcome message when the component starts
     setSelectedTopic(null);
   }, []);
 
+  useEffect(() => {
+    fetchTopics();
+  }, []); // runs once when the component mounts
 
+  console.log(selectedPosts, "POSTS SELECTED")
   return (
     <div className="forum-container">
       <div className="topics-list">
@@ -286,11 +343,11 @@ const Forum = ({ user }) => {
               Make a new post
             </FontAwesomeIcon>
           )}
-          {selectedPosts && selectedPosts.length > 0 ? (
+          {selectedTopic? (
             <>
-              <h3>Current posts:</h3>
+              <h3>Current posts for {selectedTopic.title} :</h3>
               <Messages
-                postsIds={selectedPosts}
+                topic={selectedTopic}
                 hideReplyButton={false}
                 hideIcons={false}
                 topicIndex={selectedTopic.tIndex}
