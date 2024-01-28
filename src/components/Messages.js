@@ -13,12 +13,17 @@ const Messages = ({ topic , replies, hideReplyButton, hideIcons,  onReplySubmit,
   const [data, setData] = useState([]);
   const [expandedPosts, setExpandedPosts] = useState([]);
   const [isFavorited, setIsFavorited] = useState(Array(data.length).fill(false));
+  const [newReplies, setNewReplies] = useState([]);
 
   useEffect(() => {
     const subscription = API.graphql(graphqlOperation(onCreateTopic, { topicID: topic?.id })).subscribe({
       next: ({ value }) => {
         const newData = value.data.onCreatePost;
-        setData((prevData) => [newData, ...prevData]);
+        console.log('Received new data:', newData);
+        setData((prevData) => {
+          setNewReplies((prevNewReplies) => [newData, ...prevNewReplies]); // Add new reply to state
+          return [newData, ...prevData];
+        });
       },
       error: (error) => console.error('Subscription error:', error),
     });
@@ -71,7 +76,6 @@ const Messages = ({ topic , replies, hideReplyButton, hideIcons,  onReplySubmit,
     handleLike(topicIndex, dataIndex);
   };
 
-    console.log(data, "all replies ")
 
   return (
     <div className="previous-posts-container">
@@ -81,7 +85,7 @@ const Messages = ({ topic , replies, hideReplyButton, hideIcons,  onReplySubmit,
             // If index is even, align image to the left
             <>
               <img src={post.image} alt={post.subject} className="left-image" />
-              <div className={`post ${index % 2 === 0 ? 'even' : 'odd'} ${expandedPosts.includes(index) ? 'expanded' : ''}`}>
+              <div className={`post ${index % 2 === 0 ? 'even' : 'odd'} ${expandedPosts.includes(index) ? 'expanded' : ''}  ${newReplies.includes(post) ? 'new-reply' : ''}`}>
                 <div className="post-content">
                   {topic &&
                     <h4>

@@ -19,12 +19,6 @@
   transform: scale(1.5); 
 }
 
-/* POSTS */
-.post-container {
-  display: flex;
-  min-width: 5vw;
-  max-height: 15rem;
-}
 
 /* INSIDE POST  */
 
@@ -161,4 +155,16 @@
 .odd {
   background-color: #ea13283a;
   margin-right: 2%; /*padding to the right for odd-indexed posts */
+}
+
+.new-post-arrow {
+  /* Add your styling here, e.g., position, color, etc. */
+  /* Example styles: */
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 64px;
+  color: #007bff; /* Change the color as needed */
+  cursor: pointer;
 }

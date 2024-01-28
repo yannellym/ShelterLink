@@ -9,13 +9,31 @@
   .reply-container-inside-div-one {
     width: 80vw;
     margin: -5px auto;
-    max-height: 100%;
-    overflow-y: visible;
+    max-height: 70vh;
+    overflow-y: auto;
+    position: relative;
+    /* border: red solid 4px; */
   }
   
   .reply-container-inside-div-two {
     width: 80vw;
     margin: 0% auto;
     min-height: 25%;
+  }
+
+  .scrollable-container.reply-container-inside-div-one {
+    position: relative;
+    padding-bottom: 30px; 
+    /* border: red solid 4px; */
+  }
+  .new-post-arrow {
+    position: absolute;
+    top: 90%;
+    right: 10px;
+    transition: opacity 0.5s;
+    height: 10%;
+    width: 10%;
+    cursor: pointer;
+    color: red;
   }
   
