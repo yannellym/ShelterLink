@@ -8,11 +8,11 @@ import { API, graphqlOperation } from 'aws-amplify';
 import { listPostsByTopic} from '../graphql/queries.js';
 import { onCreateTopic } from '../graphql/subscriptions.js';
 
-const Messages = ({ topic , replies, hideReplyButton, hideIcons,  onReplySubmit, topicIndex, handleLike, fetchImage }) => {
+const Messages = ({ topic , replies, hideReplyButton, hideIcons,  onReplySubmit, topicIndex, handleLike, fetchImage, user }) => {
 
   const [data, setData] = useState([]);
   const [expandedPosts, setExpandedPosts] = useState([]);
-  const [isFavorited, setIsFavorited] = useState(Array(data.length).fill(false));
+  const [isFavorited, setIsFavorited] = useState(data.map(post => post.likedBy?.includes(user.attributes.sub) || false));
   const [newReplies, setNewReplies] = useState([]);
 
   useEffect(() => {
@@ -35,13 +35,10 @@ const Messages = ({ topic , replies, hideReplyButton, hideIcons,  onReplySubmit,
     const fetchData = async () => {
       try {
         if (topic) {
-          console.log(topic, "topic")
           const result = await API.graphql(graphqlOperation(listPostsByTopic, { topicID: topic.id }));
           const fetchedData = result.data.listPosts.items;
           setData(fetchedData);
         } else if (replies) {
-          console.log(replies, "replies to check")
-         
           setData(replies);
         }
       } catch (error) {
@@ -70,12 +67,34 @@ const Messages = ({ topic , replies, hideReplyButton, hideIcons,  onReplySubmit,
     window.location.href = `/replies/${post.id}`;
   };
 
-  const handleLikeClick = (dataIndex) => {
-    console.log('Liked Data:', data[dataIndex]);
-    console.log(topicIndex, dataIndex, 'indices');
-    handleLike(topicIndex, dataIndex);
+  const handleLikeClick = async (postId) => {
+    try {
+      // Toggle the like status
+      await handleLike(postId);
+  
+      // Update likes count in the data state
+      setData((prevData) =>
+        prevData.map((post) =>
+          post.id === postId
+            ? {
+                ...post,
+                likes: isFavorited[postId] ? post.likes - 1 : post.likes + 1,
+              }
+            : post
+        )
+      );
+  
+      // Update isFavorited state
+      setIsFavorited((prevIsFavorited) => {
+        const newIsFavorited = [...prevIsFavorited];
+        newIsFavorited[postId] = !prevIsFavorited[postId];
+        return newIsFavorited;
+      });
+    } catch (error) {
+      console.error('Error handling like:', error);
+    }
   };
-
+  
 
   return (
     <div className="previous-posts-container">
@@ -119,8 +138,8 @@ const Messages = ({ topic , replies, hideReplyButton, hideIcons,  onReplySubmit,
                         {post.likes} 
                         <FontAwesomeIcon
                           icon={faHeart}
-                          onClick={() => handleLikeClick(index)}
-                          className={`like-heart-${index ? 'favorited' : 'unfavorited'}`}
+                          onClick={() => handleLikeClick(post.id)}
+                          className={`like-heart-${isFavorited[post.id] ? 'favorited' : 'unfavorited'}`}
                         />
                       </p>
                     )}
@@ -170,8 +189,8 @@ const Messages = ({ topic , replies, hideReplyButton, hideIcons,  onReplySubmit,
                         {post.likes} 
                         <FontAwesomeIcon
                           icon={faHeart}
-                          onClick={() => handleLikeClick(index)}
-                          className={`like-heart-${index ? 'favorited' : 'unfavorited'}`}
+                          onClick={() => handleLikeClick(post.id)}
+                          className={`like-heart-${isFavorited[post.id] ? 'favorited' : 'unfavorited'}`}
                         />
                       </p>
                     )}

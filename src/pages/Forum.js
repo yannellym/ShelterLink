@@ -7,7 +7,8 @@ import NewTopicModal from '../components/NewTopicModal';
 
 import { API, graphqlOperation } from 'aws-amplify';
 import { createTopic, createPost, updateTopic } from '../graphql/mutations.js';
-import { listTopics } from '../graphql/queries.js';
+import { listTopics, getPost } from '../graphql/queries.js';
+import { updatePost } from '../graphql/mutations.js'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCommentDots, faPlusCircle, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
@@ -195,7 +196,6 @@ const Forum = ({ user, fetchImage }) => {
 
         // Update the state with the sorted topics data
         setTopics(sortedTopics);
-
             
         // Update the selected topic with the new post
         setSelectedTopic((prevTopic) => ({
@@ -210,44 +210,32 @@ const Forum = ({ user, fetchImage }) => {
       }
     };
 
-  // HANDLE LIKES
-  const handleLike = (tIndex, postIndex) => {
-    console.log('inside handle like');
-
-    if (!user) {
-      alert('Please sign in to like a post.');
-      return;
+  // handle likes 
+  const handleLike = async (postId) => {
+    console.log(postId, "the psot id")
+    try {
+      // Fetch the current post data
+      const { data } = await API.graphql(graphqlOperation(getPost, { id: postId }));
+      const post = data.getPost;
+      console.log(data, "post to check")
+      // Check if the current user has already liked the post
+      const userLiked = post.likedBy.includes(user.attributes.sub);
+  
+      // Update the post with the new likes information
+      const updatedPost = await API.graphql(graphqlOperation(updatePost, {
+        input: {
+          id: postId,
+          likes: userLiked ? post.likes - 1 : post.likes + 1,
+          likedBy: userLiked
+            ? post.likedBy.filter((userId) => userId !== user.attributes.sub)
+            : [...post.likedBy, user.attributes.sub],
+        },
+      }));
+  
+      console.log('Post updated:', updatedPost.data.updatePost);
+    } catch (error) {
+      console.error('Error updating post:', error);
     }
-
-    setTopics((prevTopics) => {
-      const updatedTopics = [...prevTopics];
-
-      const updatedPosts = updatedTopics[tIndex].posts.map((post, pIndex) => {
-        if (pIndex === postIndex) {
-          console.log('toggling');
-          const updatedLikes = post.likes + 1;
-          console.log('updatedLikes', updatedLikes);
-
-          // Update the likes directly in the copied state
-          return {
-            ...post,
-            likes: updatedLikes,
-          };
-        }
-        return post;
-      });
-
-      // Update the copied state with the modified posts
-      updatedTopics[tIndex] = {
-        ...updatedTopics[tIndex],
-        posts: updatedPosts,
-      };
-
-      // Set the selectedPosts state to trigger an immediate UI update
-      setSelectedPosts(updatedPosts);
-
-      return updatedTopics;
-    });
   };
 
   // HANDLE NEW POSTS -> MODAL
@@ -331,8 +319,9 @@ const Forum = ({ user, fetchImage }) => {
                 hideReplyButton={false}
                 hideIcons={false}
                 topicIndex={selectedTopic.tIndex}
-                handleLike={(topicIndex, postIndex) => handleLike(topicIndex, postIndex)}
+                handleLike={(dataId) => handleLike(dataId)}
                 fetchImage={fetchImage}
+                user={user}
               />
             </>
           ) : (

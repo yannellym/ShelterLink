@@ -20,6 +20,10 @@
     margin: 0% auto;
     min-height: 25%;
   }
+  .no-replies-message {
+    text-align: center;
+    margin: 20px 0;
+  }
 
   .scrollable-container.reply-container-inside-div-one {
     position: relative;

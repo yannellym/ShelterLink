@@ -10,6 +10,7 @@ import { API, graphqlOperation } from 'aws-amplify';
 import { getPost, getReply } from '../graphql/queries.js';
 import { createReply, updatePost } from "../graphql/mutations.js";
 
+import kitten from "../images/kitten.jpg"
 import '../styles/Replies.css';
 
 const Replies = ({ user, fetchImage }) => {
@@ -118,20 +119,21 @@ const Replies = ({ user, fetchImage }) => {
   return (
     <div className="reply-container">
       <button onClick={() => navigate(-2)}>Back</button>
-      <h3>Original Post ID: {post && post.id ? post.id : 'Undefined'}</h3>
-      {post && (
-        <div className={`post-container ${expandedPosts.includes(post.id) ? 'expanded-message' : ''}`} key={post.id}>
+      <h3>Original Post:</h3>
+
+      <div className={`post-container ${expandedPosts.includes(post?.id) ? 'expanded-message' : ''}`} key={post?.id}>
+        {post && (
           <>
             <img src={post.image} alt={post.subject} className="left-image" />
-            <div className={`post ${expandedPosts.includes(post.index) ? 'expanded' : ''}`}>
+            <div className={`post ${expandedPosts.includes(post?.index) ? 'expanded' : ''}`}>
               <div className="post-content">
                 <h4>{post.subject.toUpperCase()}</h4>
-                <p className={`post-text ${expandedPosts.includes(post.index) ? 'expanded' : ''}`}>
+                <p className={`post-text ${expandedPosts.includes(post?.index) ? 'expanded' : ''}`}>
                   {post.content}
                 </p>
                 {post.content.length > 200 && (
-                  <span className="read-more" onClick={() => handleReadMore(post.index)}>
-                    {expandedPosts.includes(post.index) ? 'Read less' : 'Read more'}
+                  <span className="read-more" onClick={() => handleReadMore(post?.index)}>
+                    {expandedPosts.includes(post?.index) ? 'Read less' : 'Read more'}
                   </span>
                 )}
                 <p>
@@ -139,24 +141,41 @@ const Replies = ({ user, fetchImage }) => {
                   {new Date(post.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </p>
                 <p className='post-details-icon-p'>
-                  {post.replies.length} <FontAwesomeIcon icon={faCommentDots} />
+                  {post && post.replies ? post.replies.length : 0} <FontAwesomeIcon icon={faCommentDots} />
                   0 <FontAwesomeIcon icon={faHeart} />
                 </p>
               </div>
             </div>
           </>
-        </div>
-      )}
-      <div ref={messagesContainerRef} className="scrollable-container reply-container-inside-div-one">
-        <Messages replies={replies} hideReplyButton={true} hideIcons={true} />
-        {showTopNewPostArrow && (
-            <div className="new-post-arrow" onClick={() => { setShowTopNewPostArrow(false); scrollToBottom(); }}>
-                <FontAwesomeIcon icon={faCircleArrowDown} />
-            </div>
-            )}
+        )}
       </div>
+
+      <div className="no-replies-message">
+        {post && replies.length === 0 && (
+          <>
+            <p>No replies yet.</p>
+            <img src={kitten} alt="no replies yet" />
+          </>
+        )}
+      </div>
+
+      <div ref={messagesContainerRef} className="scrollable-container reply-container-inside-div-one">
+        {post && replies.length > 0 && (
+          <>
+            <Messages replies={replies} hideReplyButton={true} hideIcons={true} />
+            {showTopNewPostArrow && (
+              <div className="new-post-arrow" onClick={() => { setShowTopNewPostArrow(false); scrollToBottom(); }}>
+                <FontAwesomeIcon icon={faCircleArrowDown} />
+              </div>
+            )}
+          </>
+        )}
+      </div>
+
       <div className="reply-container-inside-div-two">
-        <ReplyPost user={user} onReplySubmit={addNewReply} />
+        {post && (
+          <ReplyPost user={user} onReplySubmit={addNewReply} />
+        )}
       </div>
     </div>
   );

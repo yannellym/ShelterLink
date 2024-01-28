@@ -93,6 +93,7 @@
   align-items: center; /* Align items vertically in the center */
   width: 15%;
   text-decoration: none;
+  color: #000000;
 }
 
 .reply-button {
@@ -103,11 +104,8 @@
   margin-right: 10px;
 }
 
-.like-heart-unfavorited, .like-heart-favorited{
-  cursor: pointer;
-  border: none;
-  color: rgb(169, 161, 161);
-
+.like-heart-unfavorited {
+  color: #827575; 
 }
 
 .like-heart-favorited {
@@ -123,7 +121,7 @@
   text-decoration: none;
 }
 .reply-count-icon {
-  color: rgb(0, 0, 0);
+  color: #0953ad;
 }
  /* IMAGES IN POSTS */
 .left-image {
