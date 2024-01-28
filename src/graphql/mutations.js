@@ -464,16 +464,9 @@ export const createReply = /* GraphQL */ `
   ) {
     createReply(input: $input, condition: $condition) {
       id
-      subject
       content
-      user {
-        id
-        username
-        email
-        createdAt
-        updatedAt
-        __typename
-      }
+      user
+      username
       image
       createdAt
       updatedAt
@@ -488,16 +481,9 @@ export const updateReply = /* GraphQL */ `
   ) {
     updateReply(input: $input, condition: $condition) {
       id
-      subject
       content
-      user {
-        id
-        username
-        email
-        createdAt
-        updatedAt
-        __typename
-      }
+      user
+      username
       image
       createdAt
       updatedAt
@@ -512,16 +498,9 @@ export const deleteReply = /* GraphQL */ `
   ) {
     deleteReply(input: $input, condition: $condition) {
       id
-      subject
       content
-      user {
-        id
-        username
-        email
-        createdAt
-        updatedAt
-        __typename
-      }
+      user
+      username
       image
       createdAt
       updatedAt

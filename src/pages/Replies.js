@@ -6,83 +6,87 @@ import ReplyPost from '../components/ReplyPost.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCommentDots, faHeart} from '@fortawesome/free-solid-svg-icons';
 
+import { API, graphqlOperation } from 'aws-amplify';
+import { getPost, getReply } from '../graphql/queries.js';
+import { createReply, updatePost } from "../graphql/mutations.js"
+
 import '../styles/Replies.css';
 
-const Replies = ({ match, user }) => {
+const Replies = ({ user, fetchImage }) => {
     const navigate = useNavigate();
     const { postId } = useParams();
     const [replies, setReplies] = useState([]);
-    const fetchRepliesRef = useRef(false);
-    const messagesContainerRef = useRef(null);
+    const [post, setPost] = useState(null);
 
-    // Retrieve post information from localStorage
-    const storedPost = localStorage.getItem('replyPost');
-    const post = storedPost ? JSON.parse(storedPost) : null;
 
     const [expandedPosts, setExpandedPosts] = useState([]);
 
-    console.log(post, "ORG POST")
 
     useEffect(() => {
-        if (post && post?.id && !fetchRepliesRef.current) {
-            const fetchReplies = async () => {
-                try {
-                    // API call or data fetching logic
-                    // const response = await fetch(`/api/replies/${postId}`);
-                    // const data = await response.json();
-                    // setReplies(data);
+        const fetchReplies = async () => {
+            try {
+                if (postId) {
+                    // Fetch post by ID
+                    const result = await API.graphql(
+                        graphqlOperation(getPost, { id: postId })
+                    );
+    
+                    const post = result.data.getPost;
+                    setPost(post);
 
-                    // dummy data
-                    const dummyReplies = [
-                        {
-                            id: Date.now() + 1,
-                            subject: 'Reply Subject 1', 
-                            content: 'Reply 1',
-                            user: { id: 2, username: 'JohnDoe' },
-                            image: 'https://www.rd.com/wp-content/uploads/2020/11/GettyImages-758586901-scaled-e1606773458129.jpg', 
-                        },
-                        {
-                            id: Date.now() + 1,
-                            subject: 'Reply Subject 2', 
-                            content: 'Reply 1',
-                            user: { id: 3, username: 'JohnDoe' },
-                            image: 'https://www.rd.com/wp-content/uploads/2020/11/GettyImages-758586901-scaled-e1606773458129.jpg', 
-                        },
-                        {
-                            id: Date.now() + 1,
-                            subject: 'Reply Subject 3', 
-                            content: 'Reply 1',
-                            user: { id: 4, username: 'JohnDoe' },
-                            image: 'https://www.rd.com/wp-content/uploads/2020/11/GettyImages-758586901-scaled-e1606773458129.jpg', 
-                        },
-                        
-                    ];
-                    setReplies(dummyReplies);
-                } catch (error) {
-                    console.error('Error fetching replies:', error);
+                    // Extract reply IDs
+                    const replyIds = Array.isArray(post.replies)
+                        ? post.replies // If replies is an array of IDs, use it directly
+                        : post.replies.map(reply => reply.id); // If replies is an array of reply objects, extract IDs
+
+    
+                   // Fetch details for each reply using getReply
+                    const fetchedReplies = await Promise.all(
+                        replyIds.map(async (replyId) => {
+                            const replyResult = await API.graphql(
+                                graphqlOperation(getReply, { id: replyId })
+                            );
+                            return replyResult.data.getReply;
+                        })
+                    );
+                    setReplies(fetchedReplies);
                 }
-            };
-
-            fetchReplies();
-            fetchRepliesRef.current = true;
-        }
-    }, [post, fetchRepliesRef.current]);
-
-    // Function to add a new reply
-    const addNewReply = (newReply) => {
-        const updatedPost = {
-            ...post,
-            replies: post.replies + 1,
+            } catch (error) {
+                console.error('Error fetching REPLIES:', error);
+            }
         };
     
-        setReplies((prevReplies) => [...prevReplies, newReply]);
+        fetchReplies();
+    }, [postId]);
+
+    // Function to add a new reply
+    const addNewReply = async (newReplyData) => {
+        const image = await fetchImage();
+        try {
+        const input = {
+            content: newReplyData.content,
+            user: newReplyData.user,
+            username: newReplyData.username,
+            image,
+        };
     
-        // Update the post in local storage
-        localStorage.setItem('replyPost', JSON.stringify(updatedPost));
-        
-        // Scroll to the latest added reply
-        if (messagesContainerRef.current) {
-            messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+        // Create a new reply
+        const result = await API.graphql(graphqlOperation(createReply, { input }));
+        const newReply = result.data.createReply;
+    
+        // Update the post with the new reply
+        const updatedPostInput = {
+            id: post.id, 
+            replies: [...post.replies, newReply.id],
+        };
+    
+        await API.graphql(graphqlOperation(updatePost, { input: updatedPostInput }));
+    
+        // Update the state with the new reply and updated post
+        setReplies([...replies, newReply]);
+        setPost({ ...post, replies: updatedPostInput.replies });
+        } catch (error) {
+        console.error('Error creating reply:', error);
         }
     };
     
@@ -96,12 +100,13 @@ const Replies = ({ match, user }) => {
         });
     };
 
+
     return (
         <div className="reply-container">
             <button onClick={() => navigate(-2)}>Back</button>
-            <h3>Original Post ID: {post ? post.id : 'Undefined'}</h3>
-            <div className={`post-container ${expandedPosts.includes(post.index) ? 'expanded-message' : ''}`} key={post.id}>
-                {
+            <h3>Original Post ID: {post && post.id ? post.id : 'Undefined'}</h3>
+            {post && (
+                <div className={`post-container ${expandedPosts.includes(post.id) ? 'expanded-message' : ''}`} key={post.id}>
                     <>
                         <img src={post.image} alt={post.subject} className="left-image" />
                         <div className={`post ${expandedPosts.includes(post.index) ? 'expanded' : ''}`}>
@@ -112,12 +117,12 @@ const Replies = ({ match, user }) => {
                                 </p>
                                 {post.content.length > 200 && (
                                     <span className="read-more" onClick={() => handleReadMore(post.index)}>
-                                    {expandedPosts.includes(post.index) ? 'Read less' : 'Read more'}
+                                        {expandedPosts.includes(post.index) ? 'Read less' : 'Read more'}
                                     </span>
                                 )}
                                 <p>
-                                    Posted by: {post.user.username} on {new Date(post.id).toLocaleDateString()} @{' '}
-                                    {new Date(post.id).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                    Posted by {post.username} on {new Date(post.createdAt).toLocaleDateString()} @{' '}
+                                    {new Date(post.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                 </p>
                                 <p className='post-details-icon-p'>
                                     {post.replies.length} <FontAwesomeIcon icon={faCommentDots} />
@@ -126,10 +131,10 @@ const Replies = ({ match, user }) => {
                             </div>
                         </div>
                     </>
-                }
-            </div>   
-            <div className="reply-container-inside-div-one" ref={messagesContainerRef}>
-                <Messages posts={replies} hideReplyButton={true} hideIcons={true} />
+                </div>
+            )}
+            <div className="reply-container-inside-div-one">
+                <Messages replies={replies} hideReplyButton={true} hideIcons={true} />
             </div>
             <div className="reply-container-inside-div-two">
                 <ReplyPost user={user} onReplySubmit={addNewReply} />

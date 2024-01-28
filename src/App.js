@@ -21,6 +21,7 @@ import useUserLocation from './hooks/useUserLocation.js';
 import Replies from './pages/Replies.js';
 
 import './styles/App.css';
+import default_pic from './images/dandc.jpeg';
 
 import { Amplify, Auth } from 'aws-amplify';
 import { Authenticator } from '@aws-amplify/ui-react';
@@ -260,6 +261,25 @@ const App = () => {
       console.log('Error signing out: ', error);
     }
   };
+
+
+  // FUNCTION to fetch a random image for the post. In case this fails, use our default photo.
+  const fetchPlaceholderImage = async () => {
+    try {
+      const response = await fetch(`https://api.unsplash.com/photos/random?query=animal&client_id=CQnaHevzLsFIwELZJhaYpxdy5vmXqmYivIAZWlWMmd0`);
+      
+      if (response.ok) {
+        const data = await response.json();
+        return data.urls.small; 
+      }
+      // Return the placeholder image if the request fails
+      return default_pic;
+    } catch (error) {
+      console.error('Error fetching placeholder image:', error);
+      // Return the placeholder image in case of an error
+      return default_pic;
+    }
+  };
   
 
   return (
@@ -337,6 +357,7 @@ const App = () => {
             // user ? (
               <Forum
                 user={user}
+                fetchImage={fetchPlaceholderImage}
               />
             // ) : (
             //   <div>
@@ -351,6 +372,7 @@ const App = () => {
           element={ 
             <Replies 
               user={user}
+              fetchImage={fetchPlaceholderImage} 
             />} 
           /> 
         <Route

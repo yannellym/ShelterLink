@@ -13,12 +13,12 @@ const ReplyPost = ({ user, onReplySubmit }) => {
     }
     // Fetch placeholder image for the selected topic
     const image = await fetchPlaceholderImage();
+    console.log(user, "user inside creating post")
 
     const newReplyData = {
-      id: Date.now(),
-      subject: 'Reply Subject', 
       content: replyContent,
-      user: { id: user.id, username: user.attributes.name },
+      user: user.attributes.sub,
+      username: user.attributes.name,
       image,
     };
 

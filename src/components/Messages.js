@@ -6,37 +6,47 @@ import { faCommentDots, faHeart} from '@fortawesome/free-solid-svg-icons';
 
 import { API, graphqlOperation } from 'aws-amplify';
 import { listPostsByTopic} from '../graphql/queries.js';
+import { onCreateTopic } from '../graphql/subscriptions.js';
 
-const Messages = ({ topic ,hideReplyButton, hideIcons,  onReplySubmit, topicIndex, handleLike }) => {
+const Messages = ({ topic , replies, hideReplyButton, hideIcons,  onReplySubmit, topicIndex, handleLike, fetchImage }) => {
 
-  const [posts, setPosts] = useState([])
-  console.log(posts, "post original")
+  const [data, setData] = useState([]);
+  const [expandedPosts, setExpandedPosts] = useState([]);
+  const [isFavorited, setIsFavorited] = useState(Array(data.length).fill(false));
 
   useEffect(() => {
-    const fetchPosts = async () => {
+    const subscription = API.graphql(graphqlOperation(onCreateTopic, { topicID: topic?.id })).subscribe({
+      next: ({ value }) => {
+        const newData = value.data.onCreatePost;
+        setData((prevData) => [newData, ...prevData]);
+      },
+      error: (error) => console.error('Subscription error:', error),
+    });
+  
+    return () => subscription.unsubscribe();
+  }, [topic]);
+
+  useEffect(() => {
+    const fetchData = async () => {
       try {
         if (topic) {
-          // Fetch posts from the database 
-          const result = await API.graphql(
-            graphqlOperation(listPostsByTopic,{ topicID: topic.id, limit: 10 })
-          );
-
-          const fetchedPosts = result.data.listPosts.items;
-          console.log(fetchedPosts.reverse(), "newpostsin messages")
-          setPosts(fetchedPosts);
+          console.log(topic, "topic")
+          const result = await API.graphql(graphqlOperation(listPostsByTopic, { topicID: topic.id }));
+          const fetchedData = result.data.listPosts.items;
+          setData(fetchedData);
+        } else if (replies) {
+          console.log(replies, "replies to check")
+         
+          setData(replies);
         }
       } catch (error) {
-        console.error('Error fetching posts:', error);
+        console.error('Error fetching data:', error);
       }
     };
 
-    fetchPosts();
-  }, [topic]); // Re-run the effect when postsReceived change
+    fetchData();
+  }, [topic, replies]);
 
-
-  const [expandedPosts, setExpandedPosts] = useState([]);
-  const [isFavorited, setIsFavorited] = useState(Array(posts.length).fill(false));
-  
   const handleReadMore = (index) => {
     setExpandedPosts((prevExpandedPosts) => {
       if (prevExpandedPosts.includes(index)) {
@@ -46,40 +56,38 @@ const Messages = ({ topic ,hideReplyButton, hideIcons,  onReplySubmit, topicInde
       }
     });
   };
+
   const handleReplySubmit = (postId, newReplyData) => {
-    // Pass the postId and new reply data to the parent component
     onReplySubmit(postId, newReplyData);
   };
-  const handleReplyClick = ({post}) => {
-     // Store post information in localStorage
-     localStorage.setItem('replyPost', JSON.stringify(post));
-     localStorage.setItem('handleReplySubmit', handleReplySubmit.toString());
- 
-     // Navigate to the Replies component
-     window.location.href = `/replies/${post.id}`;
+
+  const handleReplyClick = ({ post }) => {
+    window.location.href = `/replies/${post.id}`;
   };
 
-  const handleLikeClick = (postIndex) => {
-    
-    console.log('Liked Post:', posts[postIndex]);
-    console.log(topicIndex, postIndex, "indices");
-    // Call the handleLike function passed from the parent component
-    handleLike(topicIndex, postIndex);
+  const handleLikeClick = (dataIndex) => {
+    console.log('Liked Data:', data[dataIndex]);
+    console.log(topicIndex, dataIndex, 'indices');
+    handleLike(topicIndex, dataIndex);
   };
- 
+
+    console.log(data, "all replies ")
 
   return (
     <div className="previous-posts-container">
-      {posts.map((post, index) => (
-        <div className={`post-container ${expandedPosts.includes(index) ? 'expanded-message' : ''}`} key={post.id}>
+      {data.map((post, index) => (
+        <div className={`post-container ${expandedPosts.includes(index) ? 'expanded-message' : ''} `} key={post.id}>
           {index % 2 === 0 ? (
             // If index is even, align image to the left
             <>
               <img src={post.image} alt={post.subject} className="left-image" />
-
               <div className={`post ${index % 2 === 0 ? 'even' : 'odd'} ${expandedPosts.includes(index) ? 'expanded' : ''}`}>
                 <div className="post-content">
-                  <h4>{post.subject.toUpperCase()}</h4>
+                  {topic &&
+                    <h4>
+                      {post.subject.toUpperCase()}
+                    </h4>
+                  }
                   <p className={`post-text ${expandedPosts.includes(index) ? 'expanded' : ''}`}>
                     {post.content}
                   </p>
@@ -115,7 +123,7 @@ const Messages = ({ topic ,hideReplyButton, hideIcons,  onReplySubmit, topicInde
                   </div>
                   {!hideReplyButton && (
                     <Link to={`/replies/${post.id}`}>
-                      <button className="reply-button" onClick={() => handleReplyClick({ post, handleReplySubmit })}>Reply</button>
+                        <button className="reply-button" onClick={() => handleReplyClick({ post: post, handleReplySubmit })}>Reply</button>
                     </Link>
                   )}
                 </div>
@@ -124,9 +132,13 @@ const Messages = ({ topic ,hideReplyButton, hideIcons,  onReplySubmit, topicInde
           ) : (
             // If index is odd, align image to the right
             <>
-              <div className={`post ${index % 2 === 0 ? 'even' : 'odd'} ${expandedPosts.includes(index) ? 'expanded' : ''}`}>
+              <div className={`post ${index % 2 === 0 ? 'even' : 'odd'} ${expandedPosts.includes(index) ? 'expanded' : ''} `}>
                 <div className="post-content">
-                  <h4>{post.subject.toUpperCase()}</h4>
+                  {topic &&
+                    <h4>
+                      {post.subject.toUpperCase()}
+                    </h4>
+                  }
                   <p className={`post-text ${expandedPosts.includes(index) ? 'expanded' : ''}`}>
                     {post.content}
                   </p>
@@ -139,7 +151,6 @@ const Messages = ({ topic ,hideReplyButton, hideIcons,  onReplySubmit, topicInde
                     <p>
                       Posted by {post.username} on {new Date(post.createdAt).toLocaleDateString()} @{' '}
                       {new Date(post.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                      by {post.username}
                     </p>
                     {!hideIcons && (
                       <p className='post-details-icon-p'>

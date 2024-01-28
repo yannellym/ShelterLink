@@ -422,16 +422,9 @@ export const onCreateReply = /* GraphQL */ `
   subscription OnCreateReply($filter: ModelSubscriptionReplyFilterInput) {
     onCreateReply(filter: $filter) {
       id
-      subject
       content
-      user {
-        id
-        username
-        email
-        createdAt
-        updatedAt
-        __typename
-      }
+      user
+      username
       image
       createdAt
       updatedAt
@@ -443,16 +436,9 @@ export const onUpdateReply = /* GraphQL */ `
   subscription OnUpdateReply($filter: ModelSubscriptionReplyFilterInput) {
     onUpdateReply(filter: $filter) {
       id
-      subject
       content
-      user {
-        id
-        username
-        email
-        createdAt
-        updatedAt
-        __typename
-      }
+      user
+      username
       image
       createdAt
       updatedAt
@@ -464,16 +450,9 @@ export const onDeleteReply = /* GraphQL */ `
   subscription OnDeleteReply($filter: ModelSubscriptionReplyFilterInput) {
     onDeleteReply(filter: $filter) {
       id
-      subject
       content
-      user {
-        id
-        username
-        email
-        createdAt
-        updatedAt
-        __typename
-      }
+      user
+      username
       image
       createdAt
       updatedAt

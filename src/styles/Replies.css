@@ -1,5 +1,4 @@
 .reply-container {
-    /* border: 5px solid #f4bb01; */
     min-height: 100vh;
   }
   
@@ -8,7 +7,6 @@
   }
   
   .reply-container-inside-div-one {
-    /* border: 5px solid #ff0e0e; */
     width: 80vw;
     margin: -5px auto;
     max-height: 100%;

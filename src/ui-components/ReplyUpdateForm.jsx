@@ -24,20 +24,23 @@ export default function ReplyUpdateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    subject: "",
     content: "",
+    user: "",
+    username: "",
     image: "",
   };
-  const [subject, setSubject] = React.useState(initialValues.subject);
   const [content, setContent] = React.useState(initialValues.content);
+  const [user, setUser] = React.useState(initialValues.user);
+  const [username, setUsername] = React.useState(initialValues.username);
   const [image, setImage] = React.useState(initialValues.image);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = replyRecord
       ? { ...initialValues, ...replyRecord }
       : initialValues;
-    setSubject(cleanValues.subject);
     setContent(cleanValues.content);
+    setUser(cleanValues.user);
+    setUsername(cleanValues.username);
     setImage(cleanValues.image);
     setErrors({});
   };
@@ -58,8 +61,9 @@ export default function ReplyUpdateForm(props) {
   }, [idProp, replyModelProp]);
   React.useEffect(resetStateValues, [replyRecord]);
   const validations = {
-    subject: [{ type: "Required" }],
     content: [{ type: "Required" }],
+    user: [{ type: "Required" }],
+    username: [{ type: "Required" }],
     image: [],
   };
   const runValidationTasks = async (
@@ -88,8 +92,9 @@ export default function ReplyUpdateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          subject,
           content,
+          user,
+          username,
           image: image ?? null,
         };
         const validationResponses = await Promise.all(
@@ -143,32 +148,6 @@ export default function ReplyUpdateForm(props) {
       {...rest}
     >
       <TextField
-        label="Subject"
-        isRequired={true}
-        isReadOnly={false}
-        value={subject}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              subject: value,
-              content,
-              image,
-            };
-            const result = onChange(modelFields);
-            value = result?.subject ?? value;
-          }
-          if (errors.subject?.hasError) {
-            runValidationTasks("subject", value);
-          }
-          setSubject(value);
-        }}
-        onBlur={() => runValidationTasks("subject", subject)}
-        errorMessage={errors.subject?.errorMessage}
-        hasError={errors.subject?.hasError}
-        {...getOverrideProps(overrides, "subject")}
-      ></TextField>
-      <TextField
         label="Content"
         isRequired={true}
         isReadOnly={false}
@@ -177,8 +156,9 @@ export default function ReplyUpdateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              subject,
               content: value,
+              user,
+              username,
               image,
             };
             const result = onChange(modelFields);
@@ -195,6 +175,60 @@ export default function ReplyUpdateForm(props) {
         {...getOverrideProps(overrides, "content")}
       ></TextField>
       <TextField
+        label="User"
+        isRequired={true}
+        isReadOnly={false}
+        value={user}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              content,
+              user: value,
+              username,
+              image,
+            };
+            const result = onChange(modelFields);
+            value = result?.user ?? value;
+          }
+          if (errors.user?.hasError) {
+            runValidationTasks("user", value);
+          }
+          setUser(value);
+        }}
+        onBlur={() => runValidationTasks("user", user)}
+        errorMessage={errors.user?.errorMessage}
+        hasError={errors.user?.hasError}
+        {...getOverrideProps(overrides, "user")}
+      ></TextField>
+      <TextField
+        label="Username"
+        isRequired={true}
+        isReadOnly={false}
+        value={username}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              content,
+              user,
+              username: value,
+              image,
+            };
+            const result = onChange(modelFields);
+            value = result?.username ?? value;
+          }
+          if (errors.username?.hasError) {
+            runValidationTasks("username", value);
+          }
+          setUsername(value);
+        }}
+        onBlur={() => runValidationTasks("username", username)}
+        errorMessage={errors.username?.errorMessage}
+        hasError={errors.username?.hasError}
+        {...getOverrideProps(overrides, "username")}
+      ></TextField>
+      <TextField
         label="Image"
         isRequired={false}
         isReadOnly={false}
@@ -203,8 +237,9 @@ export default function ReplyUpdateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              subject,
               content,
+              user,
+              username,
               image: value,
             };
             const result = onChange(modelFields);

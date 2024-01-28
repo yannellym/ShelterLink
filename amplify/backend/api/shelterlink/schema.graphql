@@ -95,8 +95,8 @@ type Post @model {
 
 type Reply @model {
   id: ID!
-  subject: String!
   content: String!
-  user: User!
+  user: ID!
+  username: String!
   image: String
 }

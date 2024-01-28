@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/Forum.css';
 import bd4 from '../images/bd4.jpeg';
-import default_pic from '../images/dandc.jpeg';
 import Messages from '../components/Messages.js';
 import PostModal from '../components/PostModal.js';
 import NewTopicModal from '../components/NewTopicModal'; 
@@ -13,7 +12,7 @@ import { listTopics } from '../graphql/queries.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCommentDots, faPlusCircle, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 
-const Forum = ({ user }) => {
+const Forum = ({ user, fetchImage }) => {
 
   const [topics, setTopics] = useState([]);
 
@@ -84,7 +83,7 @@ const Forum = ({ user }) => {
   const addDefaultPostToTopic = async (topic) => {
     try {
       // Fetch placeholder image for the created post
-      const image_url = await fetchPlaceholderImage();
+      const image_url = await fetchImage();
 
       const postInput = {
         input: {
@@ -142,7 +141,7 @@ const Forum = ({ user }) => {
     }
 
     // Fetch placeholder image for the created post
-    const image_url = await fetchPlaceholderImage();
+    const image_url = await fetchImage();
 
     // Convert the new post data structure to match the existing structure
     const adaptedNewPostData = {
@@ -211,25 +210,6 @@ const Forum = ({ user }) => {
       }
     };
 
-
-  // FUNCTION to fetch a random image for the post. In case this fails, use our default photo.
-  const fetchPlaceholderImage = async () => {
-    try {
-      const response = await fetch(`https://api.unsplash.com/photos/random?query=animal&client_id=CQnaHevzLsFIwELZJhaYpxdy5vmXqmYivIAZWlWMmd0`);
-      
-      if (response.ok) {
-        const data = await response.json();
-        return data.urls.small; 
-      }
-      // Return the placeholder image if the request fails
-      return default_pic;
-    } catch (error) {
-      console.error('Error fetching placeholder image:', error);
-      // Return the placeholder image in case of an error
-      return default_pic;
-    }
-  };
-
   // HANDLE LIKES
   const handleLike = (tIndex, postIndex) => {
     console.log('inside handle like');
@@ -289,7 +269,7 @@ const Forum = ({ user }) => {
     fetchTopics();
   }, []); // runs once when the component mounts
 
-  console.log(selectedPosts, "POSTS SELECTED")
+  // console.log(selectedPosts, "POSTS SELECTED")
   return (
     <div className="forum-container">
       <div className="topics-list">
@@ -352,6 +332,7 @@ const Forum = ({ user }) => {
                 hideIcons={false}
                 topicIndex={selectedTopic.tIndex}
                 handleLike={(topicIndex, postIndex) => handleLike(topicIndex, postIndex)}
+                fetchImage={fetchImage}
               />
             </>
           ) : (

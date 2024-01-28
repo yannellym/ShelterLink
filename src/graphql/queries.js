@@ -207,6 +207,34 @@ export const listTopics = /* GraphQL */ `
     }
   }
 `;
+export const listPostsByTopic = /* GraphQL */ `
+  query ListPostsByTopic(
+    $topicID: ID!
+    $limit: Int
+    $nextToken: String
+  ) {
+    listPosts(filter: { topicID: { eq: $topicID } }, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        subject
+        content
+        user
+        username
+        topicID
+        createdAt
+        Favorited
+        likes
+        likedBy
+        replies
+        image
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
 export const getPost = /* GraphQL */ `
   query GetPost($id: ID!) {
     getPost(id: $id) {
@@ -255,73 +283,14 @@ export const listPosts = /* GraphQL */ `
     }
   }
 `;
-export const listPostsByTopic = /* GraphQL */ `
-  query ListPostsByTopic(
-    $topicID: ID!
-    $limit: Int
-    $nextToken: String
-  ) {
-    listPosts(filter: { topicID: { eq: $topicID } }, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        subject
-        content
-        user
-        username
-        topicID
-        createdAt
-        Favorited
-        likes
-        likedBy
-        replies
-        image
-        updatedAt
-        __typename
-      }
-      nextToken
-      __typename
-    }
-  }
-`;
-
-
-export const listPostsById = /* GraphQL */ `
-  query ListPostsById($id: ID!) {
-    getPost(id: $id) {
-      id
-      subject
-      content
-      user
-      username
-      topicID
-      createdAt
-      Favorited
-      likes
-      likedBy
-      replies
-      image
-      updatedAt
-      __typename
-    }
-  }
-`;
-
-
 export const getReply = /* GraphQL */ `
   query GetReply($id: ID!) {
     getReply(id: $id) {
       id
-      subject
       content
-      user {
-        id
-        username
-        email
-        createdAt
-        updatedAt
-        __typename
-      }
+      user
       image
+      username
       createdAt
       updatedAt
       __typename
@@ -337,15 +306,28 @@ export const listReplies = /* GraphQL */ `
     listReplies(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        subject
         content
+        user
         image
+        username
         createdAt
         updatedAt
         __typename
       }
       nextToken
       __typename
+    }
+  }
+`;
+export const getPostWithReplyIds = /* GraphQL */ `
+  query GetPost($id: ID!) {
+    getPost(id: $id) {
+      id
+      replies {
+        items {
+          id
+        }
+      }
     }
   }
 `;
