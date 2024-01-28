@@ -1,8 +1,7 @@
-// form to match the user to a pet
 import React, { useState } from 'react';
-import '../styles/UserPreferencesForm.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import '../styles/UserPreferencesForm.css';
 
 const UserPreferencesForm = ({ onPreferencesSubmit }) => {
   const ageCategories = {
@@ -15,19 +14,17 @@ const UserPreferencesForm = ({ onPreferencesSubmit }) => {
   const [type, setType] = useState('dog');
   const [size, setSize] = useState('Large');
   const [age, setAge] = useState(1);
-  const [selectedAgeCategory, setSelectedAgeCategory] = useState(ageCategories[1]); 
+  const [selectedAgeCategory, setSelectedAgeCategory] = useState(ageCategories[1]);
   const [gender, setGender] = useState('Male');
   const [temperament, setTemperament] = useState([]);
-  const [messageVisible, setMessageVisible] = useState(false); // State to control message visibility
-  // Additional state to manage the visibility of the spinner
+  const [messageVisible, setMessageVisible] = useState(false);
   const [isFindingMatch, setIsFindingMatch] = useState(false);
-
 
   const handleAgeChange = (event) => {
     const selectedAge = Number(event.target.value);
     setAge(selectedAge);
     setSelectedAgeCategory(ageCategories[selectedAge]);
-    setMessageVisible(selectedAge !== 0); // Check if both "Type" and "Age" are set
+    setMessageVisible(selectedAge !== 0);
   };
 
   const handleTemperamentChange = (event) => {
@@ -35,15 +32,12 @@ const UserPreferencesForm = ({ onPreferencesSubmit }) => {
     const selectedTemperaments = [...temperament];
 
     if (selectedTemperaments.includes(value)) {
-      // Remove the temperament if it's already selected
       selectedTemperaments.splice(selectedTemperaments.indexOf(value), 1);
     } else {
-      // Add the temperament if it's not selected
       selectedTemperaments.push(value);
     }
 
     setTemperament(selectedTemperaments);
-   
   };
 
   const getSelectedPreferences = () => {
@@ -55,13 +49,10 @@ const UserPreferencesForm = ({ onPreferencesSubmit }) => {
       temperament: temperament.join(', '),
     };
 
-    const formattedMessage = `You want a ${preferences.pet} of ${preferences.size} size, ${preferences.gender}, plus a ${preferences.age}. This pet will be: ${preferences.temperament}.`;
-
-    return formattedMessage;
+    return `You want a ${preferences.pet} of ${preferences.size} size, ${preferences.gender}, plus a ${preferences.age}. This pet will be: ${preferences.temperament}.`;
   };
 
-  
-  const handleSubmit =  async(event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     const userPreferences = {
@@ -71,51 +62,26 @@ const UserPreferencesForm = ({ onPreferencesSubmit }) => {
       gender,
       temperament,
     };
-    setIsFindingMatch(true); // Show the spinner when submitting
-    // Simulate a call for 3 seconds
+
+    setIsFindingMatch(true);
     await new Promise((resolve) => setTimeout(resolve, 3000));
-    // find the match
     onPreferencesSubmit(userPreferences);
   };
-
 
   return (
     <div className="container">
       <h2>Find your perfect match:</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-options">
-          <label>
-            <input
-              type="radio"
-              name="type"
-              value="Dog"
-              checked={type === 'Dog'}
-              onChange={() => setType('Dog')}
-            />{' '}
-            Dog 🐶
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="type"
-              value="Cat"
-              checked={type === 'Cat'}
-              onChange={() => setType('Cat')}
-            />{' '}
-            Cat 🐱
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="type"
-              value="other"
-              checked={type === 'Barnyard'}
-              onChange={() => setType('Barnyard')}
-            />{' '}
-            Other 🐴🐓🐷
-          </label>
-        </div>
-        <div className="form-options">
+          <div className="form-option">
+            <label htmlFor="petType">I want a:</label>
+            <select id="petType" value={type} onChange={(e) => setType(e.target.value)}>
+              <option value="Dog">Dog 🐶</option>
+              <option value="Cat">Cat 🐱</option>
+              <option value="Barnyard">Other 🐴🐓🐷</option>
+            </select>
+          </div>
+
           <div className="form-option">
             <label htmlFor="size">Size:</label>
             <select id="size" value={size} onChange={(event) => setSize(event.target.value)}>
@@ -125,6 +91,7 @@ const UserPreferencesForm = ({ onPreferencesSubmit }) => {
               <option value="Large">Large</option>
             </select>
           </div>
+
           <div className="form-option">
             <label htmlFor="gender">Gender:</label>
             <select id="gender" value={gender} onChange={(event) => setGender(event.target.value)}>
@@ -135,84 +102,54 @@ const UserPreferencesForm = ({ onPreferencesSubmit }) => {
           </div>
         </div>
 
-        <label>Age Range:</label>
-        <input
-          type="range"
-          id="age"
-          value={age}
-          onChange={handleAgeChange}
-          min="1"
-          max="4" 
-        />
-        <span>{ageCategories[age]}</span> {/* Display the age category */}
+        <div className="age-characteristics-container">
+          <div>
+            <label>Age Range:</label>
+            <input
+              type="range"
+              id="age"
+              value={age}
+              onChange={handleAgeChange}
+              min="1"
+              max="4"
+            />
+            <span>{ageCategories[age]}</span>
+          </div>
 
-        <label>Characteristics:</label>
-        <div className="temperament-options">
-          <label>
-            <input
-              type="checkbox"
-              name="temperament"
-              value="Friendly"
-              checked={temperament.includes('Friendly')}
-              onChange={handleTemperamentChange}
-            />{' '}
-            Friendly 🙂
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              name="temperament"
-              value="Playful"
-              checked={temperament.includes('Playful')}
-              onChange={handleTemperamentChange}
-            />{' '}
-            Playful 🎾
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              name="temperament"
-              value="Smart"
-              checked={temperament.includes('Smart')}
-              onChange={handleTemperamentChange}
-            />{' '}
-            Smart 😌
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              name="temperament"
-              value="Gentle"
-              checked={temperament.includes('Gentle')}
-              onChange={handleTemperamentChange}
-            />{' '}
-            Gentle 🥹
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              name="temperament"
-              value="Funny"
-              checked={temperament.includes('Funny')}
-              onChange={handleTemperamentChange}
-            />{' '}
-            Funny 🤪
-          </label>
+          <div className="form-option">
+            <label htmlFor="characteristics">Characteristics:</label>
+            <select
+              id="characteristics"
+              value={temperament}
+              onChange={(e) => setTemperament([e.target.value])}
+            >
+              <option value="Friendly">Friendly 🙂</option>
+              <option value="Playful">Playful 🎾</option>
+              <option value="Smart">Smart 😌</option>
+              <option value="Gentle">Gentle 🥹</option>
+              <option value="Funny">Funny 🤪</option>
+            </select>
+          </div>
         </div>
+
         <div className="selected-preferences">
           <h3>Selected Preferences:</h3>
           <p>{getSelectedPreferences()}</p>
         </div>
+
         {messageVisible && (
           <div className="message">
             <p>Great choices. Let's find your perfect match!</p>
           </div>
         )}
-        <button className= "find-match-button" type="submit">  {isFindingMatch ? (
-          <FontAwesomeIcon icon={faSpinner} spin /> // Display spinner when isFindingMatch is true
+
+        <button className="find-match-button" type="submit">
+          {isFindingMatch ? (
+            <FontAwesomeIcon icon={faSpinner} spin />
           ) : (
-            'Find My Match' // Display "Find My Match" text when isFindingMatch is false
-          )}</button>
+            'Find My Match'
+          )}
+        </button>
       </form>
     </div>
   );

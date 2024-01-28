@@ -1,3 +1,9 @@
+:root {
+  --primary-blue: #6495ED;
+  --greyish-hue: #f0f0f0;
+  --vibrant-red: #ea1328;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -24,12 +30,12 @@ body {
   flex-direction: column;
   min-height: 60vh;
   margin: 0 auto;
-  background-color: #9ee6e616; /* Auth container background color */
+  background-color: var(--greyish-hue); /* Auth container background color */
 }
 
 /* button style */
 button {
-  background-color: #ea1328; /* Button color */
+  background-color: var(--vibrant-red); /* Button color */
   color: #ffffff; /* Button text color */
   padding: 10px 15px;
   border: none;
@@ -39,5 +45,10 @@ button {
 }
 
 button:hover {
-  background-color: #fb061e; /* Button color */
+  background-color: #fb061e; /* Button color on hover */
+}
+
+.main-navigation a,
+.forum-heading {
+  text-decoration: none;
 }

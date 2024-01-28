@@ -1,6 +1,7 @@
 .Home {
   text-align: center;
   box-sizing: border-box;
+  /* background-color: var(--greyish-hue); */
 }
 .section-links-div h3,
 .resources-div h3,
@@ -11,7 +12,7 @@
 .section-links-div {
   width: 100vw;
   height: 53vh;
-  background-color: #0dbeb2;
+  background-color: var(--primary-blue);
 }
 .section-links-div > h3 {
   font-size: 34px;
@@ -91,6 +92,8 @@
   display: flex;
   gap: 10px; /* Adjust the gap between the form and search bar */
   flex-grow: 1; /* Allow the container to grow and take available space */
+  /* border: red solid 5px; */
+  height: 80vh;
 }
 
 .main-container {

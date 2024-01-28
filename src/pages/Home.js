@@ -145,7 +145,6 @@ function Home({ userLocation, userPreferences, handleToggleFavorite, user, favor
   return (
     <div className="Home">
       <main className="main-container">
-        <div className="background-image"></div>
         <div className="form-and-search-container">
           <div className="left-column">
             {preferredAnimals.length <= 0 ? (

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../styles/Header.css';
-import ShelterLinkLogo from '../images/ShelterLinkw.png';
+import ShelterLinkLogo from '../images/logo1.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComments} from '@fortawesome/free-solid-svg-icons';
 
@@ -23,7 +23,7 @@ const Header = ({ user, handleSignOut, userLocation }) => {
   const handleSignInClick = () => {
     localStorage.setItem('previousPage', previousPage);
   };
-
+  
   return (
     <header className="header">
       {/* Logo */}
@@ -42,12 +42,17 @@ const Header = ({ user, handleSignOut, userLocation }) => {
           {user && <li><Link to="/profile">Profile</Link></li>}
         </ul>
       </nav>
+
+      {/* Forum Link */}
       <div className="forum-div">
-        <Link className="forum-heading" to="/forum">Forum <FontAwesomeIcon icon={faComments} /></Link>
+        <Link className="forum-heading" to="/forum">
+          Forum <FontAwesomeIcon icon={faComments} className="forum-icon" />
+        </Link>
       </div>
-      {/* Sign-in button */}
+
+      {/* User Profile/Sign-in button */}
       <div className="user-profile">
-        {user? (
+        {user ? (
           <Link to="/">
             <button onClick={handleSignOut}>Sign Out</button>
           </Link>
