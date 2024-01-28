@@ -21,7 +21,7 @@ body {
   padding: 10px;
   text-align: center;
   margin-top: auto;
-  background-color: #0db9ad; /* Footer background color */
+  background-color: var(--primary-blue);
 }
 
 .auth-container {

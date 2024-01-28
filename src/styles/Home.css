@@ -11,7 +11,7 @@
 /* pet links section */
 .section-links-div {
   width: 100vw;
-  height: 53vh;
+  height: 100%;
   background-color: var(--primary-blue);
 }
 .section-links-div > h3 {
@@ -23,14 +23,14 @@
 /* adopted-animals-section  */
 .adopted-animals-section {
   width: 100vw;
-  height: 50vh;
+  height: 50%;
   color: rgb(0, 0, 0);
 }
 
 /* greater-need-for-love-section */
 .greater-need-for-love-section {
   width: 100vw;
-  height: 60vh;
+  height: 80%;
   background-color: rgba(255, 255, 255, 0.309);
   font-size: 30px; 
   color: rgb(0, 0, 0);
@@ -42,13 +42,12 @@
 /* resources section */
 .resources-section {
   width: 100vw;
-  height: 45vh;
-  background-color: #0dbeb2;
+  height: 100%;
+  background-color: var(--primary-blue);
 }
 .resources-section > h1 {
   color: white;
   font-size: 30px;
-  padding: 2%;
 }
 
 /* inner divs */

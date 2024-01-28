@@ -74,6 +74,12 @@ export const getPet = /* GraphQL */ `
         __typename
       }
       contact {
+        address {
+          address1
+          address2
+          city
+          state
+        }
         email
         phone
         __typename
@@ -171,6 +177,25 @@ export const listUserPetFavorites = /* GraphQL */ `
         __typename
       }
       nextToken
+      __typename
+    }
+  }
+`;
+export const getForum = /* GraphQL */ `
+  query GetForum($id: ID!) {
+    getForum(id: $id) {
+      id
+      title
+      description
+      topics {
+        id
+        title
+        createdAt
+        updatedAt
+        __typename
+      }
+      createdAt
+      updatedAt
       __typename
     }
   }

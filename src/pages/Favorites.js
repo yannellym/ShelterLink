@@ -48,7 +48,7 @@ function Favorites({ user, handleToggleFavorite }) {
       };
     }
   }, [user]);
-
+  console.log(favoritePets, "fav pets received")
   return (
     <div className="pet-card-container">
       <div className="title-container">
