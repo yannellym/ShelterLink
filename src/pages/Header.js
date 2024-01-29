@@ -40,30 +40,24 @@ const Header = ({ user, handleSignOut, userLocation }) => {
           <li><Link to="/resources">Resources</Link></li>
           {user && <li><Link to="/favorites">Favorites</Link></li>}
           {user && <li><Link to="/profile">Profile</Link></li>}
-        </ul>
-      </nav>
-
-      {/* Forum Link */}
-      <div className="forum-div">
-        <Link className="forum-heading" to="/forum">
-          Forum <FontAwesomeIcon icon={faComments} className="forum-icon" />
-        </Link>
-      </div>
-
-      {/* User Profile/Sign-in button */}
-      <div className="user-profile">
-        {user ? (
-          <Link to="/">
-            <button onClick={handleSignOut}>Sign Out</button>
-          </Link>
-        ) : (
-          <div className="nav-item">
+          {/* Forum Link */}
+          <li>
+            <Link to="/forum">
+              Forum <FontAwesomeIcon icon={faComments} className="forum-icon" />
+            </Link>
+          </li>
+          {/* User Profile/Sign-in button */}
+          {user ? (
+            <Link to="/" className="auth-button">
+              <button onClick={handleSignOut}>Sign Out</button>
+            </Link>
+          ) : (
             <Link to="/auth">
               <button onClick={handleSignInClick}>Sign In</button>
             </Link>
-          </div>
-        )}
-      </div>
+          )}
+        </ul>
+      </nav>
     </header>
   );
 };

@@ -1,96 +1,62 @@
-/* SearchBar */
+/* SearchBar.css */
+
 .search-bar {
-  background-color: #f5f5f5;
-  padding: 10px;
-  border-radius: 5px;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: var(--primary-blue);
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(204, 205, 205, 0.786);
+  padding: 4%;
+
 }
 
-/* Container for all items */
-.search-container {
+.search-input-container {
+  flex-grow: 1;
+  margin-right: 10px;
   display: flex;
-  align-items: center;
 }
 
-/* Input */
-.search-input {
-  flex: 1;
-  padding: 10px;
-  border: 2px solid #ccc;
-  border-radius: 5px;
-  font-size: 16px;
-  background-color: #fff;
-}
-
-/* Location Options */
-.location-options {
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  position: absolute;
-  margin-top: 10px;
-}
-
-/* Location Option */
-.location-option {
-  padding: 10px;
-  cursor: pointer;
-  border-bottom: 1px solid #ccc;
-  transition: background-color 0.2s;
-}
-
-.location-option:last-child {
-  border-bottom: none;
-}
-
-.location-option:hover {
-  background-color: #f0f0f0;
-}
-
-/* Select */
-.search-select {
-  padding: 10px;
-  border: 2px solid #ccc;
-  border-radius: 5px;
-  font-size: 16px;
-  background-color: #fff;
-}
-
-/* Button (enabled) */
+.search-input,
+.search-select,
 .search-button {
-  padding: 10px;
-  background-color:  #fb1515ef;
-  color: white;
-  border: none;
-  border-radius: 5px;
+  margin-top: 20px;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
   font-size: 16px;
+  outline: none;
+  height: 50px;
+}
+
+.search-select {
+  width: calc(50% - 10px);
+  padding-left: 5px; 
+  padding-right: 5px; 
+}
+
+.autocomplete-dropdown-container {
+  position: absolute;
+  width: 100%;
+  background-color: #fff;
+  border-top: none;
+  z-index: 1000;
+}
+
+.suggestion-item {
+  padding: 10px;
   cursor: pointer;
-  transition: background-color 0.2s;
+  &:hover {
+    background-color: #f0f0f0;
+  }
 }
 
+
+
+/* 
 .search-button:hover {
-  background-color: #000000;
+  background-color: #45a049;
 }
 
-/* Button (disabled) */
-.search-button-disabled {
-  padding: 10px;
-  background-color: #c5171742;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  font-size: 16px;
+.search-button-disabled,
+.search-button-disabled:hover {
+  background-color: #ccc;
   cursor: not-allowed;
-}
-
-.location-button {
-  font-size: 16px;
-  background-color: #ffffff00;
-  border: 2px solid rgb(226, 0, 0);
-  color: rgb(255, 0, 0);
-}
-
-.location-button:hover {
-  background-color: #c24d36a7;
-  color: rgb(255, 255, 255);
-}
+} */

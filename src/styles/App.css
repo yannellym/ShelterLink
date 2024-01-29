@@ -42,13 +42,20 @@ button {
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
+  text-decoration: none;
+  animation: none;
 }
 
 button:hover {
   background-color: #fb061e; /* Button color on hover */
+  text-decoration:  none;
+  animation: none;
 }
 
-.main-navigation a,
-.forum-heading {
+.main-navigation a {
   text-decoration: none;
+}
+.button:hover::after {
+  width: 0; /* Set width to 0 to remove the underline effect on hover */
+  opacity: 0; /* Set opacity to 0 on hover to hide the underline */
 }

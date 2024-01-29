@@ -143,7 +143,6 @@ const SearchBar = ({ onSearch }) => {
 
   return (
     <div className="search-bar">
-      <div className="search-container">
         <div className="search-input-container">
           <PlacesAutocomplete
             value={searchText}
@@ -183,29 +182,29 @@ const SearchBar = ({ onSearch }) => {
               </div>
             )}
           </PlacesAutocomplete>
-        </div>
-        <select
-          value={petType}
-          onChange={(e) => setPetType(e.target.value)}
-          className="search-select"
-        >
-          <option value="">Select pet type</option>
-          <option value="dog">Dog</option>
-          <option value="cat">Cat</option>
-          <option value="horse">Horse</option>
-          <option value="bird">Bird</option>
-          <option value="barnyard">Barnyard</option>
-        </select>
-        <Link to="/location-specific-pets">
-          <button
-            className={`search-button ${isSearchDisabled ? 'search-button-disabled' : ''}`}
-            onClick={handleSearch}
-            disabled={isSearchDisabled}
+    
+          <select
+            value={petType}
+            onChange={(e) => setPetType(e.target.value)}
+            className="search-select"
           >
-            Search
-          </button>
-        </Link>
-      </div>
+            <option value="">Select pet type</option>
+            <option value="dog">Dog</option>
+            <option value="cat">Cat</option>
+            <option value="horse">Horse</option>
+            <option value="bird">Bird</option>
+            <option value="barnyard">Barnyard</option>
+          </select>
+          <Link to="/location-specific-pets">
+            <button
+              className={`search-button ${isSearchDisabled ? 'search-button-disabled' : ''}`}
+              onClick={handleSearch}
+              disabled={isSearchDisabled}
+            >
+              Search
+            </button>
+          </Link>
+        </div>
     </div>
   );
 };

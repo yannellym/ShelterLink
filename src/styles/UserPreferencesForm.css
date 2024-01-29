@@ -36,7 +36,7 @@ label {
 
 select,
 input[type='range'] {
-  width: 100%;
+  width: 70%;
   padding: 5px;
   margin-bottom: 15px;
   border: 1px solid #ccc;
@@ -46,10 +46,6 @@ input[type='range'] {
   transition: border-color 0.3s ease;
 }
 
-select:focus,
-input[type='range']:focus {
-  border-color: #db4d34;
-}
 .selected-preferences p {
   color: white;
 }
@@ -82,10 +78,6 @@ input[type='range']:focus {
   }
 }
 
-/* Updated width for age range slider */
-input[type='range'] {
-  width: 50%; /* Adjusted width for the age range slider */
-}
 
 .temperament-options {
   display: flex;
@@ -102,16 +94,20 @@ input[type='range'] {
   margin-top: 20px;
 }
 
-.message {
-  color: white;
-  margin-bottom: 15px;
+/* LETS FIND MATCH MESSAGE DIV  */
+
+.selected-preferences p:nth-child(3){
+  color: rgb(255, 255, 255);
+  margin: 2% auto;
+  font-weight: bold;
 }
+
 
 .find-match-button {
   display: block;
   margin: 20px auto 0;
   padding: 10px 20px;
-  background-color: #db4d34;
+  background-color: var(--vibrant-red);
   color: white;
   border: none;
   border-radius: 5px;
@@ -120,9 +116,6 @@ input[type='range'] {
   transition: background-color 0.3s ease;
 }
 
-.find-match-button:hover {
-  background-color: #8b1e10;
-}
 .age-characteristics-container {
   display: flex;
   justify-content: space-between;

@@ -30,10 +30,12 @@
 /* greater-need-for-love-section */
 .greater-need-for-love-section {
   width: 100vw;
-  height: 80%;
+  min-height: 85vh;
+  max-height: 90vh;
   background-color: rgba(255, 255, 255, 0.309);
   font-size: 30px; 
   color: rgb(0, 0, 0);
+  /* border: red solid 9px; */
 }
 .greater-need-for-love-section > h3 {
   color: rgb(0, 0, 0);

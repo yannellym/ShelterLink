@@ -135,13 +135,10 @@ const UserPreferencesForm = ({ onPreferencesSubmit }) => {
         <div className="selected-preferences">
           <h3>Selected Preferences:</h3>
           <p>{getSelectedPreferences()}</p>
-        </div>
-
-        {messageVisible && (
-          <div className="message">
+          {messageVisible && (
             <p>Great choices. Let's find your perfect match!</p>
-          </div>
-        )}
+          )}
+        </div>
 
         <button className="find-match-button" type="submit">
           {isFindingMatch ? (
