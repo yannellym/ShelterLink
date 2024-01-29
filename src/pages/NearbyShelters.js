@@ -187,22 +187,16 @@ const SheltersNearbyPage = ({ userLocation }) => {
       ) : (
         <p>No location was shared. Please share location and try again.</p>
       )}
-      <div className="pagination">
-        <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
-          Previous
-        </button>
+      <div className="pagination-container">
         {pageButtons.map((page) => (
           <button
             key={page}
             onClick={() => handlePageChange(page)}
-            className={currentPage === page ? 'active' : ''}
+            className={`pagination-button ${currentPage === page ? 'active' : ''}`}
           >
             {page}
           </button>
         ))}
-        <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
-          Next
-        </button>
       </div>
     </div>
   );

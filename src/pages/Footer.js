@@ -1,47 +1,41 @@
 // Footer.js
 import React from 'react';
+import { Link } from 'react-router-dom';
 import '../styles/Footer.css'; 
 
-function Footer() {
+function Footer({ userLocation }) {
+  console.log(userLocation, "user loc in foot")
   return (
     <footer className="footer">
       <div className="footer-section">
         <h4>RESOURCES</h4>
         <ul>
-          <li>FAQs</li>
-          <li>News Center</li>
+          <li><Link to="/pet-faqs">FAQs</Link></li>
           <li>Contact Us</li>
         </ul>
       </div>
       <div className="footer-section">
         <h4>ADOPT OR GET INVOLVED</h4>
         <ul>
-          <li>All Adopt or Get Involved</li>
-          <li>Adopting Pets</li>
-          <li>Animal Shelters & Rescues</li>
-          <li>Other Types of Pets</li>
-          <button  onClick={() => window.location.href = "https://profiles.petfinder.com/subscription/subscribe/brand/PF?sc=PFOptinFooter201707&_gl=1*dfpi6t*_ga*MjEyMjEyMTk4OC4xNjkzNTE0MTg0*_ga_5H1R91DP2Q*MTY5NzEyODE2Ni4zMi4xLjE2OTcxMjg0MzkuMC4wLjA."}>
+          <li> <Link to="/pet-adoption">Adopting Pets</Link></li>
+          <li><Link to={`/nearby_shelters?zipCode=${userLocation?.zipCode || '01841'}`}>Animal Shelters & Rescues</Link></li>
+          <button  onClick={() => window.location.href = "/find-a-pet"}>
             ADOPT
           </button>
         </ul>
       </div>
       <div className="footer-section">
-        <h4>ABOUT DOGS & CATS </h4>
+        <h4>Pet Training</h4>
         <ul>
-          <li>Kittens</li>
-          <li>Puppies</li>
-          <li>Adult Dogs</li>
-          <li>Adult Cats</li>
+          <li><Link to="/pet-training">Training your pets</Link></li>
         </ul>
       </div>
       <div className="footer-section">
         <h4> FOSTER OR GET INVOLVED</h4>
         <ul>
-          <li>What is fostering?</li>
-          <li>Foster Resources</li>
-          <li>Foster Group</li>
-          <li>FAQs</li>
-          <button  onClick={() => window.location.href = "https://profiles.petfinder.com/subscription/subscribe/brand/PF?sc=PFOptinFooter201707&_gl=1*dfpi6t*_ga*MjEyMjEyMTk4OC4xNjkzNTE0MTg0*_ga_5H1R91DP2Q*MTY5NzEyODE2Ni4zMi4xLjE2OTcxMjg0MzkuMC4wLjA."}>
+          <li><Link to="/pet-foster">What is fostering?</Link></li>
+          <li><Link to="https://www.aspcapro.org/adoption-placement/foster-care">Foster Resources</Link></li>
+          <button  onClick={() => window.location.href = `/nearby_shelters?zipCode=${userLocation?.zipCode || "01841" }`}>
             FOSTER
           </button>
         </ul>

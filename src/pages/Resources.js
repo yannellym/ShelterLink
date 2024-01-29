@@ -5,7 +5,7 @@ import '../styles/Resources.css';
   parameters: 
   returns: 
 */
-//TODO: CHECK WHERE FUNCTION IS BEING CALLED
+
 const Resources = () => {
   const resources = [
     {
@@ -21,16 +21,23 @@ const Resources = () => {
       link: 'https://www.alouetteanimalhospital.ca/10-pet-care-tips/'
     },
     {
-      title: 'Local Shelters',
-      description: 'Find shelters and rescues near you.',
+      title: 'Foster Information',
+      description: 'Learn all about fostering.',
       image: 'dog.jpg',
-      link: 'https://www.google.com/search?q=animal+shelters+near+me&sca_esv=572280770&sxsrf=AM9HkKlxuAD2GjmPPBX4r_1lHGwfbdLmpA%3A1696961336649&ei=OJMlZa2EJ_yoqtsP5fCDsAI&ved=0ahUKEwitgKzNieyBAxV8lGoFHWX4ACYQ4dUDCBA&uact=5&oq=animal+shelters+near+me&gs_lp=Egxnd3Mtd2l6LXNlcnAiF2FuaW1hbCBzaGVsdGVycyBuZWFyIG1lMggQABiKBRiRAjIIEAAYigUYkQIyCBAAGIoFGJECMgUQABiABDIGEAAYBxgeMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABDIIEAAYgAQYsQNItiBQAFiUH3AAeAGQAQCYAWqgAfYHqgEDOC4zuAEDyAEA-AEBwgIHEAAYgAQYCsICCBAAGAcYHhgKwgILEAAYBxgeGPEEGArCAgcQABgNGIAEwgIIEAAYBRgeGA3iAwQYACBBiAYB&sclient=gws-wiz-serp'
+      link: '/pet-foster'
+    },
+    {
+      title: 'Train Your Pets',
+      description: 'Learn how to properly train your pets',
+      image: 'both.jpg',
+      link: '/pet-training'
     },
   ];
 
   return (
-    <div className="resources-container">
+    <div>
       <h1>Resources</h1>
+      <div className="resources-container">
       {resources.map((resource, index) => (
         <a key={index} href={resource.link} style={{ textDecoration: 'none' }} target="_blank" rel="noopener noreferrer" className={`resource ${index % 2 === 0 ? 'resource-left' : 'resource-right'}`}>
           <img
@@ -42,6 +49,7 @@ const Resources = () => {
           <p>{resource.description}</p>
         </a>
       ))}
+      </div>
     </div>
   );
 };

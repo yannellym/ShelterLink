@@ -24,7 +24,7 @@ const PetAdoption = () => {
         Remember that adopting a pet is a lifelong commitment, and it's essential to provide love, care, and a safe environment for your new companion.
       </p>
       <p>
-        For more detailed information on pet adoption, please visit organizations like Petfinder and your local animal shelters.
+        For more detailed information on pet adoption, please visit organizations like SPCA and your local animal shelters.
       </p>
     </div>
   );

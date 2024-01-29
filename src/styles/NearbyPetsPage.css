@@ -11,31 +11,27 @@
   }
   
   .pagination {
-    margin-top: 20px;
+    margin: 2% 1%;
     display: flex;
     justify-content: center;
     gap: 10px;
   }
   
-  .pagination button {
-    padding: 8px 12px;
-    font-size: 14px;
+  .pets-near-btn {
+    background-color: #ccc;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
     cursor: pointer;
-    border: 1px solid #ccc;
-    background-color: #fff;
   }
   
-  .pagination button:hover {
-    background-color: #f0f0f0;
-  }
+
   
-  .pagination button:disabled {
-    color: #999;
+  .pet-list .pagination button:disabled {
     cursor: not-allowed;
   }
   
-  .pagination button.active {
-    background-color: #3498db;
-    color: #fff;
+  .pet-list .pagination button:hover:not(.active):not(:disabled) {
+    background-color: #ddd;
+    text-decoration: underline;
   }
-  

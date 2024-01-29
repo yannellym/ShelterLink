@@ -31,9 +31,15 @@
 
 .footer-section li {
   margin-bottom: 10px;
+  text-decoration: none;
 }
 
 
 button:hover{
   background-color: #ff0019;;
+}
+
+.footer-section a {
+  text-decoration: none;
+  color: #ffffff; /* Set link color to white */
 }

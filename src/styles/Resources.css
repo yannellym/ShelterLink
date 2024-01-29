@@ -1,48 +1,29 @@
+h1 {
+  margin: 2% auto;
+}
+
 .resources-container {
-  max-width: 800px;
-  margin: auto;
-  padding: 20px;
-  text-decoration: none;
+  margin: 2% auto;
+  width: 90%;
+  padding: 10px;
   background-color: white;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px;
 }
 
 .resource {
-  margin-bottom: 20px;
-  padding: 20px;
+  padding: 10px;
   background-color: #f8f8f8;
   border-radius: 5px;
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
   transition: transform 0.3s ease;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
-}
-
-.resource-left {
-  /* flex-direction: row-reverse; Reverse the order for left-aligned images */
-}
-
-.resource-right {
-  flex-direction: row; /* Maintain the order for right-aligned images */
-}
-
-.resource-div h3 {
-  font-size: 25px;
-  color: #333;
-  margin-left: 20px;
-}
-
-.resource p {
-  font-size: 16px;
-  color: #090909;
-  margin-left: 20px;
-}
-
-.resource-image {
-  max-width: 200px; 
-  height: auto;
-  margin: 20px;
-  border-radius: 5px;
+  text-decoration: none; /* Apply text-decoration directly to the anchor tag */
+  color: #333; /* Add color to the text */
+  width: 90%;
 }
 
 .resource:hover {
@@ -50,7 +31,20 @@
 }
 
 .resource h3 {
-  font-size: 24px;
+  font-size: 25px;
   color: #e04801;
-  text-decoration: none !important;
+  margin-top: 20px; /* Adjust margin to create space */
+}
+
+.resource p {
+  font-size: 16px;
+  color: #090909;
+  margin-top: 10px; /* Adjust margin to create space */
+}
+
+.resource-image {
+  max-width: 300px; 
+  height: auto;
+  margin: 20px;
+  border-radius: 5px;
 }

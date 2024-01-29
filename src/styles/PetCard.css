@@ -4,16 +4,17 @@
   position: relative; 
   border: 1px solid #e7e6e6;
   margin: 5px;
-  background-color: #ffffff;
+  background-color: var(--greyish-hue);
   box-shadow: 0 6px 4px rgba(0, 0, 1, 0.1);
   display: flex;
   flex-direction: column; 
   align-items: center;
   text-align: center; 
   width: 270px;
-  height: 480px; 
+  height: 460px; 
   overflow: hidden;
   border: 2px solid transparent; 
+  border-radius: 15px;
 }
 .pet-card-link {
   text-decoration: none; /* Remove underline */
@@ -65,18 +66,13 @@
   color: #ea1328; 
 }
 
-
 .pet-card-info {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   padding-top: 8px;
-}
-
-.pet-card-info p {
-  font-size: 14px;
   color: #463d3d;
-  margin: 0;
+  font-size: 14px;
 }
 
 .pet-card-distance {

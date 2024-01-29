@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '../styles/MainPage.css';
+import '../styles/FindApet.css';
 import PetCard from '../components/PetCard';
 import Filter from './Filter';
 
@@ -134,9 +134,8 @@ function FindApet({ userLocation, handleToggleFavorite, favoritePets, isAuthenti
   return (
     <div className="main-page">
       <div className="sidebar">
-        <div className="filters">
-          { <Filter onFilterChange={handleFilterChange} /> }
-        </div>
+     { <Filter onFilterChange={handleFilterChange} /> }
+     
       </div>
       <div className="content">
         <div className="pet-card-list">

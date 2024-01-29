@@ -73,24 +73,27 @@ const AdoptedAnimalsSection = () => {
   };
  
 
-return (
-  <div className="adopted-animals-container">
+  return (
+    <div className="adopted-animals-container">
       <h2>Recently Adopted Animals:</h2>
       {recentlyAdoptedAnimals && recentlyAdoptedAnimals.length > 0 && (
         <Slider {...settings}>
           {recentlyAdoptedAnimals.map((adoptedAnimal, index) => {
-            console.log(adoptedAnimal, "animal");
             return (
               adoptedAnimal.photos && adoptedAnimal.photos.length > 0 && (
                 <div key={adoptedAnimal.id && adoptedAnimal.organization_animal_id} className="adopted-animal-card">
                   <div className="adopted-label">Adopted ❤️ </div>
-                  <img src={adoptedAnimal.photos[0].medium} alt={adoptedAnimal.name} />
-                  <p>Name: <span className="red-text">{adoptedAnimal.name}</span></p>
-                  <p>Adopted in 
-                    <span className="red-text"> {adoptedAnimal.contact.address.city}, {adoptedAnimal.contact.address.state} </span>
-                    on 
-                    <span className="red-text"> {new Date(adoptedAnimal.status_changed_at).toLocaleDateString()}</span>
-                  </p>
+                  <div className="image-container">
+                    <img src={adoptedAnimal.photos[0].medium} alt={adoptedAnimal.name} />
+                    <div className="text-container">
+                      <p>Name: <span className="red-text">{adoptedAnimal.name}</span></p>
+                      <p>Adopted in 
+                        <span className="red-text"> {adoptedAnimal.contact.address.city}, {adoptedAnimal.contact.address.state} </span>
+                        on 
+                        <span className="red-text"> {new Date(adoptedAnimal.status_changed_at).toLocaleDateString()}</span>
+                      </p>
+                    </div>
+                  </div>
                 </div>
               )
             );

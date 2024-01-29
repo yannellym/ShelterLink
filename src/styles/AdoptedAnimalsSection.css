@@ -1,8 +1,10 @@
 .adopted-animals-container {
   /* border: red solid 5px; */
   margin: 0 auto;
-  height: 60vh;
+  height: 90vh;
   min-width: 90vw;
+  justify-content: center;
+  font-size: 17px;
 }
 
 h2 {
@@ -23,9 +25,11 @@ h2 {
   font-weight: bold;
 }
 
-.adopted-animal-card > img {
-  height: 20vh; 
-  width: 330px;
+.image-container > img {
+  height: 350px;
+  width: 90%; 
+  object-fit: cover; 
+  border-radius: 15px;
 }
 
 .adopted-animal-card > p {

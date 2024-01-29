@@ -88,7 +88,6 @@ function AllPets() {
   // const endPage = startPage + buttonsToShow - 1;
 
   const pageButtons = Array.from({ length: buttonsToShow }, (_, i) => startPage + i);
-
   return (
     <div className="all-pets-page">
       <h2>{`All ${type.charAt(0).toUpperCase() + type.slice(1)}s`}</h2>
@@ -101,26 +100,19 @@ function AllPets() {
           ))}
         </div>
       )}
-      <div className="pagination">
-        <button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-        >
-          Previous
-        </button>
+      <div className="pagination-container">
         {pageButtons.map((page) => (
           <button
             key={page}
             onClick={() => handlePageChange(page)}
-            className={currentPage === page ? 'active' : ''}
+            className={`pagination-button ${currentPage === page ? 'active' : ''}`}
           >
             {page}
           </button>
         ))}
-        <button onClick={() => handlePageChange(currentPage + 1)}>Next</button>
       </div>
     </div>
   );
-}
+        };
 
 export default AllPets;

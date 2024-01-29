@@ -1,18 +1,19 @@
 /* PetFoster.css */
 
 .pet-foster {
-  padding: 20px;
-  background-color: #f9f9f9;
+  margin: 4%;
+  padding: 2%;
   border-radius: 10px;
+  background-color: var(--greyish-hue);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  text-align: left; 
+  text-align: left;
 }
 
 .pet-foster >p {
   text-align: center;
 }
 
-h1 {
+h1, h2 {
   font-size: 24px;
   color: #333;
   margin-bottom: 20px;
@@ -20,17 +21,16 @@ h1 {
 }
 
 .foster-list {
-  list-style: decimal; /* Keep the list numbers */
-  padding: 0;
+  padding: 5px;
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: space-between;
 }
 
 .foster-list  > li {
-  width: 50%; 
+  flex-basis: calc(50% - 30px);
+  margin-bottom: 30px; 
   padding: 10px;
-  margin-bottom: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
   background-color: #fff;
@@ -40,7 +40,6 @@ h1 {
 }
 
 .foster-list > li:hover {
-  background-color: #007bff;
-  color: #fff;
+  background-color: var(--vibrant-red);
   transform: scale(1.02);
 }

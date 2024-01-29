@@ -111,9 +111,7 @@ const PetCard = ({ pet, handleToggleFavorite }) => {
         </h4>
         <div className="pet-card-info">
           <div>
-            <p>
-              {pet.age} | {pet.gender} | {pet.size} | {pet.breeds.primary}
-            </p>
+            {pet.age} | {pet.gender} | {pet.size} | {pet.breeds.primary}
           </div>
         </div>
         {pet.description && pet.description.length > 0 ? (

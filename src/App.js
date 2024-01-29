@@ -12,6 +12,7 @@ import PetDetails from './components/PetDetails.js';
 import AllPets from './pages/AllPets.js';
 import LocationSpecificPets from './pages/LocationSpecificPets.js';
 import PetAdoption from './pages/PetAdoption.js';
+import PetTraining from './pages/PetTraining.js';
 import Faqs from './pages/Faqs.js';
 import PetFoster from './pages/PetFoster.js';
 import NearbyShelters from './pages/NearbyShelters.js';
@@ -407,12 +408,14 @@ const App = () => {
           }
         />
         <Route path="/pet-adoption" element={<PetAdoption />} />
+        <Route path="/pet-foster" element={<PetFoster />} />
+        <Route path="/pet-training" element={<PetTraining />} />
         <Route path="/pet-faqs" element={<Faqs />} />
         <Route path="/pet-foster" element={<PetFoster />} />
         <Route path="/nearby_pets" element={<NearbyPets userLocation={fetchedUserLocation} />} />
         <Route path="/nearby_shelters" element={<NearbyShelters userLocation={fetchedUserLocation} />} />
       </Routes>
-      <Footer />
+      <Footer  userLocation={fetchedUserLocation} />
     </div>
   );
 };

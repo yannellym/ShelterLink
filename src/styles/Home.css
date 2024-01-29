@@ -15,7 +15,7 @@
   background-color: var(--primary-blue);
 }
 .section-links-div > h3 {
-  font-size: 34px;
+  font-size: 30px;
   color: rgb(255, 255, 255);
 }
 
@@ -23,7 +23,8 @@
 /* adopted-animals-section  */
 .adopted-animals-section {
   width: 100vw;
-  height: 50%;
+  height: 95vh;
+  font-size: 30px; 
   color: rgb(0, 0, 0);
 }
 
@@ -36,9 +37,6 @@
   font-size: 30px; 
   color: rgb(0, 0, 0);
   /* border: red solid 9px; */
-}
-.greater-need-for-love-section > h3 {
-  color: rgb(0, 0, 0);
 }
 
 /* resources section */

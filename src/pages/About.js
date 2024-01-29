@@ -68,12 +68,6 @@ const About = ({ userLocation }) => {
   return (
     <div className="about-container">
       <div className="about-content">
-        <div className="about-image">
-          <img
-            src={ShelterLinkLogo}
-            alt="About ShelterLink"
-          />
-        </div>
         <h2>About Us</h2>
         <p>
           Welcome to ShelterLink, your online platform for finding the perfect
@@ -96,6 +90,11 @@ const About = ({ userLocation }) => {
         </p>
       </div>
       <div className="clickable-squares">
+        <img
+          src={ShelterLinkLogo}
+          alt="About ShelterLink"
+          className="about-image"
+        />
         <Link to={`/nearby_shelters?zipCode=${userLocation?.zipCode}`} className="square">
           <h3>Find a Shelter</h3>
         </Link>

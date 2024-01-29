@@ -1,14 +1,13 @@
-/* PetAdoption.css */
-
 .pet-adoption {
-  padding: 20px;
-  background-color: #f9f9f9;
+  margin: 4%;
+  padding: 2%;
   border-radius: 10px;
+  background-color: var(--greyish-hue);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  text-align: left; 
+  text-align: left;
 }
 
-.pet-adoption >p {
+.pet-adoption > p {
   text-align: center;
 }
 
@@ -16,21 +15,21 @@ h1 {
   font-size: 24px;
   color: #333;
   margin-bottom: 20px;
-  text-align: center; 
+  text-align: center;
 }
 
 .adopt-list {
-  list-style: decimal; /* Keep the list numbers */
+  list-style: decimal;
   padding: 0;
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: space-between;
 }
 
 .adopt-list > li {
-  width: 50%; 
+  flex-basis: calc(50% - 20px);
+  margin-bottom: 30px; 
   padding: 10px;
-  margin-bottom: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
   background-color: #fff;
@@ -40,7 +39,7 @@ h1 {
 }
 
 .adopt-list > li:hover {
-  background-color: #007bff;
+  background-color: var(--vibrant-red);
   color: #fff;
   transform: scale(1.02);
 }

@@ -32,7 +32,23 @@
   text-align: center;
 }
 
-.pagination {
+.pagination-container {
   display: flex;
-  gap: 10px; /* Adjust the gap between page buttons */
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 3%;
+}
+
+.pagination-button {
+  background-color: #ccc;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.pagination-button.active {
+  background-color: var(--vibrant-red);
+  color: #fff;
 }

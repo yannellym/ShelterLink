@@ -89,27 +89,15 @@ function NearbyPets() {
             ))}
           </div>
           <div className="pagination">
-            <button
-              onClick={() => handlePageChange(pagination.current_page - 1)}
-              disabled={pagination.current_page === 1}
-            >
-              Previous
-            </button>
             {generatePageButtons().map((page) => (
               <button
                 key={page}
                 onClick={() => handlePageChange(page)}
-                className={pagination.current_page === page ? 'active' : ''}
+                className={`pets-near-btn ${pagination.current_page === page ? 'active' : ''}`}
               >
                 {page}
               </button>
             ))}
-            <button
-              onClick={() => handlePageChange(pagination.current_page + 1)}
-              disabled={pagination.current_page === pagination.total_pages}
-            >
-              Next
-            </button>
           </div>
         </div>
       )}
