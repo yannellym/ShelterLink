@@ -11,7 +11,7 @@ import { listUserPetFavorites } from '../graphql/queries';
 
 import EmailForm from '../components/EmailForm'; 
 
-const PetDetails = ({  handleToggleFavorite, isAuthenticated }) => {
+const PetDetails = ({  handleToggleFavorite, isAuthenticated, user }) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const handleShareClick = () => {
@@ -25,7 +25,7 @@ const PetDetails = ({  handleToggleFavorite, isAuthenticated }) => {
   const searchParams = new URLSearchParams(window.location.search);
  
   const petData = JSON.parse(decodeURIComponent(searchParams.get('petData')));
-  console.log(petData)
+  console.log(petData, "PET DATA")
 
   const [isFavorited, setIsFavorited] = useState(false);
   
@@ -140,7 +140,7 @@ const PetDetails = ({  handleToggleFavorite, isAuthenticated }) => {
       { isAuthenticated && // only show form if the user is authenticated
         <div className="side-panel">
           {/* Email Shelter form */}
-          <EmailForm petData={petData} />
+          <EmailForm petData={petData} user={user} />
         </div>
       }
     </div>

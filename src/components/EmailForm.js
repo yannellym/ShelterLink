@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import '../styles/Emailform.css';
 import emailjs from 'emailjs-com';
 
-const EmailForm = ({ petData }) => {
-    const storedUser = JSON.parse(localStorage.getItem('user'));
+const EmailForm = ({ petData, user }) => {
+    console.log(user, "USE RIN EMAIL")
     const [emailSent, setEmailSent] = useState(false);
-    const defaultMessage = `Hi, my name is ${storedUser.attributes.name}. I'm interested in adopting ${petData.name} and would love more information about their background, temperament, and the adoption process. Thank you!`;
+    const defaultMessage = `Hi, my name is ${user.username}. I'm interested in adopting ${petData.name} and would love more information about their background, temperament, and the adoption process. Thank you!`;
 
     const [message, setMessage] = useState(defaultMessage);
     const subject = `Inquiry for ${petData.name} ID: ${petData.id}`;
@@ -23,7 +23,7 @@ const EmailForm = ({ petData }) => {
 
     const handleSendEmail = async () => {
         try {
-            await sendEmail('mercadoyannelly@gmail.com', storedUser.attributes.email, subject, message);
+            await sendEmail('mercadoyannelly@gmail.com', user.email, subject, message);
             setEmailSent(true);
         } catch (error) {
             console.error('Error sending email:', error);
@@ -37,7 +37,7 @@ const EmailForm = ({ petData }) => {
                 <label style={{ display: 'block' }}>Shelter's Email:</label>
                 <input type="email" value={petData.contact.email} readOnly />
                 <label>Your Email:</label>
-                <input type="email" value={storedUser.attributes.email} readOnly />
+                <input type="email" value={user.email} readOnly />
             </div>
             <div>
                 <label>Message:</label>

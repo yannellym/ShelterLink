@@ -106,7 +106,7 @@ const App = () => {
     if (user) {
   
       try {
-        const userId = user.attributes.sub;
+        const userId = user.id;
         const petId = pet.id;
         // Check if the pet is already favorited
         const response = await API.graphql(graphqlOperation(listUserPetFavorites));
@@ -386,6 +386,7 @@ const App = () => {
             <PetDetails
               handleToggleFavorite={handleToggleFavorite}
               isAuthenticated={user}
+              user={user}
             />
           }
         />
