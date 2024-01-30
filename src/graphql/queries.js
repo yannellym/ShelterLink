@@ -15,6 +15,7 @@ export const getUser = /* GraphQL */ `
         updatedAt
         __typename
       }
+      image
       createdAt
       updatedAt
       __typename
@@ -32,6 +33,7 @@ export const listUsers = /* GraphQL */ `
         id
         username
         email
+        image
         createdAt
         updatedAt
         __typename
@@ -135,6 +137,7 @@ export const getUserPetFavorite = /* GraphQL */ `
         id
         username
         email
+        image
         createdAt
         updatedAt
         __typename
@@ -178,6 +181,13 @@ export const listUserPetFavorites = /* GraphQL */ `
       }
       nextToken
       __typename
+    }
+  }
+`;
+export const listUserPetFavoritesCount = /* GraphQL */ `
+  query ListUserPetFavoritesCount($filter: ModelUserPetFavoriteFilterInput) {
+    listUserPetFavorites(filter: $filter) {
+      size
     }
   }
 `;

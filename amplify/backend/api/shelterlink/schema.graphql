@@ -9,6 +9,7 @@ type User @model {
   username: String!
   email: String!
   favoritePets: [UserPetFavorite]
+  image: String!
 }
 
 type Pet @model {

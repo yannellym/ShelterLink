@@ -22,8 +22,8 @@ const PostModal = ({ selectedTopic, user, onPostSubmit, onClose }) => {
     const newPostData = {
       subject: newSubject,
       content: newPost,
-      user: user.attributes.sub, 
-      username: user.attributes.name,
+      user: user.id, 
+      username: user.username,
       topicID: selectedTopic.id,
       favorited: false,
       likes: 0,

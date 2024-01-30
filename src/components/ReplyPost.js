@@ -17,9 +17,9 @@ const ReplyPost = ({ user, onReplySubmit }) => {
 
     const newReplyData = {
       content: replyContent,
-      user: user.attributes.sub,
-      username: user.attributes.name,
-      image,
+      user: user.id,
+      username: user.username,
+      image: user.image,
     };
 
     // Pass the new reply data to the parent component

@@ -104,7 +104,7 @@ const PetCard = ({ pet, handleToggleFavorite }) => {
           )}
         </div>
         <h4>
-          {pet.name.length > 9 ? pet.name.substring(0, 9) + ' ...' : pet.name}{' '}
+          {pet.name.length > 7 ? pet.name.substring(0, 7) + ' ...' : pet.name}{' '}
           <span role="img" aria-label="Location">
             📍{pet.contact.address.city.substring(0, 10)}, {pet.contact.address.state}
           </span>

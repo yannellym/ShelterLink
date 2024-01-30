@@ -12,7 +12,7 @@ const Messages = ({ topic , replies, hideReplyButton, hideIcons,  onReplySubmit,
 
   const [data, setData] = useState([]);
   const [expandedPosts, setExpandedPosts] = useState([]);
-  const [isFavorited, setIsFavorited] = useState(data.map(post => post.likedBy?.includes(user.attributes.sub) || false));
+  const [isFavorited, setIsFavorited] = useState(data.map(post => post.likedBy?.includes(user.id) || false));
   const [newReplies, setNewReplies] = useState([]);
 
   useEffect(() => {

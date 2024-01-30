@@ -1,37 +1,41 @@
 import React, { useState, useEffect } from 'react';
-import { Auth } from 'aws-amplify';
-import axios from 'axios';
+import { API, graphqlOperation } from 'aws-amplify';
+import { listUserPetFavorites } from '../graphql/queries';
 import '../styles/Profile.css';
-import userAvatar from '../images/user_icon.png';
+
 
 /* component that shows the user's information/profile
   parameters: 
   returns: 
 */
-//TODO: set userAvatar as photo in case the response fails
 const Profile = ({user}) => {
-  const [randomPhoto, setRandomPhoto] = useState(null);
-  console.log(user.attributes)
+  const [favoritePets, setFavoritePets] = useState([]);
+
   useEffect(() => {
-    const fetchRandomPhoto = async () => {
+    const fetchFavoritePets = async () => {
       try {
-        const response = await axios.get('');
-        setRandomPhoto(response.request.responseURL);
+        const response = await API.graphql(graphqlOperation(listUserPetFavorites));
+        const pets = response.data.listUserPetFavorites.items;
+    
+        setFavoritePets(pets);
       } catch (error) {
-        setRandomPhoto(userAvatar)
+        console.error('Error fetching favorite pets:', error);
       }
     };
-    // Fetch a random photo from Unsplash API
-    fetchRandomPhoto();
-  }, []); // Empty dependency array ensures this effect runs once when the component mounts
+
+    if (user) {
+      fetchFavoritePets();
+    }
+  }, [user]);
 
   return (
     <div className="profile-section">
-      <h2 className="profile-title">User Profile</h2>
+      <h3 className="profile-title">User Profile</h3>
       <div className="profile-container">
-        <img src={randomPhoto} alt="Random Icon" className="avatar" />
-        <p><strong>Name:</strong> {user.attributes.name}</p>
-        <p><strong>Email:</strong> {user.attributes.email}</p>
+        <img src={user.image} alt="Random Icon" className="avatar" />
+        <p className="user-label"><strong>Name:</strong> {user.username}</p>
+        <p className="user-label"><strong>Email:</strong> {user.email}</p>
+        <p className="user-label"><strong>Number of favorite pets: </strong> {favoritePets.length}</p>
       </div>
     </div>
   );

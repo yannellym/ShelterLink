@@ -24,18 +24,22 @@ export default function UserCreateForm(props) {
   const initialValues = {
     username: "",
     email: "",
+    image: "",
   };
   const [username, setUsername] = React.useState(initialValues.username);
   const [email, setEmail] = React.useState(initialValues.email);
+  const [image, setImage] = React.useState(initialValues.image);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setUsername(initialValues.username);
     setEmail(initialValues.email);
+    setImage(initialValues.image);
     setErrors({});
   };
   const validations = {
     username: [{ type: "Required" }],
     email: [{ type: "Required" }],
+    image: [{ type: "Required" }],
   };
   const runValidationTasks = async (
     fieldName,
@@ -65,6 +69,7 @@ export default function UserCreateForm(props) {
         let modelFields = {
           username,
           email,
+          image,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -129,6 +134,7 @@ export default function UserCreateForm(props) {
             const modelFields = {
               username: value,
               email,
+              image,
             };
             const result = onChange(modelFields);
             value = result?.username ?? value;
@@ -154,6 +160,7 @@ export default function UserCreateForm(props) {
             const modelFields = {
               username,
               email: value,
+              image,
             };
             const result = onChange(modelFields);
             value = result?.email ?? value;
@@ -167,6 +174,32 @@ export default function UserCreateForm(props) {
         errorMessage={errors.email?.errorMessage}
         hasError={errors.email?.hasError}
         {...getOverrideProps(overrides, "email")}
+      ></TextField>
+      <TextField
+        label="Image"
+        isRequired={true}
+        isReadOnly={false}
+        value={image}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              username,
+              email,
+              image: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.image ?? value;
+          }
+          if (errors.image?.hasError) {
+            runValidationTasks("image", value);
+          }
+          setImage(value);
+        }}
+        onBlur={() => runValidationTasks("image", image)}
+        errorMessage={errors.image?.errorMessage}
+        hasError={errors.image?.hasError}
+        {...getOverrideProps(overrides, "image")}
       ></TextField>
       <Flex
         justifyContent="space-between"

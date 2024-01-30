@@ -18,6 +18,7 @@ export const createUser = /* GraphQL */ `
         updatedAt
         __typename
       }
+      image
       createdAt
       updatedAt
       __typename
@@ -41,6 +42,7 @@ export const updateUser = /* GraphQL */ `
         updatedAt
         __typename
       }
+      image
       createdAt
       updatedAt
       __typename
@@ -64,6 +66,7 @@ export const deleteUser = /* GraphQL */ `
         updatedAt
         __typename
       }
+      image
       createdAt
       updatedAt
       __typename

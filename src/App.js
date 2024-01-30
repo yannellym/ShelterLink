@@ -36,40 +36,40 @@ import { getPet, listUserPetFavorites } from './graphql/queries';
 
 import awsExports from './aws-exports.js';
 Amplify.configure(awsExports);
-
-const AuthenticatorComponent = ({ setUser, navigate }) => {
+const AuthenticatorComponent = ({ setUser, navigate, fetchImage }) => {
   useEffect(() => {
     const checkUserAndNavigate = async () => {
       try {
-        // Check if the user is already authenticated
         const storedUser = JSON.parse(localStorage.getItem('user'));
         console.log('Stored User:', storedUser);
+
         if (storedUser) {
           setUser(storedUser);
           navigate('/favorites');
         } else {
-          // If not authenticated, check and authenticate the user
           const authenticatedUser = await Auth.currentAuthenticatedUser();
           const userData = await API.graphql(graphqlOperation(getUser, { id: authenticatedUser.attributes.sub }));
           const existingUser = userData.data.getUser;
+          const image_url = await fetchImage();
 
           if (!existingUser) {
+            console.log("NO EXISTING USER");
             const newUser = {
               id: authenticatedUser.attributes.sub,
-              username: authenticatedUser.attributes.name || '',
+              username: authenticatedUser.attributes.name || 'JohnDoe',
               email: authenticatedUser.attributes.email || '',
+              image: authenticatedUser.attributes.image || image_url,
             };
 
             const createdUser = await API.graphql(graphqlOperation(createUser, { input: newUser }));
+            console.log("created user", createdUser);
 
             setUser(createdUser);
-            // Store the user in local storage
             localStorage.setItem('user', JSON.stringify(createdUser));
             navigate('/favorites');
           } else {
-            setUser(authenticatedUser);
-            // Store the user in local storage
-            localStorage.setItem('user', JSON.stringify(authenticatedUser));
+            setUser(existingUser);
+            localStorage.setItem('user', JSON.stringify(existingUser));
             navigate('/favorites');
           }
         }
@@ -79,11 +79,10 @@ const AuthenticatorComponent = ({ setUser, navigate }) => {
     };
 
     checkUserAndNavigate();
-  }, [setUser, navigate]);
+  }, [setUser, navigate, fetchImage]);
 
   return null;
 };
-
 
 
 const App = () => {
@@ -105,34 +104,32 @@ const App = () => {
   // if yes, add it to the user's favorite pets
   const handleToggleFavorite = async (pet) => {
     if (user) {
-      console.log(user, "user stored")
+  
       try {
         const userId = user.attributes.sub;
         const petId = pet.id;
         // Check if the pet is already favorited
         const response = await API.graphql(graphqlOperation(listUserPetFavorites));
         const userFavoritedPets = response.data.listUserPetFavorites.items;
-        console.log(userFavoritedPets, "FAVORITE PETS OF ISER")
         
         // Find the user-pet-favorite entry based on petId
         const userPetFavorite = userFavoritedPets.find((entry) => entry.petId === String(petId));
-        console.log("is user fav ", userPetFavorite)
+
         if (userPetFavorite ) {
           // Remove pet from user's favorite pets
           const response = await API.graphql(graphqlOperation(deleteUserPetFavorite, { input: { id: String(userPetFavorite.id)} })); 
-          console.log(response, "RES OF REMOVIGN")
+          
           // Update the list of favorite pets in the component state
           removePetFromFavoritesState(petId);
  
           const remaining_pets = await API.graphql(graphqlOperation(listUserPetFavorites));
           console.log(remaining_pets, "REmaining pets")
         } else {
-          console.log("TRYING TO GET PET FROM TABLE");
+      
           const petExists = await API.graphql(graphqlOperation(getPet, { id: String(petId) }));
-          console.log(petExists, "pet exists or not");
- 
+    
           if (!petExists.data.getPet) {
-            console.log("Pet doesn't exist in the DB");
+ 
             const petInput = {
               id: petId,
               name: pet.name,
@@ -182,7 +179,6 @@ const App = () => {
             }
 
             const createdPetId = createPetResponse.data.createPet.id;
-            // console.log(createdPetId, "created a pet with id");
 
             // Link the pet to the user in userPetFavorite table
             const userPetFavoriteInput = {
@@ -192,10 +188,8 @@ const App = () => {
             };
 
             const res = await API.graphql(graphqlOperation(createUserPetFavorite, { input: userPetFavoriteInput }));
-            console.log(res, "res from adding to fav")
-            addPetToFavoritesState({id: createdPetId})
-            // console.log("adding pet, we just created it",  {id: createdPetId})
-            // console.log("Pet added to user's favorites");
+       
+            addPetToFavoritesState({id: createdPetId});
           } else {
             // The pet already exists, link it to the user in userPetFavorite table
             const userPetFavoriteInput = {
@@ -381,7 +375,7 @@ const App = () => {
           element={
             <div className="auth-container">
               <Authenticator>
-                {() => <AuthenticatorComponent setUser={setUser} navigate={navigate} />}
+                {() => <AuthenticatorComponent setUser={setUser} navigate={navigate}  fetchImage={fetchPlaceholderImage} />}
               </Authenticator> 
             </div>
           }

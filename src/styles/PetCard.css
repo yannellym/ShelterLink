@@ -31,7 +31,8 @@
   font-size: 14px;
   color: #ea1328;
   padding-left: 5px;
-}
+  max-width: 205%;
+} 
 
 .pet-card-image {
   width: 100%;

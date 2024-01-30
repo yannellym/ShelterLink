@@ -15,6 +15,7 @@ export const onCreateUser = /* GraphQL */ `
         updatedAt
         __typename
       }
+      image
       createdAt
       updatedAt
       __typename
@@ -35,6 +36,7 @@ export const onUpdateUser = /* GraphQL */ `
         updatedAt
         __typename
       }
+      image
       createdAt
       updatedAt
       __typename
@@ -55,6 +57,7 @@ export const onDeleteUser = /* GraphQL */ `
         updatedAt
         __typename
       }
+      image
       createdAt
       updatedAt
       __typename
@@ -248,6 +251,7 @@ export const onCreateUserPetFavorite = /* GraphQL */ `
         id
         username
         email
+        image
         createdAt
         updatedAt
         __typename
@@ -283,6 +287,7 @@ export const onUpdateUserPetFavorite = /* GraphQL */ `
         id
         username
         email
+        image
         createdAt
         updatedAt
         __typename
@@ -318,6 +323,7 @@ export const onDeleteUserPetFavorite = /* GraphQL */ `
         id
         username
         email
+        image
         createdAt
         updatedAt
         __typename

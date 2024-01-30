@@ -90,12 +90,12 @@ const Forum = ({ user, fetchImage }) => {
         input: {
           subject: 'Welcome to the Forum!',
           content: `Hello forum members! 👋 Welcome to our ${topic.title} community. We're excited to have you here. Feel free to make posts, share your thoughts, like posts that resonate with you, and engage with other members by replying to their posts. Let's create a vibrant and supportive community together!`,
-          user: user.attributes.sub,
-          username: user.attributes.name,
+          user: user.id,
+          username: user.username,
           topicID: topic.id,
           Favorited: false,
           likes: 0,
-          image: image_url,
+          image: user.image || image_url,
         },
       };
 
@@ -162,9 +162,7 @@ const Forum = ({ user, fetchImage }) => {
 
     try {
       const result = await API.graphql(graphqlOperation(createPost, adaptedNewPostData));
-      console.log('Result:', result);
-
-     
+    
       // post IDs from the topic
       const existingPostIds = selectedTopic.posts || [];
 
@@ -212,14 +210,14 @@ const Forum = ({ user, fetchImage }) => {
 
   // handle likes 
   const handleLike = async (postId) => {
-    console.log(postId, "the psot id")
+
     try {
       // Fetch the current post data
       const { data } = await API.graphql(graphqlOperation(getPost, { id: postId }));
       const post = data.getPost;
-      console.log(data, "post to check")
+
       // Check if the current user has already liked the post
-      const userLiked = post.likedBy.includes(user.attributes.sub);
+      const userLiked = post.likedBy.includes(user.id);
   
       // Update the post with the new likes information
       const updatedPost = await API.graphql(graphqlOperation(updatePost, {
@@ -227,12 +225,11 @@ const Forum = ({ user, fetchImage }) => {
           id: postId,
           likes: userLiked ? post.likes - 1 : post.likes + 1,
           likedBy: userLiked
-            ? post.likedBy.filter((userId) => userId !== user.attributes.sub)
-            : [...post.likedBy, user.attributes.sub],
+            ? post.likedBy.filter((userId) => userId !== user.id)
+            : [...post.likedBy, user.id],
         },
       }));
-  
-      console.log('Post updated:', updatedPost.data.updatePost);
+
     } catch (error) {
       console.error('Error updating post:', error);
     }
@@ -257,7 +254,7 @@ const Forum = ({ user, fetchImage }) => {
     fetchTopics();
   }, []); // runs once when the component mounts
 
-  // console.log(selectedPosts, "POSTS SELECTED")
+  console.log(user, "USER IN FORUM")
   return (
     <div className="forum-container">
       <div className="topics-list">

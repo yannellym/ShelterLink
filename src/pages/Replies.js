@@ -73,9 +73,9 @@ const Replies = ({ user, fetchImage }) => {
 
       const updatedPostInput = {
         id: post.id,
-        replies: [...post.replies, newReply.id],
+        replies: [...(post.replies || []), newReply.id],
       };
-
+      
       await API.graphql(graphqlOperation(updatePost, { input: updatedPostInput }));
 
       setReplies([...replies, newReply]);
