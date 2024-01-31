@@ -1,4 +1,6 @@
 /* AdoptionInfoSection.css */
+
+/* Default styles for larger screens */
 .adoption-info-section {
   display: flex;
   padding: 0% 5%;
@@ -8,7 +10,7 @@
 
 .adoption-info-card {
   flex: 1;
-  background-color: rgb(255, 255, 255); 
+  background-color: rgb(255, 255, 255);
   padding: 40px;
   border-radius: 6px;
   box-shadow: 4px 2px 14px rgba(0, 0, 0, 0.14);
@@ -27,4 +29,17 @@
   margin: 0 0 15px;
   font-size: 16px;
   color: #1e1e1e;
+}
+
+/* Responsive styles for smaller screens (e.g., phones) */
+@media (max-width: 600px) {
+  .adoption-info-section {
+    flex-direction: column; /* Display cards vertically */
+    align-items: center; /* Center cards horizontally */
+  }
+
+  .adoption-info-card {
+    flex: 0 0 100%; /* Take full width on smaller screens */
+    padding: 20px; /* Adjust padding for better spacing on smaller screens */
+  }
 }

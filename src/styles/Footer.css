@@ -43,3 +43,49 @@ button:hover{
   text-decoration: none;
   color: #ffffff; /* Set link color to white */
 }
+/* Responsive styles for smaller screens (e.g., phones) */
+@media (max-width: 600px) {
+  .footer {
+    flex-direction: column; /* Stack sections vertically on smaller screens */
+  }
+
+  .footer-section {
+    margin-bottom: 20px; /* Add space between sections */
+    margin: 0 auto;
+    /* border: red solid 3px; */
+  }
+
+  .sign-up-button {
+    margin-top: 20px; /* Add space above the sign-up button */
+  }
+}
+/* Responsive styles for medium screens (e.g., tablets) */
+@media (min-width: 601px) and (max-width: 1023px) {
+  .footer {
+    flex-direction: row; /* Keep the direction as row for medium screens */
+    flex-wrap: wrap; /* Allow items to wrap to the next row if necessary */
+    justify-content: space-around; /* Center items horizontally */
+  }
+
+  .footer-section {
+    width: 30%; /* Adjust the width of each section as needed */
+    margin-bottom: 20px; /* Add space between sections */
+  }
+
+  .sign-up-button {
+    width: 100%; /* Make the sign-up button take full width */
+    margin-top: 20px; /* Add space above the sign-up button */
+  }
+}
+
+/* Responsive styles for larger screens (e.g., desktops) */
+@media (min-width: 1024px) {
+  .footer {
+    flex-direction: row; /* Align sections horizontally on larger screens */
+    justify-content: space-around; /* Distribute sections evenly */
+  }
+
+  .footer-section {
+    margin-bottom: 0; /* Reset margin for larger screens */
+  }
+}

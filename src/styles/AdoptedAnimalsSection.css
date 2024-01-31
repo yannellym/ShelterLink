@@ -89,3 +89,24 @@ h2 {
   font-size: 16px;
   color: #ffffff; 
 }
+
+/* Responsive styles for smaller screens (e.g., phones) */
+@media (max-width: 600px) {
+  .adopted-animals-container {
+    padding: 1%;
+    margin: 0 4%;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+
+  .adopted-animal-card {
+    margin-right: 0;
+    margin-bottom: 16px; /* Add margin at the bottom for better spacing */
+  }
+
+  .slick-dots {
+    bottom: -10px;
+  }
+}

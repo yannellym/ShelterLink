@@ -76,3 +76,69 @@ header {
 .auth-button{
   text-decoration: none !important;
 }
+
+/* Responsive styles for small screens (e.g., mobile devices) */
+@media (max-width: 600px) {
+  .header {
+    flex-direction: column; /* Stack elements vertically */
+    height: auto; /* Allow the header to adjust its height based on content */
+  }
+
+  .main-navigation {
+    width: 100%; /* Take full width */
+    margin-top: 1rem; /* Add space between logo and navigation on small screens */
+  }
+
+  .logo {
+    width: 50%; /* Adjust the logo width for smaller screens */
+    margin-bottom: 1rem; /* Add space below the logo on small screens */
+  }
+
+  .main-navigation ul {
+    flex-direction: column; /* Stack navigation items vertically */
+    align-items: center; /* Center items horizontally */
+  }
+
+  .main-navigation a {
+    width: 100%; /* Take full width */
+    text-align: center; /* Center text */
+  }
+
+  .user-profile {
+    margin-top: 1rem; /* Add space between navigation and user profile */
+  }
+}
+
+/* Responsive styles for medium screens (e.g., tablets) */
+@media (min-width: 601px) and (max-width: 1023px) {
+  .header {
+    height: auto; /* Allow the header to adjust its height based on content */
+    /* border: red solid 4px; */
+  }
+
+  .main-navigation ul {
+    gap: 0.5rem; /* Reduce the gap between navigation items */
+    flex-wrap: wrap; /* Allow flex items to wrap to the next row */
+  }
+
+  .main-navigation a {
+    padding: 0.5rem 1rem; /* Adjust padding for better touch interaction */
+  }
+
+  .logo {
+    width: 50%; /* Adjust the logo width for medium screens */
+    min-width: 20%;
+    max-width: 30%;
+    height: auto;
+    max-height: 80%; /* Allow the logo height to adjust based on its width */
+    min-height: 100px; /* Set a minimum height for the logo */
+    margin-bottom: 1rem; /* Add space below the logo for better spacing */
+    /* border: red solid 4px; */
+  }
+
+  .logo img {
+    min-height: 50px; /* Set a minimum height for the logo */
+    max-height: 150px; /* Allow the logo height to adjust based on its width */
+    max-width: 150px;
+  }
+}

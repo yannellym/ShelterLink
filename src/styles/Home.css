@@ -187,5 +187,65 @@
   cursor: pointer;
   width: 100px;
 }
+/* greater-need-for-love-section */
+.greater-need-for-love-section {
+  width: 100vw;
+  background-color: rgba(255, 255, 255, 0.309);
+  font-size: 30px; 
+  color: rgb(0, 0, 0);
+}
+/* Responsive styles for smaller screens (e.g., phones) */
+@media (max-width: 600px) {
+  .greater-need-for-love-section {
+    min-height: auto; /* Let the height adjust based on content */
+    max-height: none; /* Remove max-height on smaller screens */
+  }
 
+  .nearby-pet-cards {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* Center the cards horizontally */
+    margin: 3% auto;
+    /* border: green solid 4px; */
+  }
+  h1 {
+    font-size: 20px;
+  }
+}
+/* Responsive styles for medium screens (e.g., tablets) */
+@media (min-width: 601px) and (max-width: 1023px) {
+  .greater-need-for-love-section {
+    min-height: auto; /* Let the height adjust based on content */
+    max-height: none; /* Remove max-height on smaller screens */
+  }
+    /* Ensure two cards per row, lined up */
+    .nearby-pet-cards {
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      border: rgb(0, 0, 255) solid 4px;
+      margin: 0 auto;
+      width: 90%;
+    }  
+}
 
+/* Responsive styles for larger screens (e.g., desktops) */
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .greater-need-for-love-section {
+    min-height: auto; /* Let the height adjust based on content */
+    max-height: none; /* Remove max-height on smaller screens */
+  }
+  /* Ensure two cards per row, lined up */
+  .nearby-pet-cards {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    border: rgb(0, 0, 255) solid 4px;
+    margin: 0 auto;
+    width: 70%;
+  }
+
+  .all-pets-near-card {
+    margin-right: 0px;
+    border: blue solid 5px;
+  }
+}
