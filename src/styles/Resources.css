@@ -48,3 +48,62 @@ h1 {
   margin: 20px;
   border-radius: 5px;
 }
+
+/* Responsive styles for small screens (e.g., mobile devices) */
+@media (max-width: 600px) {
+  h1 {
+    font-size: 24px; /* Adjust font size for small screens */
+  }
+
+  .resources-container {
+    grid-template-columns: 1fr; /* Display one column on small screens */
+    gap: 20px; /* Reduce gap for small screens */
+  }
+
+  .resource {
+    width: 100%; /* Full width for small screens */
+  }
+
+  .resource h3 {
+    font-size: 20px; /* Adjust font size for small screens */
+  }
+
+  .resource p {
+    font-size: 14px; /* Adjust font size for small screens */
+  }
+
+  .resource-image {
+    max-width: 100%; /* Full width for small screens */
+    margin: 10px 0; /* Adjust margin for small screens */
+  }
+}
+
+/* Responsive styles for medium screens (e.g., tablets) */
+@media (min-width: 601px) and (max-width: 1023px) {
+  h1 {
+    font-size: 28px; /* Adjust font size for medium screens */
+  }
+
+  .resources-container {
+    grid-template-columns: repeat(2, 1fr); /* Display two columns on medium screens */
+    gap: 40px; /* Set gap for medium screens */
+    /* border: red solid 5px; */
+  }
+
+  .resource {
+    width: 100%; /* Full width for medium screens */
+  }
+
+  .resource h3 {
+    font-size: 24px; /* Adjust font size for medium screens */
+  }
+
+  .resource p {
+    font-size: 16px; /* Adjust font size for medium screens */
+  }
+
+  .resource-image {
+    max-width: 100%; /* Full width for medium screens */
+    margin: 20px 0; /* Adjust margin for medium screens */
+  }
+}

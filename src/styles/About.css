@@ -102,3 +102,24 @@
 .square:hover {
   transform: scale(1.05);
 }
+/* Responsive styles for small screens (e.g., mobile devices) */
+@media (max-width: 600px) {
+  .about-container {
+    border: red solid 4px;
+    flex-direction: column;
+  }
+  .about-content {
+    max-width: 100%; /* Full width for small screens */
+    padding: 0 10px; /* Adjust padding */
+    border: none;
+  }
+
+  .about-image {
+    max-width: 100%;
+    max-height: none; /* Remove max-height for small screens */
+  }
+
+  .clickable-squares {
+    margin-right: 0; /* Remove margin for small screens */
+  }
+}

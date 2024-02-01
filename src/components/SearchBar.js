@@ -143,68 +143,67 @@ const SearchBar = ({ onSearch }) => {
 
   return (
     <div className="search-bar">
-        <div className="search-input-container">
-          <PlacesAutocomplete
-            value={searchText}
-            onChange={setSearchText}
-            onSelect={handleSelect}
-            searchOptions={searchOptions}
-            disableSearch={true} 
-          >
-            {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-              <div>
-                <input
-                  {...getInputProps({
-                    placeholder: 'Enter zipcode, city, or state',
-                    className: 'search-input',
-                    onClick: handleInputClick,
-                  })}
-                />
-                <div className="autocomplete-dropdown-container">
-                  {loading && <div>Loading...</div>}
-                  {suggestions.map((suggestion) => (
-                    <div
-                      {...getSuggestionItemProps(suggestion)}
-                      className="suggestion-item"
-                    >
-                      {suggestion.description}
-                    </div>
-                  ))}
+      <PlacesAutocomplete
+        value={searchText}
+        onChange={setSearchText}
+        onSelect={handleSelect}
+        searchOptions={searchOptions}
+        disableSearch={true} 
+      >
+        {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+          <div>
+            <input
+              {...getInputProps({
+                placeholder: 'Enter zipcode, city, or state',
+                className: 'search-input',
+                onClick: handleInputClick,
+              })}
+            />
+            <div className="autocomplete-dropdown-container">
+              {loading && <div>Loading...</div>}
+              {suggestions.map((suggestion) => (
+                <div
+                  {...getSuggestionItemProps(suggestion)}
+                  className="suggestion-item"
+                >
+                  {suggestion.description}
                 </div>
-                {showLocationMessage && (
-                  <button
-                    className="location-button"
-                    onClick={handleShareLocation}
-                  >
-                    {shareLocation? 'Sharing Location...' : 'Share Location 📍'}
-                  </button>
-                )}
-              </div>
+              ))}
+            </div>
+            {showLocationMessage && (
+              <button
+                className="location-button"
+                onClick={handleShareLocation}
+              >
+                {shareLocation? 'Sharing Location...' : 'Share Location 📍'}
+              </button>
             )}
-          </PlacesAutocomplete>
-    
-          <select
-            value={petType}
-            onChange={(e) => setPetType(e.target.value)}
-            className="search-select"
-          >
-            <option value="">Select pet type</option>
-            <option value="dog">Dog</option>
-            <option value="cat">Cat</option>
-            <option value="horse">Horse</option>
-            <option value="bird">Bird</option>
-            <option value="barnyard">Barnyard</option>
-          </select>
-          <Link to="/location-specific-pets">
-            <button
-              className={`search-button ${isSearchDisabled ? 'search-button-disabled' : ''}`}
-              onClick={handleSearch}
-              disabled={isSearchDisabled}
-            >
-              Search
-            </button>
-          </Link>
-        </div>
+          </div>
+        )}
+      </PlacesAutocomplete>
+
+      <select
+        value={petType}
+        onChange={(e) => setPetType(e.target.value)}
+        className="search-select"
+      >
+        <option value="">Select pet type</option>
+        <option value="dog">Dog</option>
+        <option value="cat">Cat</option>
+        <option value="horse">Horse</option>
+        <option value="bird">Bird</option>
+        <option value="barnyard">Barnyard</option>
+      </select>
+      <Link to="/location-specific-pets">
+        <button
+          className={`search-button ${isSearchDisabled ? 'search-button-disabled' : ''}`}
+          onClick={handleSearch}
+          disabled={isSearchDisabled}
+        >
+          Search
+        </button>
+      </Link>
+
     </div>
   );
 };

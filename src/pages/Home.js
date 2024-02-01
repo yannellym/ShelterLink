@@ -178,17 +178,15 @@ function Home({ userLocation, userPreferences, handleToggleFavorite, user, favor
           <div className="divider-container">
             <div className="divider">OR</div>
           </div>
-          <div className="right-column">
-            <div className="search-bar-container">
-              <SearchBar
-                breeds={''}
-                sizes={''}
-                ages={''}
-                types={''}
-                onFilterChange={''}
-              />
-            </div>
-          </div>
+          
+          <SearchBar
+            breeds={''}
+            sizes={''}
+            ages={''}
+            types={''}
+            onFilterChange={''}
+          />
+      
         </div>
         <div className="section-links-div">
           <h3> Find your fur-ever friend:</h3>

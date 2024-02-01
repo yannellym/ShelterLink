@@ -78,15 +78,6 @@
   z-index: -1;
 }
 
-.search-bar-container {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 80vh; /* Set the container height to cover the viewport */
-  z-index: 1; /* Place above the background image */
-}
-
 .form-and-search-container {
   display: flex;
   gap: 10px; /* Adjust the gap between the form and search bar */
@@ -116,6 +107,8 @@
 
 .right-column {
   flex-basis: calc(50% - 10px); /* Adjust the width of the right column */
+  border: rgb(57, 18, 253) solid 3px;
+  height: 50%;
 }
 
 
@@ -127,10 +120,6 @@
   padding: 2%;
 }
 
-.left-column,
-.right-column {
-  flex: 1; /* Allow columns to take available space */
-}
 
 .divider-container {
   display: flex;
@@ -202,7 +191,7 @@
     align-items: center; /* Center components horizontally */
     max-width: 100%; /* Set a maximum width for the container */
     margin: 0 auto; /* Center the container */
-    border: red solid 3px;
+    /* border: red solid 3px; */
     height: auto;
   }
   .left-column {
@@ -212,7 +201,7 @@
   }
 
   .divider-container {
-    display: none; /* Hide the divider on medium screens */
+    height: 90%;
   }
 
   .right-column {
@@ -230,7 +219,7 @@
   .section-links-div {
     height: auto;
     padding-bottom: 5%;
-    border: rgb(255, 192, 192) solid 4px;
+    /* border: rgb(255, 192, 192) solid 4px; */
   }
   .section-links-inner-div {
     margin : 2% 13%;
@@ -266,24 +255,24 @@
     align-items: center; /* Center components horizontally */
     max-width: 100%; /* Set a maximum width for the container */
     margin: 0 auto; /* Center the container */
-    border: pink solid 4px;
+    /* border: pink solid 4px; */
     height: auto;
   }
 
   .left-column {
     width: 100%; /* Full width for medium screens */
-    border: rgb(198, 192, 255) solid 4px;
+    /* border: rgb(198, 192, 255) solid 4px; */
     position: relative;
     height: 90%; /* 90% of the container height */
   }
 
   .divider-container {
-    display: none; /* Hide the divider on medium screens */
+    height: 90%;/* Hide the divider on medium screens */
   }
 
   .right-column {
     width: 100%; /* Full width for medium screens */
-    border: rgb(192, 255, 196) solid 4px;
+    /* border: rgb(192, 255, 196) solid 4px; */
     position: relative;
     height: 20%; /* 20% of the container height */
   }
@@ -301,7 +290,7 @@
   .nearby-pet-cards {
     flex-wrap: wrap;
     justify-content: flex-start;
-    border: rgb(0, 0, 255) solid 4px;
+    /* border: rgb(0, 0, 255) solid 4px; */
     margin: 0 auto;
     width: 90%;
   }
@@ -314,12 +303,23 @@
 
 
 /* Responsive styles for larger screens (e.g., desktops) */
-@media (min-width: 1024px) and (max-width: 1279px) {
+@media (min-width: 1024px) {
   .form-and-search-container {
     max-width: 100%; /* Set a maximum width for the container */
     margin: 0 auto; /* Center the container */
-    border: pink solid 4px;
+    /* border: pink solid 4px; */
     height: auto;
+  }
+  .left-column {
+    width: 100%; /* Full width for medium screens */
+    /* border: rgb(198, 192, 255) solid 4px; */
+    position: relative;
+    height: 90%; /* 90% of the container height */
+  }
+
+  .divider-container {
+    height: 90%;
+    margin: auto; 
   }
 
   .greater-need-for-love-section {
@@ -330,13 +330,13 @@
   .nearby-pet-cards {
     flex-wrap: wrap;
     justify-content: flex-start;
-    border: rgb(0, 0, 255) solid 4px;
+    /* border: rgb(0, 0, 255) solid 4px; */
     margin: 0 auto;
     width: 70%;
   }
 
   .all-pets-near-card {
     margin-right: 0px;
-    border: blue solid 5px;
+    /* border: blue solid 5px; */
   }
 }

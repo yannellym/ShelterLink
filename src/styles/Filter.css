@@ -17,7 +17,7 @@
     font-weight: bold;
   }
   
-  select {
+  .filter-group select {
     min-width: 100%;
     padding: 8px;
     border: 1px solid #ccc;
