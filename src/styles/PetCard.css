@@ -19,13 +19,16 @@
 .pet-card-link {
   text-decoration: none; /* Remove underline */
   color: inherit; /* Inherit the text color from the parent */
+  /* border: green 5px solid; */
+  width: 100%;
 }
 .pet-card h4 {
   font-size: 15px;
-  margin: 10px;
+  margin: 13px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  /* border: red solid 4px; */
 }
 .pet-card h4 span {
   font-size: 14px;
@@ -33,11 +36,19 @@
   padding-left: 5px;
   max-width: 205%;
 } 
+.pet-card-image-container {
+  /* border: rgb(25, 0, 255) solid 5px; */
+  width: 100%;
+  height: 200px; /* Set a fixed height for the container */
+  overflow: hidden; /* Hide any overflowing content */
+  margin: 0; /* Reset margin to 0 */
+}
 
 .pet-card-image {
   width: 100%;
-  height: 200px;
-  position: relative; /* Set the image as a relative container */
+  height: 100%; /* Set the height to 100% to fill the container */
+  object-fit: cover; /* Ensure the image covers the entire container */
+  display: block; /* Remove any default spacing below the image */
 }
 
 .favorite-heart-unfavorited,
@@ -134,15 +145,16 @@
 @media (max-width: 600px) {
   .pet-card {
     width: 70%; 
-    min-width:230px;/* Take full width on smaller screens */
+    min-width:250px;/* Take full width on smaller screens */
     height: auto; /* Adjust height to be flexible */
-    padding: 2%;
+    padding-bottom: 4%;
     /* border: rgb(0, 255, 13) solid 3px; */
   }
 
   .pet-card h4 {
     font-size: 14px; /* Adjust font size for smaller screens */
     margin: 5px; /* Adjust margin for better spacing on smaller screens */
+    margin: 2% 3%;
   }
 
   .pet-card h4 span {
@@ -150,7 +162,7 @@
   }
 
   .pet-card-image {
-    height: 150px; /* Adjust height for smaller screens */
+    height: 250px; /* Adjust height for smaller screens */
     border: radius
   }
 
@@ -168,10 +180,11 @@
 /* Responsive styles for medium screens (e.g., tablets) */
 @media (min-width: 601px) and (max-width: 1023px) {
   .pet-card {
-    width: 45%; /* Minimum width to ensure it's not less than 230px */
+    max-width:60%;
+    min-width:60%; /* Minimum width to ensure it's not less than 230px */
     margin-right: 20px; /* Add margin between cards for better spacing */
     margin-bottom: 20px; /* Add margin between rows for better spacing */
-    border: red solid 3px;
+    /* border: red solid 3px; */
   }
 }
 /* Responsive styles for larger screens (e.g., desktops) */
@@ -180,6 +193,6 @@
     width: calc(50% - 60px); /* Adjust width for larger screens to have two columns */
     min-width: 250px;
     margin-bottom: 20px; /* Add margin between rows for better spacing */
-    border: rgb(0, 26, 255) solid 3px;
+    /* border: rgb(0, 26, 255) solid 3px; */
   }
 }

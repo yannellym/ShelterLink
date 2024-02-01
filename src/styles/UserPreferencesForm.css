@@ -1,9 +1,9 @@
 
 .container {
-  max-width: 80%;
+  max-width: 90%;
   margin: 2% auto;
   padding: 20px;
-  max-height: 70vh;
+  max-height: 80vh;
   background-color: #6495ED;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.158);
@@ -50,19 +50,15 @@ input[type='range'] {
   color: white;
 }
 
-/* Adjusted width for smaller screens */
-@media (max-width: 768px) {
+/* Responsive styles for smaller screens (e.g., phones) */
+@media (max-width: 600px) {
   .container {
     max-width: 90%;
   }
 
-  .container h2 {
-    font-size: 24px;
-  }
-
   select,
   input[type='range'] {
-    width: calc(50% - 5px); /* Adjusted width for smaller screens */
+    width: 100%; /* Full width for phones */
   }
 
   .selected-preferences p {
@@ -72,57 +68,24 @@ input[type='range'] {
   .form-option {
     margin-right: 0;
   }
+}
 
-  .temperament-options label {
-    flex-basis: 100%;
+/* Responsive styles for medium screens (e.g., tablets) */
+@media (min-width: 601px) and (max-width: 1023px) {
+  select,
+  input[type='range'] {
+    width: calc(50% - 5px); /* Adjusted width for tablets */
+  }
+  .container {
+    border: rgb(0, 38, 255) solid 5px;
+    max-width:70%
   }
 }
 
-
-.temperament-options {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 15px;
-}
-
-.temperament-options label {
-  flex-basis: 48%;
-}
-
-.selected-preferences {
-  margin-top: 20px;
-}
-
-/* LETS FIND MATCH MESSAGE DIV  */
-
-.selected-preferences p:nth-child(3){
-  color: rgb(255, 255, 255);
-  margin: 2% auto;
-  font-weight: bold;
-}
-
-
-.find-match-button {
-  display: block;
-  margin: 20px auto 0;
-  padding: 10px 20px;
-  background-color: var(--vibrant-red);
-  color: white;
-  border: none;
-  border-radius: 5px;
-  font-size: 18px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.age-characteristics-container {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 15px;
-}
-
-.age-characteristics-container div {
-  flex: 1;
-  margin-right: 10px;
+/* Responsive styles for larger screens (e.g., desktops) */
+@media (min-width: 1024px) and (max-width: 1500px) {
+  select,
+  input[type='range'] {
+    width: calc(70% - 5px); /* Adjusted width for desktops */
+  }
 }

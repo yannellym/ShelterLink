@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import popularDogBreeds from '../data/popularDogBreeds';
 import stateNames from '../data/stateNames';
+import '../styles/Filter.css';
+
 
 // component to filter for pets based on user preferences
 function Filter({ onFilterChange }) {

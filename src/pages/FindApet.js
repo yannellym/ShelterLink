@@ -134,8 +134,9 @@ function FindApet({ userLocation, handleToggleFavorite, favoritePets, isAuthenti
   return (
     <div className="main-page">
       <div className="sidebar">
-     { <Filter onFilterChange={handleFilterChange} /> }
-     
+        { 
+          <Filter onFilterChange={handleFilterChange} /> 
+        }
       </div>
       <div className="content">
         <div className="pet-card-list">
