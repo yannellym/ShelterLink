@@ -3,7 +3,7 @@
   max-width: 90%;
   margin: 2% auto;
   padding: 20px;
-  max-height: 80vh;
+  max-height: 90vh;
   background-color: #6495ED;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.158);
@@ -54,6 +54,8 @@ input[type='range'] {
 @media (max-width: 600px) {
   .container {
     max-width: 90%;
+    max-height: 150%;
+    border: yellow 4px solid;
   }
 
   select,

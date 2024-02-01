@@ -5,13 +5,14 @@
 
 .pet-details {
   background-color: #ffffff;
-  padding: 40px;
+  padding: 10% 4%;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   margin: 20px 20px 20px 0; /* Adjust the margin to provide space on the right */
   max-width: 900px;
   position: relative;
   width: 70%;
+  /* border: solid blue 4px */
 }
 
 .side-panel {
@@ -150,9 +151,74 @@
 .favorite-heart-details-favorited {
   color: #ea1328; 
 }
-.shareBtn{
+.shareBtn {
   position: absolute;
   bottom: 1%;
   right: 1%;
   margin: 10px;
+}
+/* Styles for screens up to 600px */
+@media (max-width: 600px) {
+  .pet-details-container {
+    display: flex;
+    flex-direction: column; /* Change to column for vertical layout */
+    /* border: red solid 4px; */
+    margin: 4% auto;
+  }
+
+  .pet-details {
+    max-width: 100%; 
+    min-width: 270px;/* Full width for the details on smaller screens */
+    margin-bottom: 20px; /* Optional: Add spacing between details and side-panel */
+    /* border: red solid 4px; */
+    margin: auto;
+  }
+  /* Name and ID container */
+  .name-id-container {
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+    padding: 10px 0;
+    /* border: red solid 4px; */
+    width: 100%;
+  }
+
+  .side-panel {
+    width: 95%; /* Full width for the side panel on smaller screens */
+    margin: 8% auto;
+  }
+}
+
+
+@media (min-width: 601px) and (max-width: 1023px) {
+  .pet-details-container {
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+  }
+
+  .pet-details {
+    width: 100%; 
+  }
+
+  .side-panel {
+    width: 70%; 
+  }
+
+}
+
+/* Responsive styles for larger screens (e.g., desktops) */
+@media (min-width: 1024px){
+  .pet-details-container {
+    justify-content: space-between; 
+  }
+
+  .pet-details {
+    width: 60%; 
+  }
+
+  .side-panel {
+    width: 35%; 
+  }
+
 }

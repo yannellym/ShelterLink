@@ -80,35 +80,73 @@ header {
   text-decoration: none !important;
 }
 
+
 /* Responsive styles for small screens (e.g., mobile devices) */
 @media (max-width: 600px) {
-  .header {
-    flex-direction: column; /* Stack elements vertically */
-    height: auto; /* Allow the header to adjust its height based on content */
+  .hamburger-menu {
+    display: none;
+    cursor: pointer;
+  }
+  
+  .bar {
+    width: 25px;
+    height: 3px;
+    background-color: #333;
+    margin: 6px 0;
+    transition: 0.4s;
+  }
+  .logo{
+    width: 25%;
+    /* border: red solid 3px; */
   }
 
-  .main-navigation {
-    width: 100%; /* Take full width */
-    margin-top: 1rem; /* Add space between logo and navigation on small screens */
+  /* Mobile Menu Styles */
+  .mobile-menu {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 15vh;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    box-shadow: 0 6px 3px rgba(128, 128, 128, 0.4);
+    z-index: 1;
   }
-
-  .logo {
-    width: 50%; /* Adjust the logo width for smaller screens */
-    margin-bottom: 1rem; /* Add space below the logo on small screens */
+  
+  .mobile-menu-open .hamburger-menu .bar:nth-child(1) {
+    transform: rotate(-45deg) translate(-5px, 6px);
   }
-
-  .main-navigation ul {
-    flex-direction: column; /* Stack navigation items vertically */
-    align-items: center; /* Center items horizontally */
+  
+  .mobile-menu-open .hamburger-menu .bar:nth-child(2) {
+    opacity: 0;
   }
-
-  .main-navigation a {
-    width: 100%; /* Take full width */
-    text-align: center; /* Center text */
+  
+  .mobile-menu-open .hamburger-menu .bar:nth-child(3) {
+    transform: rotate(45deg) translate(-5px, -6px);
   }
-
-  .user-profile {
-    margin-top: 1rem; /* Add space between navigation and user profile */
+  
+  @media (max-width: 600px) {
+    .hamburger-menu {
+      display: block;
+    }
+  
+    .main-navigation {
+      display: none;
+    }
+  
+    .main-navigation ul {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .main-navigation a {
+      width: 100%;
+      text-align: center;
+    }
+  
+    .mobile-menu-open .main-navigation {
+      display: flex;
+    }
   }
 }
 

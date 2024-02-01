@@ -152,7 +152,7 @@ function Home({ userLocation, userPreferences, handleToggleFavorite, user, favor
               <UserPreferencesForm onPreferencesSubmit={handlePreferencesSubmit} userPreferences={userPreferences} />
             ) : (
               // if we have pets in the preferredAnimals array, display their information using the petCard component
-              <div>
+              <div className="match-found">
                 <PetCard
                   key={preferredAnimals[selectedPetIndex].id}
                   pet={preferredAnimals[selectedPetIndex]}

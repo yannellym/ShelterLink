@@ -1,8 +1,7 @@
-/* Faqs.css */
 
 .faqs {
-  max-width: 60%; 
-  margin: 30px auto; 
+  max-width: 60%;
+  margin: 30px auto;
   padding: 20px;
   background-color: var(--primary-blue);
   border-radius: 10px;
@@ -37,7 +36,7 @@ h2 {
   border-radius: 5px;
 }
 
-.faq-header ul > h3 {
+.faq-header h3 {
   margin: 0;
 }
 
@@ -53,4 +52,15 @@ h2 {
 
 .faqs > ul > li.open p {
   display: block;
+}
+
+/* Responsive styles for small screens (e.g., mobile devices) */
+@media (max-width: 600px) {
+  .faqs {
+    max-width: 90%;
+  }
+
+  h3 {
+    font-size: 15px;
+  }
 }

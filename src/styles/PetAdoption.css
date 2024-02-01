@@ -1,3 +1,4 @@
+/* Default styles */
 .pet-adoption {
   margin: 4%;
   padding: 2%;
@@ -28,7 +29,7 @@ h1 {
 
 .adopt-list > li {
   flex-basis: calc(50% - 20px);
-  margin-bottom: 30px; 
+  margin-bottom: 30px;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -42,4 +43,21 @@ h1 {
   background-color: var(--vibrant-red);
   color: #fff;
   transform: scale(1.02);
+}
+
+/* Responsive styles for small screens (e.g., mobile devices) */
+@media (max-width: 600px) {
+  .pet-adoption {
+    margin: 8%;
+    padding: 8%;
+  }
+
+  h1 {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+
+  .adopt-list > li {
+    flex-basis: calc(100% - 20px);
+  }
 }

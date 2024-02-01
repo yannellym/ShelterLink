@@ -144,8 +144,7 @@
 /* Responsive styles for smaller screens (e.g., phones) */
 @media (max-width: 600px) {
   .pet-card {
-    width: 70%; 
-    min-width:250px;/* Take full width on smaller screens */
+    width: 90%; 
     height: auto; /* Adjust height to be flexible */
     padding-bottom: 4%;
     /* border: rgb(0, 255, 13) solid 3px; */
@@ -198,10 +197,10 @@
   }
 }
 /* Responsive styles for larger screens (e.g., desktops) */
-@media (min-width: 1024px) and (max-width: 1279px) {
+@media (min-width: 1024px){
   .pet-card {
-    width: calc(50% - 60px); /* Adjust width for larger screens to have two columns */
-    max-width: 235px;
+    width: 90%; /* Adjust width for larger screens to have two columns */
+    max-width: 335px;
     margin-bottom: 20px; /* Add margin between rows for better spacing */
     /* border: rgb(255, 0, 204) solid 3px; */
   }

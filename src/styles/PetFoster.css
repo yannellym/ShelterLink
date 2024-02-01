@@ -1,5 +1,4 @@
-/* PetFoster.css */
-
+/* Default styles */
 .pet-foster {
   margin: 4%;
   padding: 2%;
@@ -9,7 +8,7 @@
   text-align: left;
 }
 
-.pet-foster >p {
+.pet-foster > p {
   text-align: center;
 }
 
@@ -17,20 +16,20 @@ h1, h2 {
   font-size: 24px;
   color: #333;
   margin-bottom: 20px;
-  text-align: center; 
+  text-align: center;
 }
 
 .foster-list {
-  padding: 5px;
+
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
 }
 
-.foster-list  > li {
+.foster-list > li {
   flex-basis: calc(50% - 30px);
-  margin-bottom: 30px; 
-  padding: 10px;
+  margin-bottom: 30px;
+  padding: 5%;
   border: 1px solid #ccc;
   border-radius: 5px;
   background-color: #fff;
@@ -40,6 +39,24 @@ h1, h2 {
 }
 
 .foster-list > li:hover {
-  background-color: var(--vibrant-red);
+  background-color: rgba(255, 0, 0, 0.277);
   transform: scale(1.02);
+}
+
+/* Responsive styles for small screens (e.g., mobile devices) */
+@media (max-width: 600px) {
+  .pet-foster {
+    margin: 2%;
+    padding: 8%;
+  }
+
+  .foster-list h3 {
+    font-size: 15px;
+    margin-bottom: 15px;
+  }
+
+  .foster-list > li {
+    min-width: 95%;
+    padding: 7%;
+  }
 }

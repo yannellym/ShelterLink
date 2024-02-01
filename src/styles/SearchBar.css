@@ -63,6 +63,27 @@
   .search-select {
     width: 100%;
     margin-top: 10px;
+    min-width:40%;
+  }
+  .match-found {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    /* border: red solid 4px; */
+    width: 100%;
+    margin: auto;
+  }
+
+  .matched-pet-card {
+    padding: 3% 1%;
+    min-width: 90%;
+    margin: auto;
+    border: rgb(64, 0, 128) solid 5px;
+  }
+  .fetch-new-pet {
+    background-color: rgba(58, 118, 237, 0.148);
+    color: black;
   }
 }
 
@@ -84,6 +105,26 @@
 
   .search-select {
     width: calc(50% - 10px);
+  }
+  .match-found {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    /* border: red solid 4px; */
+    width: 100%;
+    margin: auto;
+  }
+
+  .matched-pet-card {
+    padding: 3% 1%;
+    min-width: 100%;
+    margin: auto;
+    border: rgb(117, 0, 235) solid 5px;
+  }
+  .fetch-new-pet {
+    background-color: rgba(58, 118, 237, 0.148);
+    color: black;
   }
 }
 /* Responsive styles for larger screens (e.g., desktops) */
@@ -107,5 +148,19 @@
     flex: 1; /* Use flex-grow to distribute remaining space */
     margin-top: 20px;
     /* border: rgb(13, 0, 255) solid 4px; */
+  }
+  .match-found {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    /* border: red solid 4px; */
+    width: 100%;
+    margin: auto;
+  }
+
+  .fetch-new-pet {
+    background-color: rgba(58, 118, 237, 0.148);
+    color: black;
   }
 }
