@@ -176,12 +176,22 @@
     right: -13px;
   }
 }
+/* Responsive styles for smaller screens (e.g., phones) */
+@media (max-width: 600px) {
+  .pet-card {
+    max-width:60%;
+    min-width:60%; /* Minimum width to ensure it's not less than 230px */
+    margin-right: 20px; /* Add margin between cards for better spacing */
+    margin-bottom: 20px; /* Add margin between rows for better spacing */
+    /* border: rgb(102, 255, 0) solid 3px; */
+  }
+}
 
 /* Responsive styles for medium screens (e.g., tablets) */
 @media (min-width: 601px) and (max-width: 1023px) {
   .pet-card {
-    max-width:60%;
-    min-width:60%; /* Minimum width to ensure it's not less than 230px */
+    max-width: 60%;
+    min-width: 30%; /* Minimum width to ensure it's not less than 230px */
     margin-right: 20px; /* Add margin between cards for better spacing */
     margin-bottom: 20px; /* Add margin between rows for better spacing */
     /* border: red solid 3px; */
@@ -191,8 +201,8 @@
 @media (min-width: 1024px) and (max-width: 1279px) {
   .pet-card {
     width: calc(50% - 60px); /* Adjust width for larger screens to have two columns */
-    min-width: 250px;
+    max-width: 235px;
     margin-bottom: 20px; /* Add margin between rows for better spacing */
-    /* border: rgb(0, 26, 255) solid 3px; */
+    /* border: rgb(255, 0, 204) solid 3px; */
   }
 }

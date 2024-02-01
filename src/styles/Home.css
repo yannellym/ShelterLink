@@ -282,19 +282,19 @@
     position: relative;
     height: 100%; /* Full height of the right column */
   }
-    .greater-need-for-love-section {
+  .greater-need-for-love-section {
     min-height: auto; /* Let the height adjust based on content */
     max-height: none; /* Remove max-height on smaller screens */
   }
-  /* Ensure two cards per row, lined up */
-  .nearby-pet-cards {
+   /* Ensure two cards per row, lined up */
+   .nearby-pet-cards {
     flex-wrap: wrap;
     justify-content: flex-start;
-    /* border: rgb(0, 0, 255) solid 4px; */
-    margin: 0 auto;
-    width: 90%;
+    border: rgb(0, 0, 255) solid 4px;
+    margin: auto;
+    width: 100%;
+    padding: 2%;
   }
-
   .all-pets-near-card {
     margin-right: 0px;
     border: blue solid 5px;
@@ -307,7 +307,7 @@
   .form-and-search-container {
     max-width: 100%; /* Set a maximum width for the container */
     margin: 0 auto; /* Center the container */
-    /* border: pink solid 4px; */
+    border: pink solid 4px;
     height: auto;
   }
   .left-column {
@@ -325,18 +325,20 @@
   .greater-need-for-love-section {
     min-height: auto; /* Let the height adjust based on content */
     max-height: none; /* Remove max-height on smaller screens */
+    border: red solid 4px;
   }
   /* Ensure two cards per row, lined up */
   .nearby-pet-cards {
     flex-wrap: wrap;
     justify-content: flex-start;
-    /* border: rgb(0, 0, 255) solid 4px; */
-    margin: 0 auto;
-    width: 70%;
+    border: rgb(0, 0, 255) solid 4px;
+    margin: auto;
+    width: 90%;
+    padding: 2%;
   }
 
   .all-pets-near-card {
     margin-right: 0px;
-    /* border: blue solid 5px; */
+    border: blue solid 5px;
   }
 }
