@@ -55,7 +55,7 @@ input[type='range'] {
   .container {
     max-width: 90%;
     max-height: 150%;
-    border: yellow 4px solid;
+    /* border: yellow 4px solid; */
   }
 
   select,

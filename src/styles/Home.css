@@ -23,7 +23,7 @@
 /* adopted-animals-section  */
 .adopted-animals-section {
   width: 100vw;
-  height: 95vh;
+  height: auto;
   font-size: 30px; 
   color: rgb(0, 0, 0);
 }
@@ -185,6 +185,7 @@
 }
 /* Responsive styles for smaller screens (e.g., phones) */
 @media (max-width: 600px) {
+
   .form-and-search-container {
     display: flex;
     flex-direction: column; /* Stack components vertically */
@@ -289,16 +290,19 @@
    /* Ensure two cards per row, lined up */
    .nearby-pet-cards {
     flex-wrap: wrap;
-    justify-content: flex-start;
-    border: rgb(0, 0, 255) solid 4px;
+    justify-content:space-around;
+    /* border: rgb(0, 255, 21) solid 4px; */
     margin: auto;
     width: 100%;
     padding: 2%;
   }
   .all-pets-near-card {
     margin-right: 0px;
-    border: blue solid 5px;
+    /* border: blue solid 5px; */
   }
+  /* .adopted-animals-section {
+
+  } */
 }
 
 
@@ -307,7 +311,7 @@
   .form-and-search-container {
     max-width: 100%; /* Set a maximum width for the container */
     margin: 0 auto; /* Center the container */
-    border: pink solid 4px;
+    /* border: pink solid 4px; */
     height: auto;
   }
   .left-column {
@@ -325,13 +329,13 @@
   .greater-need-for-love-section {
     min-height: auto; /* Let the height adjust based on content */
     max-height: none; /* Remove max-height on smaller screens */
-    border: red solid 4px;
+    /* border: red solid 4px; */
   }
   /* Ensure two cards per row, lined up */
   .nearby-pet-cards {
     flex-wrap: wrap;
     justify-content: flex-start;
-    border: rgb(0, 0, 255) solid 4px;
+    /* border: rgb(0, 0, 255) solid 4px; */
     margin: auto;
     width: 90%;
     padding: 2%;
@@ -339,6 +343,6 @@
 
   .all-pets-near-card {
     margin-right: 0px;
-    border: blue solid 5px;
+    /* border: blue solid 5px; */
   }
 }

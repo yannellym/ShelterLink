@@ -105,7 +105,7 @@
 /* Responsive styles for small screens (e.g., mobile devices) */
 @media (max-width: 600px) {
   .about-container {
-    border: red solid 4px;
+    /* border: red solid 4px; */
     flex-direction: column;
   }
   .about-content {

@@ -139,9 +139,7 @@ function FindApet({ userLocation, handleToggleFavorite, favoritePets, isAuthenti
         }
       </div>
       <div className="content">
-        <div className="pet-card-list">
-          {renderPetCards()}
-        </div>
+        {renderPetCards()}
         <div className="pagination-horizontal">
           {generatePaginationButtons()}
         </div>

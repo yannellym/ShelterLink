@@ -121,7 +121,7 @@ const Replies = ({ user, fetchImage }) => {
       <button onClick={() => navigate(-2)}>Back</button>
       <h3>Original Post:</h3>
 
-      <div className={`post-container ${expandedPosts.includes(post?.id) ? 'expanded-message' : ''}`} key={post?.id}>
+      <div className={`post-container ${expandedPosts.includes(post?.id) ? 'expanded-message' : ''} reply-org`} key={post?.id}>
         {post && (
           <>
             <img src={post.image} alt={post.subject} className="left-image" />
@@ -154,7 +154,7 @@ const Replies = ({ user, fetchImage }) => {
         {post && replies.length === 0 && (
           <>
             <p>No replies yet.</p>
-            <img src={kitten} alt="no replies yet" />
+            <img src={kitten} className="no-replies-yet" alt="no replies yet" />
           </>
         )}
       </div>

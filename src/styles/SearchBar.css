@@ -85,6 +85,14 @@
     background-color: rgba(58, 118, 237, 0.148);
     color: black;
   }
+  .location-button {
+    /* border: yellow 4px solid; */
+    max-height: 50px;
+    font-size: 7px;
+    justify-content: center;
+    background-color: rgb(199, 232, 234);
+    color: black;
+  }
 }
 
 /* Responsive styles for medium screens (e.g., tablets) */

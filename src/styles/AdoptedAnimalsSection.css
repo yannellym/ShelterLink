@@ -1,8 +1,7 @@
 .adopted-animals-container {
   /* border: red solid 5px; */
-  margin: 0 auto;
-  height: 90vh;
-  min-width: 90vw;
+  margin: 4% auto;
+  height: auto;
   justify-content: center;
   font-size: 17px;
 }
@@ -82,7 +81,7 @@ h2 {
   position: absolute;
   top: 10px;
   left: 10px;
-  background-color: #d90c20c2; 
+  background-color: #d90c206e; 
   padding: 5px;
   border-radius: 5px;
   font-weight: bold;
@@ -105,8 +104,30 @@ h2 {
     margin-right: 0;
     margin-bottom: 16px; /* Add margin at the bottom for better spacing */
   }
+  .adopted-label{
+    font-size: 60%;
+    top: 3px;
+    left: 25px;
+  }
 
   .slick-dots {
     bottom: -10px;
   }
+  .text-container {
+    font-size: 80%;
+  }
+  .image-container {
+    /* border: red solid 4px; */
+  }
+
+  .image-container > img {
+    padding-top: 15%;
+    height: 350px;
+    width: 90%; 
+    object-fit: scale-down;
+    border-radius: 50%;
+    /* border: red solid 4px; */
+    height: auto;
+  }
+
 }

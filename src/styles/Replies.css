@@ -2,42 +2,86 @@
     min-height: 100vh;
   }
   
-  .reply-container h3 {
-    padding: 0 2%;
-  }
-  
-  .reply-container-inside-div-one {
-    width: 80vw;
-    margin: -5px auto;
-    max-height: 70vh;
-    overflow-y: auto;
-    position: relative;
-    /* border: red solid 4px; */
-  }
-  
-  .reply-container-inside-div-two {
-    width: 80vw;
-    margin: 0% auto;
-    min-height: 25%;
-  }
-  .no-replies-message {
-    text-align: center;
-    margin: 20px 0;
+.reply-container h3 {
+  padding: 0 2%;
+}
+.reply-org {
+  background-color: rgba(255, 0, 0, 0.166);
+  border-radius: 10px;
+  margin: 0 2%;
+}
+.reply-container-inside-div-one {
+  width: 80vw;
+  margin: -5px auto;
+  max-height: 70vh;
+  overflow-y: auto;
+  position: relative;
+  /* border: red solid 4px; */
+}
+
+.reply-container-inside-div-two {
+  width: 80vw;
+  margin: 0% auto;
+  min-height: 25%;
+}
+.no-replies-message {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.scrollable-container.reply-container-inside-div-one {
+  position: relative;
+  padding-bottom: 30px; 
+  /* border: red solid 4px; */
+}
+.new-post-arrow {
+  position: absolute;
+  top: 90%;
+  right: 10px;
+  transition: opacity 0.5s;
+  height: 10%;
+  width: 10%;
+  cursor: pointer;
+  color: red;
+}
+
+.no-replies-yet {
+  max-width: 50vw;
+  max-height: 50vh;
+  width: auto;
+  height: auto;
+}
+/* Media query for (max-width: 600px) */
+@media (max-width: 600px) {
+  .post-container {
+    flex-direction: column;
   }
 
-  .scrollable-container.reply-container-inside-div-one {
-    position: relative;
-    padding-bottom: 30px; 
-    /* border: red solid 4px; */
+  .post-content {
+    margin-top: 10px;
   }
-  .new-post-arrow {
-    position: absolute;
-    top: 90%;
-    right: 10px;
-    transition: opacity 0.5s;
-    height: 10%;
-    width: 10%;
-    cursor: pointer;
-    color: red;
+
+  .read-more {
+    display: block;
+    margin-top: 10px;
   }
-  
+}
+
+/* Media query for (min-width: 601px) and (max-width: 1023px) */
+@media (min-width: 601px) and (max-width: 1023px) {
+  .reply-container {
+    padding: 15px;
+  }
+
+  .post-container {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+/* Media query for (min-width: 1024px) */
+@media (min-width: 1024px) {
+  .reply-container {
+    padding: 25px;
+  }
+}

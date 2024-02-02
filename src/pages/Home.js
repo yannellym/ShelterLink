@@ -227,6 +227,7 @@ function Home({ userLocation, userPreferences, handleToggleFavorite, user, favor
                 user={user}
                 handleToggleFavorite={() => handleToggleFavorite(pet)} 
                 favorited={favoritePets.includes(pet.id)}
+                className="pet-card-inhome"
               />
             ))}
             {fetchedUserLocation || userLocation ? (

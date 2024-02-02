@@ -175,7 +175,7 @@ const SearchBar = ({ onSearch }) => {
                 className="location-button"
                 onClick={handleShareLocation}
               >
-                {shareLocation? 'Sharing Location...' : 'Share Location 📍'}
+                {shareLocation? 'Sharing Location...' : 'Share Location📍'}
               </button>
             )}
           </div>

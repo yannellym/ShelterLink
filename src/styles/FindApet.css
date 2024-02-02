@@ -10,19 +10,12 @@
 }
 
 .content {
-  flex: 3; 
-  padding: 20px; 
-}
- 
-
-.pet-card-list {
   flex: 0.5;
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
-  /* border: red solid 5px; */
 }
-
+ 
 .pagination-horizontal {
   display: flex;
   justify-content: center;
@@ -55,21 +48,42 @@
     flex: 1; /* Adjust flex value for smaller screens */
     margin: 0;
     border-right: none; /* Remove border for smaller screens */
+    /* border: red solid 5px; */
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
   }
 
   .content {
-    flex: 1; /* Adjust flex value for smaller screens */
-    padding: 10px; /* Adjust padding for smaller screens */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* border: rgb(0, 30, 255) solid 5px; */
   }
-
-  .pet-card-list {
-    flex: 1; /* Adjust flex value for smaller screens */
-    gap: 10px; /* Adjust gap for smaller screens */
-  }
-
   .pagination-horizontal {
-    margin-top: 2%; /* Adjust margin for smaller screens */
+    display: flex;
+    width: 90%;
+    margin: 2% auto; /* Adjust margin for smaller screens */
+    /* border: red solid 5px; */
+    overflow: hidden; /* Add this to prevent content overflow */
+    justify-content: space-between; /* Adjust as needed */
   }
+  
+  .pagination-button {
+    flex: 1; /* Adjust flex value for each button to distribute the space */
+    background-color: #ccc;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
+  .pagination-button.active {
+    background-color: var(--vibrant-red);
+    color: #fff;
+  }
+  
 }
 
 /* Responsive styles for medium screens (e.g., tablets) */
@@ -81,24 +95,20 @@
 
   .sidebar {
     flex: 0.3; /* Reset flex value for medium screens */
-    margin: 0 3%;
+    margin: 0 1%;
     border-right: double var(--vibrant-red) 5px;
   }
 
   .content {
-    flex: 3; 
-    padding: 20px; 
+    flex: 0.9; 
+    margin: 2% auto;
+    justify-content: center;
     /* border: rgb(0, 42, 255) solid 4px; */
-  }
-
-  .pet-card-list {
-    flex: 0.5;
-    gap: 20px;
-    /* border: rgb(0, 255, 8) solid 4px; */
   }
 
   .pagination-horizontal {
     margin-top: 3%;
+    align-items: flex-end;
   }
 }
 

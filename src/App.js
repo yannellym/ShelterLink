@@ -280,7 +280,7 @@ const App = () => {
   return (
     <div>
       {/* Render the AuthenticatorComponent for user check on every render */}
-      <AuthenticatorComponent setUser={setUser} /> 
+      <AuthenticatorComponent setUser={setUser}  /> 
       <Header user={user} handleSignOut={handleSignOut} />
       <Routes>
         <Route
