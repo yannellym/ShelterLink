@@ -8,7 +8,7 @@
   flex-wrap: wrap;
   gap: 20px;
   justify-content: center; /* Center the cards horizontally */
-  border: purple solid 4px;
+  /* border: purple solid 4px; */
 }
 
 .pagination-container {
@@ -31,4 +31,5 @@
   background-color: var(--vibrant-red);
   color: #fff;
 }
+
 

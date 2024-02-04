@@ -11,6 +11,7 @@
   align-items: center;
   text-align: center; 
   width: 240px;
+  max-width: 300px;
   height: 460px; 
   overflow: hidden;
   border: 2px solid transparent; 
@@ -145,8 +146,8 @@
 /* Responsive styles for smaller screens (e.g., phones) */
 @media (max-width: 600px) {
   .pet-card {
-    max-width: 80%;
-    min-width: 90%; /* Minimum width to ensure it's not less than 230px */
+    max-width: 300px;
+    min-width: 280px; /* Minimum width to ensure it's not less than 230px */
     
     margin-bottom: 20px; /* Add margin between rows for better spacing */
     min-height: 500px;
@@ -169,8 +170,8 @@
 /* Responsive styles for medium screens (e.g., tablets) */
 @media (min-width: 601px) and (max-width: 1023px) {
   .pet-card {
-    max-width: 60%;
-    min-width: 30%; /* Minimum width to ensure it's not less than 230px */
+    max-width: 300px;
+    min-width: 280px; /* Minimum width to ensure it's not less than 230px */
     margin-right: 20px; /* Add margin between cards for better spacing */
     margin-bottom: 20px; /* Add margin between rows for better spacing */
     /* border: red solid 3px; */
@@ -180,7 +181,7 @@
 @media (min-width: 1024px){
   .pet-card {
     width: 80%; /* Adjust width for larger screens to have two columns */
-    max-width: 40%;
+    max-width: 300px;
     margin-bottom: 20px; /* Add margin between rows for better spacing */
     /* border: rgb(255, 0, 204) solid 3px; */
   }

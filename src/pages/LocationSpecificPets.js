@@ -18,9 +18,7 @@ function LocationSpecificPets({ favoritePets, isAuthenticated }) {
   const [petsToDisplay, setPetsToDisplay] = useState([]);
   const [loading, setLoading] = useState(true);
   const [maxPage, setMaxPage] = useState(1);
-  const [showOnlyPetsWithImages, setShowOnlyPetsWithImages] = useState(false);
-
-  const dependencies = [petType, searchText, showOnlyPetsWithImages, currentPage];
+  const dependencies = [petType, searchText, currentPage];
 
   const { data, loading: apiLoading } = usePetfinderAPI(
     `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/pet_zip_search?type=${petType}&location=${searchText}&page=${currentPage}`,
@@ -43,13 +41,11 @@ function LocationSpecificPets({ favoritePets, isAuthenticated }) {
       setLoading(false);
       const parsedData = JSON.parse(data.body);
       console.log("Parsed Data Pagination Response:", parsedData.pagination);
-      const filteredPets = showOnlyPetsWithImages
-        ? parsedData.animals.filter((pet) => pet.photos.length > 0)
-        : parsedData.animals;
+      const filteredPets = parsedData.animals;
       setPetsToDisplay(filteredPets || []);
       setMaxPage(parsedData.pagination?.total_pages || 1);
     }
-  }, [data, apiLoading, showOnlyPetsWithImages]);
+  }, [data, apiLoading, ]);
 
   const renderPageNumbers = () => {
     const displayedPages = 9;
@@ -75,24 +71,11 @@ function LocationSpecificPets({ favoritePets, isAuthenticated }) {
     ));
   };
 
-  const handleShowOnlyPetsWithImages = () => {
-    setShowOnlyPetsWithImages(!showOnlyPetsWithImages);
-  };
 
   return (
     <div className="location-specific-pets">
       <h2 className="search-results-title">Search Results for:</h2>
       <h3 className="pet-type-title">All {petType}s in the {searchText} area</h3>
-      <div className="filter-pets">
-        <label>
-          <input
-            type="checkbox"
-            checked={showOnlyPetsWithImages}
-            onChange={handleShowOnlyPetsWithImages}
-          />
-          Show only {petType}s with profile images
-        </label>
-      </div>
       <div className="pet-card-container">
         {loading ? (
           <p className="loading">Loading...</p>

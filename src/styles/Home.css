@@ -298,6 +298,7 @@
   }
   .all-pets-near-card {
     margin-right: 0px;
+    justify-content: center;
     /* border: blue solid 5px; */
   }
   /* .adopted-animals-section {
@@ -334,10 +335,10 @@
   /* Ensure two cards per row, lined up */
   .nearby-pet-cards {
     flex-wrap: wrap;
-    justify-content: flex-start;
+    justify-content: center;
     /* border: rgb(0, 0, 255) solid 4px; */
     margin: auto;
-    width: 90%;
+    width: 100%;
     padding: 2%;
   }
 

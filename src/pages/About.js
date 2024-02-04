@@ -22,6 +22,7 @@ const About = ({ userLocation }) => {
     try {
       console.log(userLocation?.zipCode, "do we have a zip code")
       if (userLocation) {
+        console.log("loc available")
         // If zipCode is available, directly navigate to the nearby_pets page
         navigate(`/${targetPage}`, { state: { fetchedUserLocation: userLocation} });
       } else if (navigator.geolocation) {
@@ -95,16 +96,12 @@ const About = ({ userLocation }) => {
           alt="About ShelterLink"
           className="about-image"
         />
-        <Link to={`/nearby_shelters?zipCode=${userLocation?.zipCode}`} className="square">
+        <Link to={`/nearby_shelters?zipCode=${userLocation?.zipCode || "75070"}`} className="square">
           <h3>Find a Shelter</h3>
         </Link>
         <Link to="/resources" className="square">
           <h3>Resources</h3>
         </Link>
-        <Link to="#" className="square" onClick={() => handleViewAllPetsNearYou({ targetPage: 'nearby_pets' })}>
-          <h3>Pets Nearby</h3>
-        </Link>
-
       </div>
     </div>
   );

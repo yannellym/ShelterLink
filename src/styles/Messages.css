@@ -175,6 +175,7 @@
   .previous-posts-container {
     /* border: pink solid 4px; */
     height: 90%;
+    overflow-y: scroll;
   }
   .post-container {
     flex-direction: column;

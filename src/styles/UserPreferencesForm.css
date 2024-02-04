@@ -79,7 +79,7 @@ input[type='range'] {
     width: calc(50% - 5px); /* Adjusted width for tablets */
   }
   .container {
-    border: rgb(0, 38, 255) solid 5px;
+    /* border: rgb(0, 38, 255) solid 5px; */
     max-width:70%
   }
 }

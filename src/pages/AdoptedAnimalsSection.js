@@ -6,7 +6,7 @@ import '../styles/AdoptedAnimalsSection.css';
 import coming_soon from "../images/coming_soon.png";
 const AdoptedAnimalsSection = () => {
   const [recentlyAdoptedAnimals, setRecentlyAdoptedAnimals] = useState([]);
-
+  const [error, setError] = useState(false);
   useEffect(() => {
     const fetchAdoptedAnimals = async () => {
       try {
@@ -15,7 +15,7 @@ const AdoptedAnimalsSection = () => {
         const stringData = JSON.stringify(dataRaw);
         const parsedData = JSON.parse(stringData);
         const petData = JSON.parse(parsedData.body);
-        
+        console.log(petData, "PET DAT RECIED NOW")
         // Choose 20 animals
         const selectedAnimals = petData.animals.slice(0, 20);
 
@@ -40,6 +40,7 @@ const AdoptedAnimalsSection = () => {
         setRecentlyAdoptedAnimals(animalsWithImages || []);
       } catch (error) {
         console.error('Error fetching adopted animals:', error);
+        setError(true);
       }
     };
 
@@ -72,36 +73,38 @@ const AdoptedAnimalsSection = () => {
     autoplaySpeed: 3000,
   };
  
-
   return (
     <div className="adopted-animals-container">
-      <h2>Recently Adopted Animals:</h2>
-      {recentlyAdoptedAnimals && recentlyAdoptedAnimals.length > 0 && (
-        <Slider {...settings}>
-          {recentlyAdoptedAnimals.map((adoptedAnimal, index) => {
-            return (
-              adoptedAnimal.photos && adoptedAnimal.photos.length > 0 && (
-                <div key={adoptedAnimal.id && adoptedAnimal.organization_animal_id} className="adopted-animal-card">
-                  <div className="adopted-label">Adopted ❤️ </div>
-                  <div className="image-container">
-                    <img src={adoptedAnimal.photos[0].medium} alt={adoptedAnimal.name} />
-                    <div className="text-container">
-                      <p>Name: <span className="red-text">{adoptedAnimal.name}</span></p>
-                      <p>Adopted in 
-                        <span className="red-text"> {adoptedAnimal.contact.address.city}, {adoptedAnimal.contact.address.state} </span>
-                        on 
-                        <span className="red-text"> {new Date(adoptedAnimal.status_changed_at).toLocaleDateString()}</span>
-                      </p>
+      {error ? null  : (
+        <>
+          <h2>Recently Adopted Animals:</h2>
+          {recentlyAdoptedAnimals && recentlyAdoptedAnimals.length > 0 && (
+            <Slider {...settings}>
+              {recentlyAdoptedAnimals.map((adoptedAnimal, index) => (
+                adoptedAnimal.photos && adoptedAnimal.photos.length > 0 && (
+                  <div key={adoptedAnimal.id && adoptedAnimal.organization_animal_id} className="adopted-animal-card">
+                    <div className="adopted-label">Adopted ❤️ </div>
+                    <div className="image-container">
+                      <img src={adoptedAnimal.photos[0].medium} alt={adoptedAnimal.name} />
+                      <div className="text-container">
+                        <p>Name: <span className="red-text">{adoptedAnimal.name}</span></p>
+                        <p>Adopted in 
+                          <span className="red-text"> {adoptedAnimal.contact.address.city}, {adoptedAnimal.contact.address.state} </span>
+                          on 
+                          <span className="red-text"> {new Date(adoptedAnimal.status_changed_at).toLocaleDateString()}</span>
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              )
-            );
-          })}
-        </Slider>
+                )
+              ))}
+            </Slider>
+          )}
+        </>
       )}
     </div>
   );
 };
+    
 
 export default AdoptedAnimalsSection;
