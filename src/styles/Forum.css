@@ -92,12 +92,18 @@
   height: 100vh;
   min-width: 70%;
   max-width: 95%;
-  /* border: 4px solid #10f16a; */
+  max-height: 900px;
+  /* border: 4px solid #f110e2; */
   position: relative;
+  margin-top: 0px;
+  padding-top:0px;
 }
 
 .topic-posts-container h3 {
   padding-left: 3%;
+  /* border: red solid 4px; */
+  width: 75%;
+  margin-top: 5px;
 }
 
 .new-post-btn {
@@ -345,3 +351,17 @@
   }
 }
 
+/* Medium screens */
+@media (min-width: 1023px) {
+  .topics-list {
+    position: relative;
+    min-width: 22%;
+    background-color: #faf0f0;
+    /* border: black solid 5px; */
+  }
+  .topic-posts-container {
+    /* border: blue solid 5px; */
+    margin: 1% 0%;
+  }
+ 
+}

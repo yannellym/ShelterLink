@@ -244,6 +244,7 @@ const Forum = ({ user, fetchImage }) => {
     setShowPostModal(false);
   };
 
+
   // UPDATE OF COMPONENT
   useEffect(() => {
     // Set welcome message when the component starts
