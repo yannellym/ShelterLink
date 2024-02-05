@@ -1,8 +1,9 @@
 .data-received-container {
   display: flex;
   flex-direction: column;
-  /* border: rgb(47, 0, 255) solid 1px; */
+  /* border: rgb(242, 0, 255) solid 1px; */
   height: 95%;
+  min-height:400px;
 }
 
 .previous-posts-container {
@@ -45,6 +46,7 @@
   overflow: hidden;
   transition: max-height 0.3s ease; /* Add transition for smooth height animation */
   /* border: red solid; */
+  padding-top: 2%;
 }
 
 .post-content {
@@ -71,6 +73,7 @@
   background-color: rgba(183, 182, 182, 0.171);
   border-bottom: 3px rgba(183, 182, 182, 0.457) solid;
   width: 90%;
+  min-height: 200px;
   margin: 0 auto;
   border-radius:  10px;
 }
@@ -81,8 +84,6 @@
   width: 95%;
   overflow-y: auto;
 }
-
-
 .post-content p {
   margin-bottom: 10px; /* Adjust spacing between paragraphs */
 }
@@ -175,18 +176,6 @@
   margin-right: 2%; /*padding to the right for odd-indexed posts */
 }
 
-.new-post-arrow {
-  /* Add your styling here, e.g., position, color, etc. */
-  /* Example styles: */
-  position: fixed;
-  top: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 64px;
-  color: #007bff; /* Change the color as needed */
-  cursor: pointer;
-}
-
 
 
 /* Small screens */
@@ -265,7 +254,6 @@
   .previous-posts-container {
     max-width: 100%;
     max-height: 70%;
-    margin-top: 1%;
     overflow-y: auto;
     overflow-x: hidden;
     /* border: red solid 5px; */
@@ -289,14 +277,8 @@
   }
   
   .post {
-    margin: 2% auto;
-    border-radius: 8px;
-    width: 90%;
-    display: flex;
-    flex-direction: column; /* Change to column */
-    align-items: center;
-    overflow: hidden;
-    transition: max-height 0.3s ease; /* Add transition for smooth height animation */
+    /* border: red solid 4px; */
+    min-height: 150px;
   }
   
   .post-content {
@@ -338,4 +320,9 @@
     overflow-x: hidden;
     /* border: red solid 5px; */
   }
+  .post {
+    /* border: red solid 4px; */
+    min-height: 120px;
+  }
+  
 }

@@ -8,15 +8,17 @@
 .reply-org {
   background-color: rgba(255, 0, 0, 0.166);
   border-radius: 10px;
-  margin: 0 2art%;
+  margin: 0 2%;
 }
 .reply-container-inside-div-one {
-  width: 80vw;
+  width: 85vw;
   margin: -5px auto;
   max-height: 70vh;
-  overflow-y: auto;
+  min-height: 300px;
   position: relative;
-  /* border: red solid 4px; */
+  /* border: rgb(0, 85, 255) solid 4px; */
+  padding-top: 2%;
+  overflow-y: scroll;
 }
 
 .reply-container-inside-div-two {
@@ -84,4 +86,10 @@
   .reply-container {
     padding: 25px;
   }
+  .reply-container-inside-div-one {
+    min-height: 300px;
+    /* border: rgb(0, 38, 255) solid 4px; */
+
+  }
+
 }

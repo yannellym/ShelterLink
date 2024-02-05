@@ -98,10 +98,14 @@ const Replies = ({ user, fetchImage }) => {
     });
   };
 
+  useEffect(() => {
+    scrollToBottom();
+  }, [replies]);
+  
   const scrollToBottom = () => {
     if (messagesContainerRef.current) {
       const scrollHeight = messagesContainerRef.current.scrollHeight;
-      const stepHeight = 85; // higher value means scroll is faster
+      const stepHeight = 65; // higher value means scroll is faster
       let currentPosition = messagesContainerRef.current.scrollTop;
 
       const scrollStep = () => {
@@ -159,19 +163,11 @@ const Replies = ({ user, fetchImage }) => {
         )}
       </div>
 
-      <div ref={messagesContainerRef} className="scrollable-container reply-container-inside-div-one">
-        {post && replies.length > 0 && (
-          <>
-            <Messages replies={replies} hideReplyButton={true} hideIcons={true} />
-            {showTopNewPostArrow && (
-              <div className="new-post-arrow" onClick={() => { setShowTopNewPostArrow(false); scrollToBottom(); }}>
-                <FontAwesomeIcon icon={faCircleArrowDown} />
-              </div>
-            )}
-          </>
-        )}
-      </div>
-
+      {post && replies.length > 0 && (
+        <div ref={messagesContainerRef} className="scrollable-container reply-container-inside-div-one">
+          <Messages replies={replies} hideReplyButton={true} hideIcons={true} />
+        </div>
+      )}
       <div className="reply-container-inside-div-two">
         {post && (
           <ReplyPost user={user} onReplySubmit={addNewReply} />
