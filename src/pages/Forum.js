@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/Forum.css';
-import bd4 from '../images/bd4.jpeg';
+import bd4 from '../images/bd4.jpeg'
 import Messages from '../components/Messages.js';
 import PostModal from '../components/PostModal.js';
 import NewTopicModal from '../components/NewTopicModal'; 
@@ -113,7 +113,6 @@ const Forum = ({ user, fetchImage }) => {
           },
         },
       });
-      console.log('Result of updating topic:', resultOfTopicUpdate);
       
       // Fetch the updated topic data
       const updatedTopicResult = await API.graphql({
@@ -179,7 +178,6 @@ const Forum = ({ user, fetchImage }) => {
           },
         },
       });
-        console.log('Result of updating topic:', resultOfTopicUpdate);
 
         // Fetch the updated topic data
         const updatedTopicResult = await API.graphql({
@@ -255,7 +253,6 @@ const Forum = ({ user, fetchImage }) => {
     fetchTopics();
   }, []); // runs once when the component mounts
 
-  console.log(user, "USER IN FORUM")
   return (
     <div className="forum-container">
       <div className="topics-list">
