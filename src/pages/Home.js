@@ -13,7 +13,6 @@ import dog2 from '../images/dog.jpg';
 import kitten from '../images/kitten.jpg';
 import hamster from '../images/hamster.jpg';
 import paw from '../images/paw.png';
-import SkeletonCard from '../components/SkeletonCard';
 import usePetFinderAPI from '../hooks/usePetFinderAPI'; // hook
 import useAnimalsBasedOnPreferencesAPI from '../hooks/useAnimalsBasedOnPreferencesAPI'; // hook
 
@@ -210,13 +209,7 @@ function Home({ userLocation, userPreferences, handleToggleFavorite, user, favor
           </div>
         </div>
         <div className="adopted-animals-section">
-        {loading ? (
-           <SkeletonCard  />
-       
-            ) : ( 
-            <AdoptedAnimalsSection 
-            />
-            )} 
+          <AdoptedAnimalsSection  />
         </div>
         <div className="resources-section">
           <h1> Resources:</h1>

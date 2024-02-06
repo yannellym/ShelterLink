@@ -27,6 +27,7 @@ const Messages = ({ topic, replies, hideReplyButton, hideIcons, onReplySubmit, t
           return [...prevData, newData];
         });
         setIsFavorited((prevIsFavorited) => [...prevIsFavorited, newData.likedBy?.includes(user?.id) || false]);
+        scrollToBottom();
       },
       error: (error) => console.error('Subscription error:', error),
     });
@@ -48,9 +49,11 @@ const Messages = ({ topic, replies, hideReplyButton, hideIcons, onReplySubmit, t
           }
           setData(sortedData);
           setIsFavorited(sortedData.map((post) => post.likedBy?.includes(user?.id) || false));
+          scrollToBottom();
         } else if (replies) {
           setData(replies);
           setIsFavorited(replies.map((post) => post.likedBy?.includes(user?.id) || false));
+          scrollToBottom();
         }
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -72,6 +75,7 @@ const Messages = ({ topic, replies, hideReplyButton, hideIcons, onReplySubmit, t
 
   const handleReplySubmit = (postId, newReplyData) => {
     onReplySubmit(postId, newReplyData);
+    scrollToBottom();
   };
 
   const handleReplyClick = ({ post }) => {
@@ -103,19 +107,17 @@ const Messages = ({ topic, replies, hideReplyButton, hideIcons, onReplySubmit, t
     }
   };
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [data]);
+
 
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
-      console.log("scrolling to bottom")
+      console.log("scrolling to bottom");
       const scrollHeight = messagesEndRef.current.scrollHeight;
       const stepHeight = 65; // higher value means scroll is faster
       let currentPosition = messagesEndRef.current.scrollTop;
-
+  
       const scrollStep = () => {
-        if (currentPosition < scrollHeight) {
+        if (messagesEndRef.current && currentPosition < scrollHeight) {
           messagesEndRef.current.scrollTop = currentPosition + stepHeight;
           currentPosition += stepHeight;
           requestAnimationFrame(scrollStep);
@@ -124,7 +126,7 @@ const Messages = ({ topic, replies, hideReplyButton, hideIcons, onReplySubmit, t
       scrollStep();
     }
   };
-
+  
 
   return (
     <div className="data-received-container">

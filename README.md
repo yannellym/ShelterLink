@@ -83,5 +83,6 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 # graphQL subscriptions (instead of polling for small changes thus saving $,Low-latency, real-time updates. )
 # NosQL -DynamoDB for filtering pets
 # RDS for community forum, elastiCache clister for faster read performance
+# lazy loading, skeleton loading
 
 

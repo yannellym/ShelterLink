@@ -115,6 +115,7 @@
   text-decoration: none;
   color: #000000;
   /* border: red solid 4px; */
+  cursor: pointer;
 }
 
 .reply-button {
@@ -127,10 +128,25 @@
 
 .like-heart-unfavorited {
   color: #827575; 
+  cursor: pointer;
 }
 
 .like-heart-favorited {
-  color: #ea1328; 
+  color: #ea1328;
+  cursor: pointer;
+  animation: heartAnimation 0.5s forwards;
+}
+
+@keyframes heartAnimation {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 .link-without-underline {

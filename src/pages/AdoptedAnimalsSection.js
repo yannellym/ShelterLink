@@ -4,13 +4,18 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import '../styles/AdoptedAnimalsSection.css';
 import coming_soon from "../images/coming_soon.png";
+
+import SkeletonAdoptedCard from '../components/SkeletonAdoptedCard';
+
 const AdoptedAnimalsSection = () => {
   const [recentlyAdoptedAnimals, setRecentlyAdoptedAnimals] = useState([]);
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const fetchAdoptedAnimals = async () => {
       try {
-        const response = await fetch('https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/adopted_pets?status=adopted&limit=50');
+        const response = await fetch('https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/adopted_pets?status=adopted&limit=20');
         const dataRaw = await response.json();
         const stringData = JSON.stringify(dataRaw);
         const parsedData = JSON.parse(stringData);
@@ -38,6 +43,7 @@ const AdoptedAnimalsSection = () => {
         );
 
         setRecentlyAdoptedAnimals(animalsWithImages || []);
+        setLoading(false); // Set loading to false when data is fetched
       } catch (error) {
         console.error('Error fetching adopted animals:', error);
         setError(true);
@@ -75,17 +81,24 @@ const AdoptedAnimalsSection = () => {
  
   return (
     <div className="adopted-animals-container">
-      {error ? null  : (
+      {error ? null : (
         <>
           <h2>Recently Adopted Animals:</h2>
-          {recentlyAdoptedAnimals && recentlyAdoptedAnimals.length > 0 && (
+          {loading ? (
+            // Render skeleton loading while content is being loaded
+            <div className="skeleton-container">
+              {[...Array(3)].map((_, index) => (
+                <SkeletonAdoptedCard key={index} />
+              ))}
+            </div>
+          ) : (
             <Slider {...settings}>
               {recentlyAdoptedAnimals.map((adoptedAnimal, index) => (
                 adoptedAnimal.photos && adoptedAnimal.photos.length > 0 && (
                   <div key={adoptedAnimal.id && adoptedAnimal.organization_animal_id} className="adopted-animal-card">
                     <div className="adopted-label">Adopted ❤️ </div>
                     <div className="image-container">
-                      <img src={adoptedAnimal.photos[0].medium} alt={adoptedAnimal.name} />
+                      <img src={adoptedAnimal.photos[0].medium} alt={adoptedAnimal.name} loading="lazy" />
                       <div className="text-container">
                         <p>Name: <span className="red-text">{adoptedAnimal.name}</span></p>
                         <p>Adopted in 
@@ -105,6 +118,5 @@ const AdoptedAnimalsSection = () => {
     </div>
   );
 };
-    
 
 export default AdoptedAnimalsSection;

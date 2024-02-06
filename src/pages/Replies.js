@@ -83,6 +83,8 @@ const Replies = ({ user, fetchImage }) => {
 
       // Indicate that a new reply has been added
       setShowTopNewPostArrow(true);
+
+      scrollToBottom();
     } catch (error) {
       console.error('Error creating reply:', error);
     }
@@ -98,10 +100,7 @@ const Replies = ({ user, fetchImage }) => {
     });
   };
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [replies]);
-  
+
   const scrollToBottom = () => {
     if (messagesContainerRef.current) {
       const scrollHeight = messagesContainerRef.current.scrollHeight;
