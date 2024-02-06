@@ -183,6 +183,11 @@
   font-size: 30px; 
   color: rgb(0, 0, 0);
 }
+.skeleton-petcard-div {
+  display: flex;
+  width: 80vw;
+
+}
 /* Responsive styles for smaller screens (e.g., phones) */
 @media (max-width: 600px) {
 

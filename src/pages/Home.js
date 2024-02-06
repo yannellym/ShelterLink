@@ -15,6 +15,8 @@ import hamster from '../images/hamster.jpg';
 import paw from '../images/paw.png';
 import usePetFinderAPI from '../hooks/usePetFinderAPI'; // hook
 import useAnimalsBasedOnPreferencesAPI from '../hooks/useAnimalsBasedOnPreferencesAPI'; // hook
+import SkeletonPetCard from '../components/SkeletonPetCard';
+
 
 /* component shows UserPreferencesForm, petCards, categoryCards, and resources section
   parameters: favoritePets: array, addToFavorites: array,  userPreferences: array, removeFromFavorites:array, isAuthenticated: string
@@ -92,7 +94,7 @@ function Home({ userLocation, userPreferences, handleToggleFavorite, user, favor
   parameters: 
   returns: 
   */
- console.log("fetched use loc", fetchedUserLocation)
+ 
   const handleViewAllPetsNearYou = ({ targetPage }) => {
     try {
       if (fetchedUserLocation) {
@@ -219,7 +221,11 @@ function Home({ userLocation, userPreferences, handleToggleFavorite, user, favor
           <h3>Pets with greater need for love:</h3>
           <div className="nearby-pet-cards">
             {loading ? (
-              <p>Loading...</p>
+              <div className="skeleton-petcard-div">
+              {[...Array(5)].map((_, index) => (
+                <SkeletonPetCard key={index} />
+              ))}
+            </div>
             ) : selectedAnimals?.map((pet, index) => (
               <PetCard
                 key={pet.id} 
