@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/Forum.css';
-import bd4 from '../images/bd4.jpeg';
+import bd4 from '../images/hamster.jpg';
 import Messages from '../components/Messages.js';
 import PostModal from '../components/PostModal.js';
 import NewTopicModal from '../components/NewTopicModal'; 
