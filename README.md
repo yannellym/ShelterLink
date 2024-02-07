@@ -42,7 +42,7 @@ ShelterLink addresses a significant challenge currently prevalent in Texas, wher
 - **Nominatim**: Nominatim is used for geolocation services, enabling users to find nearby shelters and pet adoption centers.
 - **Google APIs**: Various Google APIs including Places API, Maps JavaScript API, and Geocoding API are utilized for location-based services and mapping functionalities.
 - **Unsplash API**: Unsplash API is used for fetching profile images and generating images for pets that do not have one, enhancing visual appeal.
-- **Petfinder API: Integrated to fetch information about pets available for adoption, fostering, and those already adopted.
+- **Petfinder API**: Integrated to fetch information about pets available for adoption, fostering, and those already adopted.
 
 ### Continuous Integration/Continuous Deployment (CI/CD)
 - **GitHub**: GitHub is utilized for version control and collaborative development, enabling seamless integration with CI/CD pipelines.
