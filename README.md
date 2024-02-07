@@ -51,17 +51,27 @@ ShelterLink addresses a significant challenge currently prevalent in Texas, wher
 
 ShelterLink aims to streamline the process of pet adoption by providing users with a user-friendly platform to search for pets available for adoption from various shelters and rescue organizations. The application offers the following key features:
 
-1. **Pet Searching**: Users can search for pets based on various criteria such as species, breed, age, and location. Advanced filtering options are available to narrow down search results.
+1. **Pet Searching** 🔍: Users can search for pets based on various criteria such as species, breed, age, and location. Advanced filtering options are available to narrow down search results.
    
-2. **Community Forums**: ShelterLink provides a community-driven platform where users can engage in discussions, share experiences, and seek advice from fellow pet owners and enthusiasts. Community forums facilitate knowledge sharing and community building among users.
+2. **Community Forums** 💬: ShelterLink provides a community-driven platform where users can engage in discussions, share experiences, and seek advice from fellow pet owners and enthusiasts. Community forums facilitate knowledge sharing and community building among users.
 
-3. **Real-Time Updates**: The application utilizes GraphQL subscriptions to provide real-time updates on pet availability, forum discussions, and other relevant activities, ensuring users stay informed about the latest events.
+3. **Real-Time Updates** 🔄: The application utilizes GraphQL subscriptions to provide real-time updates on pet availability, forum discussions, and other relevant activities, ensuring users stay informed about the latest events.
 
-4. **User Profiles**: Users can create profiles to personalize their experience, track their adoption journey, and participate in community forums. Profile images can be uploaded or fetched from external sources like Unsplash.
+4. **User Profiles** 👤: Users can create profiles to personalize their experience, track their adoption journey, and participate in community forums. Profile images can be uploaded or fetched from external sources like Unsplash.
 
-5. **Location Services**: ShelterLink integrates with Nominatim and Google APIs to provide location-based services, enabling users to find nearby shelters and pet adoption centers easily.
+5. **Location Services** 🗺️: ShelterLink integrates with Nominatim and Google APIs to provide location-based services, enabling users to find nearby shelters and pet adoption centers easily.
 
-6. **Responsive Design**: The application is built with responsive design principles to ensure optimal user experience across devices and screen sizes, including desktops, tablets, and mobile phones.
+6. **Responsive Design** 📱: The application is built with responsive design principles to ensure optimal user experience across devices and screen sizes, including desktops, tablets, and mobile phones.
+   
+7. **Email Shelter Feature** ✉️: ShelterLink includes a convenient feature that allows users to email the shelter about a pet they're interested in with just one click. The email is prebuilt, requiring users only to click send.
+   
+8. **Image Generation for Pets** 🖼️: ShelterLink incorporates a feature that generates images for pets that do not have an image available. This enhances the visual appeal of the platform and provides users with a more engaging experience while browsing for pets.
+
+9. **Favorite Pets Feature** ⭐: ShelterLink allows users to save their favorite pets, enabling them to reference them later on. This feature enhances user experience by facilitating easy access to pets they are interested in adopting.
+
+10. **Local Shelter Search** 🏠: Users can search for shelters around their location using ShelterLink. This functionality enables users to discover nearby shelters and pet adoption centers, making it convenient for them to explore adoption options in their area.
+
+11. **Pet Matching Form** 📝: Users can fill out a form specifying their preferences for a pet. Based on the information provided, ShelterLink's algorithm matches users with pets that align with their preferences, facilitating personalized pet recommendations. This feature enhances the adoption process by helping users find pets that suit their lifestyle and preferences.
 
 ## Project Potential and Use <a name="project-potential-and-use"></a> 🏆
 
