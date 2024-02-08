@@ -95,33 +95,34 @@
   min-width: 70%;
   max-width: 95%;
   /* border: 4px solid #f110e2; */
-  min-height: 65vh; /* Ensure it's at least 65% of the viewport height */
-  display: flex; /* Add display flex to allow children to grow */
-  flex-direction: column; /* Ensure children stack vertically */
+  min-height: 65vh;
+  display: flex;
+  flex-direction: column;
+  position: relative; /* Add position relative */
 }
 
 .topic-posts-container h3 {
   padding-left: 3%;
-  /* border: red solid 4px; */
-  width: 75%;
+  width: calc(100% - 40px); /* Adjust width to accommodate the button */
   margin-top: 5px;
+  display: inline-block; /* Make the title inline-block */
 }
 
 .new-post-btn {
-  margin: 2%;
-  position: absolute;
+  position: absolute; /* Position the button absolutely */
   top: 0;
   right: 0;
+  margin: 10px;
   color: red;
   font-size: 25px;
   /* border: red solid 5px; */
-  transition: width 0.3s ease; /* smooth transition effect */
+  transition: width 0.3s ease;
 }
 
 .new-post-btn.disabled {
   background-color: #ccc;
   cursor: not-allowed;
-} 
+}
 
 .post-input{
   max-width: 40%;

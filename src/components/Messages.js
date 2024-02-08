@@ -21,20 +21,22 @@ const Messages = ({ topic, replies, hideReplyButton, hideIcons, onReplySubmit, t
     const subscription = API.graphql(graphqlOperation(onCreateTopic, { topicID: topic?.id })).subscribe({
       next: ({ value }) => {
         const newData = value.data.onCreatePost;
-        console.log('Received new data:', newData);
-        setData((prevData) => {
-          setNewReplies((prevNewReplies) => [...prevNewReplies, newData]);
-          return [...prevData, newData];
-        });
-        setIsFavorited((prevIsFavorited) => [...prevIsFavorited, newData.likedBy?.includes(user?.id) || false]);
-        scrollToBottom();
+        if (newData) { // Check if newData is not null or undefined
+          console.log('Received new data:', newData);
+          setData((prevData) => {
+            setNewReplies((prevNewReplies) => [...prevNewReplies, newData]);
+            return [...prevData, newData];
+          });
+          setIsFavorited((prevIsFavorited) => [...prevIsFavorited, newData.likedBy?.includes(user?.id) || false]);
+          scrollToBottom();
+        }
       },
       error: (error) => console.error('Subscription error:', error),
     });
-
+  
     return () => subscription.unsubscribe();
   }, [topic, user]);
-
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
