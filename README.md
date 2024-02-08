@@ -6,9 +6,11 @@ ShelterLink addresses a significant challenge currently prevalent in Texas, wher
 # Index 📖
 1. [Technologies Used](#technologies-used)
 2. [Project Description](#project-description)
-3. [Project Potential and Use](#project-potential-and-use)
-4. [Areas for Improvement](#areas-for-improvement)
-5. [Lessons Learned](#lessons-learned)
+3. [Project Design](#project-design)
+4. [Project Walkthrough](#project-walkthrough)
+5. [Project Potential and Use](#project-potential-and-use)
+6. [Areas for Improvement](#areas-for-improvement)
+7. [Lessons Learned](#lessons-learned)
 
 
 ## Technologies Used <a name="technologies-used"></a> 💻
@@ -72,6 +74,33 @@ ShelterLink aims to streamline the process of pet adoption by providing users wi
 10. **Local Shelter Search** 🏠: Users can search for shelters around their location using ShelterLink. This functionality enables users to discover nearby shelters and pet adoption centers, making it convenient for them to explore adoption options in their area.
 
 11. **Pet Matching Form** 📝: Users can fill out a form specifying their preferences for a pet. Based on the information provided, ShelterLink's algorithm matches users with pets that align with their preferences, facilitating personalized pet recommendations. This feature enhances the adoption process by helping users find pets that suit their lifestyle and preferences.
+    
+## Project Design <a name="project-design"></a> 🎨
+
+   - [Mockup: Home page Example](https://www.figma.com/proto/P3CczV3ENL6Ozk9d3561Gs/Untitled?type=design&node-id=4-129&t=qcB6MlaAGqmgLxlV-0&scaling=scale-down&page-id=0%3A1):
+     
+   <img src="https://media.giphy.com/media/7j3BXbsXM5fBXCb7mU/giphy.gif" width=500>
+
+   - [Wireframe: Home page Example](https://www.figma.com/proto/P3CczV3ENL6Ozk9d3561Gs/Untitled?type=design&node-id=1-3&t=qcB6MlaAGqmgLxlV-0&scaling=scale-down&page-id=0%3A1):
+   
+   <img src="https://media.giphy.com/media/H5fj1NPCOOq8GkwAcb/giphy.gif" width=500>
+
+## Project Walkthrough and Functionality <a name="project-walkthrough"></a> 🎨
+
+- Functionality: Find a pet that matches what you're looking for, and a find a pet by location and pet type:
+    <img src="https://media.giphy.com/media/VXkIl2Eg2S0Hz0fAoy/giphy.gif" width=500>
+
+- Functionality: Find all dogs, cats, & other pets around you, find shelters around you, and an example of skeletons for loading:
+    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdGJyMWNrd3Y0NXdpdXFmMjVvaHk4NmlhbWtyZ3N4azEyNTltMnBsNyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/yHrnW2qeBBHKvM3JyT/giphy.gif" width=500>
+
+- Functionality: Log in and log out, and find a pet by filtering through location, type, size, age, gender, size, breed, and coat. 
+    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExYmhjbTVwNjFvb3FuZnA4dDJ5eTFmaGZxd3R1dnd0c3U1dHI0cTYxaCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/zkTO0YEknQHUPbkKKi/giphy.gif" width=500>
+
+- Functionality: Get the pet's details and origin, share the pet, email the shelter with one click, and like/unlike a pet.
+   <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExYm1jMTVkMGt0ajk2eDU4d3hxem5id3QzcW1laXZ5czN5bWl6eDc3YSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/2DzsjOAVEGFiKwQ5p5/giphy.gif" width=500>
+
+
+
 
 ## Project Potential and Use <a name="project-potential-and-use"></a> 🏆
 
