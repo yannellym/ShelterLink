@@ -3,7 +3,7 @@ import '../styles/Emailform.css';
 import emailjs from 'emailjs-com';
 
 const EmailForm = ({ petData, user }) => {
-    console.log(user, "USE RIN EMAIL")
+ 
     const [emailSent, setEmailSent] = useState(false);
     const defaultMessage = `Hi, my name is ${user.username}. I'm interested in adopting ${petData.name} and would love more information about their background, temperament, and the adoption process. Thank you!`;
 
@@ -35,7 +35,7 @@ const EmailForm = ({ petData, user }) => {
             <h3>Interested in {petData.name}?</h3>
             <div>
                 <label style={{ display: 'block' }}>Shelter's Email:</label>
-                <input type="email" value={petData.contact.email} readOnly />
+                <input type="email" value={petData.contact.email || "sheltersemail@gmail.com"} readOnly />
                 <label>Your Email:</label>
                 <input type="email" value={user.email} readOnly />
             </div>
@@ -47,7 +47,7 @@ const EmailForm = ({ petData, user }) => {
                 <button className="inquiry_btn" onClick={handleSendEmail} disabled={emailSent}>
                     {emailSent ? 'Email Sent' : 'Send Email'}
                 </button>
-                <p className="bottom_text">Send additional inquiries to the shelter at: {petData.contact.email}</p>
+                <p className="bottom_text">Send additional inquiries to the shelter at: {petData.contact.email || "sheltersemail@gmail.com"}</p>
             </div>
         </div>
     );
