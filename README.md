@@ -102,6 +102,9 @@ ShelterLink aims to streamline the process of pet adoption by providing users wi
 - Functionality: Visit forum, add a new topic, make a post, like/unlike a post, reply to a post, see the number of replies, read more.
    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdGgzdHpxZGViazMzejh0dWRqNnZ3MWZqOXFsdGp4eGlvOHN1czlhdCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/ox8Ur60as84yugsBkY/giphy.gif" width=500>
 
+- Functionality: Responsiveness. The app is designed for mobile, tablets, and large screen devices. 
+   <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExYjg1bmtiaW85dDI0d3RxYTg2MjI1amU4MnB6cW81ZnNnOXdsanNmcSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/pd05YauAZ1yPvfycNf/giphy.gif" width=500>
+
 
 
 
