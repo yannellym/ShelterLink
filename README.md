@@ -24,6 +24,7 @@ ShelterLink addresses a significant challenge currently prevalent in Texas, wher
 - **Lazy Loading**: Lazy loading is employed to improve performance by loading components asynchronously when needed.
 - **Skeleton Loading**: Skeleton loading techniques are utilized to enhance user experience by providing visual placeholders while content is loading.
 - **Font Awesome**: Font Awesome icons are used for enhancing the UI with scalable vector icons.
+- **Design Tools Used**: Figma was used for prototypes and design iteration.
 
 ### Backend (AWS Amplify) 💽
 - **AWS Amplify**: The backend infrastructure is powered by AWS Amplify, providing a serverless architecture for scalability and cost-effectiveness.
