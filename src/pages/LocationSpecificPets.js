@@ -64,7 +64,7 @@ function LocationSpecificPets({ favoritePets, isAuthenticated }) {
       <button
         key={pageNumber}
         onClick={() => handlePageChange(pageNumber)}
-        className={currentPage === pageNumber ? 'active' : ''}
+        className={`pagination-button ${currentPage === pageNumber ? 'active' : ''}`}
       >
         {pageNumber}
       </button>
@@ -76,7 +76,7 @@ function LocationSpecificPets({ favoritePets, isAuthenticated }) {
     <div className="location-specific-pets">
       <h2 className="search-results-title">Search Results for:</h2>
       <h3 className="pet-type-title">All {petType}s in the {searchText} area</h3>
-      <div className="pet-card-container">
+      <div className="pet-card-container-location-pets">
         {loading ? (
           <p className="loading">Loading...</p>
         ) : (

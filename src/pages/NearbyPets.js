@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import '../styles/NearbyPetsPage.css';
 import PetCard from '../components/PetCard';
-import SkeletonPetCard from '../components/SkeletonPetCard';
 
 
 function NearbyPets() {

@@ -4,24 +4,35 @@
   --vibrant-red: #ea1328;
 }
 
-body {
+/* Reset default margin and padding for body */
+html, body {
+  height: 100%;
+
   margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  min-height: 100vh; /* Ensure body takes up at least the full viewport height */
   background-color: #ffffff; /* Main background color */
 }
 
+/* Define content flexbox container */
 .content {
-  flex: 1;
+  flex: 1; /* Allow content to grow and take up remaining space */
 }
 
+/* Footer styles */
 .footer {
   padding: 10px;
   text-align: center;
-  margin-top: auto;
   background-color: var(--primary-blue);
+  color: #ffffff;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  width: 100%;
+  bottom: 0;
+  min-height:20vh;
 }
 
 .auth-container {
@@ -59,3 +70,5 @@ button:hover {
   width: 0; /* Set width to 0 to remove the underline effect on hover */
   opacity: 0; /* Set opacity to 0 on hover to hide the underline */
 }
+
+

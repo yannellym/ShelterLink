@@ -28,19 +28,25 @@
   padding-right: 5px;
 }
 
+.search-button-disabled{
+  background-color: rgb(200, 142, 142);
+
+ }
+
 .autocomplete-dropdown-container {
   position: absolute;
   width: 100%;
-  background-color: #fff;
+  background-color: #ffffff;
   border-top: none;
   z-index: 1000;
+  max-width: 25%;
 }
 
 .suggestion-item {
   padding: 10px;
   cursor: pointer;
   &:hover {
-    background-color: #f0f0f0;
+    background-color: #ffc4c4a5;
   }
 }
 

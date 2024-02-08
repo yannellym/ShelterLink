@@ -373,11 +373,11 @@ const App = () => {
         <Route
           path="/auth"
           element={
-            <div className="auth-container">
-              <Authenticator>
-                {() => <AuthenticatorComponent setUser={setUser} navigate={navigate}  fetchImage={fetchPlaceholderImage} />}
-              </Authenticator> 
-            </div>
+            <div className="auth-container" style={{ minHeight: "65vh" }}>
+            <Authenticator>
+              {() => <AuthenticatorComponent setUser={setUser} navigate={navigate} fetchImage={fetchPlaceholderImage} />}
+            </Authenticator> 
+          </div>
           }
         />
         <Route

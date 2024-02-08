@@ -127,7 +127,6 @@ const Messages = ({ topic, replies, hideReplyButton, hideIcons, onReplySubmit, t
     }
   };
   
-
   return (
     <div className="data-received-container">
       {data.length > 0 && (

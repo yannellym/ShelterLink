@@ -6,6 +6,7 @@
   background-color: var(--primary-blue);
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  min-height:65vh;
 }
 
 h2 {
@@ -20,7 +21,7 @@ h2 {
 }
 
 .faqs > ul > li {
-  border: 1px solid #ddd;
+  border: 1px solid #ffffff;
   border-radius: 4px;
   margin: 10px 0;
 }
@@ -53,7 +54,9 @@ h2 {
 .faqs > ul > li.open p {
   display: block;
 }
-
+.faqs > ul li {
+  background-color: rgb(255, 255, 255);
+}
 /* Responsive styles for small screens (e.g., mobile devices) */
 @media (max-width: 600px) {
   .faqs {

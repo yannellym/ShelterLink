@@ -1,5 +1,7 @@
 .profile-section{
   text-align: center;
+  min-height:65vh;
+  /* border: red solid 5px;; */
 }
 
 .profile-container {

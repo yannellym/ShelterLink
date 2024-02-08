@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/Forum.css';
-import bd4 from '../images/bd4.jpeg'
+import bd4 from '../images/bd4.jpeg';
 import Messages from '../components/Messages.js';
 import PostModal from '../components/PostModal.js';
 import NewTopicModal from '../components/NewTopicModal'; 
@@ -307,7 +307,7 @@ const Forum = ({ user, fetchImage }) => {
             </FontAwesomeIcon>
           )}
           {selectedTopic? (
-            <>
+            <div className="forum-div">
               <h3>Current posts for {selectedTopic.title} :</h3>
               <Messages
                 topic={selectedTopic}
@@ -318,7 +318,7 @@ const Forum = ({ user, fetchImage }) => {
                 fetchImage={fetchImage}
                 user={user}
               />
-            </>
+            </div>
           ) : (
             <div className="no-posts-message">
               <p>No posts yet. Be the first one to make a post!</p>

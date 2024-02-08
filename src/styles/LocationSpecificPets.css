@@ -3,6 +3,7 @@
 .location-specific-pets {
   text-align: center;
   padding: 20px;
+  min-height: 65vh;
 }
 
 .search-results-title {
@@ -16,15 +17,54 @@
   margin-top: 20px;
 }
 
-.pet-card-container {
+.pet-card-container-location-pets {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  flex-direction: row;
   margin-top: 20px;
+  justify-content: center; /* Align items vertically in the center */
+  align-items: center; /* Align items horizontally in the center */
+  /* border: rgb(0, 34, 255) solid 5px; */
 }
 
 .no-animals-message {
   font-size: 16px;
   color: #999;
   margin-top: 20px;
+}
+
+.page-numbers {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: 3%  1%;
+}
+.pagination-button {
+  background-color: #ccc;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.pagination-button.active {
+  background-color: var(--vibrant-red);
+  color: #fff;
+}
+
+/* Responsive styles for smaller screens (e.g., phones) */
+@media (max-width: 600px) {
+ 
+}
+
+/* Responsive styles for medium screens (e.g., tablets) */
+@media (min-width: 601px) and (max-width: 1023px) {
+ 
+
+}
+
+/* Responsive styles for larger screens (e.g., desktops) */
+@media (min-width: 1024px) {
+  
 }

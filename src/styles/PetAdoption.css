@@ -6,6 +6,7 @@
   background-color: var(--greyish-hue);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   text-align: left;
+  min-height:65vh;
 }
 
 .pet-adoption > p {

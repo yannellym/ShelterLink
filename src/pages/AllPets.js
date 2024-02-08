@@ -113,6 +113,6 @@ function AllPets() {
       </div>
     </div>
   );
-        };
+};
 
 export default AllPets;

@@ -1,37 +1,39 @@
+.nearby-pets-component{
+  min-height: 65vh;
+}
+.pet-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* Center the cards horizontally */
+  gap: 20px;
+}
 
-  .pet-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center; /* Center the cards horizontally */
-    gap: 20px;
-  }
-  
-  .pet-list .card {
-    max-width: 300px;
-  }
-  
-  .pagination {
-    margin: 2% 1%;
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-  }
-  
-  .pets-near-btn {
-    background-color: #ccc;
-    border: none;
-    border-radius: 5px;
-    padding: 5px 10px;
-    cursor: pointer;
-  }
-  
+.pet-list .card {
+  max-width: 300px;
+}
 
-  
-  .pet-list .pagination button:disabled {
-    cursor: not-allowed;
-  }
-  
-  .pet-list .pagination button:hover:not(.active):not(:disabled) {
-    background-color: #ddd;
-    text-decoration: underline;
-  }
+.pagination {
+  margin: 2% 1%;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.pets-near-btn {
+  background-color: #ccc;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+
+
+.pet-list .pagination button:disabled {
+  cursor: not-allowed;
+}
+
+.pet-list .pagination button:hover:not(.active):not(:disabled) {
+  background-color: #ddd;
+  text-decoration: underline;
+}

@@ -1,6 +1,7 @@
 /* Default styles */
 .all-pets-page {
   padding: 20px;
+  min-height: 65vh;
 }
 
 .pet-list {
@@ -33,3 +34,24 @@
 }
 
 
+
+/* Responsive styles for smaller screens (e.g., phones) */
+@media (max-width: 600px) {
+  .pet-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center; /* Center the cards horizontally */
+    /* border: purple solid 4px; */
+  }
+}
+
+/* Responsive styles for medium screens (e.g., tablets) */
+@media (min-width: 601px) and (max-width: 1023px) {
+ 
+}
+
+/* Responsive styles for larger screens (e.g., desktops) */
+@media (min-width: 1024px) {
+  
+}

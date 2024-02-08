@@ -50,9 +50,7 @@ function Favorites({ user, handleToggleFavorite }) {
   }, [user]);
   return (
     <div className="pet-card-container">
-      <div className="title-container">
-        <h1>Favorite Pets 🐾 </h1>
-      </div>
+      <h1>Favorite Pets 🐾 </h1>
       {user && favoritePets.length === 0 ? (
         <div className="message-container">
           <img src={SadLab} alt="Sad Lab" className="sad-lab-image" />

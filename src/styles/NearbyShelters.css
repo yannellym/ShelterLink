@@ -1,5 +1,6 @@
 .container {
   text-align: center;
+  min-height:65vh;
 }
 
 .title {
@@ -9,12 +10,14 @@
 .grid-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
+  gap: 15px;
   justify-content: space-around;
+  min-height:65vh;
 }
 
 .card {
-  width: 340px;
+  width: 310px;
+  min-width: 250px;
   margin: 20px;
   padding: 15px;
   border: 1px solid #ddd;
@@ -79,4 +82,21 @@ a:hover {
 .pagination-button.active {
   background-color: var(--vibrant-red);
   color: #fff;
+}
+
+/* Responsive styles for smaller screens (e.g., phones) */
+@media (max-width: 600px) {
+  .card {
+    width: 90%;
+  }
+}
+
+/* Responsive styles for medium screens (e.g., tablets) */
+@media (min-width: 601px) and (max-width: 1023px) {
+ 
+}
+
+/* Responsive styles for larger screens (e.g., desktops) */
+@media (min-width: 1024px) {
+  
 }
