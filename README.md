@@ -99,6 +99,9 @@ ShelterLink aims to streamline the process of pet adoption by providing users wi
 - Functionality: Get the pet's details and origin, share the pet, email the shelter with one click, and like/unlike a pet.
    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExYm1jMTVkMGt0ajk2eDU4d3hxem5id3QzcW1laXZ5czN5bWl6eDc3YSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/2DzsjOAVEGFiKwQ5p5/giphy.gif" width=500>
 
+- Functionality: Visit forum, add a new topic, make a post, like/unlike a post, reply to a post, see the number of replies, read more.
+   <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdGgzdHpxZGViazMzejh0dWRqNnZ3MWZqOXFsdGp4eGlvOHN1czlhdCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/ox8Ur60as84yugsBkY/giphy.gif" width=500>
+
 
 
 
