@@ -1,6 +1,6 @@
 .adopted-animals-container {
   /* border: red solid 5px; */
-  margin: 4% auto;
+  margin: 4% 2%;
   height: auto;
   justify-content: center;
   font-size: 17px;
@@ -121,10 +121,6 @@ h2 {
   .text-container {
     font-size: 80%;
   }
-  .image-container {
-    /* border: red solid 4px; */
-  }
-
   .image-container > img {
     padding-top: 15%;
     height: 350px;
@@ -134,5 +130,25 @@ h2 {
     /* border: red solid 4px; */
     height: auto;
   }
+}
 
+/* Responsive styles for smaller screens (e.g., phones) */
+@media (max-width: 600px) {
+  .skeleton-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    min-width: 100%;
+  }
+}
+/* Responsive styles for medium screens (e.g., tablets) */
+@media (min-width: 601px) and (max-width: 1023px) {
+  .adopted-animals-container {
+    /* border: red solid 5px; */
+    margin: 4% 2%;
+  }
+}
+/* Responsive styles for larger screens (e.g., desktops) */
+@media (min-width: 1024px) {
 }

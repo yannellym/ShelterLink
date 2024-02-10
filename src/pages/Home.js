@@ -222,7 +222,7 @@ function Home({ userLocation, userPreferences, handleToggleFavorite, user, favor
           <div className="nearby-pet-cards">
             {loading ? (
               <div className="skeleton-petcard-div">
-              {[...Array(5)].map((_, index) => (
+              {[...Array(4)].map((_, index) => (
                 <SkeletonPetCard key={index} />
               ))}
             </div>

@@ -41,8 +41,7 @@ h1 {
 }
 
 .adopt-list > li:hover {
-  background-color: var(--vibrant-red);
-  color: #fff;
+  background-color: rgba(255, 0, 0, 0.277);
   transform: scale(1.02);
 }
 

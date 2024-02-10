@@ -2,7 +2,8 @@
 .skeleton-animal-card {
   flex: 0 0 auto;
   margin-right: 16px;
-  width: 300px;
+  width: 90%;
+  padding: 3%;
 }
 
 .skeleton-label {
@@ -24,4 +25,51 @@
   width: 80%;
   height: 20px;
   background-color: #f0f0f0;
+}
+
+
+/* Responsive styles for smaller screens (e.g., phones) */
+@media (max-width: 600px) {
+  .skeleton-container {
+    display: flex;
+    flex-direction: row;
+    margin: 0 auto;
+    width: 100%;
+    /* border: red solid 5px; */
+    height: 300px;
+  }
+  .skeleton-animal-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 30%;
+    padding: 1%;
+  }
+  .skeleton-image {
+    border-radius: 50%;
+    width: 20%;
+    
+  }
+  
+}
+/* Responsive styles for medium screens (e.g., tablets) */
+@media (min-width: 601px) and (max-width: 1023px) {
+  .skeleton-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    max-width: 70%;
+  }
+}
+/* Responsive styles for larger screens (e.g., desktops) */
+@media (min-width: 1024px) {
+  .skeleton-animal-card {
+    flex: 0 0 auto;
+    margin-right: 16px;
+    width: 30%;
+    margin: 0 auto;
+  }
 }

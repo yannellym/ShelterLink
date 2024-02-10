@@ -31,7 +31,8 @@
 
 .post-container {
   display: flex;
-  min-width: 75vw;
+  width: 100%;
+  min-width: 95%;
   /* border: 4px solid #f14110; */
   overflow: hidden;
 }
@@ -57,6 +58,7 @@
   height:10px;
   transition: 200px 0.3s ease; /* Add transition for smooth height animation */
 }
+
 .post-header {
   display: flex;
   justify-content: space-between;
@@ -101,11 +103,13 @@
 .post-details {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-between; /* Ensure space between the items */
   align-items: center; /* Align items vertically in the center */
   width: 65%;
-  /* border: 4px rgb(238, 0, 255) solid; */
+  /* Adjust other styles as needed */
+  position: relative; /* Add relative position */
 }
+
 .post-details-icon-p {
   display: flex;
   flex-direction: row;
@@ -119,12 +123,11 @@
 }
 
 .reply-button {
-  position: absolute;
+  position: relative;
   bottom: 0;
-  right: 0;
-  margin-bottom: 10px;
-  margin-right: 10px;
+  margin: 10px; /* Adjust margins as needed */
 }
+
 
 .like-heart-unfavorited {
   color: #827575; 
@@ -175,7 +178,6 @@
   border-radius: 50%;
 }
 
-
 .post-button.disabled {
   /* Style for the disabled state */
   background-color: #ccc;
@@ -193,4 +195,63 @@
 }
 
 
-/*  */
+/* Responsive styles for smaller screens (e.g., phones) */
+@media (max-width: 600px) {
+  .post-details {
+    width: 100%;
+  }
+  .post-details-icon-p {
+    min-width: 60%;
+    min-width: 80px;
+  }
+  .left-image, .right-image {
+    display: none;
+  }
+
+}
+
+/* Responsive styles for medium screens (e.g., tablets) */
+@media (min-width: 601px) and (max-width: 1023px) { 
+  .left-image, .right-image {
+    display: none;
+  }
+  .data-received-container {
+    width: 100%;
+    /* border: red solid 5px; */
+    margin: 0 auto;
+  }
+  .post-container {
+    max-width: 60%;
+    min-height: 300px;
+    /* border: rgb(0, 34, 255) solid 5px; */
+    overflow-y: auto;
+  }
+  .previous-posts-container {
+    padding-top: 200px;
+    max-width: 100%;
+    /* border: rgb(9, 119, 55) solid 5px; */
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Align items horizontally in the center */
+    align-items: center; /* Align items vertically in the center */
+    margin: 5% auto;
+  }
+  .post-details {
+    width: 100%;
+  }
+}
+
+/* Responsive styles for larger screens (e.g., desktops) */
+@media (min-width: 1024px) {
+  .post-container {
+    max-width: 60%;
+    min-height: 300px;
+    /* border: rgb(0, 34, 255) solid 5px; */
+    overflow-y: auto;
+  }
+  .previous-posts-container {
+    max-width: 98%;
+    /* border: rgb(9, 119, 55) solid 5px; */
+  }
+}
