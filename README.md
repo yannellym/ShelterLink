@@ -12,6 +12,15 @@ ShelterLink addresses a significant challenge currently prevalent in Texas, wher
 6. [Areas for Improvement](#areas-for-improvement)
 7. [Lessons Learned](#lessons-learned)
 
+## Hosted site on AWS:
+- https://main.dl4evxiffuqtj.amplifyapp.com/
+
+- ShelterLink App Preview:
+
+https://github.com/yannellym/ShelterLink/assets/91508647/025d9b9a-3de5-4a49-a25f-5c808d9c69d4
+
+
+
 
 ## Technologies Used <a name="technologies-used"></a> 💻
 
@@ -159,4 +168,3 @@ Throughout the development of ShelterLink, several valuable lessons were learned
 ShelterLink has been quite the journey, giving me deep insights into pet adoption and community dynamics while honing my tech skills. Being responsible for both frontend and backend was tough, but it was a fantastic opportunity to flex my abilities and learn as I went. This project allowed me to put my AWS certifications into action and tackle real-world challenges head-on. 
 
 Working solo meant I had to troubleshoot and innovate on my own. It was like diving into the deep end, but I learned to swim pretty fast. Each hurdle I faced turned into a chance to grow and learn something new. ShelterLink has been more than just a project; it's been a journey of self-discovery and skill-building that I'm proud of. Despite the challenges, I wouldn't trade this experience for anything!
-
