@@ -5,9 +5,7 @@
   height:100%;
 }
 .previous-posts-container {
-
-  overflow-y: scroll;
-
+  overflow-y: auto;
   /* border: rgb(66, 124, 61) solid 5px; */
   overflow-x: none;
   height:100%;

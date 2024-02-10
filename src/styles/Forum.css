@@ -32,7 +32,7 @@
   padding: 20px;
   border-right: double var(--vibrant-red);
   /* position: inherit; */
-  border: red solid 5px;
+  /* border: red solid 5px; */
 }
 
 .scrollable-list {
