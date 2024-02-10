@@ -205,18 +205,19 @@ const Forum = ({ user, fetchImage }) => {
         console.error('Error creating new post:', error);
       }
     };
-
   // handle likes 
   const handleLike = async (postId) => {
+    console.log("post id received ", postId)
 
     try {
       // Fetch the current post data
       const { data } = await API.graphql(graphqlOperation(getPost, { id: postId }));
       const post = data.getPost;
+      console.log(post, "post from db")
 
       // Check if the current user has already liked the post
-      const userLiked = post.likedBy.includes(user.id);
-  
+      const userLiked = post.likedBy ? post.likedBy.includes(user?.id || false) : false;
+
       // Update the post with the new likes information
       const updatedPost = await API.graphql(graphqlOperation(updatePost, {
         input: {
@@ -224,14 +225,19 @@ const Forum = ({ user, fetchImage }) => {
           likes: userLiked ? post.likes - 1 : post.likes + 1,
           likedBy: userLiked
             ? post.likedBy.filter((userId) => userId !== user.id)
-            : [...post.likedBy, user.id],
+            : [...(post.likedBy || []), user.id], // Use an empty array if likedBy is null
         },
       }));
 
+      // Return the updated like count
+      return userLiked ? post.likes - 1 : post.likes + 1;
     } catch (error) {
       console.error('Error updating post:', error);
+      // Return null or any default value in case of error
+      return null;
     }
   };
+
 
   // HANDLE NEW POSTS -> MODAL
   const handleNewPostClick = () => {

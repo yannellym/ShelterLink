@@ -21,6 +21,7 @@
 .forum-container {  
   display: flex;
   width: 100%;
+  min-height: 100vh;
 }
 
 /* TOPICS */
@@ -31,6 +32,7 @@
   padding: 20px;
   border-right: double var(--vibrant-red);
   /* position: inherit; */
+  border: red solid 5px;
 }
 
 .scrollable-list {
@@ -138,81 +140,6 @@
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
-}
-
-.thread-container {
-  margin: 3%;
-}
-.thread-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start; 
-  width: 90%;
-  margin: 0 4%;
-}
-
-.thread-container h3, p {
-  margin : 4% 3%;
-}
-
-.thread-container h4, text{
-  color: #fb061e;
-}
-.threads-list {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 columns*/
-  grid-gap: 16px; /* gap between threads */
-  width: 70vw;
-  margin : 1vw 3vw;
-  height: 65vh;
-  overflow-y: scroll;
-}
-
-/* wrapper to contain the threads grid */
-.threads-grid-wrapper {
-  display: flex;
-  flex-wrap: wrap;
-  margin: -8px; /* Counteract the grid-gap */
-}
-
-.indiv-thread {
-  border: 1px solid #ccc;
-  padding: 10px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  flex-basis: 40%; 
-  height: 10vh;
-  margin: 8px; /* margin to separate threads */
-}
-
-.indiv-thread:hover {
-  background-color: #ffd4d4; 
-} 
-
-.write-post-div {
-  width: 50vw;
-  height: 35vh;
-  display: flex;
-  flex-direction: column;
-  border: rgb(235, 235, 235) solid 2px;
-  border-radius: 8px;
-  background-color: #ddd;
-}
-
-.make-post-container {
-  flex: 2;
-  overflow-y: auto;
-  padding: 2%;
-  height: 80vh;
-}
-.current-posts-grid-container {
-  border: rgb(68, 0, 255) solid 4px;
-  width: 95%;
-  margin: 2%;
-}
-
-.write-post-div {
-  margin-top: 20px;
 }
 
 .post-bottom-container {
@@ -327,11 +254,7 @@
     width: 100%;
     background-color: #faf0f0;
     border: none;
-    margin: auto;
   }
-
- 
-
 }
 
 /* Medium screens */

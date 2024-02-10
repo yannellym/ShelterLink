@@ -121,15 +121,14 @@ const Replies = ({ user, fetchImage }) => {
 
   return (
     <div className="reply-container">
-      <button onClick={() => navigate(-2)}>Back</button>
       <h3>Original Post:</h3>
 
-      <div className={`post-container ${expandedPosts.includes(post?.id) ? 'expanded-message' : ''} reply-org`} key={post?.id}>
+      <div className={`reply-post-container ${expandedPosts.includes(post?.id) ? 'expanded-message' : ''} reply-org`} key={post?.id}>
         {post && (
           <>
             <img src={post.image} alt={post.subject} className="left-image" />
             <div className={`post ${expandedPosts.includes(post?.index) ? 'expanded' : ''}`}>
-              <div className="post-content">
+              <div className="reply-post-content">
                 <h4>{post.subject.toUpperCase()}</h4>
                 <p className={`post-text ${expandedPosts.includes(post?.index) ? 'expanded' : ''}`}>
                   {post.content}
@@ -143,7 +142,7 @@ const Replies = ({ user, fetchImage }) => {
                   Posted by {post.username} on {new Date(post.createdAt).toLocaleDateString()} @{' '}
                   {new Date(post.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </p>
-                <p className='post-details-icon-p'>
+                <p className='reply-post-details-icon-p'>
                   {post && post.replies ? post.replies.length : 0} <FontAwesomeIcon icon={faCommentDots} />
                   0 <FontAwesomeIcon icon={faHeart} />
                 </p>

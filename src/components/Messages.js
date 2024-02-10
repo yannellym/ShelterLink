@@ -11,7 +11,7 @@ import { onCreateTopic } from '../graphql/subscriptions.js';
 const Messages = ({ topic, replies, hideReplyButton, hideIcons, onReplySubmit, topicIndex, handleLike, fetchImage, user }) => {
   const [data, setData] = useState([]);
   const [expandedPosts, setExpandedPosts] = useState([]);
-  const [isFavorited, setIsFavorited] = useState([]);
+  const [isFavorited, setIsFavorited] = useState({});
   const [newReplies, setNewReplies] = useState([]);
 
   const messagesEndRef = useRef(null);
@@ -21,13 +21,17 @@ const Messages = ({ topic, replies, hideReplyButton, hideIcons, onReplySubmit, t
     const subscription = API.graphql(graphqlOperation(onCreateTopic, { topicID: topic?.id })).subscribe({
       next: ({ value }) => {
         const newData = value.data.onCreatePost;
-        if (newData) { // Check if newData is not null or undefined
-          console.log('Received new data:', newData);
+        if (newData) {
           setData((prevData) => {
             setNewReplies((prevNewReplies) => [...prevNewReplies, newData]);
             return [...prevData, newData];
           });
-          setIsFavorited((prevIsFavorited) => [...prevIsFavorited, newData.likedBy?.includes(user?.id) || false]);
+          setIsFavorited((prevIsFavorited) => {
+            const newIsFavorited = { ...prevIsFavorited };
+            newIsFavorited[newData.id] = newData.likedBy?.includes(user?.id) || false;
+            localStorage.setItem('favoritedPosts', JSON.stringify(newIsFavorited));
+            return newIsFavorited;
+          });
           scrollToBottom();
         }
       },
@@ -50,11 +54,11 @@ const Messages = ({ topic, replies, hideReplyButton, hideIcons, onReplySubmit, t
             setIsPinned(sortedData[0] || false);
           }
           setData(sortedData);
-          setIsFavorited(sortedData.map((post) => post.likedBy?.includes(user?.id) || false));
+          setIsFavorited(JSON.parse(localStorage.getItem('favoritedPosts')) || {});
           scrollToBottom();
         } else if (replies) {
           setData(replies);
-          setIsFavorited(replies.map((post) => post.likedBy?.includes(user?.id) || false));
+          setIsFavorited(JSON.parse(localStorage.getItem('favoritedPosts')) || {});
           scrollToBottom();
         }
       } catch (error) {
@@ -86,34 +90,36 @@ const Messages = ({ topic, replies, hideReplyButton, hideIcons, onReplySubmit, t
 
   const handleLikeClick = async (postId) => {
     try {
-      await handleLike(postId);
+      const newLikeCount = await handleLike(postId);
+      if (newLikeCount !== null) {
+        // Update the UI state with the new like count
+        setData((prevData) =>
+          prevData.map((post) =>
+            post.id === postId
+              ? {
+                  ...post,
+                  likes: newLikeCount,
+                }
+              : post
+          )
+        );
 
-      setData((prevData) =>
-        prevData.map((post) =>
-          post.id === postId
-            ? {
-                ...post,
-                likes: isFavorited[postId] ? post.likes - 1 : post.likes + 1,
-              }
-            : post
-        )
-      );
-
-      setIsFavorited((prevIsFavorited) => {
-        const newIsFavorited = [...prevIsFavorited];
-        newIsFavorited[postId] = !prevIsFavorited[postId];
-        return newIsFavorited;
-      });
+        // Toggle the favorited status of the post in state
+        setIsFavorited((prevIsFavorited) => {
+          const newIsFavorited = { ...prevIsFavorited };
+          newIsFavorited[postId] = !prevIsFavorited[postId];
+          localStorage.setItem('favoritedPosts', JSON.stringify(newIsFavorited));
+          return newIsFavorited;
+        });
+      }
     } catch (error) {
       console.error('Error handling like:', error);
     }
   };
-
-
+  
 
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
-      console.log("scrolling to bottom");
       const scrollHeight = messagesEndRef.current.scrollHeight;
       const stepHeight = 65; // higher value means scroll is faster
       let currentPosition = messagesEndRef.current.scrollTop;
@@ -135,7 +141,7 @@ const Messages = ({ topic, replies, hideReplyButton, hideIcons, onReplySubmit, t
         <div className={`post-container ${expandedPosts.includes(0) ? 'expanded-message' : ''} pinned-post`} key={data[0].id}>
           {/* Render the first post separately */}
           <div className={`post ${expandedPosts.includes(0) ? 'expanded' : ''} ${newReplies.includes(data[0]) ? 'new-reply' : ''}`}>
-            <div className="post-content">
+            <div className="post-content-pinned">
               <div className="post-header">
                 {topic && <h4>{data[0].subject.toUpperCase()}</h4>}
                 {isPinned && (
@@ -165,7 +171,7 @@ const Messages = ({ topic, replies, hideReplyButton, hideIcons, onReplySubmit, t
                     <FontAwesomeIcon
                       icon={faHeart}
                       onClick={() => handleLikeClick(data[0].id)}
-                      className={`like-heart-${isFavorited[data[0].id] ? 'favorited' : 'unfavorited'}`}
+                      className={`like-heart ${isFavorited[data[0].id] ? 'favorited' : ''}`}
                     />
                   </p>
                 )}
@@ -192,6 +198,7 @@ const Messages = ({ topic, replies, hideReplyButton, hideIcons, onReplySubmit, t
                   <div className="post-content">
                     {topic && <h4>{post.subject.toUpperCase()}</h4>}
                     <p className={`post-text ${expandedPosts.includes(index + 1) ? 'expanded' : ''}`}>{post.content}</p>
+
                     {post.content.length > 200 && (
                       <span className="read-more" onClick={() => handleReadMore(index + 1)}>
                         {expandedPosts.includes(index + 1) ? 'Read less' : 'Read more'}
@@ -212,7 +219,7 @@ const Messages = ({ topic, replies, hideReplyButton, hideIcons, onReplySubmit, t
                           <FontAwesomeIcon
                             icon={faHeart}
                             onClick={() => handleLikeClick(post.id)}
-                            className={`like-heart-${isFavorited[post.id] ? 'favorited' : 'unfavorited'}`}
+                            className={`like-heart ${isFavorited[post.id] ? 'favorited' : ''}`}
                           />
                         </p>
                       )}
@@ -234,6 +241,7 @@ const Messages = ({ topic, replies, hideReplyButton, hideIcons, onReplySubmit, t
                   <div className="post-content">
                     {topic && <h4>{post.subject.toUpperCase()}</h4>}
                     <p className={`post-text ${expandedPosts.includes(index + 1) ? 'expanded' : ''}`}>{post.content}</p>
+
                     {post.content.length > 200 && (
                       <span className="read-more" onClick={() => handleReadMore(index + 1)}>
                         {expandedPosts.includes(index + 1) ? 'Read less' : 'Read more'}
@@ -254,7 +262,7 @@ const Messages = ({ topic, replies, hideReplyButton, hideIcons, onReplySubmit, t
                           <FontAwesomeIcon
                             icon={faHeart}
                             onClick={() => handleLikeClick(post.id)}
-                            className={`like-heart-${isFavorited[post.id] ? 'favorited' : 'unfavorited'}`}
+                            className={`like-heart ${isFavorited[post.id] ? 'favorited' : ''}`}
                           />
                         </p>
                       )}
@@ -276,6 +284,6 @@ const Messages = ({ topic, replies, hideReplyButton, hideIcons, onReplySubmit, t
       </div>
     </div>
   );
-};
+                    };
 
 export default Messages;
