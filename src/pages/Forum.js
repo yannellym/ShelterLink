@@ -161,24 +161,31 @@ const Forum = ({ user, fetchImage }) => {
 
     try {
       const result = await API.graphql(graphqlOperation(createPost, adaptedNewPostData));
-    
-      // post IDs from the topic
-      const existingPostIds = selectedTopic.posts || [];
 
-      // Update the existing topic's posts array by adding the new post's ID
-      const updatedPostIds = [...existingPostIds, result.data.createPost.id];
+      // Get the ID of the newly created post
+      const newPostId = result.data.createPost.id;
+      
+      // Update the existing topic's posts array by adding the new post's ID locally
+      const existingPostIdsSet = new Set(selectedTopic.posts ? selectedTopic.posts.map(post => post.id) : []);
 
+      // Add the new post ID to the Set
+      existingPostIdsSet.add(newPostId);
+      
+      // Convert the Set back to an array
+      const existingPostIds = [...existingPostIdsSet];
+      console.log(newPostData, "data before sending")
       // Update the topic with the modified post array
       const resultOfTopicUpdate = await API.graphql({
         query: updateTopic,
         variables: {
           input: {
             id: newPostData.topicID,
-            posts: updatedPostIds,
+            title: newPostData.topicTitle,
+            posts: existingPostIds,
           },
         },
       });
-
+      console.log(resultOfTopicUpdate, "added post?")
         // Fetch the updated topic data
         const updatedTopicResult = await API.graphql({
           query: listTopics,
@@ -205,6 +212,8 @@ const Forum = ({ user, fetchImage }) => {
         console.error('Error creating new post:', error);
       }
     };
+
+    
   // handle likes 
   const handleLike = async (postId) => {
     console.log("post id received ", postId)

@@ -33,7 +33,7 @@ const PostModal = ({ selectedTopic, user, onPostSubmit, onClose }) => {
     };
 
     // // Pass the new post data to the parent component
-    // console.log(newPostData, "sending data");
+    console.log(newPostData, "sending data");
     onPostSubmit(newPostData);
 
     // Clear input fields after submitting

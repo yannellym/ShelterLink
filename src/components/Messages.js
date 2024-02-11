@@ -284,6 +284,6 @@ const Messages = ({ topic, replies, hideReplyButton, hideIcons, onReplySubmit, t
       </div>
     </div>
   );
-                    };
+};
 
 export default Messages;
