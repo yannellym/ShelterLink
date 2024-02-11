@@ -12,6 +12,15 @@ ShelterLink addresses a significant challenge currently prevalent in Texas, wher
 6. [Areas for Improvement](#areas-for-improvement)
 7. [Lessons Learned](#lessons-learned)
 
+## The problem <a name="problem"></a> 😥
+ - Many animal shelters in Texas are operating under code Red due to overcrowding, only accepting hurt or sick animals, after experiencing a record number of intakes after the pandemic.
+<img width="384" alt="Screenshot 2024-02-10 at 6 27 03 PM" src="https://github.com/yannellym/ShelterLink/assets/91508647/d4c6b4d4-331f-4534-bf85-b3d9f848073c">
+
+
+## A way to help</a> 🙏
+ Due to this crisis, I decided to develop an app aimed at facilitating the adoption process and connecting animals with loving forever homes. The app's mission extends beyond adoption, fostering a supportive community dedicated to addressing the challenges faced by animal shelters and advocating for animal welfare.
+
+
 ## Hosted site on AWS:
 - https://main.dl4evxiffuqtj.amplifyapp.com/
 
@@ -33,7 +42,8 @@ https://github.com/yannellym/ShelterLink/assets/91508647/025d9b9a-3de5-4a49-a25f
 - **Lazy Loading**: Lazy loading is employed to improve performance by loading components asynchronously when needed.
 - **Skeleton Loading**: Skeleton loading techniques are utilized to enhance user experience by providing visual placeholders while content is loading.
 - **Font Awesome**: Font Awesome icons are used for enhancing the UI with scalable vector icons.
-- **Design Tools Used**: Figma was used for prototypes and design iteration.
+- **Figma**: Figma was used for prototypes and design iteration.
+- **Chrome devTools**: Chrome DevTools was used to inspect, modify, and debug the app, test cache, and view storage.
 
 ### Backend (AWS Amplify) 💽
 - **AWS Amplify**: The backend infrastructure is powered by AWS Amplify, providing a serverless architecture for scalability and cost-effectiveness.
@@ -115,6 +125,8 @@ ShelterLink aims to streamline the process of pet adoption by providing users wi
 - Functionality: Responsiveness. The app is designed for mobile, tablets, and large screen devices. 
    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExYjg1bmtiaW85dDI0d3RxYTg2MjI1amU4MnB6cW81ZnNnOXdsanNmcSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/pd05YauAZ1yPvfycNf/giphy.gif" width=500>
 
+- Functionality: Skeleton loading. The app displays a skeleton loading screen as the items load.
+   <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcnh3N3hvMzdnY3hzdDk2YWJqbjhnZDZxYWl4YmZkZzRrdDBwcmswbiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Rf0Agk0M0rY0KsBg5n/giphy.gif" width=500>
 
 
 
