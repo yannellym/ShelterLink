@@ -22,7 +22,7 @@ ShelterLink addresses a significant challenge currently prevalent in Texas, wher
 
 
 ## Hosted site on AWS:
-- [https://main.dl4evxiffuqtj.amplifyapp.com/](https://www.shelterlinkbestfriend.com/)
+- https://www.shelterlinkbestfriend.com/
 
 - ShelterLink App Preview:
 
