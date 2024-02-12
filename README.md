@@ -58,6 +58,7 @@ https://github.com/yannellym/ShelterLink/assets/91508647/025d9b9a-3de5-4a49-a25f
 - **AWS Lambda@Edge**: Lambda@Edge is leveraged for serverless compute at the edge, enhancing performance and reducing latency.
 - **AWS Pinpoint**: AWS Pinpoint is used for user engagement and analytics, providing insights into user behavior and interaction.
 - **AWS AppSync**: AppSync facilitates real-time data synchronization and offline access for GraphQL APIs, enhancing the user experience.
+- **AWS Route53**: Route53 for domain management. 
 
 ### External APIs ䷇
 - **Nominatim**: Nominatim is used for geolocation services, enabling users to find nearby shelters and pet adoption centers.
