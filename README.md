@@ -22,14 +22,15 @@ ShelterLink addresses a significant challenge currently prevalent in Texas, wher
 
 
 ## Hosted site on AWS:
-- https://main.dl4evxiffuqtj.amplifyapp.com/
+- [https://main.dl4evxiffuqtj.amplifyapp.com/](https://www.shelterlinkbestfriend.com/)
 
 - ShelterLink App Preview:
 
 https://github.com/yannellym/ShelterLink/assets/91508647/025d9b9a-3de5-4a49-a25f-5c808d9c69d4
 
+- ShelterLink Advertisement:
 
-
+https://github.com/yannellym/ShelterLink/assets/91508647/421be789-bb77-4a56-bb81-1e13f400d77e
 
 ## Technologies Used <a name="technologies-used"></a> 💻
 
