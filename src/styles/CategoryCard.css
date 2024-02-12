@@ -20,7 +20,7 @@
   transition: background-color 0.2s;
   flex-direction: column;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-  width: 100%; /* Use full width on small screens */
+  width: 100%; 
   padding: 4%;
 }
 
@@ -37,8 +37,8 @@
 }
 
 .section-card img {
-  max-width: 70%; /* Adjust the maximum width of the image */
-  max-height: 70%; /* Adjust the maximum height of the image */
+  max-width: 70%; 
+  max-height: 70%; 
   padding-bottom: 3%;
   border-radius: 5px;
 }
@@ -46,14 +46,13 @@
 /* Media query for smaller screens (e.g., phones) */
 @media (max-width: 600px) {
   .section-card {
-    height: auto; /* Adjust height to be flexible */
-    flex-direction: row; /* Display text and image side by side */
+    height: auto; 
+    flex-direction: row; 
   }
 
   .section-card img {
-    max-width: 40%; /* Adjust the maximum width of the image for smaller screens */
-    max-height: 90%; /* Allow the image to take full height */
-    /* border: red solid 3px; */
+    max-width: 40%; 
+    max-height: 90%; 
     margin: 2% 3%;
   }
 }

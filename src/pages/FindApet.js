@@ -24,8 +24,7 @@ function FindApet({ userLocation, handleToggleFavorite, favoritePets, isAuthenti
 
   // Function to fetch pets for a specific page
   const fetchPetsForPage = async (page, filters) => {
-    console.log(filters, "filter selc");
-    console.log("fetching");
+
     try {
       let endpoint = `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/pet_filter?page=${page}&limit=${itemsPerPage}`;
 
@@ -35,12 +34,12 @@ function FindApet({ userLocation, handleToggleFavorite, favoritePets, isAuthenti
           endpoint += `&${filterKey}=${filters[filterKey]}`;
         }
       }
-      console.log(endpoint);
+  
       const response = await fetch(endpoint);
       const responseData = await response.json(); // Parse the outer JSON string
       const data = JSON.parse(responseData.body); // Parse the inner JSON string
 
-      console.log(data);
+  
       if (data && data.animals.length > 0) {
         setSearchResults(data.animals); // new filtered data
         // remove the loading indicator
@@ -68,8 +67,7 @@ function FindApet({ userLocation, handleToggleFavorite, favoritePets, isAuthenti
     setLoading(true);
     setSelectedFilters(newFilters);
     setCurrentPage(1);
-    }
-  
+  }
 
   const handlePageChange = (page) => {
     // Set loading to true before changing the page
@@ -85,7 +83,6 @@ function FindApet({ userLocation, handleToggleFavorite, favoritePets, isAuthenti
 
   const renderPetCards = () => {
     if (loading) {
-      console.log(searchResults, "search res")
       return <p>Looking through all of our amazing pets...</p>;
     } else {
       if (searchResults?.length > 0) {

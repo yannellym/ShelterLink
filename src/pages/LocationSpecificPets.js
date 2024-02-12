@@ -4,7 +4,7 @@ import PetCard from '../components/PetCard';
 import '../styles/LocationSpecificPets.css';
 import usePetfinderAPI from '../hooks/usePetFinderAPI';
 
-/* component that shows nearby shelters based on user;s location
+/* component that shows nearby pets based on user;s location
   parameters: favoritePets: array, addToFavorites: array, removeFromFavorites:array, isAuthenticated: string
   returns: 
 */
@@ -29,7 +29,6 @@ function LocationSpecificPets({ favoritePets, isAuthenticated }) {
     if (newPage >= 1 && newPage <= maxPage) {
       setCurrentPage(newPage);
     }
-
     // Scroll to the top of the page when a new page is clicked
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -40,7 +39,6 @@ function LocationSpecificPets({ favoritePets, isAuthenticated }) {
     } else {
       setLoading(false);
       const parsedData = JSON.parse(data.body);
-      console.log("Parsed Data Pagination Response:", parsedData.pagination);
       const filteredPets = parsedData.animals;
       setPetsToDisplay(filteredPets || []);
       setMaxPage(parsedData.pagination?.total_pages || 1);

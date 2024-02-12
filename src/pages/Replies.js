@@ -4,7 +4,7 @@ import Messages from '../components/Messages.js';
 import ReplyPost from '../components/ReplyPost.js';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCommentDots, faHeart, faCircleArrowDown } from '@fortawesome/free-solid-svg-icons';
+import { faCommentDots, faHeart} from '@fortawesome/free-solid-svg-icons';
 
 import { API, graphqlOperation } from 'aws-amplify';
 import { getPost, getReply } from '../graphql/queries.js';
@@ -14,12 +14,10 @@ import kitten from "../images/kitten.jpg"
 import '../styles/Replies.css';
 
 const Replies = ({ user, fetchImage }) => {
-  const navigate = useNavigate();
   const { postId } = useParams();
   const [replies, setReplies] = useState([]);
   const [post, setPost] = useState(null);
   const [expandedPosts, setExpandedPosts] = useState([]);
-  const [showTopNewPostArrow, setShowTopNewPostArrow] = useState(false);
   const messagesContainerRef = useRef();
 
   useEffect(() => {
@@ -80,9 +78,6 @@ const Replies = ({ user, fetchImage }) => {
 
       setReplies([...replies, newReply]);
       setPost({ ...post, replies: updatedPostInput.replies });
-
-      // Indicate that a new reply has been added
-      setShowTopNewPostArrow(true);
 
       scrollToBottom();
     } catch (error) {

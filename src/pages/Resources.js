@@ -5,7 +5,6 @@ import '../styles/Resources.css';
   parameters: 
   returns: 
 */
-
 const Resources = () => {
   const resources = [
     {

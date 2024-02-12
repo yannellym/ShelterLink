@@ -54,12 +54,12 @@
 .square {
   text-align: center;
   padding: 20px;
-  background-color: var(--primary-blue); /* Set card background to blue */
+  background-color: var(--primary-blue); 
   border-radius: 8px;
   box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.2);
   text-decoration: none;
   margin-bottom: 20px;
-  color: white; /* Set text color to white */
+  color: rgb(255, 255, 255);
 }
 
 .square h3 {
@@ -69,20 +69,21 @@
 .square:hover {
   transform: scale(1.05);
 }
+
 /* Add vertical line between about-content and clickable-squares */
 .about-container::after {
   content: '';
   width: 1px;
-  height: 80%; /* Adjust height as needed */
-  background-color: #fff; /* Use your preferred color */
-  margin: 0 20px; /* Adjust margin as needed */
+  height: 80%;
+  background-color: #fff; 
+  margin: 0 20px; 
   
 }
 
 .clickable-squares {
   display: flex;
   flex-direction: column;
-  margin-right: 5%; /* Adjust margin-right as needed */
+  margin-right: 5%;
 }
 
 .square {
@@ -103,15 +104,15 @@
 .square:hover {
   transform: scale(1.05);
 }
+
 /* Responsive styles for small screens (e.g., mobile devices) */
 @media (max-width: 600px) {
   .about-container {
-    /* border: red solid 4px; */
     flex-direction: column;
   }
   .about-content {
     max-width: 100%; /* Full width for small screens */
-    padding: 0 10px; /* Adjust padding */
+    padding: 0 10px; 
     border: none;
   }
 

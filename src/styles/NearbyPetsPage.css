@@ -4,7 +4,7 @@
 .pet-list {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center; /* Center the cards horizontally */
+  justify-content: center;
   gap: 20px;
 }
 

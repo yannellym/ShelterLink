@@ -5,7 +5,7 @@ header {
   font-weight: bold;
   padding: 1rem;
   position: relative;
-  box-shadow: 0 6px 3px rgba(128, 128, 128, 0.4); /* Adjusted for a thinner glowing effect */
+  box-shadow: 0 6px 3px rgba(128, 128, 128, 0.4);
   height: 15vh;
 }
 
@@ -23,7 +23,6 @@ header {
   max-height: 100%;
 }
 
-
 .main-navigation ul {
   list-style: none;
   display: flex;
@@ -34,28 +33,27 @@ header {
 .main-navigation a {
   color: rgb(0, 0, 0);
   text-decoration: none;
-  transition: border-color 0.7s; /* Add transition for smooth effect */
+  transition: border-color 0.7s;
   position: relative;
 }
-
 
 .main-navigation a::after {
   content: "";
   display: block;
   height: 1px;
   width: 0;
-  background-color: var(--primary-blue); /* Set initial color to blue */
+  background-color: var(--primary-blue);
   position: absolute;
   bottom: -5px;
-  left: 50%; /* Center the underline */
-  transform: translateX(-50%); /* Center the underline */
-  transition: width 0.7s, opacity 0.3s; /* Add transition for smooth effect */
-  opacity: 0; /* Initially set opacity to 0 */
+  left: 50%;
+  transform: translateX(-50%);
+  transition: width 0.7s, opacity 0.3s;
+  opacity: 0;
 }
 
 .main-navigation a:hover::after {
-  width: 100%; /* Expand the width on hover to create underline effect */
-  opacity: 1; /* Set opacity to 1 on hover */
+  width: 100%;
+  opacity: 1;
 }
 
 .user-profile {
@@ -73,21 +71,21 @@ header {
   font-size: 14px;
   margin-left: 1rem;
 }
+
 .forum-icon {
   color: var(--primary-blue);
 }
-.auth-button{
+
+.auth-button {
   text-decoration: none !important;
 }
 
-
-/* Responsive styles for small screens (e.g., mobile devices) */
 @media (max-width: 600px) {
   .hamburger-menu {
     display: none;
     cursor: pointer;
   }
-  
+
   .bar {
     width: 25px;
     height: 3px;
@@ -95,12 +93,11 @@ header {
     margin: 6px 0;
     transition: 0.4s;
   }
-  .logo{
+
+  .logo {
     width: 25%;
-    /* border: red solid 3px; */
   }
 
-  /* Mobile Menu Styles */
   .mobile-menu {
     display: flex;
     flex-direction: column;
@@ -112,74 +109,71 @@ header {
     box-shadow: 0 6px 3px rgba(128, 128, 128, 0.4);
     z-index: 1;
   }
-  
+
   .mobile-menu-open .hamburger-menu .bar:nth-child(1) {
     transform: rotate(-45deg) translate(-5px, 6px);
   }
-  
+
   .mobile-menu-open .hamburger-menu .bar:nth-child(2) {
     opacity: 0;
   }
-  
+
   .mobile-menu-open .hamburger-menu .bar:nth-child(3) {
     transform: rotate(45deg) translate(-5px, -6px);
   }
-  
+
   @media (max-width: 600px) {
     .hamburger-menu {
       display: block;
     }
-  
+
     .main-navigation {
       display: none;
     }
-  
+
     .main-navigation ul {
       flex-direction: column;
       align-items: center;
     }
-  
+
     .main-navigation a {
       width: 100%;
       text-align: center;
     }
-  
+
     .mobile-menu-open .main-navigation {
       display: flex;
     }
   }
 }
 
-/* Responsive styles for medium screens (e.g., tablets) */
 @media (min-width: 601px) and (max-width: 1023px) {
   .header {
-    height: auto; /* Allow the header to adjust its height based on content */
-    /* border: red solid 4px; */
+    height: auto;
   }
 
   .main-navigation ul {
-    gap: 0.5rem; /* Reduce the gap between navigation items */
-    flex-wrap: wrap; /* Allow flex items to wrap to the next row */
+    gap: 0.5rem;
+    flex-wrap: wrap;
   }
 
   .main-navigation a {
-    padding: 0.5rem 1rem; /* Adjust padding for better touch interaction */
+    padding: 0.5rem 1rem;
   }
 
   .logo {
-    width: 50%; /* Adjust the logo width for medium screens */
+    width: 50%;
     min-width: 20%;
     max-width: 30%;
     height: auto;
-    max-height: 80%; /* Allow the logo height to adjust based on its width */
-    min-height: 100px; /* Set a minimum height for the logo */
-    margin-bottom: 1rem; /* Add space below the logo for better spacing */
-    /* border: red solid 4px; */
+    max-height: 80%;
+    min-height: 100px;
+    margin-bottom: 1rem;
   }
 
   .logo img {
-    min-height: 50px; /* Set a minimum height for the logo */
-    max-height: 150px; /* Allow the logo height to adjust based on its width */
+    min-height: 50px;
+    max-height: 150px;
     max-width: 150px;
   }
 }

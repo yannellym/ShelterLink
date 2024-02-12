@@ -100,7 +100,6 @@ const Forum = ({ user, fetchImage }) => {
       };
 
       const result = await API.graphql(graphqlOperation(createPost, postInput));
-      console.log('Result:', result);
 
       // Update the topic to include the new post
       const resultOfTopicUpdate = await API.graphql({
@@ -173,7 +172,6 @@ const Forum = ({ user, fetchImage }) => {
       
       // Convert the Set back to an array
       const existingPostIds = [...existingPostIdsSet];
-      console.log(newPostData, "data before sending")
       // Update the topic with the modified post array
       const resultOfTopicUpdate = await API.graphql({
         query: updateTopic,
@@ -185,44 +183,41 @@ const Forum = ({ user, fetchImage }) => {
           },
         },
       });
-      console.log(resultOfTopicUpdate, "added post?")
-        // Fetch the updated topic data
-        const updatedTopicResult = await API.graphql({
-          query: listTopics,
-          variables: {},
-        });
-        const updatedTopics = updatedTopicResult.data.listTopics.items;
+      // Fetch the updated topic data
+      const updatedTopicResult = await API.graphql({
+        query: listTopics,
+        variables: {},
+      });
+      const updatedTopics = updatedTopicResult.data.listTopics.items;
 
-        // Sort the updated topics alphabetically based on the title
-        const sortedTopics = updatedTopics.sort((a, b) => a.title.localeCompare(b.title));
+      // Sort the updated topics alphabetically based on the title
+      const sortedTopics = updatedTopics.sort((a, b) => a.title.localeCompare(b.title));
 
 
-        // Update the state with the sorted topics data
-        setTopics(sortedTopics);
+      // Update the state with the sorted topics data
+      setTopics(sortedTopics);
+          
+      // Update the selected topic with the new post
+      setSelectedTopic((prevTopic) => ({
+        ...prevTopic,
+        posts: [result.data.createPost, ...(prevTopic.posts || [])], // Place the new post at the beginning
+      }));
             
-        // Update the selected topic with the new post
-        setSelectedTopic((prevTopic) => ({
-          ...prevTopic,
-          posts: [result.data.createPost, ...(prevTopic.posts || [])], // Place the new post at the beginning
-        }));
-              
-        setNewSubject('');
-        setNewPost('');
-      } catch (error) {
-        console.error('Error creating new post:', error);
-      }
-    };
+      setNewSubject('');
+      setNewPost('');
+    } catch (error) {
+      console.error('Error creating new post:', error);
+    }
+  };
 
     
   // handle likes 
   const handleLike = async (postId) => {
-    console.log("post id received ", postId)
 
     try {
       // Fetch the current post data
       const { data } = await API.graphql(graphqlOperation(getPost, { id: postId }));
       const post = data.getPost;
-      console.log(post, "post from db")
 
       // Check if the current user has already liked the post
       const userLiked = post.likedBy ? post.likedBy.includes(user?.id || false) : false;

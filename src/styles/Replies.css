@@ -1,28 +1,30 @@
 .reply-container {
   min-height: 100vh;
 }
+
 .reply-post-container {
   display: flex;
   width: 90vw;
   min-width: 95%;
-  /* border: 4px solid #f14110; */
   overflow: hidden;
 }  
+
 .reply-container h3 {
   padding: 0 2%;
 }
+
 .reply-org {
   background-color: rgba(255, 0, 0, 0.166);
   border-radius: 10px;
   margin: 0 2%;
 }
+
 .reply-container-inside-div-one {
   width: 85vw;
   margin: -5px auto;
   max-height: 70vh;
   min-height: 300px;
   position: relative;
-  /* border: rgb(0, 85, 255) solid 4px; */
   padding-top: 2%;
   overflow-y: scroll;
 }
@@ -32,32 +34,34 @@
   margin: 0% auto;
   min-height: 25%;
 }
+
 .reply-post-content {
-  /* border: rgb(0, 85, 255) solid 4px; */
   padding: 2%;
   max-width: 75vw; 
   min-width: 85vw;
 }
+
 .no-replies-message {
   text-align: center;
   margin: 20px 0;
 }
+
 .reply-post-details-icon-p{
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: center; /* Align items vertically in the center */
+  align-items: center; 
   max-width: 100px;
   text-decoration: none;
   color: #000000;
-  /* border: red solid 4px; */
   cursor: pointer;
 }
+
 .scrollable-container.reply-container-inside-div-one {
   position: relative;
   padding-bottom: 30px; 
-  /* border: red solid 4px; */
 }
+
 .new-post-arrow {
   position: absolute;
   top: 90%;
@@ -75,6 +79,7 @@
   width: auto;
   height: auto;
 }
+
 /* Media query for (max-width: 600px) */
 @media (max-width: 600px) {
   .reply-post-container {
@@ -98,9 +103,7 @@
   }
 
   .reply-post-container {
-    /* flex-direction: column; */
     align-items: center;
-    /* border: red solid 5px; */
   }
 }
 
@@ -111,10 +114,8 @@
   }
   .reply-container-inside-div-one {
     min-height: 300px;
-    /* border: rgb(0, 38, 255) solid 4px; */
   }
   .reply-post-content {
-    /* border: rgb(212, 0, 255) solid 4px; */
     padding: 2%;
     max-width: 75vw; 
     min-width: 70vw;

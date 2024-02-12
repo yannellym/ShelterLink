@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import '../styles/AllPetsPage.css';
 import PetCard from '../components/PetCard';
 
-
 /* function to fetch animals by type
 parameters: type: String, page: Int
 returns: array of animals according to given type

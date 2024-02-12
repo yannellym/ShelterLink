@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../styles/SignUp.css'; // Import your custom CSS for SignUp
+import '../styles/SignUp.css'; 
 
 
 const SignUp = () => {
@@ -8,7 +8,7 @@ const SignUp = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const handleSignUp = () => {
-    // Handle the sign-up logic using an authentication system
+    // Handled in amplify
   };
 
   return (

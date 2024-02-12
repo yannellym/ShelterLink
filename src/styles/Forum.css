@@ -1,7 +1,7 @@
 .forum-container{
   min-height: auto;
 }
-/* Forum.css */
+
 .welcome-div {
   text-align: center;
   justify-content: center;
@@ -31,8 +31,6 @@
   background-color: #f0f0f0;
   padding: 20px;
   border-right: double var(--vibrant-red);
-  /* position: inherit; */
-  /* border: red solid 5px; */
 }
 
 .scrollable-list {
@@ -96,28 +94,26 @@
 .topic-posts-container {
   min-width: 70%;
   max-width: 100%;
-  /* border: 4px solid #f110e2; */
   min-height: 65vh;
   display: flex;
   flex-direction: column;
-  position: relative; /* Add position relative */
+  position: relative; 
 }
 
 .topic-posts-container h3 {
   padding-left: 3%;
-  width: calc(100% - 40px); /* Adjust width to accommodate the button */
+  width: calc(100% - 40px); 
   margin-top: 5px;
-  display: inline-block; /* Make the title inline-block */
+  display: inline-block; 
 }
 
 .new-post-btn {
-  position: absolute; /* Position the button absolutely */
+  position: absolute; 
   top: 0;
   right: 0;
   margin: 10px;
   color: red;
   font-size: 25px;
-  /* border: red solid 5px; */
   transition: width 0.3s ease;
 }
 
@@ -147,13 +143,13 @@
   width: 95%;
   justify-content: space-between;
   align-items: end;
-  /* border: rgb(3, 162, 3) solid 2px;  */
   float: right;
   margin-right: 2.5%;
 }
 .post-bottom-container p {
   margin-right: 5%;
 }
+
 /* Modal styles */
 .modal {
   position: fixed;
@@ -195,14 +191,13 @@
   margin-left: 10px;
 }
 
-
 /*  no posts yet */
 .no-posts-message {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100%; /* Ensure it takes the full height of its container */
+  height: 100%; 
   text-align: center;
   padding: 20px;
   background-color: #f0efef;
@@ -219,17 +214,17 @@
 
 @media (max-width: 600px) {
   .forum-container {
-    /* border: red solid 4px; */
     display: flex;
     flex-direction: column;
   }
-  /* Forum.css */
+
   .welcome-div {
     text-align: center;
     justify-content: center;
     margin: 0 auto;
   }
-  .welcome-div h1{
+
+  .welcome-div h1 {
     margin-top: 5%;
     font-size: 80%;
   }
@@ -246,7 +241,6 @@
   .scrollable-list {
     max-height: 300px;
     overflow-y: auto;
-    /* border: red solid 4px; */
   }
 
   .topics-list {
@@ -263,14 +257,11 @@
     position: relative;
     min-width: 25%;
     background-color: #faf0f0;
-    /* border: black solid 5px; */
   }
   .topic-posts-container {
-    /* border: blue solid 5px; */
     width: 50%;
   }
   .new-post-btn {
-   /* border: red solid 4px; */
    margin-left: -35px;
   }
 }
@@ -281,11 +272,8 @@
     position: relative;
     min-width: 22%;
     background-color: #faf0f0;
-    /* border: black solid 5px; */
   }
   .topic-posts-container {
-    /* border: blue solid 5px; */
     margin: 1% 0%;
   }
- 
 }

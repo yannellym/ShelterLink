@@ -1,18 +1,15 @@
-/* Footer.css */
-
-
 .footer-section {
   flex: 1;
   max-width: 300px;
-  margin: 0; /* Remove margin */
-  padding: 20px; /* Add padding for spacing */
-  text-align: center; /* Center the content */
+  margin: 0;
+  padding: 20px;
+  text-align: center;
 }
 
 .footer-section h4 {
   font-size: 20px;
   font-weight: bold;
-  margin: 0; /* Remove margin */
+  margin: 0;
   margin-bottom: 20px;
 }
 
@@ -27,58 +24,55 @@
   text-decoration: none;
 }
 
-
-button:hover{
-  background-color: #ff0019;;
+button:hover {
+  background-color: #ff0019;
 }
 
 .footer-section a {
   text-decoration: none;
-  color: #ffffff; /* Set link color to white */
+  color: #ffffff;
 }
-/* Responsive styles for smaller screens (e.g., phones) */
+
 @media (max-width: 600px) {
   .footer {
-    flex-direction: column; /* Stack sections vertically on smaller screens */
+    flex-direction: column;
   }
 
   .footer-section {
-    margin-bottom: 20px; /* Add space between sections */
+    margin-bottom: 20px;
     margin: 0 auto;
-    /* border: red solid 3px; */
   }
 
   .sign-up-button {
-    margin-top: 20px; /* Add space above the sign-up button */
+    margin-top: 20px;
   }
 }
-/* Responsive styles for medium screens (e.g., tablets) */
+
 @media (min-width: 601px) and (max-width: 1023px) {
   .footer {
-    flex-direction: row; /* Keep the direction as row for medium screens */
-    flex-wrap: wrap; /* Allow items to wrap to the next row if necessary */
-    justify-content: space-around; /* Center items horizontally */
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
   }
 
   .footer-section {
-    width: 30%; /* Adjust the width of each section as needed */
-    margin-bottom: 20px; /* Add space between sections */
+    width: 30%;
+    margin-bottom: 20px;
   }
 
   .sign-up-button {
-    width: 100%; /* Make the sign-up button take full width */
-    margin-top: 20px; /* Add space above the sign-up button */
+    width: 100%;
+    margin-top: 20px;
   }
 }
 
-/* Responsive styles for larger screens (e.g., desktops) */
 @media (min-width: 1024px) {
   .footer {
-    flex-direction: row; /* Align sections horizontally on larger screens */
-    justify-content: space-around; /* Distribute sections evenly */
+    flex-direction: row;
+    justify-content: space-around;
   }
 
   .footer-section {
-    margin-bottom: 0; /* Reset margin for larger screens */
+    margin-bottom: 0;
   }
 }

@@ -5,15 +5,11 @@ import { useLocation } from 'react-router-dom';
 
 const SheltersNearbyPage = ({ userLocation }) => {
   const location = useLocation();
-  console.log(location, "location state");
-
   // Prioritize the ZIP code from the state object
   const passedInLocation = location.state?.fetchedUserLocation?.zipCode || new URLSearchParams(location.search).get('zipCode');
-  console.log(passedInLocation, "passedInLocation");
   
   
   useEffect(() => {
-    console.log('Zip Code:', passedInLocation);
   }, [passedInLocation]);
 
   const [newUserLocation, setUserLocation] = useState(null);
@@ -44,23 +40,21 @@ const SheltersNearbyPage = ({ userLocation }) => {
       const response = await fetch(
         `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/nearby_shelters?location=${locationToUse}&limit=${pagination.count_per_page}&page=${page}`
       );
-        console.log(response, "RESPONSE")
+     
       if (!response.ok) {
-        console.log("error of api", response.status);
         throw new Error(`Failed to fetch data: ${response.status}`);
       }
 
       const responseData = await response.json();
-      console.log(responseData, "response data")
       const apiData = JSON.parse(responseData.body);
 
-      console.log(apiData, "data received");
       setData(apiData.organizations || []);
       setPagination({
         current_page: apiData.pagination.current_page,
         total_pages: apiData.pagination.total_pages,
         count_per_page: apiData.pagination.count_per_page,
       });
+
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (error) {
       console.log("error", error);
@@ -71,8 +65,7 @@ const SheltersNearbyPage = ({ userLocation }) => {
 
   useEffect(() => {
     // Fetch nearby shelters only if the user location is available
-    if (locationToUse !== '11208') {
-      console.log("calling shelters");
+    if (locationToUse) {
       fetchNearbySheltersForCurrentPage(currentPage);
     }
   }, [locationToUse, currentPage]);
@@ -104,7 +97,7 @@ const SheltersNearbyPage = ({ userLocation }) => {
   return (
     <div>
       <h1 className="title">Shelters Nearby {newUserLocation || locationToUse}</h1>
-      {newUserLocation || locationToUse !== '11208' ? (
+      {newUserLocation || locationToUse ? (
         <div className="grid-container">
           {loading ? (
             <p>Loading...</p>

@@ -80,7 +80,7 @@ function Favorites({ user, handleToggleFavorite }) {
 export default Favorites;
 
 /*
-Like queries, subscriptions enable you to fetch data. 
+note: Like queries, subscriptions enable you to fetch data. 
 Unlike queries, subscriptions are long-lasting operations 
 that can change their result over time. They can maintain an active 
 connection to your GraphQL server (most commonly via WebSocket), 

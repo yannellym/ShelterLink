@@ -20,7 +20,6 @@ const AdoptedAnimalsSection = () => {
         const stringData = JSON.stringify(dataRaw);
         const parsedData = JSON.parse(stringData);
         const petData = JSON.parse(parsedData.body);
-        console.log(petData, "PET DAT RECIED NOW")
         // Choose 20 animals
         const selectedAnimals = petData.animals.slice(0, 20);
 

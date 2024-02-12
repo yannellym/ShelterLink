@@ -1,35 +1,33 @@
 
 .filters {
-    margin: 0 7%;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    /* border: yellow solid 4px; */
-  }
-  
-  .filter-group {
-    margin-bottom: 15px;
-    width: 90%;
-    margin: 0 auto;
-  }
-  
-  label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-  }
-  
-  .filter-group select {
-    min-width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-    margin-top: 5px;
-  }
-  
-  h2 {
-    font-size: 1.5em;
-    margin-bottom: 15px;
-    color: #333;
-  }
-  
+  margin: 0 7%;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.filter-group {
+  margin-bottom: 15px;
+  width: 90%;
+  margin: 0 auto;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.filter-group select {
+  min-width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-top: 5px;
+}
+
+h2 {
+  font-size: 1.5em;
+  margin-bottom: 15px;
+  color: #333;
+}

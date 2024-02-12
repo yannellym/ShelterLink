@@ -55,7 +55,6 @@ input[type='range'] {
   .container {
     max-width: 90%;
     max-height: 150%;
-    /* border: yellow 4px solid; */
   }
 
   select,
@@ -79,7 +78,6 @@ input[type='range'] {
     width: calc(50% - 5px); /* Adjusted width for tablets */
   }
   .container {
-    /* border: rgb(0, 38, 255) solid 5px; */
     max-width:70%
   }
 }

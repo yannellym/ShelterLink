@@ -1,7 +1,6 @@
 .profile-section{
   text-align: center;
   min-height:65vh;
-  /* border: red solid 5px;; */
 }
 
 .profile-container {
@@ -20,7 +19,6 @@
 .profile-title {
   color: var(--vibrant-red);
   font-size: 24px;
-  /* bordeR: red solid 5px; */
 }
 
 .profile-info {

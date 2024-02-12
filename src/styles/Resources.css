@@ -23,7 +23,7 @@ h1 {
   flex-direction: column;
   align-items: center;
   text-decoration: none; /* Apply text-decoration directly to the anchor tag */
-  color: #333; /* Add color to the text */
+  color: #333; 
   width: 90%;
 }
 
@@ -34,13 +34,13 @@ h1 {
 .resource h3 {
   font-size: 25px;
   color: #e04801;
-  margin-top: 20px; /* Adjust margin to create space */
+  margin-top: 20px; 
 }
 
 .resource p {
   font-size: 16px;
   color: #090909;
-  margin-top: 10px; /* Adjust margin to create space */
+  margin-top: 10px; 
 }
 
 .resource-image {
@@ -53,58 +53,57 @@ h1 {
 /* Responsive styles for small screens (e.g., mobile devices) */
 @media (max-width: 600px) {
   h1 {
-    font-size: 24px; /* Adjust font size for small screens */
+    font-size: 24px; 
   }
 
   .resources-container {
     grid-template-columns: 1fr; /* Display one column on small screens */
-    gap: 20px; /* Reduce gap for small screens */
+    gap: 20px; 
   }
 
   .resource {
-    width: 100%; /* Full width for small screens */
+    width: 100%; 
   }
 
   .resource h3 {
-    font-size: 20px; /* Adjust font size for small screens */
+    font-size: 20px; 
   }
 
   .resource p {
-    font-size: 14px; /* Adjust font size for small screens */
+    font-size: 14px;
   }
 
   .resource-image {
     max-width: 100%; /* Full width for small screens */
-    margin: 10px 0; /* Adjust margin for small screens */
+    margin: 10px 0; 
   }
 }
 
 /* Responsive styles for medium screens (e.g., tablets) */
 @media (min-width: 601px) and (max-width: 1023px) {
   h1 {
-    font-size: 28px; /* Adjust font size for medium screens */
+    font-size: 28px; 
   }
 
   .resources-container {
     grid-template-columns: repeat(2, 1fr); /* Display two columns on medium screens */
-    gap: 40px; /* Set gap for medium screens */
-    /* border: red solid 5px; */
+    gap: 40px; 
   }
 
   .resource {
-    width: 100%; /* Full width for medium screens */
+    width: 100%; 
   }
 
   .resource h3 {
-    font-size: 24px; /* Adjust font size for medium screens */
+    font-size: 24px;
   }
 
   .resource p {
-    font-size: 16px; /* Adjust font size for medium screens */
+    font-size: 16px;
   }
 
   .resource-image {
-    max-width: 100%; /* Full width for medium screens */
-    margin: 20px 0; /* Adjust margin for medium screens */
+    max-width: 100%; 
+    margin: 20px 0; 
   }
 }

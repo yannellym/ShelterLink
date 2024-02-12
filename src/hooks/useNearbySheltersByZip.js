@@ -5,7 +5,6 @@ const useNearbySheltersByZip = ({ userLocation, page, limit}) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  console.log(userLocation)
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -13,7 +12,6 @@ const useNearbySheltersByZip = ({ userLocation, page, limit}) => {
         const response = await fetch(apiUrl);
         const responseData = await response.json(); // Parse the outer JSON string
         const data = JSON.parse(responseData.body); // Parse the inner JSON string
-        console.log(data, "res")
         // set our shelters data
         setShelters(data);
         setLoading(false);

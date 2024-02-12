@@ -25,7 +25,6 @@ const useUserLocation = () => {
         const zipCode = data.results[0]?.address_components.find(
           (component) => component.types.includes('postal_code')
         )?.short_name;
-        console.log('User Location:', { latitude, longitude, zipCode }); // Log user location
 
         // Update the userLocation state
         setUserLocation({ latitude, longitude, zipCode });

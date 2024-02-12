@@ -23,10 +23,7 @@ const PetDetails = ({  handleToggleFavorite, isAuthenticated, user }) => {
   };
   
   const searchParams = new URLSearchParams(window.location.search);
- 
   const petData = JSON.parse(decodeURIComponent(searchParams.get('petData')));
-  console.log(petData, "PET DATA")
-
   const [isFavorited, setIsFavorited] = useState(false);
   
   if (!petData) {
@@ -43,17 +40,14 @@ const PetDetails = ({  handleToggleFavorite, isAuthenticated, user }) => {
     try {
       const response = await API.graphql(graphqlOperation(listUserPetFavorites));
       const userPetFavorites = response.data.listUserPetFavorites.items;
-
       // Check if the current pet is in the user's favorites
       const isPetFavorited = userPetFavorites.some(favorite => favorite.petId === String(petData.id));
-
       // Update the local state based on whether the pet is in the user's favorites
       setIsFavorited(isPetFavorited);
     } catch (error) {
       console.error('Error fetching favorite pets:', error);
     }
   };
-
   // Fetch and set the initial favorite state when the component mounts
   fetchFavoriteState();
 

@@ -4,21 +4,19 @@
   --vibrant-red: #ea1328;
 }
 
-/* Reset default margin and padding for body */
 html, body {
   height: 100%;
-
   margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* Ensure body takes up at least the full viewport height */
-  background-color: #ffffff; /* Main background color */
+  min-height: 100vh; 
+  background-color: #ffffff; 
 }
 
 /* Define content flexbox container */
 .content {
-  flex: 1; /* Allow content to grow and take up remaining space */
+  flex: 1; 
 }
 
 /* Footer styles */
@@ -41,13 +39,13 @@ html, body {
   flex-direction: column;
   min-height: 60vh;
   margin: 0 auto;
-  background-color: var(--greyish-hue); /* Auth container background color */
+  background-color: var(--greyish-hue);
 }
 
 /* button style */
 button {
-  background-color: var(--vibrant-red); /* Button color */
-  color: #ffffff; /* Button text color */
+  background-color: var(--vibrant-red);
+  color: #ffffff; 
   padding: 10px 15px;
   border: none;
   border-radius: 5px;
@@ -58,7 +56,7 @@ button {
 }
 
 button:hover {
-  background-color: #fb061e; /* Button color on hover */
+  background-color: #fb061e; 
   text-decoration:  none;
   animation: none;
 }
@@ -67,8 +65,8 @@ button:hover {
   text-decoration: none;
 }
 .button:hover::after {
-  width: 0; /* Set width to 0 to remove the underline effect on hover */
-  opacity: 0; /* Set opacity to 0 on hover to hide the underline */
+  width: 0;
+  opacity: 0; 
 }
 
 

@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import '../styles/Footer.css'; 
 
 function Footer({ userLocation }) {
-  console.log(userLocation, "user loc in foot")
   return (
     <footer className="footer">
       <div className="footer-section">

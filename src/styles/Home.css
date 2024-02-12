@@ -1,7 +1,6 @@
 .Home {
   text-align: center;
   box-sizing: border-box;
-  /* background-color: var(--greyish-hue); */
 }
 .section-links-div h3,
 .resources-div h3,
@@ -18,7 +17,6 @@
   font-size: 30px;
   color: rgb(255, 255, 255);
 }
-
 
 /* adopted-animals-section  */
 .adopted-animals-section {
@@ -82,7 +80,6 @@
   display: flex;
   gap: 10px; /* Adjust the gap between the form and search bar */
   flex-grow: 1; /* Allow the container to grow and take available space */
-  /* border: red solid 5px; */
   height: 80vh;
 }
 
@@ -176,6 +173,7 @@
   cursor: pointer;
   width: 100px;
 }
+
 /* greater-need-for-love-section */
 .greater-need-for-love-section {
   width: 100vw;
@@ -194,17 +192,16 @@
 
   .form-and-search-container {
     display: flex;
-    flex-direction: column; /* Stack components vertically */
-    align-items: center; /* Center components horizontally */
-    max-width: 100%; /* Set a maximum width for the container */
-    margin: 0 auto; /* Center the container */
-    /* border: red solid 3px; */
+    flex-direction: column; 
+    align-items: center; 
+    max-width: 100%; 
+    margin: 0 auto; 
     height: auto;
   }
   .left-column {
     width: 100%; /* Full width for medium screens */
     position: relative;
-    height: 90%; /* 90% of the container height */
+    height: 90%; 
   }
 
   .divider-container {
@@ -212,21 +209,20 @@
   }
 
   .right-column {
-    width: 100%; /* Full width for medium screens */
+    width: 100%; 
     position: relative;
-    height: 20%; /* 20% of the container height */
+    height: 20%; 
   }
 
   .search-bar-container {
-    width: 100%; /* Full width for the search bar */
+    width: 100%;
     position: relative;
-    height: 100%; /* Full height of the right column */
+    height: 100%; 
   }
 
   .section-links-div {
     height: auto;
     padding-bottom: 5%;
-    /* border: rgb(255, 192, 192) solid 4px; */
   }
   .section-links-inner-div {
     margin : 2% 13%;
@@ -246,86 +242,78 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center; /* Center the cards horizontally */
+    justify-content: center; 
     margin: 3% auto;
-    /* border: green solid 4px; */
   }
   h3 {
     font-size: 25px;
   }
 }
+
 /* Responsive styles for medium screens (e.g., tablets) */
 @media (min-width: 601px) and (max-width: 1023px) {
   .form-and-search-container {
     display: flex;
-    flex-direction: column; /* Stack components vertically */
-    align-items: center; /* Center components horizontally */
-    max-width: 100%; /* Set a maximum width for the container */
-    margin: 0 auto; /* Center the container */
-    /* border: pink solid 4px; */
+    flex-direction: column; 
+    align-items: center; 
+    max-width: 100%; 
+    margin: 0 auto; 
     height: auto;
   }
 
   .left-column {
     width: 100%; /* Full width for medium screens */
-    /* border: rgb(198, 192, 255) solid 4px; */
     position: relative;
-    height: 90%; /* 90% of the container height */
+    height: 90%; 
   }
 
   .divider-container {
-    height: 90%;/* Hide the divider on medium screens */
+    height: 90%;
   }
 
   .right-column {
-    width: 100%; /* Full width for medium screens */
-    /* border: rgb(192, 255, 196) solid 4px; */
+    width: 100%; 
     position: relative;
-    height: 20%; /* 20% of the container height */
+    height: 20%; 
   }
 
   .search-bar-container {
-    width: 100%; /* Full width for the search bar */
+    width: 100%;
     position: relative;
-    height: 100%; /* Full height of the right column */
+    height: 100%;
   }
   .greater-need-for-love-section {
-    min-height: auto; /* Let the height adjust based on content */
-    max-height: none; /* Remove max-height on smaller screens */
+    min-height: auto; 
+    max-height: none; 
   }
-   /* Ensure two cards per row, lined up */
-   .nearby-pet-cards {
+
+  /* Ensure two cards per row, lined up */
+  .nearby-pet-cards {
     flex-wrap: wrap;
     justify-content:space-around;
-    /* border: rgb(0, 255, 21) solid 4px; */
     margin: auto;
     width: 100%;
     padding: 2%;
   }
+
   .all-pets-near-card {
     margin-right: 0px;
     justify-content: center;
-    /* border: blue solid 5px; */
   }
-  /* .adopted-animals-section {
-
-  } */
 }
 
 
 /* Responsive styles for larger screens (e.g., desktops) */
 @media (min-width: 1024px) {
   .form-and-search-container {
-    max-width: 100%; /* Set a maximum width for the container */
-    margin: 0 auto; /* Center the container */
-    /* border: pink solid 4px; */
+    max-width: 100%;
+    margin: 0 auto;
     height: auto;
   }
   .left-column {
-    width: 100%; /* Full width for medium screens */
-    /* border: rgb(198, 192, 255) solid 4px; */
+    width: 100%;
     position: relative;
-    height: 90%; /* 90% of the container height */
+    height: 90%; 
   }
 
   .divider-container {
@@ -334,15 +322,14 @@
   }
 
   .greater-need-for-love-section {
-    min-height: auto; /* Let the height adjust based on content */
-    max-height: none; /* Remove max-height on smaller screens */
-    /* border: red solid 4px; */
+    min-height: auto; 
+    max-height: none; 
   }
+
   /* Ensure two cards per row, lined up */
   .nearby-pet-cards {
     flex-wrap: wrap;
     justify-content: center;
-    /* border: rgb(0, 0, 255) solid 4px; */
     margin: auto;
     width: 100%;
     padding: 2%;
@@ -350,6 +337,5 @@
 
   .all-pets-near-card {
     margin-right: 0px;
-    /* border: blue solid 5px; */
   }
 }

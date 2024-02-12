@@ -20,9 +20,7 @@ const About = ({ userLocation }) => {
 
   const handleViewAllPetsNearYou = ({ targetPage }) => {
     try {
-      console.log(userLocation?.zipCode, "do we have a zip code")
       if (userLocation) {
-        console.log("loc available")
         // If zipCode is available, directly navigate to the nearby_pets page
         navigate(`/${targetPage}`, { state: { fetchedUserLocation: userLocation} });
       } else if (navigator.geolocation) {

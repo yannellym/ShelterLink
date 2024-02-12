@@ -41,7 +41,6 @@ const AuthenticatorComponent = ({ setUser, navigate, fetchImage }) => {
     const checkUserAndNavigate = async () => {
       try {
         const storedUser = JSON.parse(localStorage.getItem('user'));
-        console.log('Stored User:', storedUser);
 
         if (storedUser) {
           setUser(storedUser);
@@ -94,7 +93,6 @@ const App = () => {
   const location = useLocation();
   const navigate = useNavigate();
   
-  console.log(user, "USER IN APP")
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location]);
@@ -123,7 +121,6 @@ const App = () => {
           removePetFromFavoritesState(petId);
  
           const remaining_pets = await API.graphql(graphqlOperation(listUserPetFavorites));
-          console.log(remaining_pets, "REmaining pets")
         } else {
       
           const petExists = await API.graphql(graphqlOperation(getPet, { id: String(petId) }));
@@ -169,7 +166,7 @@ const App = () => {
               },
               url: pet.url,
             };            
-            // console.log("creating pet in DB", petInput);
+
  
             // Now create the pet
             const createPetResponse = await API.graphql(graphqlOperation(createPet, { input: petInput }));
@@ -199,14 +196,11 @@ const App = () => {
             };
 
             await API.graphql(graphqlOperation(createUserPetFavorite, { input: userPetFavoriteInput }));
-            // console.log("adding pet, its already created", pet) 
             addPetToFavoritesState(pet)
-            // console.log("Pet added to user's favorites");
           }
         }
       } catch (error) {
         console.error('Error:', error);
-        // Handle error, e.g., show a message to the user
       } finally {
         // Re-enable the button or hide the loading indicator
       }
@@ -256,7 +250,6 @@ const App = () => {
       console.log('Error signing out: ', error);
     }
   };
-
 
   // FUNCTION to fetch a random image for the post. In case this fails, use our default photo.
   const fetchPlaceholderImage = async () => {
@@ -349,17 +342,10 @@ const App = () => {
         <Route
           path="/forum"
           element={ 
-            // user ? (
-              <Forum
-                user={user}
-                fetchImage={fetchPlaceholderImage}
-              />
-            // ) : (
-            //   <div>
-            //     {showMessage && <h1>Please log in first to view favorites!</h1>}
-            //     <h1>Redirecting to sign in page ... </h1>
-            //   </div>
-            // )
+            <Forum
+              user={user}
+              fetchImage={fetchPlaceholderImage}
+            />
           }
         />
         <Route 

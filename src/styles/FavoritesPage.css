@@ -1,14 +1,13 @@
 .pet-card-container {
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Align items vertically in the center */
-  align-items: center; /* Align items horizontally in the center */
+  justify-content: center; 
+  align-items: center; 
   flex-wrap: wrap;
   height: 100%; 
   width: 100%;
   min-height:65vh;
   padding-bottom: 2%;
-  /* border: red solid 4px; */
 }
 
 .title-container {
@@ -20,17 +19,16 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  max-height: 60vh; /* Limit the maximum height */
+  max-height: 60vh; 
   box-shadow: 0px 2px 5px rgb(105, 105, 105);
   border-radius: 5%;
-  /* border: red solid 5px; */
   margin: 2%;
-  overflow: hidden; /* Ensure that the image doesn't overflow the container */
+  overflow: hidden; 
 }
 
 .sad-lab-image {
-  max-width: 50%; /* Set the maximum width of the image */
-  max-height: 100%; /* Allow the image to take up 100% of the available height */
+  max-width: 50%; 
+  max-height: 100%; 
   height: auto;
   border-radius: 5%;
 }

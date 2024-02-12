@@ -83,7 +83,6 @@ const PetCard = ({ pet, handleToggleFavorite }) => {
   }, [pet]);
   
   const handleToggleFavoriteClick = () => {
-    console.log("clicked heart toggle")
     handleToggleFavorite(pet); // Call the parent component function
     setIsFavorited((prevIsFavorited) => !prevIsFavorited); // Update the local state
   };

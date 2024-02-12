@@ -53,8 +53,6 @@ const useAnimalsBasedOnPreferencesAPI = () => {
       } catch (error) {
         console.error('Error parsing JSON data:', error);
       }
-      
-      console.log(filteredAnimals, "matched animals");
       // Set the preferred animals state variable with the filtered results
       setPreferredAnimals(filteredAnimals);
       // Stop retrying after the first attempt

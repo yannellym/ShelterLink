@@ -5,23 +5,21 @@ import PetCard from '../components/PetCard';
 
 
 function NearbyPets() {
+
   const { state: { fetchedUserLocation } } = useLocation();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
-  // const [error, setError] = useState(null);
   const [pagination, setPagination] = useState({
     current_page: 1,
     total_pages: 1,
     count_per_page: 24,
   });
   const buttonsToShow = 9;
-  console.log(fetchedUserLocation, "loc received in pets_nearby")
   useEffect(() => {
     const fetchNearbyPets = async (page) => {
       try {
         setLoading(true);
         let apiUrl = null;
-        console.log(" location in ")
         // Check if fetchedUserLocation is an object with latitude and longitude
         if (fetchedUserLocation && fetchedUserLocation.latitude && fetchedUserLocation.longitude) {
           apiUrl = `https://2hghsit103.execute-api.us-east-1.amazonaws.com/default/nearby_pets?location=${fetchedUserLocation.latitude},${fetchedUserLocation.longitude}&limit=${pagination.count_per_page}&page=${page}`;
@@ -33,8 +31,6 @@ function NearbyPets() {
           console.error('Invalid fetchedUserLocation object:', fetchedUserLocation);
           return;
         }
-  
-        // Make your API request using the constructed apiUrl
         const response = await fetch(apiUrl);
         
         if (!response) {

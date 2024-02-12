@@ -1,17 +1,13 @@
 import React, { useState } from 'react';
 import '../styles/SignIn.css'; 
 
-/* component to display resources for the user
-  parameters: 
-  returns: 
-*/
-//TODO: IMPLEMENT SIG IN FUNC
+
 const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSignIn = () => {
-    // Handle the sign-in logic using an authentication system
+    // Handled the sign-in logic using the authentication system
   };
 
   return (

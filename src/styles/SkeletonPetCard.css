@@ -45,7 +45,6 @@
 
 /* Responsive styles for smaller screens (e.g., phones) */
 @media (max-width: 600px) {
-
   .skeleton-petcard-div {
     display: flex;
     flex-direction: column;

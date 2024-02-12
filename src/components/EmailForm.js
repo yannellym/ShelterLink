@@ -48,6 +48,7 @@ const EmailForm = ({ petData, user }) => {
                     {emailSent ? 'Email Sent' : 'Send Email'}
                 </button>
                 <p className="bottom_text">Send additional inquiries to the shelter at: {petData.contact.email || "sheltersemail@gmail.com"}</p>
+                <p className="bottom_text">*For purposes of this project, the email will not be sent to a pre-configured email and NOT to the actual shelter*</p>
             </div>
         </div>
     );

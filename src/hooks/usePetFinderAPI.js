@@ -23,8 +23,6 @@ const usePetFinderAPI = (url, dependencies) => {
         setData(result);
       } catch (error) {
         console.error('Error fetching data:', error);
-        // Log the detailed error response for debugging
-        console.error('Detailed error response:', responseText);
       } finally {
         setLoading(false);
       }

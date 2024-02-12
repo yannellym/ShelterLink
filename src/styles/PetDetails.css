@@ -8,7 +8,7 @@
   padding: 1% 2%;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  margin: 20px 20px 20px 0; /* Adjust the margin to provide space on the right */
+  margin: 20px 20px 20px 0; 
   max-width: 900px;
   position: relative;
   width: 70%;
@@ -20,7 +20,7 @@
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   height: 30%;
-  margin: 20vh 0; /* Adjust the margin to center vertically */
+  margin: 20vh 0; 
   background-color: #0db9ad;
   color: white;
 }
@@ -50,7 +50,7 @@
   border: 1px solid #ddd;
   border-radius: 5px;
   background-color: #f9f9f9;
-  margin: 0 10px 10px 0; /* Added margin to separate sections */
+  margin: 0 10px 10px 0; 
 }
 
 .pet-info-section p {
@@ -136,7 +136,7 @@
   position: absolute;
   top: 4%;
   right: 5px;
-  transform: translate(-50%, -50%); /* Center the heart icon */
+  transform: translate(-50%, -50%); 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -156,20 +156,20 @@
   right: 1%;
   margin: 10px;
 }
+
+
 /* Styles for screens up to 600px */
 @media (max-width: 600px) {
   .pet-details-container {
     display: flex;
-    flex-direction: column; /* Change to column for vertical layout */
-    /* border: red solid 4px; */
+    flex-direction: column;
     margin: 4% auto;
   }
 
   .pet-details {
     max-width: 100%; 
-    min-width: 310px;/* Full width for the details on smaller screens */
-    margin-bottom: 20px; /* Optional: Add spacing between details and side-panel */
-    /* border: red solid 4px; */
+    min-width: 310px;
+    margin-bottom: 20px; 
     margin: auto;
   }
   /* Name and ID container */
@@ -178,7 +178,6 @@
     flex-direction: column; 
     align-items: center;
     padding: 5px 0;
-    /* border: red solid 4px; */
     width: 100%;
   }
 

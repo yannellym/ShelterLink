@@ -10,7 +10,7 @@ function MainPage({ favoritePets, addToFavorites, removeFromFavorites }) {
   const itemsPerPage = 100;
   const [cachedData, setCachedData] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
-  const maxPaginationButtons = 10; // Adjust this number
+  const maxPaginationButtons = 10; 
 
   const [selectedFilters, setSelectedFilters] = useState({
     type: 'any',
@@ -26,8 +26,6 @@ function MainPage({ favoritePets, addToFavorites, removeFromFavorites }) {
       const endpoint = `http://localhost:3002/api/petfinder?page=${page}&perPage=${itemsPerPage}`;
       const response = await fetch(endpoint);
       const data = await response.json();
-
-      console.log('API Response:', data);
 
       if (data && data.animals) {
         setCachedData(data.animals);

@@ -1,5 +1,3 @@
-/* LocationSpecificPets.css */
-
 .location-specific-pets {
   text-align: center;
   padding: 20px;
@@ -22,9 +20,8 @@
   flex-wrap: wrap;
   flex-direction: row;
   margin-top: 20px;
-  justify-content: center; /* Align items vertically in the center */
-  align-items: center; /* Align items horizontally in the center */
-  /* border: rgb(0, 34, 255) solid 5px; */
+  justify-content: center; 
+  align-items: center; 
 }
 
 .no-animals-message {

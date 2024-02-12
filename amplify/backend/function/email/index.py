@@ -38,7 +38,6 @@ def lambda_handler(event, context):
 
         ses.send_email(**params)
 
-        # Your existing response logic...
         return {
             'statusCode': 200,
             'headers': {

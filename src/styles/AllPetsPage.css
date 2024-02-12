@@ -8,8 +8,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
-  justify-content: center; /* Center the cards horizontally */
-  /* border: purple solid 4px; */
+  justify-content: center; 
 }
 
 .pagination-container {
@@ -41,8 +40,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
-    justify-content: center; /* Center the cards horizontally */
-    /* border: purple solid 4px; */
+    justify-content: center; 
   }
 }
 

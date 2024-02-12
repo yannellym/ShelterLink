@@ -4,7 +4,7 @@ import { listUserPetFavorites } from '../graphql/queries';
 import '../styles/Profile.css';
 
 
-/* component that shows the user's information/profile
+/* component that shows the user's favorite pets list
   parameters: 
   returns: 
 */

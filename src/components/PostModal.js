@@ -5,8 +5,6 @@ const PostModal = ({ selectedTopic, user, onPostSubmit, onClose }) => {
   const [newSubject, setNewSubject] = useState('');
   const [newPost, setNewPost] = useState('');
 
-  // console.log(selectedTopic, user, "USRER AND SELECTED TOPIC")
-
   const handlePostSubmit = async () => {
     // Validate and submit the post
     if (!user) {
@@ -31,9 +29,7 @@ const PostModal = ({ selectedTopic, user, onPostSubmit, onClose }) => {
       replies: [],
       topicTitle: selectedTopic.title,
     };
-
-    // // Pass the new post data to the parent component
-    console.log(newPostData, "sending data");
+    
     onPostSubmit(newPostData);
 
     // Clear input fields after submitting

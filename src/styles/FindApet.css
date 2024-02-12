@@ -6,7 +6,6 @@
   flex: 0.3;
   margin: 0 3%;
   border-right: double var(--vibrant-red) 5px;
-
 }
 
 .content {
@@ -42,14 +41,13 @@
 /* Responsive styles for smaller screens (e.g., phones) */
 @media (max-width: 600px) {
   .main-page {
-    display: block; /* Change to block for smaller screens */
+    display: block; 
   }
 
   .sidebar {
-    flex: 1; /* Adjust flex value for smaller screens */
+    flex: 1; 
     margin: 0;
-    border-right: none; /* Remove border for smaller screens */
-    /* border: red solid 5px; */
+    border-right: none; 
     align-items: center;
     justify-content: center;
     flex-direction: column;
@@ -60,19 +58,17 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    /* border: rgb(0, 30, 255) solid 5px; */
   }
   .pagination-horizontal {
     display: flex;
     width: 90%;
-    margin: 2% auto; /* Adjust margin for smaller screens */
-    /* border: red solid 5px; */
-    overflow: hidden; /* Add this to prevent content overflow */
-    justify-content: space-between; /* Adjust as needed */
+    margin: 2% auto; 
+    overflow: hidden; 
+    justify-content: space-between; 
   }
   
   .pagination-button {
-    flex: 1; /* Adjust flex value for each button to distribute the space */
+    flex: 1; 
     background-color: #ccc;
     border: none;
     border-radius: 5px;
@@ -84,14 +80,12 @@
     background-color: var(--vibrant-red);
     color: #fff;
   }
-  
 }
 
 /* Responsive styles for medium screens (e.g., tablets) */
 @media (min-width: 601px) and (max-width: 1023px) {
   .main-page {
-    display: flex; /* Reset to flex for medium screens */
-    /* border: rgb(0, 38, 255) solid 4px; */
+    display: flex; 
   }
 
   .sidebar {
@@ -104,7 +98,6 @@
     flex: 0.9; 
     margin: 2% auto;
     justify-content: center;
-    /* border: rgb(0, 42, 255) solid 4px; */
   }
 
   .pagination-horizontal {
@@ -124,13 +117,11 @@
     margin: 0 auto;
     padding: 0 2px;
     border-right: double var(--vibrant-red) 5px;
-    /* border: red solid 4px; */
   }
 
   .content {
     flex: 3; 
     padding: 20px; 
-    /* border: red solid 4px; */
   }
 
   .pet-card-list {
