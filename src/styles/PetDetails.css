@@ -5,14 +5,13 @@
 
 .pet-details {
   background-color: #ffffff;
-  padding: 10% 4%;
+  padding: 1% 2%;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   margin: 20px 20px 20px 0; /* Adjust the margin to provide space on the right */
   max-width: 900px;
   position: relative;
   width: 70%;
-  /* border: solid blue 4px */
 }
 
 .side-panel {
